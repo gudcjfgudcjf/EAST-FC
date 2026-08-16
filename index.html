@@ -845,6 +845,54 @@
   .day-match-title { font-weight: 600; font-size: 14px; margin-bottom: 3px; }
   .day-match-meta { font-size: 12px; color: var(--text-2); }
 
+  /* Quarter → squad rows in match modal */
+  .quarter-row {
+    display: grid;
+    grid-template-columns: 92px 1fr 34px;
+    gap: 8px; align-items: center;
+    margin-bottom: 8px;
+  }
+  .quarter-row input.q-label {
+    padding: 8px 10px;
+    background: var(--bg); color: var(--text);
+    border: 1px solid var(--border-2); border-radius: 8px;
+    font-size: 13px; outline: none;
+  }
+  .quarter-row input.q-label:focus { border-color: var(--gold); }
+  .quarter-row select.q-squad {
+    width: 100%; padding: 8px 10px;
+    background: var(--bg); color: var(--text);
+    border: 1px solid var(--border-2); border-radius: 8px;
+    font-size: 13px; outline: none;
+  }
+  .quarter-row select.q-squad:focus { border-color: var(--gold); }
+  .quarter-row .q-remove {
+    background: var(--bg-3); color: var(--danger);
+    border: 1px solid var(--border-2); border-radius: 8px;
+    width: 34px; height: 36px; cursor: pointer;
+    font-size: 15px; display: flex; align-items: center; justify-content: center;
+  }
+  .quarter-row .q-remove:hover { border-color: var(--danger); background: var(--danger-bg); }
+  .btn-add-quarter {
+    width: 100%; padding: 9px;
+    background: var(--bg-3); color: var(--gold);
+    border: 1px dashed var(--border-2); border-radius: 8px;
+    font-family: var(--font-brand); font-weight: 700; font-size: 13px;
+    letter-spacing: 0.03em; cursor: pointer;
+    margin-top: 2px;
+  }
+  .btn-add-quarter:hover { border-color: var(--gold); background: rgba(244,196,48,0.06); }
+  .quarter-empty { font-size: 12px; color: var(--text-3); padding: 6px 0 10px; }
+  /* Multiple squad chips in day/upcoming lists */
+  .match-squad-chip {
+    display: inline-block;
+    background: var(--bg-3); border: 1px solid var(--border-2);
+    color: var(--gold-warm);
+    padding: 1px 7px; border-radius: 6px;
+    font-size: 11px; font-weight: 600;
+    margin-right: 4px; margin-top: 2px;
+  }
+
   .player-tooltip {
     position: absolute;
     background: rgba(15, 23, 42, 0.97); color: white;
@@ -2041,11 +2089,13 @@
       <div class="form-group"><label>시간</label><input type="time" id="mTime" value="15:00" /></div>
     </div>
     <div class="form-group"><label>상대팀</label><input type="text" id="mOpponent" placeholder="예: FC 서울" /></div>
-    <div class="form-row">
-      <div class="form-group"><label>홈/원정</label>
-        <select id="mHomeAway"><option value="home">홈</option><option value="away">원정</option></select>
-      </div>
-      <div class="form-group"><label>연결 스쿼드</label><select id="mSquadId"><option value="">없음</option></select></div>
+    <div class="form-group"><label>홈/원정</label>
+      <select id="mHomeAway"><option value="home">홈</option><option value="away">원정</option></select>
+    </div>
+    <div class="form-group">
+      <label>쿼터별 스쿼드 <span style="text-transform:none; letter-spacing:0; color:var(--text-3); font-weight:400;">· 쿼터마다 다른 스쿼드를 연결하세요</span></label>
+      <div id="mQuarterList"></div>
+      <button type="button" id="btnAddQuarter" class="btn-add-quarter">+ 쿼터 추가</button>
     </div>
     <div class="form-group"><label>장소</label><input type="text" id="mLocation" placeholder="예: 서울월드컵경기장" /></div>
     <div class="form-group">
@@ -2286,6 +2336,11 @@ function normalizeStore(s) {
   // Players positions arrays
   s.players.forEach(p => {
     if (p.positions && !Array.isArray(p.positions)) p.positions = Object.values(p.positions);
+  });
+  // Matches: ensure quarters array (migrate old single squadId)
+  s.matches.forEach(m => {
+    if (m.quarters && !Array.isArray(m.quarters)) m.quarters = Object.values(m.quarters);
+    if (!Array.isArray(m.quarters)) m.quarters = m.squadId ? [{ label: '', squadId: m.squadId }] : [];
   });
   if (!s.currentSquadId) s.currentSquadId = s.squads[0]?.id || null;
   return s;
@@ -3166,6 +3221,10 @@ function migrateData() {
     });
   });
   store.squads.forEach(s => ensureSquadSlots(s));
+  // Matches: migrate old single squadId → quarters array
+  (store.matches || []).forEach(m => {
+    if (!Array.isArray(m.quarters)) m.quarters = m.squadId ? [{ label: '', squadId: m.squadId }] : [];
+  });
 }
 
 /* ==================== Utilities ==================== */
@@ -3918,7 +3977,10 @@ function deleteSquad(id) {
   if (!confirm('이 스쿼드를 삭제하시겠습니까?')) return;
   store.squads = store.squads.filter(s => s.id !== id);
   if (store.currentSquadId === id) store.currentSquadId = store.squads[0]?.id || null;
-  store.matches.forEach(m => { if (m.squadId === id) m.squadId = ''; });
+  store.matches.forEach(m => {
+    if (m.squadId === id) m.squadId = '';
+    if (Array.isArray(m.quarters)) m.quarters = m.quarters.filter(q => q.squadId !== id);
+  });
   saveState();
   renderPlayerList(); renderField(); renderSquadList();
   toast('스쿼드를 삭제했어요');
@@ -4027,18 +4089,69 @@ function renderUpcoming() {
 
 /* ==================== Match modal ==================== */
 let editingMatchId = null;
+
+// Normalize a match's quarter list (migrate old single squadId → quarters array)
+function matchQuarters(m) {
+  if (Array.isArray(m?.quarters)) return m.quarters;
+  if (m?.squadId) return [{ label: '', squadId: m.squadId }];
+  return [];
+}
+function squadOptionsHtml(selectedId) {
+  return '<option value="">— 스쿼드 선택 —</option>' +
+    store.squads.map(s => `<option value="${s.id}" ${s.id===selectedId?'selected':''}>${escapeHtml(s.name)} (${s.formation})</option>`).join('');
+}
+function addQuarterRow(label, squadId) {
+  const list = document.getElementById('mQuarterList');
+  const empty = list.querySelector('.quarter-empty');
+  if (empty) empty.remove();
+  const idx = list.querySelectorAll('.quarter-row').length;
+  const row = document.createElement('div');
+  row.className = 'quarter-row';
+  row.innerHTML = `
+    <input class="q-label" placeholder="${idx+1}쿼터" value="${escapeHtml(label || '')}" />
+    <select class="q-squad">${squadOptionsHtml(squadId || '')}</select>
+    <button type="button" class="q-remove" title="이 쿼터 삭제">✕</button>
+  `;
+  row.querySelector('.q-remove').addEventListener('click', () => {
+    row.remove();
+    if (document.querySelectorAll('#mQuarterList .quarter-row').length === 0) {
+      document.getElementById('mQuarterList').innerHTML = '<div class="quarter-empty">아직 쿼터가 없습니다. 아래 버튼으로 추가하세요.</div>';
+    }
+  });
+  list.appendChild(row);
+}
+function renderQuarterRows(quarters) {
+  const list = document.getElementById('mQuarterList');
+  list.innerHTML = '';
+  if (!quarters || quarters.length === 0) {
+    list.innerHTML = '<div class="quarter-empty">아직 쿼터가 없습니다. 아래 버튼으로 추가하세요.</div>';
+    return;
+  }
+  quarters.forEach(q => addQuarterRow(q.label, q.squadId));
+}
+function collectQuarters() {
+  const rows = document.querySelectorAll('#mQuarterList .quarter-row');
+  const out = [];
+  rows.forEach((row, i) => {
+    const squadId = row.querySelector('.q-squad').value;
+    let label = row.querySelector('.q-label').value.trim();
+    if (!squadId) return; // skip rows with no squad chosen
+    if (!label) label = (i + 1) + '쿼터';
+    out.push({ label, squadId });
+  });
+  return out;
+}
+
 function openMatchModal(matchId, defaultDate) {
   editingMatchId = matchId || null;
   $('#matchModalTitle').textContent = matchId ? '경기 편집' : '경기 추가';
   $('#btnDeleteMatch').style.display = matchId ? 'inline-block' : 'none';
-  const sel = $('#mSquadId');
-  sel.innerHTML = '<option value="">없음</option>' + store.squads.map(s => `<option value="${s.id}">${escapeHtml(s.name)} (${s.formation})</option>`).join('');
   const m = matchId ? store.matches.find(x => x.id === matchId) : null;
   $('#mDate').value = m?.date || defaultDate || ymd(new Date());
   $('#mTime').value = m?.time || '15:00';
   $('#mOpponent').value = m?.opponent || '';
   $('#mHomeAway').value = m?.homeAway || 'home';
-  $('#mSquadId').value = m?.squadId || '';
+  renderQuarterRows(matchQuarters(m));
   $('#mLocation').value = m?.location || '';
   $('#mScoreUs').value = m?.scoreUs ?? '';
   $('#mScoreThem').value = m?.scoreThem ?? '';
@@ -4048,14 +4161,17 @@ function openMatchModal(matchId, defaultDate) {
 }
 function closeMatchModal() { $('#matchModal').classList.remove('show'); editingMatchId = null; }
 function saveMatchFromModal() {
-  if (!canManageMatches()) { toast('감독 권한이 필요합니다'); return; }
+  if (!canManageMatches()) { toast('로그인이 필요합니다'); return; }
   const date = $('#mDate').value;
   const opponent = $('#mOpponent').value.trim();
   if (!date) { alert('날짜를 선택하세요'); return; }
   if (!opponent) { alert('상대팀 이름을 입력하세요'); return; }
+  const quarters = collectQuarters();
   const data = {
     date, time: $('#mTime').value || '', opponent,
-    homeAway: $('#mHomeAway').value, squadId: $('#mSquadId').value || '',
+    homeAway: $('#mHomeAway').value,
+    quarters,
+    squadId: quarters[0]?.squadId || '', // keep first for backward compat
     location: $('#mLocation').value.trim(),
     scoreUs: $('#mScoreUs').value === '' ? null : Number($('#mScoreUs').value),
     scoreThem: $('#mScoreThem').value === '' ? null : Number($('#mScoreThem').value),
@@ -4089,16 +4205,21 @@ function openDayModal(dateStr) {
     list.innerHTML = '<div class="empty">이 날 예정된 경기가 없습니다</div>';
   } else {
     list.innerHTML = matches.map(m => {
-      const squad = store.squads.find(s => s.id === m.squadId);
       const scoreStr = (m.scoreUs != null && m.scoreThem != null) ? ` · ${m.scoreUs}:${m.scoreThem}` : '';
+      const qs = matchQuarters(m);
+      const quarterChips = qs.map(q => {
+        const sq = store.squads.find(s => s.id === q.squadId);
+        if (!sq) return '';
+        return `<span class="match-squad-chip">${escapeHtml(q.label || '쿼터')}: ${escapeHtml(sq.name)}</span>`;
+      }).join('');
       return `<div class="day-match-item" data-id="${m.id}">
         <div class="day-match-info">
           <div class="day-match-title">${m.time || ''} ${m.homeAway === 'away' ? '[원정]' : '[홈]'} vs ${escapeHtml(m.opponent)}${scoreStr}</div>
           <div class="day-match-meta">
             ${m.location ? '📍 ' + escapeHtml(m.location) : ''}
-            ${squad ? ' · ⚽ ' + escapeHtml(squad.name) : ''}
             ${m.notes ? ' · 📝 ' + escapeHtml(m.notes.slice(0, 40)) + (m.notes.length > 40 ? '…' : '') : ''}
           </div>
+          ${quarterChips ? `<div style="margin-top:6px;">⚽ ${quarterChips}</div>` : ''}
         </div>
         <button class="icon-btn" data-action="edit-match">✏️</button>
       </div>`;
@@ -4692,6 +4813,7 @@ function bindEvents() {
   $('#btnCancelMatch').addEventListener('click', closeMatchModal);
   $('#btnSaveMatch').addEventListener('click', saveMatchFromModal);
   $('#btnDeleteMatch').addEventListener('click', deleteCurrentMatch);
+  $('#btnAddQuarter').addEventListener('click', () => addQuarterRow('', ''));
   $('#matchModal').addEventListener('click', e => { if (e.target.id === 'matchModal') closeMatchModal(); });
 
   $('#btnCloseDay').addEventListener('click', closeDayModal);
