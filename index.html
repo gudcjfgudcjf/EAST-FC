@@ -1319,33 +1319,41 @@
     .nav-utils.open { display: flex; }
     .nav-utils .nav-btn { margin-left: 0; text-align: left; padding: 10px 12px; font-size: 14px; }
 
-    /* Squad layout → single column, field first */
-    .squad-layout { display: flex; flex-direction: column; height: 100%; }
-    .field-wrap { order: 1; flex: 1 1 auto; min-height: 0; }
+    /* Squad view: let the WHOLE view scroll vertically on phones */
+    #view-squad { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .squad-layout { display: flex; flex-direction: column; height: auto; min-height: 100%; }
+    /* Field first, at natural (big) size — no longer squeezed */
+    .field-wrap { order: 1; flex: 0 0 auto; min-height: 0; }
+    .field-container {
+      flex: 0 0 auto; display: block;
+      padding: 10px; overflow: visible;
+    }
+    .field { width: 100%; max-width: 100%; max-height: 82vh; margin: 0 auto; }
+    .field-toolbar {
+      padding: 8px 12px; gap: 6px;
+      position: sticky; top: 0; z-index: 4;
+      flex-wrap: wrap;
+    }
+    .field-toolbar input, .field-toolbar select { padding: 6px 8px; font-size: 12px; }
+    .field-toolbar #squadName { width: 100px !important; }
+    /* Player list → compact horizontal swipeable strip below the field */
     .sidebar {
       order: 2; border-right: none; border-top: 1px solid var(--border);
-      flex: 0 0 auto; max-height: 30vh;
-    }
-    .right-panel {
-      order: 3; border-left: none; border-top: 1px solid var(--border);
-      flex: 0 0 auto; max-height: 26vh;
+      flex: 0 0 auto; max-height: none;
     }
     .sidebar header { padding: 10px 12px; }
-    /* Player list becomes a horizontal swipeable strip */
     .sidebar .player-list {
       display: flex; flex-direction: row; flex-wrap: nowrap;
       overflow-x: auto; overflow-y: hidden; gap: 8px;
       -webkit-overflow-scrolling: touch;
       padding: 10px;
     }
-    .sidebar .player-item {
-      flex: 0 0 auto; min-width: 150px; margin-bottom: 0;
+    .sidebar .player-item { flex: 0 0 auto; min-width: 150px; margin-bottom: 0; }
+    /* Saved squads below */
+    .right-panel {
+      order: 3; border-left: none; border-top: 1px solid var(--border);
+      flex: 0 0 auto; max-height: none;
     }
-    .field-toolbar { padding: 8px 12px; gap: 6px; }
-    .field-toolbar input, .field-toolbar select { padding: 6px 8px; font-size: 12px; }
-    .field-toolbar #squadName { width: 100px !important; }
-    .field-container { padding: 10px; }
-    .field { max-width: 100%; }
 
     /* Views padding */
     .players-view, .calendar-view, .org-view, .board-view, .dor-view, .admin-view { padding: 12px; }
