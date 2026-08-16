@@ -1456,6 +1456,59 @@
   .htl-chip b { color: #fff; }
   .htl-none { font-size: 12px; color: var(--text-4); }
 
+  /* ==================== 팀 능력치 패널 (스쿼드 우측) ==================== */
+  .team-power-panel { padding: 12px; border-bottom: 1px solid var(--bg-3); background: linear-gradient(160deg, var(--bg-3), var(--bg-2)); }
+  .tp-title { font-family: var(--font-brand); font-size: 13px; font-weight: 700; color: var(--gold); letter-spacing: .04em; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .tp-count { margin-left: auto; font-size: 11px; color: var(--text-3); font-weight: 400; }
+  .tp-empty { font-size: 12px; color: var(--text-3); line-height: 1.5; }
+  .tp-top { display: flex; align-items: center; gap: 8px; }
+  .tp-radar { width: 130px; flex-shrink: 0; }
+  .tp-radar svg { width: 100%; height: auto; display: block; }
+  .tp-score { flex: 1; text-align: center; }
+  .tp-ovr { font-family: var(--font-brand); font-weight: 700; font-size: 40px; line-height: 1; }
+  .tp-ovr-sub { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+  .tp-breakdown { font-size: 11px; color: var(--text-2); margin-top: 6px; }
+  .tp-breakdown b { color: var(--text); font-family: var(--font-brand); }
+  .tp-links-title { font-size: 11px; color: var(--gold); font-weight: 700; margin: 10px 0 5px; }
+  .tp-links { display: flex; flex-direction: column; gap: 4px; }
+  .tp-link { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 11px; background: var(--bg-2); border-radius: 6px; padding: 4px 8px; }
+  .tp-link-names { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tp-link-val { font-family: var(--font-brand); font-weight: 700; flex-shrink: 0; }
+  .tp-nolink { font-size: 11px; color: var(--text-3); margin-top: 8px; line-height: 1.5; }
+  .tp-nolink b { color: var(--gold-warm); }
+
+  /* ==================== 팀컬러 탭 ==================== */
+  .chem-list { display: flex; flex-direction: column; gap: 8px; }
+  .chem-card { display: flex; align-items: center; gap: 10px; background: var(--bg-2); border: 1px solid var(--border); border-left-width: 4px; border-radius: 11px; padding: 11px 13px; }
+  .chem-main { flex: 1; min-width: 0; }
+  .chem-pair { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .chem-p { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; }
+  .chem-num { width: 22px; height: 22px; flex-shrink: 0; border-radius: 50%; background: #000; border: 1px solid var(--gold); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; font-family: var(--font-brand); }
+  .chem-amp { color: var(--text-4); font-size: 15px; }
+  .chem-note { font-size: 11px; color: var(--text-3); margin-top: 5px; }
+  .chem-right { text-align: center; flex-shrink: 0; min-width: 62px; }
+  .chem-score { font-family: var(--font-brand); font-weight: 700; font-size: 24px; line-height: 1; }
+  .chem-tag { font-size: 11px; font-weight: 700; margin-top: 2px; }
+  .chem-actions { display: flex; gap: 4px; flex-shrink: 0; }
+  .chem-edit, .chem-del { background: var(--bg-3); border: 1px solid var(--border-2); border-radius: 6px; padding: 5px 7px; font-size: 12px; cursor: pointer; }
+  .chem-edit:hover { border-color: var(--gold); }
+  .chem-del:hover { border-color: var(--danger); }
+  #chemScoreTag { font-weight: 700; }
+  .chem-ovr-u { display: block; font-size: 9px; color: var(--text-3); font-weight: 400; letter-spacing: .04em; }
+  /* 선수 표: 시너지 셀 */
+  .syn-cell { display: flex; flex-wrap: wrap; gap: 3px; justify-content: center; max-width: 130px; }
+  .syn-chip { font-size: 10px; font-weight: 700; border: 1px solid; border-radius: 20px; padding: 1px 6px; white-space: nowrap; background: rgba(0,0,0,0.25); }
+  .syn-none { color: var(--text-4); }
+  .chem-name { font-size: 13px; font-weight: 700; color: var(--gold-warm); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+  .chem-mcount { font-size: 10px; font-weight: 700; color: var(--text-3); background: var(--bg-3); border: 1px solid var(--border-2); border-radius: 10px; padding: 1px 7px; }
+  /* 케미 다중 선택 picker */
+  .chem-pick-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; max-height: 240px; overflow-y: auto; padding: 2px; }
+  .chem-pick { display: flex; align-items: center; gap: 7px; background: var(--bg-3); border: 1px solid var(--border-2); border-radius: 9px; padding: 8px 10px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .12s; }
+  .chem-pick:hover { border-color: var(--gold-2); }
+  .chem-pick.on { background: rgba(244,196,48,0.12); border-color: var(--gold); color: var(--gold); }
+  .chem-pick-num { width: 22px; height: 22px; flex-shrink: 0; border-radius: 50%; background: #000; border: 1px solid var(--gold); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; font-family: var(--font-brand); }
+  .chem-pick-chk { margin-left: auto; color: var(--gold); font-weight: 700; }
+
   /* ==================== Admin view ==================== */
   .admin-view {
     display: flex; flex-direction: column;
@@ -1926,6 +1979,15 @@
     .player-radar-ovr { font-size: 40px; }
     .stat-grid { grid-template-columns: 1fr; }
 
+    /* 팀 능력치 · 팀컬러 모바일 */
+    .tp-radar { width: 120px; }
+    .tp-ovr { font-size: 34px; }
+    .chem-card { flex-wrap: wrap; gap: 8px; }
+    .chem-main { flex-basis: 100%; }
+    .chem-right { min-width: 0; margin-left: auto; text-align: right; display: flex; align-items: baseline; gap: 6px; }
+    .chem-score { font-size: 20px; }
+    .chem-pick-list { grid-template-columns: 1fr; max-height: 44vh; }
+
     /* Slots slightly smaller labels on phones */
     .slot { width: 84px; height: 90px; }
     .slot-circle { width: 42px; height: 42px; }
@@ -2276,6 +2338,7 @@
     <button class="tab-btn" data-tab="board">📝 게시판</button>
     <button class="tab-btn" data-tab="dor">💛 이스트도르</button>
     <button class="tab-btn" data-tab="traits">🎭 특성</button>
+    <button class="tab-btn" data-tab="chem">🤝 팀컬러</button>
     <button class="tab-btn" data-tab="records">🏅 기록</button>
     <button class="tab-btn" data-tab="attend">📅 출석</button>
     <button class="tab-btn" data-tab="hall">👑 전당</button>
@@ -2351,6 +2414,7 @@
       </main>
 
       <aside class="right-panel">
+        <div class="team-power-panel" id="teamPowerPanel"></div>
         <header><h2>저장된 스쿼드</h2></header>
         <div class="squad-list" id="squadList"></div>
         <div class="panel-footer">
@@ -2386,6 +2450,7 @@
               <th data-sort="number">#</th>
               <th data-sort="name">이름</th>
               <th data-sort="positions">역할</th>
+              <th data-sort="synergy" title="이 선수가 속한 케미 그룹의 시너지 합 · 팀컬러 탭에서 관리">🤝 시너지</th>
               <th data-sort="condition" title="컨디션 · 감독/운영진과 본인만 조정 가능">컨디션</th>
               <th data-sort="foot">주발</th>
               <th data-sort="bestOvr">최고 OVR</th>
@@ -2478,6 +2543,44 @@
       <div class="traits-content" id="traitsContent"></div>
     </div>
   </section>
+
+  <!-- ============ 팀컬러 (케미) VIEW ============ -->
+  <section class="view" id="view-chem">
+    <div class="stats-view">
+      <div class="stats-header">
+        <h1>🤝 팀컬러 · 케미</h1>
+        <div class="spacer"></div>
+        <button id="btnAddChem">+ 케미 만들기</button>
+      </div>
+      <div style="font-size:12px; color:var(--text-2); margin-bottom:10px;">
+        두 선수의 궁합(케미)을 만들어보세요. 점수가 높으면 <b style="color:#f4c430">브로맨스</b>, 낮으면 <b style="color:#f87171">앙숙</b>이에요. 스쿼드에 두 선수를 함께 배치하면 팀 종합 OVR에 반영돼요(가까이 둘수록 시너지 ↑).
+      </div>
+      <div id="chemContent"></div>
+    </div>
+  </section>
+
+  <!-- ============ 케미 만들기 모달 ============ -->
+  <div class="modal-overlay" id="chemModal">
+    <div class="modal wide">
+      <h3 id="chemModalTitle">🤝 케미 만들기</h3>
+      <div class="form-group"><label>케미 이름 / 메모 (선택)</label><input type="text" id="chemNote" placeholder="예: 삼겹살 브라더스 · 대학 동기" /></div>
+      <div class="form-group">
+        <label>선수 선택 <span id="chemPickCount" style="color:var(--gold);font-weight:700">0명</span> <span style="text-transform:none;letter-spacing:0;color:var(--text-3);font-weight:400">· 2명 이상 골라주세요</span></label>
+        <input type="search" id="chemPickSearch" class="search" placeholder="선수 검색..." style="width:100%; margin-bottom:8px;" />
+        <div class="chem-pick-list" id="chemPickList"></div>
+      </div>
+      <div class="form-group">
+        <label>시너지 보너스 <span id="chemScoreLbl" style="color:var(--gold);font-weight:700">+5</span> <span style="text-transform:none;letter-spacing:0;color:var(--text-3);font-weight:400">OVR</span> · <span id="chemScoreTag"></span></label>
+        <input type="range" id="chemScore" min="-10" max="15" value="5" style="width:100%; accent-color:var(--gold);" />
+        <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--text-3); margin-top:2px;"><span>⚔️ 앙숙 −10</span><span>😐 0</span><span>💛 +15</span></div>
+        <div style="font-size:11px; color:var(--text-3); margin-top:6px; line-height:1.5;">이 그룹이 스쿼드에 함께 뛸 때 팀 종합 OVR에 더해질 값이에요. 그룹 전원이 가까이 배치될수록 최대치로 발동돼요. <b style="color:var(--gold-warm)">그룹당 최대 +15 · 팀 전체 합 최대 +20</b></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="btnCancelChem">취소</button>
+        <button class="btn-primary" id="btnSaveChem">저장</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ============ RECORDS (MOM & 시즌) VIEW ============ -->
   <section class="view" id="view-records">
@@ -2932,6 +3035,12 @@ function normalizeStore(s) {
     s.traitCats.forEach(c => { if (c && c.traits && !Array.isArray(c.traits)) c.traits = Object.values(c.traits); if (c && !c.traits) c.traits = []; });
   }
   s.traitRatings = s.traitRatings || {};
+  s.chemistry = Array.isArray(s.chemistry) ? s.chemistry : (s.chemistry ? Object.values(s.chemistry) : []);
+  s.chemistry.forEach(l => {
+    if (!l) return;
+    if (!Array.isArray(l.members)) { l.members = l.members ? Object.values(l.members) : [l.a, l.b].filter(Boolean); delete l.a; delete l.b; }
+    if (typeof l.synergy !== 'number') { l.synergy = (typeof l.score === 'number') ? Math.max(-10, Math.min(15, Math.round((l.score - 50) / 50 * 8))) : 5; delete l.score; }
+  });
   s.dorVotes = s.dorVotes || {};
   // dorVotes: each entry should be an array
   Object.keys(s.dorVotes).forEach(k => {
@@ -2996,6 +3105,7 @@ function rerenderCurrent() {
   else if (t === 'board') renderBoard();
   else if (t === 'dor') renderDor();
   else if (t === 'traits') renderTraits();
+  else if (t === 'chem') renderChemistry();
   else if (t === 'records') renderRecords();
   else if (t === 'attend') renderAttend();
   else if (t === 'hall') renderHall();
@@ -3762,6 +3872,7 @@ let store = {
   customDepts: [], // [{ key, label, order, createdBy, createdAt }]
   traitCats: undefined, // [{ id, emoji, label, traits:[{id,name,createdBy?}], createdBy? }]  (undefined → seed defaults once)
   traitRatings: {},      // { playerId: { traitId: { userId: value 0-100 } } }
+  chemistry: [],         // [{ id, a:playerId, b:playerId, score 0-100, note, createdBy, createdAt }]
   currentSquadId: null,
 };
 
@@ -3877,6 +3988,7 @@ function loadState() {
       if (!store.customDepts) store.customDepts = [];
       if (store.traitCats === undefined) store.traitCats = defaultTraitCats();
       if (!store.traitRatings) store.traitRatings = {};
+      if (!Array.isArray(store.chemistry)) store.chemistry = [];
       migrateData();
     }
   } catch (e) { console.warn('로드 실패:', e); }
@@ -3969,6 +4081,12 @@ function migrateData() {
   });
   if (store.traitCats === undefined) store.traitCats = defaultTraitCats();
   if (!store.traitRatings) store.traitRatings = {};
+  if (!Array.isArray(store.chemistry)) store.chemistry = [];
+  store.chemistry.forEach(l => {
+    if (!l) return;
+    if (!Array.isArray(l.members)) { l.members = [l.a, l.b].filter(Boolean); delete l.a; delete l.b; }
+    if (typeof l.synergy !== 'number') { l.synergy = (typeof l.score === 'number') ? Math.max(-10, Math.min(15, Math.round((l.score - 50) / 50 * 8))) : 5; delete l.score; }
+  });
 }
 
 /* ==================== Utilities ==================== */
@@ -4072,6 +4190,7 @@ function switchTab(name) {
   if (name === 'board') renderBoard();
   if (name === 'dor') renderDor();
   if (name === 'traits') renderTraits();
+  if (name === 'chem') renderChemistry();
   if (name === 'records') renderRecords();
   if (name === 'attend') renderAttend();
   if (name === 'hall') renderHall();
@@ -4176,6 +4295,7 @@ function renderField() {
     }
     field.appendChild(el);
   });
+  renderTeamPanel();
 }
 
 function assignPlayerToSlot(slotIndex, playerId) {
@@ -4235,6 +4355,7 @@ function attachSlotDrag(slotEl, slotIndex) {
         squad.slots[slotIndex].x = parseFloat(slotEl.style.left);
         squad.slots[slotIndex].y = parseFloat(slotEl.style.top);
         saveState();
+        renderTeamPanel();
       }
     } else {
       const squad = getCurrentSquad();
@@ -4455,6 +4576,7 @@ function renderPlayersTable() {
     if (key === 'bestOvr') { av = bestRoleForPlayer(a).ovr; bv = bestRoleForPlayer(b).ovr; }
     else if (key === 'positions') { av = (a.positions||[]).join(','); bv = (b.positions||[]).join(','); }
     else if (key.startsWith('avg_')) { const sid = +key.slice(4); av = sectionAvg(a, sid); bv = sectionAvg(b, sid); }
+    else if (key === 'synergy') { av = playerSynergyTotal(a); bv = playerSynergyTotal(b); }
     else if (key === 'condition') { av = getCondition(a); bv = getCondition(b); }
     else { av = a[key]; bv = b[key]; }
     if (typeof av === 'string') { av = av.toLowerCase(); bv = (bv||'').toString().toLowerCase(); }
@@ -4467,7 +4589,7 @@ function renderPlayersTable() {
     if (th.dataset.sort === key) th.classList.add(dir === 'asc' ? 'sort-asc' : 'sort-desc');
   });
   if (list.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="14" class="empty">${store.players.length === 0 ? '오른쪽 위 [+ 선수 추가]를 눌러 첫 선수를 추가해 보세요' : '검색 결과 없음'}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="15" class="empty">${store.players.length === 0 ? '오른쪽 위 [+ 선수 추가]를 눌러 첫 선수를 추가해 보세요' : '검색 결과 없음'}</td></tr>`;
     return;
   }
   tbody.innerHTML = list.map(p => {
@@ -4485,6 +4607,7 @@ function renderPlayersTable() {
         <td>${p.number || '-'}</td>
         <td><strong>${escapeHtml(p.name)}</strong></td>
         <td><div class="positions-cell">${roleBadges}</div></td>
+        <td>${playerSynergyCellHtml(p)}</td>
         <td>${conditionBadgeHtml(p)}</td>
         <td>${footLabel(p.foot)}</td>
         <td><span class="ovr-badge">${best.ovr}<span class="ovr-role">${escapeHtml(best.name)}</span></span></td>
@@ -6378,6 +6501,227 @@ function renderHall() {
   }
 }
 
+/* ==================== 팀컬러 / 케미 (그룹) ==================== */
+function chemistryLinks() { return Array.isArray(store.chemistry) ? store.chemistry : []; }
+// 구버전 {a,b} 도 members 배열로 취급
+function chemMembers(l) {
+  if (Array.isArray(l.members)) return l.members.filter(Boolean);
+  return [l.a, l.b].filter(Boolean);
+}
+function chemSetKey(members) { return members.slice().sort().join('__'); }
+function findChemSet(members) { const k = chemSetKey(members); return chemistryLinks().find(l => chemSetKey(chemMembers(l)) === k); }
+const CHEM_SYN_MIN = -10, CHEM_SYN_MAX = 15;        // 본인이 정하는 그룹 시너지 값(상/하한)
+const CHEM_TOTAL_MAX = 20, CHEM_TOTAL_MIN = -15;    // 팀 전체 케미 보너스 상/하한
+// 그룹의 시너지 값(사용자 지정). 구버전 score(0~100)는 환산.
+function chemSynergy(l) {
+  let v = (typeof l.synergy === 'number') ? l.synergy
+        : (typeof l.score === 'number') ? Math.round((l.score - 50) / 50 * 8) : 5;
+  return Math.max(CHEM_SYN_MIN, Math.min(CHEM_SYN_MAX, v));
+}
+// 시너지 값 → 라벨
+function chemLabel(syn) {
+  if (syn >= 8)  return { t: '💛 환상의 케미', c: '#f4c430' };
+  if (syn >= 3)  return { t: '👍 좋은 케미', c: '#22c55e' };
+  if (syn >= -2) return { t: '😐 무난', c: '#9ca3af' };
+  if (syn >= -6) return { t: '😤 삐걱', c: '#fb923c' };
+  return { t: '⚔️ 앙숙', c: '#f87171' };
+}
+// 스쿼드 종합 능력치 + 케미 그룹 보너스 계산
+function squadStats(squad) {
+  if (!squad) return { count: 0 };
+  const slots = ensureSquadSlots(squad);
+  const placed = [];
+  slots.forEach((slot, i) => {
+    const pid = squad.assignments[i];
+    const p = pid ? getPlayer(pid) : null;
+    if (p) placed.push({ p, slot, ovr: ovrForRole(p, slot.role) });
+  });
+  const count = placed.length;
+  if (!count) return { count: 0 };
+  const baseAvg = Math.round(placed.reduce((a, x) => a + x.ovr, 0) / count);
+  const sectionVals = SECTIONS.map(s => Math.round(placed.reduce((a, x) => a + sectionAvg(x.p, s.id), 0) / count));
+  const posById = {}; placed.forEach(x => { posById[x.p.id] = x.slot; });
+  const placedIds = new Set(placed.map(x => x.p.id));
+  let chemSum = 0; const activeGroups = [];
+  chemistryLinks().forEach(link => {
+    const members = chemMembers(link);
+    const here = members.filter(id => placedIds.has(id));
+    if (here.length < 2) return; // 2명 이상 함께 배치돼야 발동
+    const syn = chemSynergy(link);
+    // 발동률 = (배치된 인원 비율) × (근접도) — 전원 가까이 붙을수록 100%
+    let closeSum = 0, pairs = 0;
+    for (let i = 0; i < here.length; i++) for (let j = i + 1; j < here.length; j++) {
+      const sa = posById[here[i]], sb = posById[here[j]];
+      const dist = Math.hypot(sa.x - sb.x, sa.y - sb.y);
+      closeSum += dist <= 22 ? 1 : dist <= 40 ? 0.8 : 0.6;
+      pairs++;
+    }
+    const closeFactor = pairs ? closeSum / pairs : 1;
+    const placedRatio = here.length / members.length;
+    const activation = placedRatio * closeFactor;
+    const contrib = syn * activation;
+    chemSum += contrib;
+    activeGroups.push({ link, contrib, placedCount: here.length, total: members.length, synergy: syn, activation });
+  });
+  const chemBonus = Math.round(Math.max(CHEM_TOTAL_MIN, Math.min(CHEM_TOTAL_MAX, chemSum)));
+  return { count, placed, baseAvg, sectionVals, chemBonus, overall: Math.max(0, Math.min(99, baseAvg + chemBonus)), activeGroups };
+}
+// 스쿼드 탭 오른쪽: 팀 능력치 패널(레이더 + 종합 OVR + 케미) 실시간 갱신
+function renderTeamPanel() {
+  const el = document.getElementById('teamPowerPanel');
+  if (!el) return;
+  const st = squadStats(getCurrentSquad());
+  if (!st.count) {
+    el.innerHTML = `<div class="tp-title">🎨 팀 능력치</div><div class="tp-empty">선수를 배치하면 팀 전체 능력치가 실시간으로 표시돼요</div>`;
+    return;
+  }
+  const radar = statRadarSvg(st.sectionVals, SECTIONS.map(s => s.emoji));
+  const sign = st.chemBonus > 0 ? '+' : '';
+  const chemCol = st.chemBonus > 0 ? '#22c55e' : st.chemBonus < 0 ? '#f87171' : 'var(--text-3)';
+  const links = st.activeGroups.slice().sort((a, b) => b.contrib - a.contrib).map(g => {
+    const names = chemMembers(g.link).map(id => getPlayer(id)).filter(Boolean).map(p => escapeHtml(p.name));
+    const c = g.contrib >= 0 ? '#22c55e' : '#f87171';
+    const s = g.contrib > 0 ? '+' : '';
+    const title = g.link.note ? escapeHtml(g.link.note) : names.join(' · ');
+    return `<div class="tp-link"><span class="tp-link-names">${title} <span style="color:var(--text-4)">(${g.placedCount}/${g.total})</span></span><span class="tp-link-val" style="color:${c}">${s}${g.contrib.toFixed(1)}</span></div>`;
+  }).join('');
+  el.innerHTML = `
+    <div class="tp-title">🎨 팀 능력치 <span class="tp-count">${st.count}명</span></div>
+    <div class="tp-top">
+      <div class="tp-radar">${radar}</div>
+      <div class="tp-score">
+        <div class="tp-ovr" style="color:${traitValColor(st.overall)}">${st.overall}</div>
+        <div class="tp-ovr-sub">팀 종합 OVR</div>
+        <div class="tp-breakdown">기본 <b>${st.baseAvg}</b> <span style="color:${chemCol}">${sign}${st.chemBonus} 케미</span></div>
+      </div>
+    </div>
+    ${st.activeGroups.length ? `<div class="tp-links-title">⚡ 발동 중인 케미</div><div class="tp-links">${links}</div>` : `<div class="tp-nolink">함께 배치된 케미 그룹이 없어요 · <b>팀컬러</b> 탭에서 만들어보세요</div>`}
+  `;
+}
+
+/* ---- 선수별 시너지 (선수 관리 표에서 확인) ---- */
+function playerChemGroups(playerId) { return chemistryLinks().filter(l => chemMembers(l).includes(playerId)); }
+function playerSynergyTotal(playerId) { return playerChemGroups(playerId).reduce((a, l) => a + chemSynergy(l), 0); }
+function playerSynergyCellHtml(p) {
+  const groups = playerChemGroups(p.id);
+  if (!groups.length) return '<span class="syn-none">–</span>';
+  const chips = groups.slice().sort((a, b) => chemSynergy(b) - chemSynergy(a)).map(l => {
+    const syn = chemSynergy(l);
+    const lab = chemLabel(syn);
+    const names = chemMembers(l).map(id => getPlayer(id)).filter(Boolean).map(x => x.name).join(', ');
+    const title = (l.note ? l.note + ' · ' : '') + names;
+    return `<span class="syn-chip" style="border-color:${lab.c}66; color:${lab.c}" title="${escapeHtml(title)}">🤝${syn>0?'+':''}${syn}</span>`;
+  }).join('');
+  return `<div class="syn-cell">${chips}</div>`;
+}
+
+/* ---- 팀컬러 탭 ---- */
+function renderChemistry() {
+  const el = document.getElementById('chemContent');
+  const links = chemistryLinks().slice().sort((a, b) => b.score - a.score);
+  if (!store.players.length) { el.innerHTML = '<div class="podium-empty">「선수 관리」 탭에서 선수를 먼저 등록해 주세요</div>'; return; }
+  if (!links.length) { el.innerHTML = '<div class="podium-empty">아직 만든 케미가 없어요. 오른쪽 위 <b>+ 케미 만들기</b>로 여러 선수의 궁합을 등록해보세요!</div>'; return; }
+  const u = currentUser();
+  el.innerHTML = '<div class="chem-list">' + links.map(l => {
+    const members = chemMembers(l).map(id => getPlayer(id)).filter(Boolean);
+    if (members.length < 2) return '';
+    const syn = chemSynergy(l);
+    const lab = chemLabel(syn);
+    const canDel = isAdmin() || (l.createdBy && u && l.createdBy === u.id);
+    const chips = members.map(p => `<span class="chem-p"><span class="chem-num">${p.number||'?'}</span>${escapeHtml(p.name)}</span>`).join('');
+    return `<div class="chem-card" style="border-left-color:${lab.c}">
+      <div class="chem-main">
+        ${l.note ? `<div class="chem-name">${escapeHtml(l.note)} <span class="chem-mcount">${members.length}명</span></div>` : `<div class="chem-name"><span class="chem-mcount">${members.length}명 그룹</span></div>`}
+        <div class="chem-pair">${chips}</div>
+      </div>
+      <div class="chem-right">
+        <div class="chem-score" style="color:${lab.c}">${syn>0?'+':''}${syn}<span class="chem-ovr-u">OVR</span></div>
+        <div class="chem-tag" style="color:${lab.c}">${lab.t}</div>
+      </div>
+      <div class="chem-actions">
+        <button class="chem-edit" data-edit-chem="${l.id}" title="수정">✏️</button>
+        ${canDel ? `<button class="chem-del" data-del-chem="${l.id}" title="삭제">🗑️</button>` : ''}
+      </div>
+    </div>`;
+  }).join('') + '</div>';
+  el.querySelectorAll('[data-del-chem]').forEach(b => b.addEventListener('click', () => deleteChem(b.dataset.delChem)));
+  el.querySelectorAll('[data-edit-chem]').forEach(b => b.addEventListener('click', () => openChemModal(b.dataset.editChem)));
+}
+let editingChemId = null;
+let chemPicked = new Set();
+function updateChemScoreLbl() {
+  const v = +document.getElementById('chemScore').value;
+  document.getElementById('chemScoreLbl').textContent = (v > 0 ? '+' : '') + v;
+  const lab = chemLabel(v);
+  const tag = document.getElementById('chemScoreTag');
+  tag.textContent = lab.t; tag.style.color = lab.c;
+}
+function renderChemPickList() {
+  const q = (document.getElementById('chemPickSearch').value || '').toLowerCase().trim();
+  const list = document.getElementById('chemPickList');
+  const players = store.players.slice().sort((a,b)=>(a.number||999)-(b.number||999))
+    .filter(p => !q || p.name.toLowerCase().includes(q) || String(p.number).includes(q));
+  list.innerHTML = players.map(p => `<div class="chem-pick ${chemPicked.has(p.id)?'on':''}" data-pick="${p.id}">
+    <span class="chem-pick-num">${p.number||'?'}</span>${escapeHtml(p.name)}${chemPicked.has(p.id)?' <span class="chem-pick-chk">✓</span>':''}
+  </div>`).join('') || '<div style="font-size:12px;color:var(--text-3);padding:8px;">검색 결과 없음</div>';
+  list.querySelectorAll('[data-pick]').forEach(el => el.addEventListener('click', () => {
+    const id = el.dataset.pick;
+    if (chemPicked.has(id)) chemPicked.delete(id); else chemPicked.add(id);
+    updateChemPickCount(); renderChemPickList();
+  }));
+}
+function updateChemPickCount() { document.getElementById('chemPickCount').textContent = chemPicked.size + '명'; }
+function openChemModal(chemId) {
+  if (!isLoggedIn()) { toast('로그인이 필요합니다'); return; }
+  editingChemId = chemId || null;
+  const l = chemId ? chemistryLinks().find(x => x.id === chemId) : null;
+  document.getElementById('chemModalTitle').textContent = l ? '🤝 케미 수정' : '🤝 케미 만들기';
+  chemPicked = new Set(l ? chemMembers(l) : []);
+  document.getElementById('chemPickSearch').value = '';
+  document.getElementById('chemScore').value = l ? chemSynergy(l) : 5;
+  document.getElementById('chemNote').value = l?.note || '';
+  updateChemScoreLbl();
+  updateChemPickCount();
+  renderChemPickList();
+  document.getElementById('chemModal').classList.add('show');
+}
+function closeChemModal() { document.getElementById('chemModal').classList.remove('show'); editingChemId = null; chemPicked = new Set(); }
+function saveChemFromModal() {
+  const u = currentUser(); if (!u) { toast('로그인이 필요합니다'); return; }
+  const members = Array.from(chemPicked).filter(id => getPlayer(id));
+  let synergy = +document.getElementById('chemScore').value;
+  synergy = Math.max(CHEM_SYN_MIN, Math.min(CHEM_SYN_MAX, synergy));
+  const note = document.getElementById('chemNote').value.trim();
+  if (members.length < 2) { alert('2명 이상의 선수를 선택하세요'); return; }
+  if (!Array.isArray(store.chemistry)) store.chemistry = [];
+  const dup = findChemSet(members);
+  if (editingChemId) {
+    const l = chemistryLinks().find(x => x.id === editingChemId);
+    if (l) { l.members = members; delete l.a; delete l.b; delete l.score; l.synergy = synergy; l.note = note; l.updatedBy = u.id; }
+  } else if (dup) {
+    dup.members = members; delete dup.a; delete dup.b; delete dup.score; dup.synergy = synergy; dup.note = note; dup.updatedBy = u.id;
+    toast('이미 있는 조합이라 케미를 업데이트했어요');
+  } else {
+    store.chemistry.push({ id: uid(), members, synergy, note, createdBy: u.id, createdAt: Date.now() });
+  }
+  saveState();
+  closeChemModal();
+  renderChemistry();
+  if (currentTab === 'squad') renderTeamPanel();
+  toast('케미 저장 ✓');
+}
+function deleteChem(id) {
+  const l = chemistryLinks().find(x => x.id === id); if (!l) return;
+  const u = currentUser();
+  if (!isAdmin() && !(l.createdBy && u && l.createdBy === u.id)) { toast('본인이 만든 케미 또는 운영진만 삭제 가능'); return; }
+  if (!confirm('이 케미를 삭제할까요?')) return;
+  store.chemistry = chemistryLinks().filter(x => x.id !== id);
+  saveState();
+  renderChemistry();
+  if (currentTab === 'squad') renderTeamPanel();
+  toast('케미 삭제');
+}
+
 /* ==================== Event bindings ==================== */
 let _eventsBound = false;
 function bindEvents() {
@@ -6566,6 +6910,14 @@ function bindEvents() {
   document.querySelectorAll('.tmt-btn').forEach(b => b.addEventListener('click', () => setTraitMode(b.dataset.tmode)));
   document.getElementById('traitModal').addEventListener('click', e => { if (e.target.id === 'traitModal') closeTraitModal(); });
 
+  // 팀컬러 / 케미
+  document.getElementById('btnAddChem').addEventListener('click', () => openChemModal(null));
+  document.getElementById('btnCancelChem').addEventListener('click', closeChemModal);
+  document.getElementById('btnSaveChem').addEventListener('click', saveChemFromModal);
+  document.getElementById('chemScore').addEventListener('input', updateChemScoreLbl);
+  document.getElementById('chemPickSearch').addEventListener('input', renderChemPickList);
+  document.getElementById('chemModal').addEventListener('click', e => { if (e.target.id === 'chemModal') closeChemModal(); });
+
   // 기록 / 출석 / 명예의 전당
   document.getElementById('recordsSeason').addEventListener('change', e => { recordsSeasonSel = e.target.value; renderRecords(); });
   document.getElementById('attendScope').addEventListener('change', renderAttend);
@@ -6578,7 +6930,7 @@ function bindEvents() {
     if (e.key === 'Escape') {
       closePlayerModal(); closeAssignModal(); closeMatchModal();
       closeDayModal(); closeRoleEditor(); closeStaffModal();
-      closePostModal(); closeDorModal(); closeTraitModal(); closeRecordModal();
+      closePostModal(); closeDorModal(); closeTraitModal(); closeRecordModal(); closeChemModal();
     }
   });
 }
