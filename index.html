@@ -840,10 +840,47 @@
     display: flex; justify-content: space-between; align-items: center;
     gap: 8px; cursor: pointer;
   }
+  .day-match-item { flex-direction: column; align-items: stretch; cursor: default; }
   .day-match-item:hover { border-color: var(--gold); }
+  .dm-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; cursor: pointer; }
   .day-match-info { flex: 1; }
   .day-match-title { font-weight: 600; font-size: 14px; margin-bottom: 3px; }
   .day-match-meta { font-size: 12px; color: var(--text-2); }
+
+  /* Attendance voting */
+  .match-attend { margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px; }
+  .attend-label {
+    font-family: var(--font-brand); font-size: 12px; font-weight: 700;
+    color: var(--text); letter-spacing: 0.02em; margin-bottom: 8px;
+  }
+  .attend-row { display: flex; gap: 6px; }
+  .attend-btn {
+    flex: 1; padding: 8px 6px; border-radius: 8px; cursor: pointer;
+    background: var(--bg-2); border: 1px solid var(--border-2); color: var(--text-2);
+    font-size: 12px; font-weight: 600; font-family: var(--font-brand);
+    display: flex; align-items: center; justify-content: center; gap: 5px;
+    transition: all 0.12s;
+  }
+  .attend-btn b { font-size: 13px; }
+  .attend-btn:hover { border-color: var(--gold); }
+  .attend-btn.attend.on { background: rgba(34,197,94,0.18); border-color: #22c55e; color: #4ade80; }
+  .attend-btn.hold.on { background: rgba(250,204,21,0.16); border-color: #facc15; color: #fde047; }
+  .attend-btn.absent.on { background: rgba(239,68,68,0.16); border-color: #ef4444; color: #fca5a5; }
+  .attend-voters { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+  .voter-chip { font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 600; border: 1px solid transparent; }
+  .voter-chip.attend { background: rgba(34,197,94,0.15); color: #4ade80; border-color: rgba(34,197,94,0.4); }
+  .voter-chip.hold { background: rgba(250,204,21,0.12); color: #fde047; border-color: rgba(250,204,21,0.35); }
+  .voter-chip.absent { background: rgba(239,68,68,0.12); color: #fca5a5; border-color: rgba(239,68,68,0.35); }
+  .attend-empty { font-size: 11px; color: var(--text-3); margin-top: 8px; }
+
+  /* Assign modal attendance highlight */
+  .assign-player-item.att-attend { border-color: rgba(34,197,94,0.5); box-shadow: inset 3px 0 0 #22c55e; }
+  .assign-player-item.att-hold { box-shadow: inset 3px 0 0 #facc15; }
+  .assign-player-item.att-absent { opacity: 0.55; box-shadow: inset 3px 0 0 #ef4444; }
+  .att-chip { font-size: 10px; padding: 1px 6px; border-radius: 6px; font-weight: 700; margin-left: 6px; font-family: var(--font-brand); }
+  .att-chip.attend { background: #22c55e; color: #04210f; }
+  .att-chip.hold { background: #facc15; color: #3a2e00; }
+  .att-chip.absent { background: #ef4444; color: #2a0606; }
 
   /* Quarter → squad rows in match modal */
   .quarter-row {
@@ -2482,10 +2519,11 @@ function normalizeStore(s) {
   s.players.forEach(p => {
     if (p.positions && !Array.isArray(p.positions)) p.positions = Object.values(p.positions);
   });
-  // Matches: ensure quarters array (migrate old single squadId)
+  // Matches: ensure quarters array (migrate old single squadId) + attendance map
   s.matches.forEach(m => {
     if (m.quarters && !Array.isArray(m.quarters)) m.quarters = Object.values(m.quarters);
     if (!Array.isArray(m.quarters)) m.quarters = m.squadId ? [{ label: '', squadId: m.squadId }] : [];
+    if (!m.attendance || typeof m.attendance !== 'object' || Array.isArray(m.attendance)) m.attendance = m.attendance && !Array.isArray(m.attendance) ? m.attendance : {};
   });
   if (!s.currentSquadId) s.currentSquadId = s.squads[0]?.id || null;
   return s;
@@ -3390,9 +3428,10 @@ function migrateData() {
     });
   });
   store.squads.forEach(s => ensureSquadSlots(s));
-  // Matches: migrate old single squadId → quarters array
+  // Matches: migrate old single squadId → quarters array + ensure attendance map
   (store.matches || []).forEach(m => {
     if (!Array.isArray(m.quarters)) m.quarters = m.squadId ? [{ label: '', squadId: m.squadId }] : [];
+    if (!m.attendance || typeof m.attendance !== 'object' || Array.isArray(m.attendance)) m.attendance = {};
   });
 }
 
@@ -4144,6 +4183,13 @@ function openAssignModal(slotIndex, roleName) {
   const available = store.players.filter(p => !assigned.has(p.id));
   const list = $('#assignPlayerList');
 
+  // Attendance priority: nearest upcoming match that uses this squad
+  const upMatch = getUpcomingMatchForSquad(squad.id);
+  const attHint = upMatch ? `<div class="assign-hint" style="border-color:rgba(34,197,94,0.35); background:rgba(34,197,94,0.06); color:#86efac;">
+    🗓️ 다가오는 경기 <b>vs ${escapeHtml(upMatch.opponent)}</b> 참석 투표 반영 · <b>참석자</b>가 맨 위로 정렬됩니다
+    <span style="color:var(--text-2);">(🟢참석 · 🟡보류 · 🔴불참)</span>
+  </div>` : '';
+
   // Hint banner
   const hintHtml = `<div class="assign-hint">
     💡 각 선수 옆에 이 지역의 모든 역할별 OVR이 표시됩니다.
@@ -4152,7 +4198,7 @@ function openAssignModal(slotIndex, roleName) {
   </div>`;
 
   if (available.length === 0) {
-    list.innerHTML = hintHtml + '<div class="empty">배치 가능한 선수가 없어요</div>';
+    list.innerHTML = attHint + hintHtml + '<div class="empty">배치 가능한 선수가 없어요</div>';
   } else {
     // For each player, compute OVR at every applicable role, find their best
     const withOvrs = available.map(p => {
@@ -4161,12 +4207,15 @@ function openAssignModal(slotIndex, roleName) {
       const sortedRoles = applicable.slice().sort((a,b) => ovrsByRole[b] - ovrsByRole[a]);
       const bestOvr = ovrsByRole[sortedRoles[0]];
       const bestRole = sortedRoles[0];
-      return { p, ovrsByRole, sortedRoles, bestOvr, bestRole };
+      const attStatus = upMatch ? playerAttendStatus(p, upMatch) : null;
+      const attRank = upMatch ? attendRankForPlayer(p, upMatch) : 2;
+      return { p, ovrsByRole, sortedRoles, bestOvr, bestRole, attStatus, attRank };
     });
-    // Sort by best OVR (descending)
-    withOvrs.sort((a,b) => b.bestOvr - a.bestOvr);
+    // Sort: attendance first (if there's an upcoming match), then by OVR
+    if (upMatch) withOvrs.sort((a,b) => (a.attRank - b.attRank) || (b.bestOvr - a.bestOvr));
+    else withOvrs.sort((a,b) => b.bestOvr - a.bestOvr);
 
-    list.innerHTML = hintHtml + withOvrs.map(({p, ovrsByRole, sortedRoles, bestRole}) => {
+    list.innerHTML = attHint + hintHtml + withOvrs.map(({p, ovrsByRole, sortedRoles, bestRole, attStatus}) => {
       const preferredRoles = new Set(p.positions || []);
       const roleButtons = sortedRoles.map(rc => {
         const isPreferred = preferredRoles.has(rc);
@@ -4187,11 +4236,12 @@ function openAssignModal(slotIndex, roleName) {
         const cat = ROLES[code]?.cat || 'MF';
         return `<span class="role-chip ${cat}">${code}</span>`;
       }).join('');
+      const attChip = attStatus ? `<span class="att-chip ${attStatus}">${ATTEND_META[attStatus].label}</span>` : '';
       return `
-      <div class="assign-player-item">
+      <div class="assign-player-item ${attStatus ? 'att-' + attStatus : ''}">
         <div class="player-num">${p.number || '?'}</div>
         <div class="player-info">
-          <div class="player-name">${escapeHtml(p.name)}</div>
+          <div class="player-name">${escapeHtml(p.name)}${attChip}</div>
           <div class="player-meta" style="margin-top:2px;">${preferredBadges}</div>
           <div class="assign-role-row">${roleButtons}</div>
         </div>
@@ -4496,6 +4546,67 @@ function deleteCurrentMatch() {
   toast('경기를 삭제했어요');
 }
 let currentDayStr = null;
+/* ==================== Attendance (참석 투표) ==================== */
+const ATTEND_META = {
+  attend: { label: '참석', icon: '✅', rank: 0 },
+  hold:   { label: '보류', icon: '⏸️', rank: 1 },
+  absent: { label: '불참', icon: '❌', rank: 3 },
+};
+function getMatchAttendance(m) { return (m && m.attendance && typeof m.attendance === 'object') ? m.attendance : {}; }
+function attendCounts(m) {
+  const a = getMatchAttendance(m);
+  const c = { attend: 0, hold: 0, absent: 0 };
+  Object.values(a).forEach(s => { if (c[s] != null) c[s]++; });
+  return c;
+}
+function myAttend(m) { const u = currentUser(); return u ? (getMatchAttendance(m)[u.id] || null) : null; }
+function setMatchAttendance(matchId, status) {
+  const u = currentUser();
+  if (!u) { toast('로그인이 필요합니다'); return; }
+  const m = store.matches.find(x => x.id === matchId);
+  if (!m) return;
+  if (!m.attendance) m.attendance = {};
+  if (m.attendance[u.id] === status) delete m.attendance[u.id]; // 다시 누르면 취소
+  else m.attendance[u.id] = status;
+  saveState();
+  if (currentDayStr) openDayModal(currentDayStr);
+  const meta = ATTEND_META[status];
+  toast(m.attendance[u.id] ? `${meta.icon} ${meta.label}` : '투표 취소');
+}
+function buildVoterChips(m) {
+  const a = getMatchAttendance(m);
+  const rows = [];
+  authStore.users.forEach(u => {
+    const s = a[u.id];
+    if (!s) return;
+    const pl = u.playerId ? store.players.find(p => p.id === u.playerId) : null;
+    rows.push({ status: s, name: u.displayName, num: pl ? pl.number : null, rank: ATTEND_META[s]?.rank ?? 2 });
+  });
+  rows.sort((x, y) => (x.rank - y.rank) || (x.name || '').localeCompare(y.name || ''));
+  return rows.map(r => `<span class="voter-chip ${r.status}">${r.num ? ('#' + r.num + ' ') : ''}${escapeHtml(r.name)}</span>`).join('');
+}
+// Squad placement priority: find the soonest upcoming match that uses this squad
+function getUpcomingMatchForSquad(squadId) {
+  const today = ymd(new Date());
+  const cands = store.matches.filter(m => {
+    if (m.date < today) return false;
+    const qs = matchQuarters(m);
+    return qs.some(q => q.squadId === squadId) || m.squadId === squadId;
+  }).sort((a, b) => a.date.localeCompare(b.date) || (a.time || '').localeCompare(b.time || ''));
+  return cands[0] || null;
+}
+function playerAttendStatus(player, match) {
+  if (!match || !player || !player.userId) return null;
+  return getMatchAttendance(match)[player.userId] || null;
+}
+function attendRankForPlayer(player, match) {
+  const s = playerAttendStatus(player, match);
+  if (s === 'attend') return 0;
+  if (s === 'hold') return 1;
+  if (s === 'absent') return 3;
+  return 2; // 미투표 / 미연결
+}
+
 function openDayModal(dateStr) {
   currentDayStr = dateStr;
   const d = parseYmd(dateStr);
@@ -4514,20 +4625,37 @@ function openDayModal(dateStr) {
         if (!sq) return '';
         return `<span class="match-squad-chip">${escapeHtml(q.label || '쿼터')}: ${escapeHtml(sq.name)}</span>`;
       }).join('');
+      const counts = attendCounts(m);
+      const mine = myAttend(m);
+      const voterChips = buildVoterChips(m);
+      const attendBtns = ['attend','hold','absent'].map(s => {
+        const meta = ATTEND_META[s];
+        return `<button class="attend-btn ${s} ${mine===s?'on':''}" data-att="${s}" data-match="${m.id}">${meta.icon} ${meta.label} <b>${counts[s]}</b></button>`;
+      }).join('');
       return `<div class="day-match-item" data-id="${m.id}">
-        <div class="day-match-info">
-          <div class="day-match-title">${m.time || ''} ${m.homeAway === 'away' ? '[원정]' : '[홈]'} vs ${escapeHtml(m.opponent)}${scoreStr}</div>
-          <div class="day-match-meta">
-            ${m.location ? '📍 ' + escapeHtml(m.location) : ''}
-            ${m.notes ? ' · 📝 ' + escapeHtml(m.notes.slice(0, 40)) + (m.notes.length > 40 ? '…' : '') : ''}
+        <div class="dm-top">
+          <div class="day-match-info">
+            <div class="day-match-title">${m.time || ''} ${m.homeAway === 'away' ? '[원정]' : '[홈]'} vs ${escapeHtml(m.opponent)}${scoreStr}</div>
+            <div class="day-match-meta">
+              ${m.location ? '📍 ' + escapeHtml(m.location) : ''}
+              ${m.notes ? ' · 📝 ' + escapeHtml(m.notes.slice(0, 40)) + (m.notes.length > 40 ? '…' : '') : ''}
+            </div>
+            ${quarterChips ? `<div style="margin-top:6px;">⚽ ${quarterChips}</div>` : ''}
           </div>
-          ${quarterChips ? `<div style="margin-top:6px;">⚽ ${quarterChips}</div>` : ''}
+          <button class="icon-btn" data-action="edit-match" title="경기 편집">✏️</button>
         </div>
-        <button class="icon-btn" data-action="edit-match">✏️</button>
+        <div class="match-attend">
+          <div class="attend-label">참석 투표 <span style="color:var(--text-3); font-weight:400;">· 참석자는 스쿼드 배치 우선순위로 앞에 떠요</span></div>
+          <div class="attend-row">${attendBtns}</div>
+          ${voterChips ? `<div class="attend-voters">${voterChips}</div>` : '<div class="attend-empty">아직 투표한 사람이 없어요</div>'}
+        </div>
       </div>`;
     }).join('');
-    list.querySelectorAll('.day-match-item').forEach(item => {
-      item.addEventListener('click', () => openMatchModal(item.dataset.id));
+    list.querySelectorAll('.dm-top').forEach(top => {
+      top.addEventListener('click', () => openMatchModal(top.closest('.day-match-item').dataset.id));
+    });
+    list.querySelectorAll('.attend-btn').forEach(btn => {
+      btn.addEventListener('click', e => { e.stopPropagation(); setMatchAttendance(btn.dataset.match, btn.dataset.att); });
     });
   }
   $('#dayModal').classList.add('show');
