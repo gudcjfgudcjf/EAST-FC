@@ -2603,12 +2603,13 @@ function canEditPlayer(player) {
   if (!isLoggedIn()) return false;
   return true; // everyone can open modal (may be read-only)
 }
-// Can this user edit STATS? Only admin/manager-mode users, and NEVER self.
+// Can this user edit STATS?
+// 감독/운영진 → 모든 선수. 일반 회원 → 본인과 연결된 선수 프로필만.
 function canEditPlayerStats(player) {
   if (!isLoggedIn()) return false;
+  if (isManagerActive()) return true; // 감독/운영진: 모든 선수 편집 가능
   const u = currentUser();
-  if (player?.userId && player.userId === u.id) return false; // block self even for admin (self-rating protection)
-  return isManagerActive(); // admin or unlocked manager mode
+  return !!(player && player.userId && player.userId === u.id); // 일반 회원: 본인 연결 선수만
 }
 // Can this user edit identity (name, number, foot, positions)?
 function canEditPlayerIdentity(player) {
@@ -4000,15 +4001,15 @@ function openPlayerModal(playerId) {
   }
   notice.innerHTML = '';
   notice.className = '';
-  if (isSelfPlayer) {
-    notice.className = 'readonly-notice self';
-    notice.innerHTML = '⚠️ 본인 프로필 · 능력치는 감독/운영진만 조정할 수 있습니다 (이름·등번호·역할은 편집 가능)';
-  } else if (statsBlocked && !isManagerActive()) {
-    notice.className = 'readonly-notice';
-    notice.innerHTML = '👁️ 능력치 조회만 가능합니다 · 능력치 조정은 감독/운영진만 가능 (상단 🔒 감독 버튼으로 잠금 해제)';
-  } else if (isManagerActive()) {
+  if (isManagerActive()) {
     notice.className = 'readonly-notice member';
-    notice.innerHTML = '🔓 감독/운영진 편집 모드 · 능력치를 자유롭게 조정하세요';
+    notice.innerHTML = '🔓 감독/운영진 편집 모드 · 모든 선수 능력치를 조정할 수 있어요';
+  } else if (isSelfPlayer) {
+    notice.className = 'readonly-notice member';
+    notice.innerHTML = '✏️ 본인 프로필 · 능력치를 직접 조정할 수 있어요';
+  } else if (statsBlocked) {
+    notice.className = 'readonly-notice';
+    notice.innerHTML = '👁️ 조회 전용 · 다른 선수 능력치는 감독/운영진과 본인만 조정할 수 있어요';
   }
 
   $('#pName').value = p?.name || '';
