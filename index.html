@@ -880,6 +880,8 @@
   .voter-chip.hold { background: rgba(250,204,21,0.12); color: #fde047; border-color: rgba(250,204,21,0.35); }
   .voter-chip.absent { background: rgba(239,68,68,0.12); color: #fca5a5; border-color: rgba(239,68,68,0.35); }
   .attend-empty { font-size: 11px; color: var(--text-3); margin-top: 8px; }
+  .attend-selfname { font-size: 12px; color: var(--gold-warm); font-weight: 700; margin-bottom: 6px; }
+  .amr-unlinked { font-size: 10px; color: var(--text-3); background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; padding: 0 5px; margin-left: 4px; }
 
   /* Manager roster: set anyone's attendance */
   .attend-manage { margin-top: 12px; border-top: 1px dashed var(--border-2); padding-top: 10px; }
@@ -4639,50 +4641,55 @@ const ATTEND_META = {
   hold:   { label: '보류', icon: '⏸️', rank: 1 },
   absent: { label: '불참', icon: '❌', rank: 3 },
 };
+// 참석은 "선수(playerId)" 기준으로 저장 — 가입 안 한 선수도 명단에 나오고 감독이 대신 눌러줄 수 있음
 function getMatchAttendance(m) { return (m && m.attendance && typeof m.attendance === 'object') ? m.attendance : {}; }
 function attendCounts(m) {
   const a = getMatchAttendance(m);
   const c = { attend: 0, hold: 0, absent: 0 };
-  Object.values(a).forEach(s => { if (c[s] != null) c[s]++; });
+  store.players.forEach(p => { const s = a[p.id]; if (c[s] != null) c[s]++; });
   return c;
 }
-function myAttend(m) { const u = currentUser(); return u ? (getMatchAttendance(m)[u.id] || null) : null; }
-// Shared attendance voting UI (used in day modal + match edit modal)
+// 현재 로그인 유저의 "선수"의 참석 상태
+function myPlayer() { const u = currentUser(); return u && u.playerId ? store.players.find(p => p.id === u.playerId) : null; }
+function myAttend(m) { const p = myPlayer(); return p ? (getMatchAttendance(m)[p.id] || null) : null; }
+// Shared attendance voting UI (used in match edit modal)
 function attendanceSectionHtml(m) {
   const counts = attendCounts(m);
+  const mp = myPlayer();
   const mine = myAttend(m);
   const voterChips = buildVoterChips(m);
-  const attendBtns = ['attend','hold','absent'].map(s => {
-    const meta = ATTEND_META[s];
-    return `<button class="attend-btn ${s} ${mine===s?'on':''}" data-att="${s}" data-match="${m.id}">${meta.icon} ${meta.label} <b>${counts[s]}</b></button>`;
-  }).join('');
+  let selfArea;
+  if (mp) {
+    const attendBtns = ['attend','hold','absent'].map(s => {
+      const meta = ATTEND_META[s];
+      return `<button class="attend-btn ${s} ${mine===s?'on':''}" data-att="${s}" data-match="${m.id}">${meta.icon} ${meta.label} <b>${counts[s]}</b></button>`;
+    }).join('');
+    selfArea = `<div class="attend-selfname">내 참석 (#${mp.number||'?'} ${escapeHtml(mp.name)})</div><div class="attend-row">${attendBtns}</div>`;
+  } else {
+    const cnt = `<div style="display:flex; gap:6px; font-size:12px; color:var(--text-2); margin-bottom:6px;">현재 ✅${counts.attend} · ⏸️${counts.hold} · ❌${counts.absent}</div>`;
+    selfArea = cnt + `<div class="attend-empty" style="margin-top:0;">본인 선수 프로필이 연결돼 있어야 직접 참석 투표할 수 있어요. (관리자 탭에서 연결)</div>`;
+  }
   return `<div class="match-attend">
     <div class="attend-label">참석 투표 <span style="color:var(--text-3); font-weight:400;">· 참석자는 스쿼드 배치 우선순위로 앞에 떠요</span></div>
-    <div class="attend-row">${attendBtns}</div>
-    ${voterChips ? `<div class="attend-voters">${voterChips}</div>` : '<div class="attend-empty">아직 투표한 사람이 없어요</div>'}
+    ${selfArea}
+    ${voterChips ? `<div class="attend-voters">${voterChips}</div>` : '<div class="attend-empty">아직 투표한 선수가 없어요</div>'}
     ${isManagerActive() ? managerRosterHtml(m) : ''}
   </div>`;
 }
 function managerRosterHtml(m) {
   const att = getMatchAttendance(m);
-  const users = authStore.users.slice().sort((a, b) => {
-    const pa = a.playerId ? store.players.find(p => p.id === a.playerId) : null;
-    const pb = b.playerId ? store.players.find(p => p.id === b.playerId) : null;
-    const na = pa ? (pa.number || 999) : 1000;
-    const nb = pb ? (pb.number || 999) : 1000;
-    return na - nb || (a.displayName || '').localeCompare(b.displayName || '');
-  });
-  const rows = users.map(u => {
-    const cur = att[u.id] || '';
-    const pl = u.playerId ? store.players.find(p => p.id === u.playerId) : null;
-    const nm = (pl ? ('#' + (pl.number || '?') + ' ') : '') + u.displayName;
+  const players = store.players.slice().sort((a, b) => (a.number || 999) - (b.number || 999) || (a.name || '').localeCompare(b.name || ''));
+  const rows = players.map(p => {
+    const cur = att[p.id] || '';
+    const linked = !!p.userId;
+    const nm = `#${p.number || '?'} ${p.name}` + (linked ? '' : ' <span class="amr-unlinked">미가입</span>');
     const btns = ['attend','hold','absent'].map(s =>
-      `<button class="amr-btn ${s} ${cur===s?'on':''}" data-set="${s}" data-user="${u.id}" data-match="${m.id}">${ATTEND_META[s].label}</button>`
-    ).join('') + `<button class="amr-btn clear ${cur===''?'on':''}" data-set="" data-user="${u.id}" data-match="${m.id}">미투표</button>`;
-    return `<div class="amr"><span class="amr-name">${escapeHtml(nm)}</span><div class="amr-btns">${btns}</div></div>`;
+      `<button class="amr-btn ${s} ${cur===s?'on':''}" data-set="${s}" data-player="${p.id}" data-match="${m.id}">${ATTEND_META[s].label}</button>`
+    ).join('') + `<button class="amr-btn clear ${cur===''?'on':''}" data-set="" data-player="${p.id}" data-match="${m.id}">미투표</button>`;
+    return `<div class="amr"><span class="amr-name">${nm}</span><div class="amr-btns">${btns}</div></div>`;
   }).join('');
   return `<div class="attend-manage">
-    <div class="attend-manage-title">🛡️ 감독/운영진 · 선수단 참석 직접 관리</div>
+    <div class="attend-manage-title">🛡️ 감독/운영진 · 선수단 참석 직접 관리 <span style="color:var(--text-3); font-weight:400; font-size:11px;">(미가입 선수도 대신 체크 가능)</span></div>
     <div class="attend-manage-list">${rows}</div>
   </div>`;
 }
@@ -4691,7 +4698,7 @@ function bindAttendanceButtons(root) {
     btn.addEventListener('click', e => { e.stopPropagation(); setMatchAttendance(btn.dataset.match, btn.dataset.att); });
   });
   root.querySelectorAll('.amr-btn').forEach(btn => {
-    btn.addEventListener('click', e => { e.stopPropagation(); setMatchAttendanceFor(btn.dataset.match, btn.dataset.user, btn.dataset.set); });
+    btn.addEventListener('click', e => { e.stopPropagation(); setMatchAttendanceForPlayer(btn.dataset.match, btn.dataset.player, btn.dataset.set); });
   });
 }
 function refreshAttendSection(matchId) {
@@ -4702,40 +4709,40 @@ function refreshAttendSection(matchId) {
     bindAttendanceButtons(sec);
   }
 }
+// 본인 선수의 참석 투표
 function setMatchAttendance(matchId, status) {
-  const u = currentUser();
-  if (!u) { toast('로그인이 필요합니다'); return; }
+  const p = myPlayer();
+  if (!p) { toast('본인 선수 프로필 연결이 필요해요'); return; }
   const m = store.matches.find(x => x.id === matchId);
   if (!m) return;
   if (!m.attendance) m.attendance = {};
-  if (m.attendance[u.id] === status) delete m.attendance[u.id]; // 다시 누르면 취소
-  else m.attendance[u.id] = status;
+  if (m.attendance[p.id] === status) delete m.attendance[p.id]; // 다시 누르면 취소
+  else m.attendance[p.id] = status;
   saveState();
   refreshAttendSection(matchId);
   const meta = ATTEND_META[status];
-  toast(m.attendance[u.id] ? `${meta.icon} ${meta.label}` : '투표 취소');
+  toast(m.attendance[p.id] ? `${meta.icon} ${meta.label}` : '투표 취소');
 }
-// 감독/운영진이 다른 회원(선수단)의 참석 상태를 직접 지정/해제
-function setMatchAttendanceFor(matchId, userId, status) {
+// 감독/운영진이 특정 "선수"의 참석 상태를 직접 지정/해제 (미가입 선수 포함)
+function setMatchAttendanceForPlayer(matchId, playerId, status) {
   if (!isManagerActive()) { toast('감독/운영진만 가능합니다'); return; }
   const m = store.matches.find(x => x.id === matchId);
   if (!m) return;
   if (!m.attendance) m.attendance = {};
-  if (!status) delete m.attendance[userId];
-  else m.attendance[userId] = status;
+  if (!status) delete m.attendance[playerId];
+  else m.attendance[playerId] = status;
   saveState();
   refreshAttendSection(matchId);
 }
 function buildVoterChips(m) {
   const a = getMatchAttendance(m);
   const rows = [];
-  authStore.users.forEach(u => {
-    const s = a[u.id];
+  store.players.forEach(p => {
+    const s = a[p.id];
     if (!s) return;
-    const pl = u.playerId ? store.players.find(p => p.id === u.playerId) : null;
-    rows.push({ status: s, name: u.displayName, num: pl ? pl.number : null, rank: ATTEND_META[s]?.rank ?? 2 });
+    rows.push({ status: s, name: p.name, num: p.number, rank: ATTEND_META[s]?.rank ?? 2 });
   });
-  rows.sort((x, y) => (x.rank - y.rank) || (x.name || '').localeCompare(y.name || ''));
+  rows.sort((x, y) => (x.rank - y.rank) || ((x.num || 999) - (y.num || 999)));
   return rows.map(r => `<span class="voter-chip ${r.status}">${r.num ? ('#' + r.num + ' ') : ''}${escapeHtml(r.name)}</span>`).join('');
 }
 // Squad placement priority: find the soonest upcoming match that uses this squad
@@ -4749,8 +4756,8 @@ function getUpcomingMatchForSquad(squadId) {
   return cands[0] || null;
 }
 function playerAttendStatus(player, match) {
-  if (!match || !player || !player.userId) return null;
-  return getMatchAttendance(match)[player.userId] || null;
+  if (!match || !player) return null;
+  return getMatchAttendance(match)[player.id] || null;
 }
 function attendRankForPlayer(player, match) {
   const s = playerAttendStatus(player, match);
