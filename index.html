@@ -732,6 +732,17 @@
   .stat-input label { font-size: 11px; display: flex; justify-content: space-between; color: var(--text); margin-bottom: 2px; }
   .stat-input label span { color: var(--gold); font-weight: 700; }
   .stat-input input[type=range] { width: 100%; accent-color: var(--gold); }
+  .stat-input.stat-invert input[type=range] { accent-color: #f87171; }
+  .stat-input.stat-invert label span:not(.stat-neg-tag) { color: #f87171; }
+  .stat-neg-tag { font-size: 9px; color: #f87171; background: rgba(248,113,113,0.14); border: 1px solid #f8717155; border-radius: 4px; padding: 0 4px; font-weight: 700; margin-left: 3px; }
+
+  /* 선수 모달: 능력 레이더 + 종합 OVR */
+  .player-radar-panel { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; background: linear-gradient(155deg, var(--bg-3), var(--bg-2)); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin: 4px 0 16px; }
+  .player-radar-wrap { width: 260px; max-width: 100%; }
+  .player-radar-wrap svg { width: 100%; height: auto; display: block; }
+  .player-radar-score { text-align: center; }
+  .player-radar-ovr { font-family: var(--font-brand); font-weight: 700; font-size: 48px; line-height: 1; }
+  .player-radar-ovr-sub { font-size: 12px; color: var(--text-3); margin-top: 4px; letter-spacing: .04em; }
 
   .live-ovr-panel { background: var(--bg-2); border: 1px solid var(--border-2); border-radius: 8px; padding: 10px; margin-top: 14px; }
   .live-ovr-panel h4 { margin-top: 0; margin-bottom: 8px; }
@@ -1909,6 +1920,12 @@
     .champ-name { font-size: 17px; }
     .rec-mom-bar { width: 60px; }
 
+    /* 선수 레이더 모바일 */
+    .player-radar-panel { gap: 6px; padding: 10px; }
+    .player-radar-wrap { width: 210px; }
+    .player-radar-ovr { font-size: 40px; }
+    .stat-grid { grid-template-columns: 1fr; }
+
     /* Slots slightly smaller labels on phones */
     .slot { width: 84px; height: 90px; }
     .slot-circle { width: 42px; height: 42px; }
@@ -2378,6 +2395,7 @@
               <th data-sort="avg_4" class="stat-cell">🛡️ 수비</th>
               <th data-sort="avg_5" class="stat-cell">🧠 정신</th>
               <th data-sort="avg_6" class="stat-cell">🧤 GK</th>
+              <th data-sort="avg_7" class="stat-cell">🧩 지능</th>
               <th></th>
             </tr>
           </thead>
@@ -2606,7 +2624,16 @@
       <div class="role-picker" id="rolePicker"></div>
     </div>
 
-    <!-- 6 stat sections will be built dynamically -->
+    <!-- 능력 한눈에 보기: 레이더 + 종합 OVR -->
+    <div class="player-radar-panel" id="playerRadarPanel">
+      <div class="player-radar-wrap" id="playerRadarSvg"></div>
+      <div class="player-radar-score">
+        <div class="player-radar-ovr" id="playerRadarOvr">—</div>
+        <div class="player-radar-ovr-sub" id="playerRadarOvrSub">종합</div>
+      </div>
+    </div>
+
+    <!-- stat sections will be built dynamically -->
     <div id="statSections"></div>
 
     <div class="live-ovr-panel">
@@ -3517,6 +3544,7 @@ const STATS = {
   strength:     { name: '근력',         section: 1 },
   jump:         { name: '점프',         section: 1 },
   react:        { name: '반응속도',     section: 1 },
+  duel:         { name: '몸싸움',       section: 1 },
 
   // 공격 (7)
   finishing:    { name: '골결정력',     section: 2 },
@@ -3537,12 +3565,13 @@ const STATS = {
   curve:        { name: '감아차기',     section: 3 },
 
   // 수비 (6)
-  marking:      { name: '마킹',         section: 4 },
+  marking:      { name: '대인방어',     section: 4 },
   tackling:     { name: '서서 태클',    section: 4 },
   slidetackle:  { name: '슬라이딩 태클', section: 4 },
   intercept:    { name: '인터셉트',     section: 4 },
   def_pos:      { name: '수비 위치선정', section: 4 },
   def_head:     { name: '수비 헤더',    section: 4 },
+  assert:       { name: '적극성',       section: 4 },
 
   // 정신 (6)
   composure:    { name: '침착성',       section: 5 },
@@ -3560,15 +3589,26 @@ const STATS = {
   gk_kick:      { name: '킥력',         section: 6 },
   gk_1v1:       { name: '1대1 대응',    section: 6 },
   gk_throw:     { name: '스로잉',       section: 6 },
+
+  // 지능 (7) — 빡대가리는 높을수록 OVR에 감점(invert)
+  gameiq:       { name: '축구도사',     section: 7 },
+  att_iq:       { name: '공격 지능',    section: 7 },
+  def_iq:       { name: '수비 지능',    section: 7 },
+  reading:      { name: '경기 읽기',    section: 7 },
+  dumb:         { name: '빡대가리',     section: 7, invert: true },
 };
 const STAT_KEYS = Object.keys(STATS);
+// invert 스탯: 값이 높을수록 나쁨 → OVR/평균 계산 시 (100 - 값)으로 반영
+const STAT_DEFAULT = (k) => (STATS[k] && STATS[k].invert ? 20 : 70);
+function statQualityVal(k, raw) { return (STATS[k] && STATS[k].invert) ? (100 - raw) : raw; }
 const SECTIONS = [
-  { id: 1, label: '🏃 신체 능력' },
-  { id: 2, label: '⚽ 공격 능력' },
-  { id: 3, label: '🎨 기술 능력' },
-  { id: 4, label: '🛡️ 수비 능력' },
-  { id: 5, label: '🧠 정신 능력' },
-  { id: 6, label: '🧤 골키퍼 전용' },
+  { id: 1, label: '🏃 신체 능력', emoji: '🏃' },
+  { id: 2, label: '⚽ 공격 능력', emoji: '⚽' },
+  { id: 3, label: '🎨 기술 능력', emoji: '🎨' },
+  { id: 4, label: '🛡️ 수비 능력', emoji: '🛡️' },
+  { id: 5, label: '🧠 정신 능력', emoji: '🧠' },
+  { id: 6, label: '🧤 골키퍼 전용', emoji: '🧤' },
+  { id: 7, label: '🧩 지능', emoji: '🧩' },
 ];
 
 /* ==================== Roles ==================== */
@@ -3913,9 +3953,9 @@ function migrateData() {
     // Clean up old keys
     ['pace','shoot','pass','drib','def','phy','tackle','head','cross','mental','position','gk'].forEach(k => delete s[k]);
 
-    // Fill missing new keys with 70
+    // Fill missing new keys with default (invert 스탯은 낮은 기본값)
     STAT_KEYS.forEach(k => {
-      if (typeof s[k] !== 'number') s[k] = 70;
+      if (typeof s[k] !== 'number') s[k] = STAT_DEFAULT(k);
     });
   });
   store.squads.forEach(s => ensureSquadSlots(s));
@@ -3944,15 +3984,28 @@ function toast(msg) {
   toast._h = setTimeout(() => t.classList.remove('show'), 1800);
 }
 
+// 모든 역할 OVR에 공통으로 반영되는 신규 스탯 가중치
+const UNIV_WEIGHTS = { gameiq: 8, assert: 4, duel: 4, reading: 4, dumb: 10 }; // dumb=빡대가리(invert, 높을수록 감점)
+// 포지션 카테고리별 지능 가중치
+const CAT_IQ_WEIGHTS = {
+  FW: { att_iq: 10, def_iq: 2 },
+  MF: { att_iq: 7,  def_iq: 7 },
+  DF: { att_iq: 3,  def_iq: 10 },
+  GK: { att_iq: 1,  def_iq: 6 },
+};
 function ovrForRole(player, roleCode) {
   const role = ROLES[roleCode];
   if (!role) return 0;
-  const w = role.weights;
   let total = 0, sumW = 0;
-  for (const k in w) {
-    const v = player.stats?.[k];
-    if (typeof v === 'number') { total += v * w[k]; sumW += w[k]; }
-  }
+  const add = (k, w) => {
+    if (!w) return;
+    const raw = player.stats?.[k];
+    if (typeof raw === 'number') { total += statQualityVal(k, raw) * w; sumW += w; }
+  };
+  for (const k in role.weights) add(k, role.weights[k]);
+  for (const k in UNIV_WEIGHTS) add(k, UNIV_WEIGHTS[k]);
+  const catIq = CAT_IQ_WEIGHTS[role.cat] || {};
+  for (const k in catIq) add(k, catIq[k]);
   return sumW > 0 ? Math.round(total / sumW) : 0;
 }
 function bestRoleForPlayer(player) {
@@ -3967,9 +4020,9 @@ function bestRoleForPlayer(player) {
   return best || { code: positions[0], name: ROLES[positions[0]]?.name || '?', ovr: 0 };
 }
 function sectionAvg(player, sectionId) {
-  const keys = STAT_KEYS.filter(k => STATS[k].section === sectionId);
-  const vals = keys.map(k => player.stats?.[k]).filter(v => typeof v === 'number');
-  return vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : 0;
+  const keys = STAT_KEYS.filter(k => STATS[k].section === sectionId && typeof player.stats?.[k] === 'number');
+  const qvals = keys.map(k => statQualityVal(k, player.stats[k]));
+  return qvals.length ? Math.round(qvals.reduce((a,b)=>a+b,0)/qvals.length) : 0;
 }
 function footLabel(f) { return f === 'L' ? '왼발' : f === 'B' ? '양발' : '오른발'; }
 function escapeHtml(s) {
@@ -4414,7 +4467,7 @@ function renderPlayersTable() {
     if (th.dataset.sort === key) th.classList.add(dir === 'asc' ? 'sort-asc' : 'sort-desc');
   });
   if (list.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="13" class="empty">${store.players.length === 0 ? '오른쪽 위 [+ 선수 추가]를 눌러 첫 선수를 추가해 보세요' : '검색 결과 없음'}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="14" class="empty">${store.players.length === 0 ? '오른쪽 위 [+ 선수 추가]를 눌러 첫 선수를 추가해 보세요' : '검색 결과 없음'}</td></tr>`;
     return;
   }
   tbody.innerHTML = list.map(p => {
@@ -4479,9 +4532,9 @@ function buildStatGrid() {
       </div>
       <div class="stat-grid">
         ${keys.map(k => `
-          <div class="stat-input">
-            <label>${STATS[k].name} <span id="lbl_${k}">70</span></label>
-            <input type="range" id="stat_${k}" min="1" max="99" value="70" data-key="${k}" data-section="${sec.id}" />
+          <div class="stat-input${STATS[k].invert ? ' stat-invert' : ''}">
+            <label>${STATS[k].name}${STATS[k].invert ? ' <span class="stat-neg-tag">↓감점</span>' : ''} <span id="lbl_${k}">${STAT_DEFAULT(k)}</span></label>
+            <input type="range" id="stat_${k}" min="1" max="99" value="${STAT_DEFAULT(k)}" data-key="${k}" data-section="${sec.id}" />
           </div>
         `).join('')}
       </div>
@@ -4492,16 +4545,61 @@ function buildStatGrid() {
       document.getElementById('lbl_' + e.target.dataset.key).textContent = e.target.value;
       updateSectionAvg(+e.target.dataset.section);
       updateLiveOvr();
+      updatePlayerRadar();
     });
   });
 }
 
 function updateSectionAvg(sectionId) {
   const keys = STAT_KEYS.filter(k => STATS[k].section === sectionId);
-  const vals = keys.map(k => +document.getElementById('stat_' + k).value);
+  const vals = keys.map(k => statQualityVal(k, +document.getElementById('stat_' + k).value));
   const avg = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : 0;
   const el = document.getElementById('secAvg_' + sectionId);
   if (el) el.textContent = '평균 ' + avg;
+}
+// 현재 모달 슬라이더 기준 임시 선수 객체
+function modalTempPlayer() {
+  const stats = {};
+  STAT_KEYS.forEach(k => { const el = document.getElementById('stat_' + k); if (el) stats[k] = +el.value; });
+  return { stats, positions: Array.from(selectedRoles) };
+}
+// 선수 모달 상단 레이더(섹션별 능력) + 종합 OVR 실시간 갱신
+function updatePlayerRadar() {
+  const panel = document.getElementById('playerRadarPanel');
+  if (!panel) return;
+  const tp = modalTempPlayer();
+  const vals = SECTIONS.map(s => sectionAvg(tp, s.id));
+  const labels = SECTIONS.map(s => s.emoji);
+  const best = bestRoleForPlayer(tp);
+  const bigVal = best.ovr || 0;
+  document.getElementById('playerRadarSvg').innerHTML = statRadarSvg(vals, labels);
+  const ovrEl = document.getElementById('playerRadarOvr');
+  ovrEl.textContent = bigVal || '—';
+  ovrEl.style.color = traitValColor(bigVal || 0);
+  document.getElementById('playerRadarOvrSub').textContent = best.code ? `${best.code} 기준 최고 OVR` : '종합';
+}
+// 섹션 레이더 SVG (값 배열 + 이모지 라벨)
+function statRadarSvg(vals, labels) {
+  const n = vals.length;
+  if (n < 3) return '';
+  const size = 260, cx = size/2, cy = size/2, R = size/2 - 42;
+  const rings = [0.25,0.5,0.75,1].map(f => {
+    let d = '';
+    for (let i=0;i<n;i++){ const ang=-Math.PI/2 + i*2*Math.PI/n; d+=(i?'L':'M')+(cx+Math.cos(ang)*R*f).toFixed(1)+' '+(cy+Math.sin(ang)*R*f).toFixed(1)+' '; }
+    return `<path d="${d}Z" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>`;
+  }).join('');
+  let axes='', dataD='', dots='', lab='';
+  for (let i=0;i<n;i++){
+    const ang=-Math.PI/2 + i*2*Math.PI/n;
+    axes += `<line x1="${cx}" y1="${cy}" x2="${(cx+Math.cos(ang)*R).toFixed(1)}" y2="${(cy+Math.sin(ang)*R).toFixed(1)}" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>`;
+    const v = vals[i] || 0;
+    const rx=cx+Math.cos(ang)*R*(v/100), ry=cy+Math.sin(ang)*R*(v/100);
+    dataD += (i?'L':'M')+rx.toFixed(1)+' '+ry.toFixed(1)+' ';
+    dots += `<circle cx="${rx.toFixed(1)}" cy="${ry.toFixed(1)}" r="3.2" fill="${traitValColor(v)}" stroke="#000" stroke-width="0.5"/>`;
+    lab += `<text x="${(cx+Math.cos(ang)*(R+19)).toFixed(1)}" y="${(cy+Math.sin(ang)*(R+19)+5).toFixed(1)}" text-anchor="middle" font-size="15">${labels[i]||''}</text>`;
+  }
+  return `<svg viewBox="0 0 ${size} ${size}" class="trait-radar" xmlns="http://www.w3.org/2000/svg">${rings}${axes}
+    <path d="${dataD}Z" fill="rgba(244,196,48,0.20)" stroke="var(--gold)" stroke-width="2" stroke-linejoin="round"/>${dots}${lab}</svg>`;
 }
 
 function updateLiveOvr() {
@@ -4590,9 +4688,9 @@ function openPlayerModal(playerId) {
     let v;
     if (p?.ratings?.[k] && !isAdmin() && u.id !== p?.userId) {
       // Show this user's rating if they've voted before, else current average
-      v = p.ratings[k][u.id] ?? p.stats?.[k] ?? 70;
+      v = p.ratings[k][u.id] ?? p.stats?.[k] ?? STAT_DEFAULT(k);
     } else {
-      v = p?.stats?.[k] ?? 70;
+      v = p?.stats?.[k] ?? STAT_DEFAULT(k);
     }
     document.getElementById('stat_' + k).value = v;
     document.getElementById('lbl_' + k).textContent = v;
@@ -4606,6 +4704,7 @@ function openPlayerModal(playerId) {
 
   SECTIONS.forEach(sec => updateSectionAvg(sec.id));
   updateLiveOvr();
+  updatePlayerRadar();
   $('#playerModal').classList.add('show');
   setTimeout(() => {
     if (!identityDisabled) $('#pName').focus();
@@ -6488,10 +6587,10 @@ function bindEvents() {
 function seedSampleData() {
   if (store.players.length > 0 || store.squads.length > 0 || store.staff.length > 0) return;
 
-  // Helper to build stats: pass an object of overrides on base 70
+  // Helper to build stats: pass an object of overrides on base default (invert 스탯은 낮게)
   const buildStats = (overrides = {}) => {
     const s = {};
-    STAT_KEYS.forEach(k => { s[k] = overrides[k] ?? 70; });
+    STAT_KEYS.forEach(k => { s[k] = overrides[k] ?? STAT_DEFAULT(k); });
     return s;
   };
 
