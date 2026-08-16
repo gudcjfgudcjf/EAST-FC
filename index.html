@@ -2419,7 +2419,7 @@
 <div class="modal-overlay" id="dorModal">
   <div class="modal">
     <h3 id="dorModalTitle">호감도 투표</h3>
-    <div class="dor-anon-note">🔒 100% 익명 투표 · 누가 어떤 점수를 줬는지 알 수 없습니다</div>
+    <div class="dor-anon-note">🔒 100% 익명 · 누를 때마다 점수가 누적됩니다 (여러 번 투표 가능)</div>
 
     <div class="dor-vote-slider-wrap">
       <div class="dor-vote-value neutral" id="dorVoteValue">0</div>
@@ -5216,7 +5216,7 @@ function renderDor() {
         <div class="dor-card-name">${escapeHtml(p.name)}</div>
         <div class="dor-card-pos">${roleTags}</div>
         <div class="dor-score ${cls}">${sign}${s.total}</div>
-        <div class="dor-vote-count">${s.count}명 참여</div>
+        <div class="dor-vote-count">누적 ${s.count}표</div>
       </div>`;
   }).join('');
   container.querySelectorAll('.dor-card').forEach(c => {
@@ -5228,14 +5228,12 @@ function openDorModal(playerId) {
   editingDorPlayerId = playerId;
   const p = getPlayer(playerId);
   if (!p) return;
-  const u = currentUser();
-  const votes = store.dorVotes[playerId] || [];
-  const myVote = votes.find(v => v.voterId === u.id);
   document.getElementById('dorModalTitle').textContent = `💛 ${p.name} · 호감도`;
+  // 누적 투표 — 열 때마다 0에서 시작 (누를 때마다 새 표가 쌓임)
   const slider = document.getElementById('dorVoteSlider');
-  slider.value = myVote?.value ?? 0;
-  updateDorValueDisplay(slider.value);
-  document.getElementById('dorReason').value = myVote?.reason || '';
+  slider.value = 0;
+  updateDorValueDisplay(0);
+  document.getElementById('dorReason').value = '';
   renderDorReasons(playerId);
   document.getElementById('dorModal').classList.add('show');
   setTimeout(() => slider.focus(), 50);
@@ -5272,20 +5270,14 @@ function saveDorVote() {
   if (!u || !editingDorPlayerId) return;
   const value = Number(document.getElementById('dorVoteSlider').value);
   const reason = document.getElementById('dorReason').value.trim();
+  if (value === 0 && !reason) { toast('점수나 사유를 입력하세요'); return; }
   if (!store.dorVotes[editingDorPlayerId]) store.dorVotes[editingDorPlayerId] = [];
-  const arr = store.dorVotes[editingDorPlayerId];
-  const existing = arr.find(v => v.voterId === u.id);
-  if (existing) {
-    existing.value = value;
-    existing.reason = reason;
-    existing.createdAt = new Date().toISOString();
-  } else {
-    arr.push({ id: uid(), voterId: u.id, value, reason, createdAt: new Date().toISOString() });
-  }
+  // 누적 투표: 누를 때마다 새로운 표를 추가 (덮어쓰지 않음)
+  store.dorVotes[editingDorPlayerId].push({ id: uid(), voterId: u.id, value, reason, createdAt: new Date().toISOString() });
   saveState();
   closeDorModal();
   renderDor();
-  toast('익명 투표가 반영되었습니다');
+  toast('익명 투표가 누적되었습니다 💛');
 }
 
 /* ==================== Event bindings ==================== */
