@@ -881,6 +881,20 @@
   .voter-chip.absent { background: rgba(239,68,68,0.12); color: #fca5a5; border-color: rgba(239,68,68,0.35); }
   .attend-empty { font-size: 11px; color: var(--text-3); margin-top: 8px; }
 
+  /* Manager roster: set anyone's attendance */
+  .attend-manage { margin-top: 12px; border-top: 1px dashed var(--border-2); padding-top: 10px; }
+  .attend-manage-title { font-family: var(--font-brand); font-size: 12px; font-weight: 700; color: #93c5fd; margin-bottom: 8px; }
+  .attend-manage-list { max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 5px; }
+  .amr { display: flex; align-items: center; gap: 8px; justify-content: space-between; padding: 3px 2px; }
+  .amr-name { font-size: 12px; color: var(--text); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .amr-btns { display: flex; gap: 3px; flex-shrink: 0; }
+  .amr-btn { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; background: var(--bg-2); border: 1px solid var(--border-2); color: var(--text-2); white-space: nowrap; }
+  .amr-btn:hover { border-color: var(--gold); }
+  .amr-btn.attend.on { background: rgba(34,197,94,0.2); border-color: #22c55e; color: #4ade80; }
+  .amr-btn.hold.on { background: rgba(250,204,21,0.18); border-color: #facc15; color: #fde047; }
+  .amr-btn.absent.on { background: rgba(239,68,68,0.18); border-color: #ef4444; color: #fca5a5; }
+  .amr-btn.clear.on { background: var(--border-2); border-color: var(--text-4); color: var(--text); }
+
   /* Assign modal attendance highlight */
   .assign-player-item.att-attend { border-color: rgba(34,197,94,0.5); box-shadow: inset 3px 0 0 #22c55e; }
   .assign-player-item.att-hold { box-shadow: inset 3px 0 0 #facc15; }
@@ -1622,6 +1636,12 @@
     /* Dor cards a bit smaller */
     .dor-content { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
 
+    /* Manager attendance roster: stack name over full-width buttons */
+    .amr { flex-wrap: wrap; gap: 5px; padding: 6px 4px; border-bottom: 1px solid var(--border); }
+    .amr-name { flex-basis: 100%; font-size: 13px; font-weight: 600; }
+    .amr-btns { width: 100%; }
+    .amr-btn { flex: 1; text-align: center; padding: 7px 4px; }
+
     /* Slots slightly smaller labels on phones */
     .slot { width: 84px; height: 90px; }
     .slot-circle { width: 42px; height: 42px; }
@@ -2281,6 +2301,14 @@
     <div class="form-group"><label>상대팀</label><input type="text" id="mOpponent" placeholder="예: FC 서울" /></div>
     <div class="form-group"><label>홈/원정</label>
       <select id="mHomeAway"><option value="home">홈</option><option value="away">원정</option></select>
+    </div>
+    <div class="form-group" id="mAutoQuarterWrap" style="display:none;">
+      <label>자동 스쿼드 생성</label>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <input type="number" id="mAutoQuarters" min="1" max="12" value="4" style="width:80px;" />
+        <span style="font-size:12px; color:var(--text-2);">쿼터</span>
+      </div>
+      <div style="font-size:11px; color:var(--text-3); margin-top:5px; line-height:1.5;">저장하면 <b style="color:var(--gold-warm)">"MMDD 상대팀 N쿼터"</b> 스쿼드가 쿼터 수만큼 자동 생성돼 연결됩니다. <br>쿼터를 아래에서 직접 추가하면 자동 생성은 건너뜁니다.</div>
     </div>
     <div class="form-group">
       <label>쿼터별 스쿼드 <span style="text-transform:none; letter-spacing:0; color:var(--text-3); font-weight:400;">· 쿼터마다 다른 스쿼드를 연결하세요</span></label>
@@ -4527,6 +4555,7 @@ function openMatchModal(matchId, defaultDate) {
   editingMatchId = matchId || null;
   $('#matchModalTitle').textContent = matchId ? '경기 편집' : '경기 추가';
   $('#btnDeleteMatch').style.display = matchId ? 'inline-block' : 'none';
+  document.getElementById('mAutoQuarterWrap').style.display = matchId ? 'none' : 'block'; // 신규 경기만 자동생성
   const m = matchId ? store.matches.find(x => x.id === matchId) : null;
   $('#mDate').value = m?.date || defaultDate || ymd(new Date());
   $('#mTime').value = m?.time || '15:00';
@@ -4571,16 +4600,23 @@ function saveMatchFromModal() {
     toast('경기 정보 업데이트');
   } else {
     const newMatch = { id: uid(), color: nextMatchColor(), ...data };
-    // 쿼터를 직접 지정하지 않았으면 "M/D vs 상대팀" 스쿼드를 자동 생성해 1쿼터로 연결
+    // 쿼터를 직접 지정하지 않았으면 "MMDD 상대팀 N쿼터" 스쿼드를 쿼터 수만큼 자동 생성
     if (!newMatch.quarters || newMatch.quarters.length === 0) {
       const dt = parseYmd(newMatch.date);
-      const sqName = `${dt.getMonth()+1}/${dt.getDate()} vs ${newMatch.opponent}`;
-      const squad = { id: uid(), name: sqName, formation: '4-4-2', slots: [], assignments: {} };
-      ensureSquadSlots(squad);
-      store.squads.push(squad);
-      newMatch.quarters = [{ label: '1쿼터', squadId: squad.id }];
-      newMatch.squadId = squad.id;
-      toast('경기 추가 · 스쿼드 자동 생성');
+      const mm = String(dt.getMonth()+1).padStart(2,'0');
+      const dd = String(dt.getDate()).padStart(2,'0');
+      let n = parseInt($('#mAutoQuarters').value) || 1;
+      n = Math.max(1, Math.min(12, n));
+      const quarters = [];
+      for (let i = 1; i <= n; i++) {
+        const squad = { id: uid(), name: `${mm}${dd} ${newMatch.opponent} ${i}쿼터`, formation: '4-3-3', slots: [], assignments: {} };
+        ensureSquadSlots(squad);
+        store.squads.push(squad);
+        quarters.push({ label: `${i}쿼터`, squadId: squad.id });
+      }
+      newMatch.quarters = quarters;
+      newMatch.squadId = quarters[0].squadId;
+      toast(`경기 추가 · 스쿼드 ${n}개 자동 생성`);
     } else {
       toast('경기 추가 완료');
     }
@@ -4624,12 +4660,47 @@ function attendanceSectionHtml(m) {
     <div class="attend-label">참석 투표 <span style="color:var(--text-3); font-weight:400;">· 참석자는 스쿼드 배치 우선순위로 앞에 떠요</span></div>
     <div class="attend-row">${attendBtns}</div>
     ${voterChips ? `<div class="attend-voters">${voterChips}</div>` : '<div class="attend-empty">아직 투표한 사람이 없어요</div>'}
+    ${isManagerActive() ? managerRosterHtml(m) : ''}
+  </div>`;
+}
+function managerRosterHtml(m) {
+  const att = getMatchAttendance(m);
+  const users = authStore.users.slice().sort((a, b) => {
+    const pa = a.playerId ? store.players.find(p => p.id === a.playerId) : null;
+    const pb = b.playerId ? store.players.find(p => p.id === b.playerId) : null;
+    const na = pa ? (pa.number || 999) : 1000;
+    const nb = pb ? (pb.number || 999) : 1000;
+    return na - nb || (a.displayName || '').localeCompare(b.displayName || '');
+  });
+  const rows = users.map(u => {
+    const cur = att[u.id] || '';
+    const pl = u.playerId ? store.players.find(p => p.id === u.playerId) : null;
+    const nm = (pl ? ('#' + (pl.number || '?') + ' ') : '') + u.displayName;
+    const btns = ['attend','hold','absent'].map(s =>
+      `<button class="amr-btn ${s} ${cur===s?'on':''}" data-set="${s}" data-user="${u.id}" data-match="${m.id}">${ATTEND_META[s].label}</button>`
+    ).join('') + `<button class="amr-btn clear ${cur===''?'on':''}" data-set="" data-user="${u.id}" data-match="${m.id}">미투표</button>`;
+    return `<div class="amr"><span class="amr-name">${escapeHtml(nm)}</span><div class="amr-btns">${btns}</div></div>`;
+  }).join('');
+  return `<div class="attend-manage">
+    <div class="attend-manage-title">🛡️ 감독/운영진 · 선수단 참석 직접 관리</div>
+    <div class="attend-manage-list">${rows}</div>
   </div>`;
 }
 function bindAttendanceButtons(root) {
   root.querySelectorAll('.attend-btn').forEach(btn => {
     btn.addEventListener('click', e => { e.stopPropagation(); setMatchAttendance(btn.dataset.match, btn.dataset.att); });
   });
+  root.querySelectorAll('.amr-btn').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); setMatchAttendanceFor(btn.dataset.match, btn.dataset.user, btn.dataset.set); });
+  });
+}
+function refreshAttendSection(matchId) {
+  const m = store.matches.find(x => x.id === matchId);
+  const sec = document.getElementById('matchAttendSection');
+  if (m && sec && editingMatchId === matchId) {
+    sec.innerHTML = attendanceSectionHtml(m);
+    bindAttendanceButtons(sec);
+  }
 }
 function setMatchAttendance(matchId, status) {
   const u = currentUser();
@@ -4640,14 +4711,20 @@ function setMatchAttendance(matchId, status) {
   if (m.attendance[u.id] === status) delete m.attendance[u.id]; // 다시 누르면 취소
   else m.attendance[u.id] = status;
   saveState();
-  // Refresh the match edit modal's attendance section (the only place voting lives)
-  const sec = document.getElementById('matchAttendSection');
-  if (sec && editingMatchId === matchId) {
-    sec.innerHTML = attendanceSectionHtml(m);
-    bindAttendanceButtons(sec);
-  }
+  refreshAttendSection(matchId);
   const meta = ATTEND_META[status];
   toast(m.attendance[u.id] ? `${meta.icon} ${meta.label}` : '투표 취소');
+}
+// 감독/운영진이 다른 회원(선수단)의 참석 상태를 직접 지정/해제
+function setMatchAttendanceFor(matchId, userId, status) {
+  if (!isManagerActive()) { toast('감독/운영진만 가능합니다'); return; }
+  const m = store.matches.find(x => x.id === matchId);
+  if (!m) return;
+  if (!m.attendance) m.attendance = {};
+  if (!status) delete m.attendance[userId];
+  else m.attendance[userId] = status;
+  saveState();
+  refreshAttendSection(matchId);
 }
 function buildVoterChips(m) {
   const a = getMatchAttendance(m);
