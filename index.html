@@ -69,7 +69,9 @@
     flex: 0 0 auto;
     z-index: 50;
   }
-  .tab-strip { display: flex; align-items: stretch; gap: 2px; height: 60px; }
+  .tab-strip { display: flex; align-items: stretch; gap: 2px; height: 60px; min-width: 0; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+  .tab-strip::-webkit-scrollbar { display: none; }
+  .tab-btn { flex: 0 0 auto; }
   .nav-menu-btn {
     display: none;
     background: var(--bg-3); color: var(--gold);
@@ -1342,6 +1344,107 @@
   .tg-bar-val .tg-cnt { display: block; font-size: 9px; color: var(--text-3); font-weight: 400; }
   .tg-empty { font-size: 12px; color: var(--text-3); padding: 10px; text-align: center; }
 
+  /* ==================== Stats views (기록/출석/전당 공용) ==================== */
+  .stats-view { display: flex; flex-direction: column; height: 100%; padding: 20px; overflow: hidden; }
+  .stats-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+  .stats-header h1 { font-family: var(--font-brand); font-size: 24px; color: var(--text); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 700; }
+  .stats-header .spacer { flex: 1; }
+  #recordsContent, #attendContent, #hallContent { flex: 1; overflow-y: auto; padding-right: 4px; padding-bottom: 30px; }
+
+  /* Podium (랭킹 top3) */
+  .podium-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 22px; }
+  .podium-card { background: linear-gradient(155deg, var(--bg-3), var(--bg-2)); border: 1px solid var(--border); border-radius: 14px; padding: 14px 12px; text-align: center; }
+  .podium-card.rank-mom { border-color: #f4c43066; }
+  .podium-title { font-family: var(--font-brand); font-size: 13px; font-weight: 700; letter-spacing: .04em; color: var(--gold); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 5px; }
+  .podium-list { display: flex; flex-direction: column; gap: 7px; }
+  .podium-row { display: flex; align-items: center; gap: 8px; text-align: left; }
+  .podium-medal { width: 24px; flex-shrink: 0; text-align: center; font-size: 15px; font-weight: 700; font-family: var(--font-brand); color: var(--text-3); }
+  .podium-name { flex: 1; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .podium-val { font-family: var(--font-brand); font-weight: 700; font-size: 15px; color: var(--gold-warm); }
+  .podium-empty { font-size: 12px; color: var(--text-3); padding: 8px 0; }
+  .podium-row.top1 .podium-name { color: var(--gold); font-weight: 700; }
+
+  .sv-section-title { font-family: var(--font-brand); font-size: 15px; font-weight: 700; color: var(--text); letter-spacing: .03em; margin: 4px 0 12px; display: flex; align-items: center; gap: 7px; }
+
+  /* Match record list */
+  .rec-match-list { display: flex; flex-direction: column; gap: 8px; }
+  .rec-match { display: flex; align-items: center; gap: 12px; background: var(--bg-2); border: 1px solid var(--border); border-left-width: 4px; border-radius: 10px; padding: 11px 13px; cursor: pointer; transition: all .15s; }
+  .rec-match:hover { border-color: var(--gold); background: var(--bg-3); }
+  .rec-match-date { font-family: var(--font-brand); font-weight: 700; font-size: 13px; color: var(--text-2); min-width: 46px; }
+  .rec-match-main { flex: 1; min-width: 0; }
+  .rec-match-opp { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rec-match-meta { font-size: 11px; color: var(--text-3); margin-top: 2px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .rec-mom-badge { color: #f4c430; font-weight: 700; }
+  .rec-score { font-family: var(--font-brand); font-weight: 700; font-size: 15px; }
+  .rec-score.win { color: var(--success, #22c55e); } .rec-score.lose { color: var(--danger, #f87171); } .rec-score.draw { color: var(--text-2); }
+  .rec-arrow { color: var(--text-4); font-size: 16px; }
+
+  /* Record modal */
+  .rec-sub { font-size: 13px; color: var(--text-2); margin-bottom: 14px; }
+  .rec-block-title { font-family: var(--font-brand); font-size: 14px; font-weight: 700; color: var(--gold); margin: 6px 0 8px; letter-spacing: .03em; }
+  .rec-note { font-size: 11px; color: var(--text-3); margin-bottom: 8px; }
+  .rec-mom-block { margin-bottom: 18px; }
+  .rec-mom-opt { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 9px; margin-bottom: 6px; cursor: pointer; transition: all .12s; }
+  .rec-mom-opt:hover { border-color: var(--gold-2); }
+  .rec-mom-opt.mine { border-color: var(--gold); background: rgba(244,196,48,0.08); }
+  .rec-mom-opt.winner { box-shadow: inset 3px 0 0 #f4c430; }
+  .rec-mom-num { width: 26px; height: 26px; flex-shrink: 0; border-radius: 50%; background: #000; border: 1px solid var(--gold); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; font-family: var(--font-brand); }
+  .rec-mom-name { flex: 1; font-size: 14px; font-weight: 600; }
+  .rec-mom-bar { width: 90px; height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+  .rec-mom-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--gold-warm), var(--gold)); }
+  .rec-mom-cnt { min-width: 34px; text-align: right; font-family: var(--font-brand); font-weight: 700; font-size: 13px; color: var(--gold-warm); }
+  .rec-ga-row { display: grid; grid-template-columns: 1fr 66px 66px; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+  .rec-ga-head { font-size: 11px; color: var(--text-3); font-weight: 700; padding-bottom: 4px; }
+  .rec-ga-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rec-ga-cell { display: flex; align-items: center; gap: 4px; }
+  .rec-ga-cell input { width: 46px; text-align: center; background: var(--bg-3); border: 1px solid var(--border-2); color: var(--text); border-radius: 6px; padding: 5px 2px; font-size: 14px; }
+  .rec-ga-cell .ga-ic { font-size: 12px; }
+  .rec-ga-ro { font-family: var(--font-brand); font-weight: 700; font-size: 15px; text-align: center; }
+
+  /* Attendance cards */
+  .att-highlight { background: linear-gradient(135deg, rgba(244,196,48,0.14), rgba(244,196,48,0.04)); border: 1px solid #f4c43055; border-radius: 14px; padding: 14px 16px; margin-bottom: 18px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .att-hl-emoji { font-size: 34px; }
+  .att-hl-text { flex: 1; min-width: 140px; }
+  .att-hl-label { font-size: 12px; color: var(--gold); font-weight: 700; letter-spacing: .04em; }
+  .att-hl-name { font-family: var(--font-brand); font-size: 20px; font-weight: 700; margin-top: 2px; }
+  .att-hl-sub { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+  .att-list { display: flex; flex-direction: column; gap: 8px; }
+  .att-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 11px; padding: 11px 13px; }
+  .att-card-top { display: flex; align-items: center; gap: 10px; }
+  .att-num { width: 30px; height: 30px; flex-shrink: 0; border-radius: 50%; background: #000; border: 1.5px solid var(--gold); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; font-family: var(--font-brand); }
+  .att-name { font-size: 14px; font-weight: 700; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .att-rate { font-family: var(--font-brand); font-weight: 700; font-size: 18px; }
+  .att-bar { height: 9px; background: rgba(255,255,255,0.06); border-radius: 5px; overflow: hidden; margin: 9px 0 8px; }
+  .att-bar i { display: block; height: 100%; border-radius: 5px; transition: width .4s; }
+  .att-meta { display: flex; gap: 10px; font-size: 11px; color: var(--text-3); flex-wrap: wrap; }
+  .att-meta b { color: var(--text-2); }
+  .att-badges { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px; }
+  .att-badge { font-size: 11px; padding: 3px 8px; border-radius: 20px; font-weight: 700; border: 1px solid transparent; }
+  .att-badge.streak { background: rgba(251,146,60,0.14); color: #fb923c; border-color: #fb923c55; }
+  .att-badge.perfect { background: rgba(34,197,94,0.14); color: #22c55e; border-color: #22c55e55; }
+  .att-badge.king { background: rgba(244,196,48,0.16); color: #f4c430; border-color: #f4c43066; }
+  .att-badge.regular { background: rgba(129,140,248,0.14); color: #818cf8; border-color: #818cf855; }
+
+  /* Hall of fame */
+  .hall-champs { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  .champ-card { background: linear-gradient(155deg, var(--bg-3), var(--bg-2)); border: 1px solid var(--border); border-radius: 14px; padding: 16px 14px; text-align: center; position: relative; overflow: hidden; }
+  .champ-card::before { content: ''; position: absolute; top: -30px; right: -30px; width: 90px; height: 90px; background: radial-gradient(circle, rgba(244,196,48,0.12), transparent 70%); }
+  .champ-award { font-size: 12px; color: var(--gold); font-weight: 700; letter-spacing: .03em; }
+  .champ-emoji { font-size: 30px; margin: 6px 0 4px; }
+  .champ-name { font-family: var(--font-brand); font-size: 19px; font-weight: 700; }
+  .champ-val { font-size: 12px; color: var(--text-2); margin-top: 3px; }
+  .champ-none { font-size: 13px; color: var(--text-3); }
+  .hall-titles { display: flex; flex-direction: column; gap: 10px; }
+  .htl-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
+  .htl-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .htl-num { width: 30px; height: 30px; flex-shrink: 0; border-radius: 50%; background: #000; border: 1.5px solid var(--gold); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; font-family: var(--font-brand); }
+  .htl-name { font-family: var(--font-brand); font-size: 15px; font-weight: 700; flex: 1; }
+  .htl-count { font-size: 12px; color: var(--gold-warm); font-weight: 700; }
+  .htl-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .htl-chip { font-size: 11px; padding: 3px 9px; border-radius: 20px; background: rgba(244,196,48,0.1); border: 1px solid #f4c43044; color: #f7d774; font-weight: 600; }
+  .htl-chip b { color: #fff; }
+  .htl-none { font-size: 12px; color: var(--text-4); }
+
   /* ==================== Admin view ==================== */
   .admin-view {
     display: flex; flex-direction: column;
@@ -1794,6 +1897,18 @@
     .tg-bar-name { font-size: 12px; }
     .tcm-strip { height: 26px; }
 
+    /* 기록/출석/전당 모바일 */
+    .stats-view { padding: 12px; }
+    .stats-header h1 { font-size: 19px; }
+    .podium-grid { grid-template-columns: 1fr; gap: 10px; }
+    .rec-match-date { min-width: 42px; }
+    .rec-ga-row { grid-template-columns: 1fr 56px 56px; }
+    .rec-ga-cell input { width: 40px; }
+    .att-hl-name { font-size: 18px; }
+    .hall-champs { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .champ-name { font-size: 17px; }
+    .rec-mom-bar { width: 60px; }
+
     /* Slots slightly smaller labels on phones */
     .slot { width: 84px; height: 90px; }
     .slot-circle { width: 42px; height: 42px; }
@@ -1807,6 +1922,7 @@
     .dor-content { grid-template-columns: 1fr 1fr; }
     .org-cards { grid-template-columns: 1fr; }
     .traits-content { grid-template-columns: 1fr; }
+    .hall-champs { grid-template-columns: 1fr; }
   }
 
   /* ==================== Auth ==================== */
@@ -2143,6 +2259,9 @@
     <button class="tab-btn" data-tab="board">📝 게시판</button>
     <button class="tab-btn" data-tab="dor">💛 이스트도르</button>
     <button class="tab-btn" data-tab="traits">🎭 특성</button>
+    <button class="tab-btn" data-tab="records">🏅 기록</button>
+    <button class="tab-btn" data-tab="attend">📅 출석</button>
+    <button class="tab-btn" data-tab="hall">👑 전당</button>
     <button class="tab-btn" data-tab="admin" id="tabAdmin" style="display:none">🛡️ 관리자</button>
   </div>
   <div class="spacer"></div>
@@ -2341,6 +2460,69 @@
       <div class="traits-content" id="traitsContent"></div>
     </div>
   </section>
+
+  <!-- ============ RECORDS (MOM & 시즌) VIEW ============ -->
+  <section class="view" id="view-records">
+    <div class="stats-view">
+      <div class="stats-header">
+        <h1>🏅 기록 · 시즌</h1>
+        <div class="spacer"></div>
+        <select class="search" id="recordsSeason" style="max-width:140px;"></select>
+      </div>
+      <div id="recordsContent"></div>
+    </div>
+  </section>
+
+  <!-- ============ ATTENDANCE VIEW ============ -->
+  <section class="view" id="view-attend">
+    <div class="stats-view">
+      <div class="stats-header">
+        <h1>📅 출석</h1>
+        <div class="spacer"></div>
+        <select class="search" id="attendScope" style="max-width:130px;">
+          <option value="all">전체 기간</option>
+          <option value="month">이번 달</option>
+        </select>
+      </div>
+      <div id="attendContent"></div>
+    </div>
+  </section>
+
+  <!-- ============ HALL OF FAME VIEW ============ -->
+  <section class="view" id="view-hall">
+    <div class="stats-view">
+      <div class="stats-header">
+        <h1>👑 명예의 전당</h1>
+        <div class="spacer"></div>
+        <select class="search" id="hallView" style="max-width:150px;">
+          <option value="champs">부문별 챔피언</option>
+          <option value="titles">선수별 칭호</option>
+        </select>
+      </div>
+      <div id="hallContent"></div>
+    </div>
+  </section>
+
+  <!-- ============ 경기 기록 모달 (MOM/골/도움) ============ -->
+  <div class="modal-overlay" id="recordModal">
+    <div class="modal">
+      <h3 id="recordModalTitle">경기 기록</h3>
+      <div class="rec-sub" id="recordModalSub"></div>
+      <div class="rec-mom-block">
+        <div class="rec-block-title">🏅 오늘의 선수 (MOM) 투표</div>
+        <div class="rec-note" id="recMomNote"></div>
+        <div id="recMomList"></div>
+      </div>
+      <div class="rec-ga-block">
+        <div class="rec-block-title">⚽ 득점 · 🅰️ 도움 <span id="recGaHint" style="font-weight:400; color:var(--text-3); font-size:11px;"></span></div>
+        <div id="recGaList"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="btnCloseRecord">닫기</button>
+        <button class="btn-primary" id="btnSaveRecord">저장</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ============ ADMIN VIEW ============ -->
   <section class="view" id="view-admin">
@@ -2756,6 +2938,8 @@ function normalizeStore(s) {
     if (!Array.isArray(m.quarters)) m.quarters = m.squadId ? [{ label: '', squadId: m.squadId }] : [];
     if (!m.attendance || typeof m.attendance !== 'object' || Array.isArray(m.attendance)) m.attendance = m.attendance && !Array.isArray(m.attendance) ? m.attendance : {};
     if (!m.color) m.color = MATCH_COLORS[i % MATCH_COLORS.length];
+    if (!m.records || typeof m.records !== 'object' || Array.isArray(m.records)) m.records = {};
+    if (!m.momVotes || typeof m.momVotes !== 'object' || Array.isArray(m.momVotes)) m.momVotes = {};
   });
   if (!s.currentSquadId) s.currentSquadId = s.squads[0]?.id || null;
   return s;
@@ -2784,6 +2968,10 @@ function rerenderCurrent() {
   else if (t === 'org') renderOrg();
   else if (t === 'board') renderBoard();
   else if (t === 'dor') renderDor();
+  else if (t === 'traits') renderTraits();
+  else if (t === 'records') renderRecords();
+  else if (t === 'attend') renderAttend();
+  else if (t === 'hall') renderHall();
   else if (t === 'admin' && isAdmin()) renderAdmin();
 }
 
@@ -3736,6 +3924,8 @@ function migrateData() {
     if (!Array.isArray(m.quarters)) m.quarters = m.squadId ? [{ label: '', squadId: m.squadId }] : [];
     if (!m.attendance || typeof m.attendance !== 'object' || Array.isArray(m.attendance)) m.attendance = {};
     if (!m.color) m.color = MATCH_COLORS[i % MATCH_COLORS.length];
+    if (!m.records || typeof m.records !== 'object' || Array.isArray(m.records)) m.records = {};
+    if (!m.momVotes || typeof m.momVotes !== 'object' || Array.isArray(m.momVotes)) m.momVotes = {};
   });
   if (store.traitCats === undefined) store.traitCats = defaultTraitCats();
   if (!store.traitRatings) store.traitRatings = {};
@@ -3829,6 +4019,9 @@ function switchTab(name) {
   if (name === 'board') renderBoard();
   if (name === 'dor') renderDor();
   if (name === 'traits') renderTraits();
+  if (name === 'records') renderRecords();
+  if (name === 'attend') renderAttend();
+  if (name === 'hall') renderHall();
   if (name === 'admin') renderAdmin();
   if (name === 'squad') { renderPlayerList(); renderField(); renderSquadList(); }
 }
@@ -5816,6 +6009,276 @@ function deleteTraitCategory(catId) {
   toast('카테고리 삭제');
 }
 
+/* ==================== 기록 / 출석 / 명예의 전당 ==================== */
+function pastMatches() {
+  const today = ymd(new Date());
+  return store.matches.filter(m => m.date && m.date <= today).sort((a,b) => a.date.localeCompare(b.date));
+}
+function matchSeasonYear(m) { return (m.date || '').slice(0,4); }
+function seasonYears() { return [...new Set(store.matches.map(matchSeasonYear).filter(Boolean))].sort().reverse(); }
+function matchRecords(m) { return (m && m.records && typeof m.records === 'object' && !Array.isArray(m.records)) ? m.records : {}; }
+function matchMomVotes(m) { return (m && m.momVotes && typeof m.momVotes === 'object' && !Array.isArray(m.momVotes)) ? m.momVotes : {}; }
+function momWinner(m) {
+  const votes = matchMomVotes(m), tally = {};
+  Object.values(votes).forEach(pid => { if (pid) tally[pid] = (tally[pid]||0) + 1; });
+  let best = null, bestN = 0;
+  Object.entries(tally).forEach(([pid,n]) => { if (n > bestN) { bestN = n; best = pid; } });
+  return { playerId: best, votes: bestN, tally };
+}
+function scoreDisplay(m) {
+  if (m.scoreUs == null || m.scoreThem == null) return '<div class="rec-score" style="font-size:13px;color:var(--text-4)">–</div>';
+  const cls = m.scoreUs > m.scoreThem ? 'win' : (m.scoreUs < m.scoreThem ? 'lose' : 'draw');
+  return `<div class="rec-score ${cls}">${m.scoreUs}:${m.scoreThem}</div>`;
+}
+
+/* ---- 기록 탭 ---- */
+let recordsSeasonSel = 'all';
+function renderRecords() {
+  const sel = document.getElementById('recordsSeason');
+  const years = seasonYears();
+  sel.innerHTML = ['<option value="all">전체 기간</option>'].concat(years.map(y => `<option value="${y}">${y} 시즌</option>`)).join('');
+  if ([...sel.options].some(o => o.value === recordsSeasonSel)) sel.value = recordsSeasonSel; else { sel.value = 'all'; recordsSeasonSel = 'all'; }
+
+  const matches = pastMatches().filter(m => recordsSeasonSel === 'all' || matchSeasonYear(m) === recordsSeasonSel);
+  const goals = {}, assists = {}, momCount = {};
+  matches.forEach(m => {
+    Object.entries(matchRecords(m)).forEach(([pid,r]) => {
+      if (r && r.g) goals[pid] = (goals[pid]||0) + Number(r.g||0);
+      if (r && r.a) assists[pid] = (assists[pid]||0) + Number(r.a||0);
+    });
+    const w = momWinner(m);
+    if (w.playerId) momCount[w.playerId] = (momCount[w.playerId]||0) + 1;
+  });
+  const podium = (map, unit) => {
+    const arr = Object.entries(map).map(([pid,v]) => ({ pid, v })).filter(x => x.v > 0).sort((a,b) => b.v - a.v).slice(0, 5);
+    if (!arr.length) return '<div class="podium-empty">아직 기록이 없어요</div>';
+    const medals = ['🥇','🥈','🥉'];
+    return '<div class="podium-list">' + arr.map((x,i) => {
+      const p = getPlayer(x.pid); if (!p) return '';
+      return `<div class="podium-row ${i===0?'top1':''}"><div class="podium-medal">${medals[i]||(i+1)}</div><div class="podium-name">${escapeHtml(p.name)}</div><div class="podium-val">${x.v}<span style="font-size:10px;color:var(--text-3);font-weight:400"> ${unit}</span></div></div>`;
+    }).join('') + '</div>';
+  };
+  let html = `<div class="podium-grid">
+    <div class="podium-card rank-mom"><div class="podium-title">🏅 MOM왕</div>${podium(momCount,'회')}</div>
+    <div class="podium-card"><div class="podium-title">⚽ 득점왕</div>${podium(goals,'골')}</div>
+    <div class="podium-card"><div class="podium-title">🅰️ 도움왕</div>${podium(assists,'개')}</div>
+  </div>`;
+  html += `<div class="sv-section-title">📋 경기별 기록 <span style="font-weight:400;color:var(--text-3);font-size:12px">· 눌러서 MOM 투표 · 골/도움 입력</span></div>`;
+  const listMatches = matches.slice().reverse();
+  if (!listMatches.length) {
+    html += '<div class="podium-empty">이 시즌에 완료된 경기가 없어요. 「일정」 탭에서 경기를 추가하고 날짜가 지나면 여기서 기록할 수 있어요.</div>';
+  } else {
+    html += '<div class="rec-match-list">' + listMatches.map(m => {
+      const w = momWinner(m); const wp = w.playerId ? getPlayer(w.playerId) : null;
+      let tg = 0; Object.values(matchRecords(m)).forEach(r => tg += Number(r && r.g || 0));
+      const d = parseYmd(m.date);
+      return `<div class="rec-match" data-mid="${m.id}" style="border-left-color:${matchColorFor(m)}">
+        <div class="rec-match-date">${d.getMonth()+1}/${d.getDate()}</div>
+        <div class="rec-match-main">
+          <div class="rec-match-opp">vs ${escapeHtml(m.opponent)}</div>
+          <div class="rec-match-meta">${wp?`<span class="rec-mom-badge">🏅 ${escapeHtml(wp.name)}</span>`:'<span>MOM 미정</span>'}${tg?`<span>⚽ ${tg}골</span>`:''}</div>
+        </div>
+        ${scoreDisplay(m)}
+        <div class="rec-arrow">›</div>
+      </div>`;
+    }).join('') + '</div>';
+  }
+  document.getElementById('recordsContent').innerHTML = html;
+  document.querySelectorAll('#recordsContent .rec-match').forEach(el => el.addEventListener('click', () => openRecordModal(el.dataset.mid)));
+}
+
+let recordModalMatchId = null;
+function recordCandidates(m) {
+  const att = getMatchAttendance(m);
+  const attendees = store.players.filter(p => att[p.id] === 'attend');
+  const base = attendees.length ? attendees : store.players.slice();
+  return base.slice().sort((a,b) => (a.number||999) - (b.number||999));
+}
+function openRecordModal(mid) {
+  const m = store.matches.find(x => x.id === mid); if (!m) return;
+  recordModalMatchId = mid;
+  const d = parseYmd(m.date);
+  document.getElementById('recordModalTitle').textContent = `🏅 ${d.getMonth()+1}/${d.getDate()} vs ${m.opponent}`;
+  const nAtt = store.players.filter(p => getMatchAttendance(m)[p.id] === 'attend').length;
+  document.getElementById('recordModalSub').textContent = nAtt ? `참석 ${nAtt}명 · 오늘의 선수를 투표하고 골/도움을 기록하세요` : '참석 표시된 선수가 없어 전체 선수가 표시됩니다';
+  renderRecordModal();
+  document.getElementById('recordModal').classList.add('show');
+}
+function renderRecordModal() {
+  const m = store.matches.find(x => x.id === recordModalMatchId); if (!m) return;
+  const cands = recordCandidates(m);
+  const u = currentUser();
+  const votes = matchMomVotes(m);
+  const myVote = u ? votes[u.id] : null;
+  const w = momWinner(m);
+  const totalVotes = Object.keys(votes).length;
+  const noteEl = document.getElementById('recMomNote');
+  if (!isLoggedIn()) noteEl.textContent = '로그인하면 투표할 수 있어요';
+  else noteEl.innerHTML = `총 ${totalVotes}표 참여${w.playerId?` · 현재 1위 <b style="color:#f4c430">${escapeHtml(getPlayer(w.playerId)?.name||'')}</b> (${w.votes}표)`:' · 아직 투표 없음'}`;
+  document.getElementById('recMomList').innerHTML = cands.map(p => {
+    const cnt = w.tally[p.id] || 0;
+    const pct = totalVotes ? Math.round(cnt/totalVotes*100) : 0;
+    const mine = myVote === p.id;
+    const isWin = w.playerId === p.id && w.votes > 0;
+    return `<div class="rec-mom-opt ${mine?'mine':''} ${isWin?'winner':''}" data-vote="${p.id}">
+      <div class="rec-mom-num">${p.number||'?'}</div>
+      <div class="rec-mom-name">${escapeHtml(p.name)}${mine?' <span style="color:var(--gold);font-size:11px">✓ 내 투표</span>':''}</div>
+      <div class="rec-mom-bar"><i style="width:${pct}%"></i></div>
+      <div class="rec-mom-cnt">${cnt}</div>
+    </div>`;
+  }).join('');
+  const canEditGA = isManagerActive();
+  document.getElementById('recGaHint').textContent = canEditGA ? '(감독·운영진 입력)' : '(운영진만 입력 · 보기 전용)';
+  const recs = matchRecords(m);
+  let gaHtml = `<div class="rec-ga-row rec-ga-head"><div>선수</div><div style="text-align:center">⚽ 골</div><div style="text-align:center">🅰️ 도움</div></div>`;
+  gaHtml += cands.map(p => {
+    const r = recs[p.id] || {}; const g = Number(r.g||0), a = Number(r.a||0);
+    if (canEditGA) return `<div class="rec-ga-row"><div class="rec-ga-name">#${p.number||'?'} ${escapeHtml(p.name)}</div>
+      <div class="rec-ga-cell"><input type="number" min="0" max="99" value="${g||''}" placeholder="0" data-g="${p.id}"></div>
+      <div class="rec-ga-cell"><input type="number" min="0" max="99" value="${a||''}" placeholder="0" data-a="${p.id}"></div></div>`;
+    return `<div class="rec-ga-row"><div class="rec-ga-name">#${p.number||'?'} ${escapeHtml(p.name)}</div><div class="rec-ga-ro">${g||'-'}</div><div class="rec-ga-ro">${a||'-'}</div></div>`;
+  }).join('');
+  document.getElementById('recGaList').innerHTML = gaHtml;
+  document.querySelectorAll('#recMomList .rec-mom-opt').forEach(el => el.addEventListener('click', () => voteMom(el.dataset.vote)));
+  document.getElementById('btnSaveRecord').style.display = canEditGA ? '' : 'none';
+}
+function voteMom(pid) {
+  const u = currentUser(); if (!u) { toast('로그인이 필요합니다'); return; }
+  const m = store.matches.find(x => x.id === recordModalMatchId); if (!m) return;
+  if (!m.momVotes || typeof m.momVotes !== 'object' || Array.isArray(m.momVotes)) m.momVotes = {};
+  if (m.momVotes[u.id] === pid) delete m.momVotes[u.id]; else m.momVotes[u.id] = pid;
+  saveState();
+  renderRecordModal();
+  toast(m.momVotes[u.id] ? '🏅 MOM 투표 완료' : '투표 취소');
+}
+function saveRecordGA() {
+  const m = store.matches.find(x => x.id === recordModalMatchId);
+  if (!m || !isManagerActive()) { closeRecordModal(); return; }
+  if (!m.records || typeof m.records !== 'object' || Array.isArray(m.records)) m.records = {};
+  document.querySelectorAll('#recGaList input[data-g]').forEach(inp => {
+    const pid = inp.dataset.g; if (!m.records[pid]) m.records[pid] = {};
+    m.records[pid].g = Math.max(0, Math.min(99, parseInt(inp.value)||0));
+  });
+  document.querySelectorAll('#recGaList input[data-a]').forEach(inp => {
+    const pid = inp.dataset.a; if (!m.records[pid]) m.records[pid] = {};
+    m.records[pid].a = Math.max(0, Math.min(99, parseInt(inp.value)||0));
+  });
+  Object.keys(m.records).forEach(pid => { const r = m.records[pid]; if (!(r.g>0) && !(r.a>0)) delete m.records[pid]; });
+  saveState();
+  closeRecordModal();
+  renderRecords();
+  toast('경기 기록 저장');
+}
+function closeRecordModal() { document.getElementById('recordModal').classList.remove('show'); recordModalMatchId = null; }
+
+/* ---- 출석 탭 ---- */
+function renderAttend() {
+  const scope = document.getElementById('attendScope').value || 'all';
+  const now = new Date();
+  const curYm = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+  let matches = pastMatches();
+  if (scope === 'month') matches = matches.filter(m => (m.date||'').slice(0,7) === curYm);
+  const total = matches.length;
+  const stats = store.players.map(p => {
+    let att = 0, abs = 0, hold = 0;
+    matches.forEach(m => { const s = getMatchAttendance(m)[p.id]; if (s==='attend') att++; else if (s==='absent') abs++; else if (s==='hold') hold++; });
+    let cur = 0; for (let i = matches.length-1; i >= 0; i--) { if (getMatchAttendance(matches[i])[p.id] === 'attend') cur++; else break; }
+    let best = 0, run = 0; matches.forEach(m => { if (getMatchAttendance(m)[p.id] === 'attend') { run++; best = Math.max(best, run); } else run = 0; });
+    return { p, att, abs, hold, cur, best, rate: total ? Math.round(att/total*100) : 0 };
+  });
+  // 이달의 개근왕
+  const monthMatches = pastMatches().filter(m => (m.date||'').slice(0,7) === curYm);
+  let kingHtml = '';
+  if (monthMatches.length) {
+    const ks = store.players.map(p => ({ p, n: monthMatches.filter(m => getMatchAttendance(m)[p.id] === 'attend').length })).sort((a,b) => b.n - a.n);
+    const topN = ks[0]?.n || 0;
+    if (topN > 0) {
+      const kings = ks.filter(x => x.n === topN);
+      const perfect = topN === monthMatches.length;
+      kingHtml = `<div class="att-highlight"><div class="att-hl-emoji">👑</div><div class="att-hl-text">
+        <div class="att-hl-label">${now.getMonth()+1}월의 개근왕</div>
+        <div class="att-hl-name">${kings.map(k => escapeHtml(k.p.name)).join(', ')}</div>
+        <div class="att-hl-sub">이번 달 ${monthMatches.length}경기 중 ${topN}경기 참석${perfect?' · 전경기 참석 💯':''}</div>
+      </div></div>`;
+    }
+  }
+  const maxRate = Math.max(0, ...stats.filter(s => s.att > 0).map(s => s.rate));
+  const sorted = stats.slice().sort((a,b) => b.rate - a.rate || b.att - a.att || (a.p.number||999) - (b.p.number||999));
+  let html = kingHtml;
+  if (!total) { html += '<div class="podium-empty">완료된 경기가 아직 없어요. 「일정」 탭에서 경기를 추가하고 날짜가 지나면 출석 통계가 쌓여요.</div>'; document.getElementById('attendContent').innerHTML = html; return; }
+  html += `<div class="sv-section-title">📊 선수별 출석 <span style="font-weight:400;color:var(--text-3);font-size:12px">· ${scope==='month'?(now.getMonth()+1)+'월':'전체'} ${total}경기 기준</span></div>`;
+  html += '<div class="att-list">' + sorted.map(s => {
+    const badges = [];
+    if (s.cur >= 2) badges.push(`<span class="att-badge streak">🔥 ${s.cur}연속</span>`);
+    if (s.att > 0 && s.att === total) badges.push('<span class="att-badge perfect">💯 개근</span>');
+    if (maxRate > 0 && s.rate === maxRate && s.att > 0) badges.push('<span class="att-badge king">👑 출석왕</span>');
+    else if (s.rate >= 70 && s.att > 0) badges.push('<span class="att-badge regular">⭐ 성실</span>');
+    const col = s.rate >= 80 ? '#22c55e' : s.rate >= 50 ? '#facc15' : '#f87171';
+    return `<div class="att-card">
+      <div class="att-card-top"><div class="att-num">${s.p.number||'?'}</div><div class="att-name">${escapeHtml(s.p.name)}</div><div class="att-rate" style="color:${col}">${s.rate}%</div></div>
+      <div class="att-bar"><i style="width:${s.rate}%;background:${col}"></i></div>
+      <div class="att-meta"><span>✅ 참석 <b>${s.att}</b></span><span>⏸️ 보류 <b>${s.hold}</b></span><span>❌ 불참 <b>${s.abs}</b></span><span>최고 연속 <b>${s.best}</b></span></div>
+      ${badges.length?`<div class="att-badges">${badges.join('')}</div>`:''}
+    </div>`;
+  }).join('') + '</div>';
+  document.getElementById('attendContent').innerHTML = html;
+}
+
+/* ---- 명예의 전당 탭 ---- */
+const TITLE_SUFFIX = ['왕 👑','장인','마스터','최고위원','끝판왕','그 자체','요정','대장','천재','고수'];
+function hashStr(s) { let h = 0; for (let i = 0; i < s.length; i++) h = (h*31 + s.charCodeAt(i)) >>> 0; return h; }
+function traitTitle(t) { return `${t.name} ${TITLE_SUFFIX[hashStr(t.id) % TITLE_SUFFIX.length]}`; }
+function traitChampions() {
+  const byPlayer = {};
+  traitCats().forEach(c => (c.traits||[]).forEach(t => {
+    let top = [], topV = -1;
+    store.players.forEach(p => { const a = traitAvg(p.id, t.id); if (a.avg != null) { if (a.avg > topV) { topV = a.avg; top = [p]; } else if (a.avg === topV) top.push(p); } });
+    if (topV >= 0 && top.length && top.length <= 3) top.forEach(p => { (byPlayer[p.id] = byPlayer[p.id] || []).push({ title: traitTitle(t), score: topV }); });
+  }));
+  return byPlayer;
+}
+function statChampions() {
+  const awards = [];
+  const push = (award, emoji, valFn, fmt) => {
+    let top = null, topV = -Infinity;
+    store.players.forEach(p => { const v = valFn(p); if (v > topV) { topV = v; top = p; } });
+    awards.push({ award, emoji, player: topV > 0 ? top : null, val: topV > 0 ? fmt(topV) : null });
+  };
+  push('에이스 · 종합 1위', '🌟', p => bestRoleForPlayer(p).ovr, v => `OVR ${v}`);
+  push('피지컬 몬스터 · 신체', '🏃', p => sectionAvg(p,1), v => `${v}`);
+  push('득점 기계 · 공격', '⚽', p => sectionAvg(p,2), v => `${v}`);
+  push('테크니션 · 기술', '🎨', p => sectionAvg(p,3), v => `${v}`);
+  push('철벽 · 수비', '🛡️', p => sectionAvg(p,4), v => `${v}`);
+  push('두뇌 · 정신', '🧠', p => sectionAvg(p,5), v => `${v}`);
+  push('수문장 · GK', '🧤', p => sectionAvg(p,6), v => `${v}`);
+  return awards;
+}
+function renderHall() {
+  const view = document.getElementById('hallView').value || 'champs';
+  const el = document.getElementById('hallContent');
+  if (!store.players.length) { el.innerHTML = '<div class="podium-empty">「선수 관리」 탭에서 선수를 먼저 등록해 주세요</div>'; return; }
+  if (view === 'champs') {
+    let html = `<div class="sv-section-title">🏆 스탯 부문 챔피언 <span style="font-weight:400;color:var(--text-3);font-size:12px">· 능력치 기준 1위</span></div><div class="hall-champs">`;
+    html += statChampions().map(aw => `<div class="champ-card">
+      <div class="champ-award">${aw.award}</div>
+      <div class="champ-emoji">${aw.emoji}</div>
+      ${aw.player?`<div class="champ-name">${escapeHtml(aw.player.name)}</div><div class="champ-val">${aw.val}</div>`:'<div class="champ-none">기록 없음</div>'}
+    </div>`).join('') + `</div>`;
+    html += `<div class="sv-section-title" style="margin-top:22px">🎭 특성 챔피언은 우측 상단에서 「선수별 칭호」로 전환해 확인하세요</div>`;
+    el.innerHTML = html;
+  } else {
+    const champs = traitChampions();
+    const rows = store.players.map(p => ({ p, titles: (champs[p.id]||[]).sort((a,b) => b.score - a.score) }))
+      .sort((a,b) => b.titles.length - a.titles.length || (a.p.number||999) - (b.p.number||999));
+    let html = `<div class="sv-section-title">👑 선수별 칭호 <span style="font-weight:400;color:var(--text-3);font-size:12px">· 특성 1위에게 자동 부여</span></div>`;
+    html += '<div class="hall-titles">' + rows.map(r => `<div class="htl-card">
+      <div class="htl-top"><div class="htl-num">${r.p.number||'?'}</div><div class="htl-name">${escapeHtml(r.p.name)}</div><div class="htl-count">${r.titles.length?`칭호 ${r.titles.length}개`:''}</div></div>
+      ${r.titles.length?`<div class="htl-chips">${r.titles.map(t => `<span class="htl-chip">${escapeHtml(t.title)} <b>${t.score}</b></span>`).join('')}</div>`:'<div class="htl-none">아직 1위 칭호가 없어요 — 「특성」 탭 평가가 쌓이면 생겨요</div>'}
+    </div>`).join('') + '</div>';
+    el.innerHTML = html;
+  }
+}
+
 /* ==================== Event bindings ==================== */
 let _eventsBound = false;
 function bindEvents() {
@@ -6004,11 +6467,19 @@ function bindEvents() {
   document.querySelectorAll('.tmt-btn').forEach(b => b.addEventListener('click', () => setTraitMode(b.dataset.tmode)));
   document.getElementById('traitModal').addEventListener('click', e => { if (e.target.id === 'traitModal') closeTraitModal(); });
 
+  // 기록 / 출석 / 명예의 전당
+  document.getElementById('recordsSeason').addEventListener('change', e => { recordsSeasonSel = e.target.value; renderRecords(); });
+  document.getElementById('attendScope').addEventListener('change', renderAttend);
+  document.getElementById('hallView').addEventListener('change', renderHall);
+  document.getElementById('btnCloseRecord').addEventListener('click', closeRecordModal);
+  document.getElementById('btnSaveRecord').addEventListener('click', saveRecordGA);
+  document.getElementById('recordModal').addEventListener('click', e => { if (e.target.id === 'recordModal') closeRecordModal(); });
+
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       closePlayerModal(); closeAssignModal(); closeMatchModal();
       closeDayModal(); closeRoleEditor(); closeStaffModal();
-      closePostModal(); closeDorModal(); closeTraitModal();
+      closePostModal(); closeDorModal(); closeTraitModal(); closeRecordModal();
     }
   });
 }
