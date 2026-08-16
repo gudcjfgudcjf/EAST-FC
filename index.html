@@ -2450,7 +2450,7 @@ function isManagerActive() { return isAdmin() || session.managerModeActive; }
 
 function canManageSquad() { return isManagerActive(); }
 function canManageMatches() { return isLoggedIn(); } // 경기 추가/편집은 로그인한 모든 회원 가능
-function canManageStaff() { return isAdmin(); }
+function canManageStaff() { return isLoggedIn(); } // 조직도 인원 추가/편집은 로그인한 모든 회원 가능
 function canManageUsers() { return isOwner(); }
 function canAddPlayer() { return isLoggedIn(); }
 
@@ -4401,7 +4401,7 @@ function openStaffModal(staffId) {
 }
 function closeStaffModal() { $('#staffModal').classList.remove('show'); editingStaffId = null; }
 function saveStaffFromModal() {
-  if (!canManageStaff()) { toast('관리자 권한이 필요합니다'); return; }
+  if (!canManageStaff()) { toast('로그인이 필요합니다'); return; }
   const name = $('#sName').value.trim();
   const title = $('#sTitle').value.trim();
   if (!name) { alert('이름을 입력하세요'); return; }
