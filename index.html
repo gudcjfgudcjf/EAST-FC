@@ -1526,6 +1526,19 @@
   .chem-del:hover { border-color: var(--danger); }
   #chemScoreTag { font-weight: 700; }
   .chem-ovr-u { display: block; font-size: 9px; color: var(--text-3); font-weight: 400; letter-spacing: .04em; }
+
+  /* ==================== 역할 가이드 탭 ==================== */
+  .guide-cat-title { font-family: var(--font-brand); font-size: 15px; font-weight: 700; letter-spacing: .03em; margin: 16px 0 10px; display: flex; align-items: center; gap: 8px; }
+  .guide-cat-title:first-child { margin-top: 2px; }
+  .guide-cat-dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+  .guide-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+  .guide-card { background: var(--bg-2); border: 1px solid var(--border); border-left-width: 4px; border-radius: 12px; padding: 13px 15px; }
+  .guide-head { display: flex; align-items: center; gap: 9px; margin-bottom: 8px; }
+  .guide-code { font-family: var(--font-brand); font-weight: 700; font-size: 12px; color: #0a0a0a; padding: 2px 9px; border-radius: 6px; letter-spacing: .02em; }
+  .guide-name { font-family: var(--font-brand); font-size: 16px; font-weight: 700; color: var(--text); }
+  .guide-desc { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+  .guide-keys { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+  .guide-key { font-size: 10px; font-weight: 700; color: var(--text-3); background: var(--bg-3); border: 1px solid var(--border-2); border-radius: 20px; padding: 2px 8px; }
   /* 선수 표: 시너지 셀 */
   .syn-cell { display: flex; flex-wrap: wrap; gap: 3px; justify-content: center; max-width: 130px; }
   .syn-chip { font-size: 10px; font-weight: 700; border: 1px solid; border-radius: 20px; padding: 1px 6px; white-space: nowrap; background: rgba(0,0,0,0.25); }
@@ -2013,6 +2026,8 @@
     /* 팀 능력치 · 팀컬러 모바일 */
     .tp-radar { width: 120px; }
     .tp-ovr { font-size: 34px; }
+    /* 역할 가이드 모바일 */
+    .guide-grid { grid-template-columns: 1fr; }
     .chem-card { flex-wrap: wrap; gap: 8px; }
     .chem-main { flex-basis: 100%; }
     .chem-right { min-width: 0; margin-left: auto; text-align: right; display: flex; align-items: baseline; gap: 6px; }
@@ -2369,6 +2384,7 @@
     <button class="tab-btn" data-tab="board">📝 게시판</button>
     <button class="tab-btn" data-tab="dor">💛 이스트도르</button>
     <button class="tab-btn" data-tab="traits">🎭 특성</button>
+    <button class="tab-btn" data-tab="guide">📖 역할 가이드</button>
     <button class="tab-btn" data-tab="chem">🤝 팀컬러</button>
     <button class="tab-btn" data-tab="records">🏅 기록</button>
     <button class="tab-btn" data-tab="attend">📅 출석</button>
@@ -2578,6 +2594,19 @@
         선수를 눌러 특성을 0~100으로 평가하세요. 모두가 참여하며 값은 전체 평균이에요. 특성·카테고리는 자유롭게 추가할 수 있어요.
       </div>
       <div class="traits-content" id="traitsContent"></div>
+    </div>
+  </section>
+
+  <!-- ============ 역할 가이드 VIEW ============ -->
+  <section class="view" id="view-guide">
+    <div class="stats-view">
+      <div class="stats-header">
+        <h1>📖 역할 가이드</h1>
+        <div class="spacer"></div>
+        <input type="search" class="search" id="guideSearch" placeholder="역할 검색 (예: 윙어, ST)..." style="max-width:220px;" />
+      </div>
+      <div style="font-size:12px; color:var(--text-2); margin-bottom:10px;">각 역할이 지향하는 플레이와 핵심 능력치를 정리했어요. 스쿼드 슬롯 색상(🟡GK·🔵수비·🟢미들·🔴공격)과 같은 기준이에요.</div>
+      <div id="guideContent"></div>
     </div>
   </section>
 
@@ -3142,6 +3171,7 @@ function rerenderCurrent() {
   else if (t === 'board') renderBoard();
   else if (t === 'dor') renderDor();
   else if (t === 'traits') renderTraits();
+  else if (t === 'guide') renderGuide();
   else if (t === 'chem') renderChemistry();
   else if (t === 'records') renderRecords();
   else if (t === 'attend') renderAttend();
@@ -3788,12 +3818,12 @@ const ROLES = {
   // ===== MF Attacking =====
   CAM: { name: '공격형 MF',        cat: 'MF', weights: { shortpass: 15, longpass: 10, vision: 15, dribbling: 15, longshot: 10, composure: 15, control: 10, decision: 10 } },
   REG: { name: '레지스타',         cat: 'MF', weights: { vision: 20, longpass: 15, shortpass: 15, composure: 15, passacc: 15, decision: 10, longshot: 10 } },
-  SS:  { name: '섀도우 스트라이커', cat: 'MF', weights: { finishing: 15, shotpower: 10, dribbling: 15, composure: 15, att_pos: 15, accel: 15, control: 15 } },
+  SS:  { name: '섀도우 스트라이커', cat: 'FW', weights: { finishing: 15, shotpower: 10, dribbling: 15, composure: 15, att_pos: 15, accel: 15, control: 15 } },
 
   // ===== MF Wide =====
   WM:  { name: '측면 MF',          cat: 'MF', weights: { topspeed: 15, accel: 10, crossing: 20, shortpass: 10, stamina: 10, dribbling: 10, def_pos: 10, teamwork: 15 } },
-  WNG: { name: '윙어',             cat: 'MF', weights: { topspeed: 15, accel: 10, dribbling: 20, crossing: 15, finishing: 10, composure: 10, agility: 10, control: 10 } },
-  IW:  { name: '인버티드 윙어',    cat: 'MF', weights: { dribbling: 20, finishing: 15, shotpower: 10, longshot: 10, accel: 15, composure: 10, control: 10, agility: 10 } },
+  WNG: { name: '윙어',             cat: 'FW', weights: { topspeed: 15, accel: 10, dribbling: 20, crossing: 15, finishing: 10, composure: 10, agility: 10, control: 10 } },
+  IW:  { name: '인버티드 윙어',    cat: 'FW', weights: { dribbling: 20, finishing: 15, shotpower: 10, longshot: 10, accel: 15, composure: 10, control: 10, agility: 10 } },
 
   // ===== FW =====
   ST:  { name: '스트라이커',       cat: 'FW', weights: { finishing: 20, shotpower: 10, shotacc: 10, accel: 15, att_pos: 15, composure: 10, strength: 10, control: 10 } },
@@ -3808,8 +3838,40 @@ const ROLES = {
 const ROLE_CATEGORIES = {
   GK: { label: '🧤 골키퍼',    codes: ['GK','SK'] },
   DF: { label: '🛡️ 수비수',    codes: ['CB','BPD','SW','FB','WB','IWB'] },
-  MF: { label: '⚙️ 미드필더',  codes: ['CDM','DLP','ANC','BBM','CM','MEZ','CAM','REG','SS','WM','WNG','IW'] },
-  FW: { label: '⚽ 공격수',    codes: ['ST','POA','CF','TGT','F9','DLF','IF'] },
+  MF: { label: '⚙️ 미드필더',  codes: ['CDM','DLP','ANC','BBM','CM','MEZ','CAM','REG','WM'] },
+  FW: { label: '⚽ 공격수',    codes: ['ST','SS','POA','CF','TGT','F9','DLF','IF','WNG','IW'] },
+};
+// 포지션 카테고리 색상 (스쿼드 슬롯 색과 동일)
+const CAT_COLOR = { GK: '#facc15', DF: '#3b82f6', MF: '#4ade80', FW: '#f43f5e' };
+// 역할별 지향 플레이 설명
+const ROLE_GUIDE = {
+  GK:  '골문을 지키는 최후의 보루. 선방과 위치선정으로 실점을 막고, 페널티 박스 안의 공중볼과 1대1 상황을 지배한다. 안정적인 캐칭과 침착한 판단으로 수비를 조율한다.',
+  SK:  '골문 밖까지 활동 범위를 넓히는 현대형 키퍼. 높은 수비 라인 뒤의 공간을 커버하고, 정확한 발밑 처리와 롱패스로 후방 빌드업의 시작점이 된다.',
+  CB:  '중앙 수비의 기둥. 대인방어·태클·제공권으로 상대 공격수를 봉쇄한다. 위치선정과 몸싸움으로 위험 지역을 통제하고 세트피스에서도 강점을 보인다.',
+  BPD: '수비하면서 빌드업을 여는 센터백. 정확한 숏·롱패스와 넓은 시야로 후방에서 공격을 전개한다. 압박을 받아도 침착하게 전진 패스를 찔러 넣는다.',
+  SW:  '수비 라인 뒤를 청소하는 자유로운 최종 수비수. 빠른 커버 스피드와 위치선정으로 배후 공간을 지우고, 볼을 뺏은 뒤 안정적으로 배급한다.',
+  FB:  '측면 수비의 기본. 상대 윙어를 대인방어로 막고, 기회가 되면 오버래핑으로 크로스를 올린다. 왕성한 활동량으로 측면을 오르내린다.',
+  WB:  '공격 가담이 강한 측면 수비. 측면을 위아래로 폭넓게 커버하며 크로스와 드리블 돌파로 공격에 무게를 싣는다. 지구력이 생명이다.',
+  IWB: '수비 시 측면, 공격 시 중앙으로 좁혀 들어가 미드필드 숫자를 늘리는 변형 풀백. 패스와 시야로 중원 빌드업을 돕는다.',
+  CDM: '수비 라인 앞을 보호하는 방패. 인터셉트와 태클로 상대 공격을 끊고, 간결한 패스로 볼을 재배급한다. 위치선정과 체력으로 중원을 장악한다.',
+  DLP: '후방에서 경기를 조율하는 지휘자. 넓은 시야와 정확한 롱·숏패스로 템포를 만들고, 낮은 위치에서 공격의 실마리를 푼다.',
+  ANC: '수비 라인 바로 앞에 고정되어 중앙을 걸어 잠그는 순수 수비형. 위치선정과 대인방어로 공간을 지우고 리스크를 최소화한다.',
+  BBM: '양쪽 박스를 오가며 공수 모두에 기여하는 만능형. 왕성한 활동량으로 수비 가담과 침투, 중거리슛까지 소화한다.',
+  CM:  '중원의 균형추. 패스로 볼을 순환시키고 공수 전환을 잇는다. 시야와 판단력으로 팀의 리듬을 유지한다.',
+  MEZ: '하프스페이스를 파고드는 공격적 중앙 미드필더. 드리블과 침투로 측면과 중앙 사이 공간을 공략하고 슈팅까지 노린다.',
+  CAM: '최전방 바로 뒤에서 찬스를 만드는 플레이메이커. 키패스와 드리블, 중거리슛으로 상대 수비 라인을 허문다.',
+  REG: '후방 깊은 곳에서 경기를 설계하는 딥라잉 창조자. 최고의 시야와 롱패스로 한 번에 전선을 바꾸는 전개를 한다.',
+  WM:  '측면을 지키며 공수 균형을 잡는 미드필더. 크로스와 활동량으로 측면을 커버하고 풀백을 보호한다.',
+  ST:  '최전방 득점원. 마무리·위치선정·스피드로 골을 책임진다. 박스 안에서 냉정하게 슈팅을 끝낸다.',
+  SS:  '스트라이커 바로 뒤에서 침투하는 그림자 공격수. 골 냄새를 맡는 위치선정과 마무리로 두 번째 득점 루트를 만든다.',
+  POA: '문전에서 기회를 놓치지 않는 골잡이. 최고의 위치선정과 반응속도로 짧은 순간에 골을 낚아챈다. 박스 안의 여우.',
+  CF:  '모든 것을 갖춘 완성형 공격수. 득점·연계·포스트 플레이·드리블까지 소화하며 공격의 중심이 된다.',
+  TGT: '최전방 기준점. 강한 몸과 제공권으로 롱볼을 받아 지켜내고, 헤더와 연계로 동료를 끌어들인다.',
+  F9:  '최전방에서 중앙으로 내려와 공간을 만드는 가짜 9번. 연계와 시야로 수비를 끌어내고 2선 침투 공간을 연다.',
+  DLF: '아래로 내려와 볼을 연결하는 처진 공격수. 등지는 플레이와 연계로 공격을 이어주고 2선 득점도 노린다.',
+  IF:  '측면에서 안쪽으로 좁혀 득점에 집중하는 공격수. 드리블 돌파 후 직접 슈팅으로 골을 노린다.',
+  WNG: '측면을 폭넓게 쓰는 돌파형 공격수. 빠른 스피드와 드리블로 수비를 제치고 크로스·컷백으로 기회를 창출한다.',
+  IW:  '반대발 측면 공격수. 측면에서 중앙으로 접어 들어와 감아차기 슈팅과 침투로 직접 득점을 노린다.',
 };
 
 const LABEL_TO_ROLE = {
@@ -4227,6 +4289,7 @@ function switchTab(name) {
   if (name === 'board') renderBoard();
   if (name === 'dor') renderDor();
   if (name === 'traits') renderTraits();
+  if (name === 'guide') renderGuide();
   if (name === 'chem') renderChemistry();
   if (name === 'records') renderRecords();
   if (name === 'attend') renderAttend();
@@ -6637,6 +6700,41 @@ function renderTeamPanel() {
   `;
 }
 
+/* ---- 역할 가이드 탭 ---- */
+function roleKeyStats(code, n) {
+  const w = ROLES[code]?.weights || {};
+  return Object.entries(w).sort((a, b) => b[1] - a[1]).slice(0, n)
+    .map(([k]) => STATS[k]?.name || k);
+}
+function renderGuide() {
+  const el = document.getElementById('guideContent');
+  const q = (document.getElementById('guideSearch').value || '').toLowerCase().trim();
+  let html = '';
+  Object.entries(ROLE_CATEGORIES).forEach(([cat, info]) => {
+    const col = CAT_COLOR[cat] || '#9ca3af';
+    const codes = info.codes.filter(code => {
+      if (!q) return true;
+      const nm = (ROLES[code]?.name || '').toLowerCase();
+      return code.toLowerCase().includes(q) || nm.includes(q) || (ROLE_GUIDE[code] || '').toLowerCase().includes(q);
+    });
+    if (!codes.length) return;
+    html += `<div class="guide-cat-title" style="color:${col}"><span class="guide-cat-dot" style="background:${col}"></span>${info.label}</div>`;
+    html += '<div class="guide-grid">' + codes.map(code => {
+      const r = ROLES[code]; if (!r) return '';
+      const keys = roleKeyStats(code, 4);
+      return `<div class="guide-card" style="border-left-color:${col}">
+        <div class="guide-head">
+          <span class="guide-code" style="background:${col}">${code}</span>
+          <span class="guide-name">${escapeHtml(r.name)}</span>
+        </div>
+        <div class="guide-desc">${escapeHtml(ROLE_GUIDE[code] || '설명 준비 중')}</div>
+        <div class="guide-keys">${keys.map(k => `<span class="guide-key">${escapeHtml(k)}</span>`).join('')}</div>
+      </div>`;
+    }).join('') + '</div>';
+  });
+  el.innerHTML = html || '<div class="podium-empty">검색 결과가 없어요</div>';
+}
+
 /* ---- 선수별 시너지 (선수 관리 표에서 확인) ---- */
 function playerChemGroups(playerId) { return chemistryLinks().filter(l => chemMembers(l).includes(playerId)); }
 function playerSynergyTotal(playerId) { return playerChemGroups(playerId).reduce((a, l) => a + chemSynergy(l), 0); }
@@ -6947,6 +7045,9 @@ function bindEvents() {
   document.getElementById('btnSaveTrait').addEventListener('click', saveTraitModal);
   document.querySelectorAll('.tmt-btn').forEach(b => b.addEventListener('click', () => setTraitMode(b.dataset.tmode)));
   document.getElementById('traitModal').addEventListener('click', e => { if (e.target.id === 'traitModal') closeTraitModal(); });
+
+  // 역할 가이드
+  document.getElementById('guideSearch').addEventListener('input', renderGuide);
 
   // 팀컬러 / 케미
   document.getElementById('btnAddChem').addEventListener('click', () => openChemModal(null));
