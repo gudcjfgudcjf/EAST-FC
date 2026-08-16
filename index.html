@@ -901,6 +901,16 @@
   .assign-player-item.att-attend { border-color: rgba(34,197,94,0.5); box-shadow: inset 3px 0 0 #22c55e; }
   .assign-player-item.att-hold { box-shadow: inset 3px 0 0 #facc15; }
   .assign-player-item.att-absent { opacity: 0.55; box-shadow: inset 3px 0 0 #ef4444; }
+  /* Sidebar player list attendance highlight */
+  .player-item.att-attend { box-shadow: inset 3px 0 0 #22c55e; border-color: rgba(34,197,94,0.4); }
+  .player-item.att-hold { box-shadow: inset 3px 0 0 #facc15; }
+  .player-item.att-absent { opacity: 0.5; box-shadow: inset 3px 0 0 #ef4444; }
+  .pl-attend-legend {
+    font-size: 11px; color: var(--text-2);
+    padding: 6px 8px; margin-bottom: 8px;
+    background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.25);
+    border-radius: 8px; line-height: 1.4;
+  }
   .att-chip { font-size: 10px; padding: 1px 6px; border-radius: 6px; font-weight: 700; margin-left: 6px; font-family: var(--font-brand); }
   .att-chip.attend { background: #22c55e; color: #04210f; }
   .att-chip.hold { background: #facc15; color: #3a2e00; }
@@ -3573,6 +3583,8 @@ function renderPlayerList() {
   const q = ($('#searchPlayers').value || '').toLowerCase().trim();
   const squad = getCurrentSquad();
   const onFieldIds = new Set(squad ? Object.values(squad.assignments) : []);
+  // 이 스쿼드가 연결된 다가오는 경기의 참석 투표를 반영해 참석자 우선 정렬
+  const upMatch = squad ? getUpcomingMatchForSquad(squad.id) : null;
 
   const filtered = store.players
     .filter(p => {
@@ -3581,24 +3593,33 @@ function renderPlayerList() {
              String(p.number).includes(q) ||
              (p.positions || []).some(r => r.toLowerCase().includes(q) || (ROLES[r]?.name || '').includes(q));
     })
-    .sort((a, b) => (a.number || 0) - (b.number || 0));
+    .sort((a, b) => {
+      if (upMatch) {
+        const ra = attendRankForPlayer(a, upMatch), rb = attendRankForPlayer(b, upMatch);
+        if (ra !== rb) return ra - rb; // 참석 → 보류 → 미투표 → 불참
+      }
+      return (a.number || 0) - (b.number || 0);
+    });
 
   if (filtered.length === 0) {
     list.innerHTML = `<div class="empty">${store.players.length === 0 ? '「선수 관리」 탭에서 선수를 추가해 보세요' : '검색 결과 없음'}</div>`;
     return;
   }
-  list.innerHTML = filtered.map(p => {
+  const legend = upMatch ? `<div class="pl-attend-legend">🗓️ vs ${escapeHtml(upMatch.opponent)} · <span style="color:#4ade80">참석</span> 우선 정렬</div>` : '';
+  list.innerHTML = legend + filtered.map(p => {
     const onField = onFieldIds.has(p.id);
     const best = bestRoleForPlayer(p);
     const roleTags = (p.positions || []).slice(0, 3).map(code => {
       const cat = ROLES[code]?.cat || 'MF';
       return `<span class="role-chip ${cat}">${code}</span>`;
     }).join('');
+    const att = upMatch ? playerAttendStatus(p, upMatch) : null;
+    const attChip = att ? `<span class="att-chip ${att}">${ATTEND_META[att].label}</span>` : '';
     return `
-      <div class="player-item ${onField ? 'on-field' : ''}" draggable="true" data-id="${p.id}">
+      <div class="player-item ${onField ? 'on-field' : ''} ${att ? 'att-' + att : ''}" draggable="true" data-id="${p.id}">
         <div class="player-num">${p.number || '?'}</div>
         <div class="player-info">
-          <div class="player-name">${escapeHtml(p.name)}</div>
+          <div class="player-name">${escapeHtml(p.name)}${attChip}</div>
           <div class="player-meta">${roleTags}<span>OVR ${best.ovr}</span></div>
         </div>
       </div>`;
