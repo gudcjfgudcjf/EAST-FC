@@ -1237,6 +1237,7 @@
   .admin-user-avatar.admin { border-color: #60a5fa; color: #93c5fd; }
   .admin-user-name { font-weight: 600; }
   .admin-user-id { color: var(--text-3); font-size: 12px; }
+  .admin-user-id-inline { display: none; }
   .admin-role-select {
     background: var(--bg-3); color: var(--text);
     border: 1px solid var(--border-2); border-radius: 6px;
@@ -1272,17 +1273,60 @@
     0%, 49% { background: rgba(255, 17, 17, 0.22); box-shadow: 0 0 12px rgba(255,17,17,0.7); }
     50%, 100% { background: var(--bg-3); box-shadow: none; }
   }
+  .cond-badge.cond-flash-good { animation: condSirenGood 0.7s steps(1,end) infinite; border-color: #39ff14; }
+  @keyframes condSirenGood {
+    0%, 49% { background: rgba(57, 255, 20, 0.22); box-shadow: 0 0 14px rgba(57,255,20,0.75); }
+    50%, 100% { background: var(--bg-3); box-shadow: none; }
+  }
+  .cond-opt.cond-flash-good { animation: condSirenGood 0.7s steps(1,end) infinite; }
 
   .cond-picker {
     position: fixed;
     z-index: 300;
-    width: 190px;
+    width: 220px;
+    max-height: 90vh;
+    overflow-y: auto;
     background: linear-gradient(160deg, #1a1a1a, #0f0f0f);
     border: 1px solid var(--border-2);
     border-radius: 12px;
     padding: 8px;
     box-shadow: 0 16px 44px rgba(0,0,0,0.85);
   }
+  .cond-memo-dot { font-size: 10px; margin-left: 2px; }
+  .cond-memo-label {
+    font-family: var(--font-brand);
+    font-size: 11px; color: var(--text-2);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    padding: 8px 6px 6px;
+    border-top: 1px solid var(--border);
+    margin-top: 6px;
+  }
+  .cond-memo-input {
+    width: 100%;
+    min-height: 56px;
+    background: var(--bg); color: var(--text);
+    border: 1px solid var(--border-2); border-radius: 8px;
+    padding: 8px 10px; font-size: 13px;
+    outline: none; resize: vertical; font-family: inherit;
+  }
+  .cond-memo-input:focus { border-color: var(--gold); }
+  .cond-picker-actions { display: flex; gap: 6px; margin-top: 8px; }
+  .cond-picker-actions button {
+    flex: 1; padding: 8px; border-radius: 8px; cursor: pointer;
+    font-family: var(--font-brand); font-weight: 700; font-size: 13px;
+    border: 1px solid var(--border-2);
+  }
+  .cond-picker-actions .cond-cancel { background: var(--border-2); color: var(--text); }
+  .cond-picker-actions .cond-save {
+    background: linear-gradient(180deg, var(--gold-warm), var(--gold));
+    color: #0a0a0a; border-color: var(--gold-2);
+  }
+  .cond-readonly-note {
+    font-size: 11px; color: var(--text-3);
+    text-align: center; padding: 8px 4px 4px;
+  }
+  .cond-opt[disabled] { opacity: 0.75; cursor: default; }
+  .cond-opt[disabled]:hover { border-color: transparent; }
   .cond-picker-title {
     font-family: var(--font-brand);
     font-size: 11px; color: var(--text-2);
@@ -1476,14 +1520,43 @@
     /* Tables scroll horizontally with a hint */
     .players-table-wrap, .admin-table-wrap { -webkit-overflow-scrolling: touch; }
 
-    /* Admin view: let the WHOLE view scroll so the side panels below are reachable */
+    /* Admin view: whole view scrolls; table becomes stacked cards (no side-scroll) */
     #view-admin { overflow-y: auto; -webkit-overflow-scrolling: touch; }
     .admin-view { height: auto; min-height: 100%; }
     .admin-body { grid-template-columns: 1fr; overflow: visible; }
     .admin-main { overflow: visible; }
-    .admin-table-wrap { overflow-x: auto; overflow-y: visible; }
     .admin-side { overflow: visible; }
     .admin-stats { grid-template-columns: repeat(2, 1fr); }
+
+    .admin-table-wrap { overflow: visible; border: none; background: transparent; }
+    table.admin-table { min-width: 0; display: block; }
+    .admin-table thead { display: none; }
+    .admin-table tbody { display: block; }
+    .admin-table tr {
+      display: block;
+      background: linear-gradient(155deg, var(--bg-3), var(--bg-2));
+      border: 1px solid var(--border); border-radius: 12px;
+      padding: 12px 14px; margin-bottom: 10px;
+    }
+    .admin-table td {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; padding: 7px 0; border: none; white-space: normal;
+    }
+    .admin-table td::before {
+      content: attr(data-label);
+      color: var(--text-2); font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.04em;
+      flex: 0 0 auto;
+    }
+    .admin-table td.admin-td-user {
+      display: block; padding: 0 0 10px; margin-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .admin-table td.admin-td-user::before { display: none; }
+    .admin-table td.admin-user-id { display: none; } /* username shown inline in the card header */
+    .admin-user-id-inline { display: block; color: var(--text-3); font-size: 12px; margin-top: 2px; }
+    .admin-table td select { max-width: 62%; }
+    .admin-player-select { max-width: 62%; }
 
     /* Calendar view: let the WHOLE view scroll so the bottom (다가오는 경기) is reachable */
     #view-calendar { overflow-y: auto; -webkit-overflow-scrolling: touch; }
@@ -2831,20 +2904,21 @@ function renderAdminTable() {
 
     return `
       <tr>
-        <td>
+        <td class="admin-td-user">
           <div class="admin-user-cell">
             <div class="admin-user-avatar ${avatarCls}">${escapeHtml((u.displayName||'?').slice(0,1))}</div>
             <div>
               <div class="admin-user-name">${escapeHtml(u.displayName)}${isSelf?' <span style="color:var(--gold); font-size:11px;">(나)</span>':''}</div>
+              <div class="admin-user-id-inline">@${escapeHtml(u.username)}</div>
             </div>
           </div>
         </td>
-        <td class="admin-user-id">@${escapeHtml(u.username)}</td>
-        <td>${roleControl}</td>
-        <td>${linkSelect}</td>
-        <td style="color:var(--text-2); white-space:nowrap;">${joined}</td>
-        <td class="admin-activity">📝 ${act.posts} · 💛 ${act.dorVotes}</td>
-        <td><div class="admin-actions">${actionsHtml}</div></td>
+        <td class="admin-user-id" data-label="아이디">@${escapeHtml(u.username)}</td>
+        <td data-label="등급">${roleControl}</td>
+        <td data-label="선수 프로필">${linkSelect}</td>
+        <td data-label="가입일" style="color:var(--text-2); white-space:nowrap;">${joined}</td>
+        <td class="admin-activity" data-label="활동">📝 ${act.posts} · 💛 ${act.dorVotes}</td>
+        <td data-label="관리"><div class="admin-actions">${actionsHtml}</div></td>
       </tr>`;
   }).join('');
 
@@ -3631,7 +3705,7 @@ function renderSquadList() {
 // level 1 = best ... 8 = worst. deg = arrow rotation (0=12시/up, 90=3시/right, 180=6시/down)
 const CONDITIONS = [
   null,
-  { level: 1, name: '최상',      color: '#39ff14', deg: 0,   glow: true },
+  { level: 1, name: '최상',      color: '#39ff14', deg: 0,   glow: true, flashGood: true },
   { level: 2, name: '좋음',      color: '#22c55e', deg: 0 },
   { level: 3, name: '양호',      color: '#15803d', deg: 30 },
   { level: 4, name: '보통',      color: '#fde047', deg: 60 },
@@ -3661,56 +3735,84 @@ function conditionBadgeHtml(p) {
   const level = getCondition(p);
   const c = CONDITIONS[level];
   const editable = canEditCondition(p);
+  const memo = (p.conditionMemo || '').trim();
   const cls = ['cond-badge'];
   if (c.glow) cls.push('cond-glow');
   if (c.flash) cls.push('cond-flash');
-  if (editable) cls.push('editable');
+  if (c.flashGood) cls.push('cond-flash-good');
+  cls.push('editable'); // always clickable (read-only if no edit permission → shows memo)
+  const titleTxt = `컨디션: ${c.name}` + (memo ? ` · 사유: ${memo}` : '') + (editable ? ' (클릭)' : ' (클릭해서 사유 보기)');
   return `<button type="button" class="${cls.join(' ')}" data-cond-player="${p.id}"
-            title="컨디션: ${c.name}${editable ? ' (클릭해서 변경)' : ''}"
+            title="${escapeHtml(titleTxt)}"
             style="--cond-color:${c.color}">
       ${conditionArrowSvg(level, 16)}
       <span class="cond-name" style="color:${c.color}">${c.name}</span>
+      ${memo ? '<span class="cond-memo-dot" title="사유 메모 있음">📝</span>' : ''}
     </button>`;
 }
 let _condPickerEl = null;
+let _condPickSelected = null; // level currently selected in the open picker
 function closeConditionPicker() {
-  if (_condPickerEl) { _condPickerEl.remove(); _condPickerEl = null; }
+  if (_condPickerEl) { _condPickerEl.remove(); _condPickerEl = null; _condPickSelected = null; }
 }
 function openConditionPicker(playerId, anchorEl) {
   closeConditionPicker();
   const p = getPlayer(playerId);
   if (!p) return;
+  const editable = canEditCondition(p);
   const cur = getCondition(p);
+  const memo = p.conditionMemo || '';
+  _condPickSelected = cur;
   const el = document.createElement('div');
   el.className = 'cond-picker';
   el.innerHTML = `
-    <div class="cond-picker-title">컨디션 선택</div>
-    ${CONDITIONS.slice(1).map(c => `
-      <button type="button" class="cond-opt ${c.level===cur?'active':''} ${c.flash?'cond-flash':''} ${c.glow?'cond-glow':''}" data-level="${c.level}" style="--cond-color:${c.color}">
-        ${conditionArrowSvg(c.level, 18)}
-        <span style="color:${c.color}; font-weight:700;">${c.name}</span>
-        ${c.level===cur?'<span style="margin-left:auto; color:var(--text-2); font-size:11px;">현재</span>':''}
-      </button>
-    `).join('')}
+    <div class="cond-picker-title">컨디션 ${editable ? '선택' : '(보기 전용)'}</div>
+    <div class="cond-opts">
+      ${CONDITIONS.slice(1).map(c => `
+        <button type="button" class="cond-opt ${c.level===cur?'active':''} ${c.flash?'cond-flash':''} ${c.flashGood?'cond-flash-good':''} ${c.glow?'cond-glow':''}" data-level="${c.level}" style="--cond-color:${c.color}" ${editable?'':'disabled'}>
+          ${conditionArrowSvg(c.level, 18)}
+          <span style="color:${c.color}; font-weight:700;">${c.name}</span>
+          ${c.level===cur?'<span style="margin-left:auto; color:var(--text-2); font-size:11px;">현재</span>':''}
+        </button>
+      `).join('')}
+    </div>
+    <div class="cond-memo-label">📝 사유 메모</div>
+    <textarea class="cond-memo-input" placeholder="예: 무릎 통증 / 최근 폼 상승 / 감기 기운..." ${editable?'':'readonly'}>${escapeHtml(memo)}</textarea>
+    ${editable
+      ? `<div class="cond-picker-actions">
+           <button type="button" class="cond-cancel">취소</button>
+           <button type="button" class="cond-save">저장</button>
+         </div>`
+      : `<div class="cond-readonly-note">감독/운영진과 본인만 수정할 수 있어요</div>`}
   `;
   document.body.appendChild(el);
   _condPickerEl = el;
   // Position near anchor
   const r = anchorEl.getBoundingClientRect();
-  const pw = 190, ph = el.offsetHeight || 320;
+  const pw = 220, ph = el.offsetHeight || 420;
   let left = r.left;
   let top = r.bottom + 6;
   if (left + pw > window.innerWidth - 8) left = window.innerWidth - pw - 8;
-  if (top + ph > window.innerHeight - 8) top = Math.max(8, r.top - ph - 6);
+  if (left < 8) left = 8;
+  if (top + ph > window.innerHeight - 8) top = Math.max(8, window.innerHeight - ph - 8);
   el.style.left = left + 'px';
   el.style.top = top + 'px';
-  el.querySelectorAll('.cond-opt').forEach(btn => {
-    btn.addEventListener('click', () => {
-      setPlayerCondition(playerId, +btn.dataset.level);
+
+  if (editable) {
+    // Selecting a level just highlights it (doesn't save yet)
+    el.querySelectorAll('.cond-opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        _condPickSelected = +btn.dataset.level;
+        el.querySelectorAll('.cond-opt').forEach(b => b.classList.toggle('active', b === btn));
+      });
+    });
+    el.querySelector('.cond-save').addEventListener('click', () => {
+      const memoVal = el.querySelector('.cond-memo-input').value.trim();
+      setPlayerCondition(playerId, _condPickSelected, memoVal);
       closeConditionPicker();
     });
-  });
-  // Close on outside click / escape
+    el.querySelector('.cond-cancel').addEventListener('click', closeConditionPicker);
+  }
   setTimeout(() => {
     document.addEventListener('click', _condOutside, { once: true });
   }, 0);
@@ -3718,15 +3820,16 @@ function openConditionPicker(playerId, anchorEl) {
 function _condOutside(e) {
   if (_condPickerEl && !_condPickerEl.contains(e.target)) closeConditionPicker();
 }
-function setPlayerCondition(playerId, level) {
+function setPlayerCondition(playerId, level, memo) {
   const p = getPlayer(playerId);
   if (!p) return;
   if (!canEditCondition(p)) { toast('권한이 없습니다'); return; }
   p.condition = level;
+  if (typeof memo === 'string') p.conditionMemo = memo;
   saveState();
   if (currentTab === 'players') renderPlayersTable();
   if (currentTab === 'squad') renderPlayerList();
-  toast(`컨디션 → ${CONDITIONS[level].name}`);
+  toast(`컨디션 → ${CONDITIONS[level].name}${memo ? ' · 사유 저장' : ''}`);
 }
 
 /* ==================== Players table ==================== */
@@ -4995,14 +5098,11 @@ function bindEvents() {
     });
   });
   $('#playersTableBody').addEventListener('click', e => {
-    // Condition badge click → open picker (don't open the full edit modal)
+    // Condition badge click → open picker (read-only if no edit permission → shows memo)
     const condBtn = e.target.closest('.cond-badge');
     if (condBtn) {
       e.stopPropagation();
-      const pid = condBtn.dataset.condPlayer;
-      const p = getPlayer(pid);
-      if (canEditCondition(p)) openConditionPicker(pid, condBtn);
-      else toast('컨디션은 감독/운영진과 본인만 조정할 수 있어요');
+      openConditionPicker(condBtn.dataset.condPlayer, condBtn);
       return;
     }
     const row = e.target.closest('tr[data-id]');
