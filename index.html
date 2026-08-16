@@ -374,6 +374,37 @@
   }
   .slot.filled:hover .slot-circle { transform: scale(1.08); box-shadow: 0 8px 20px rgba(0,0,0,0.8), 0 0 0 3px var(--gold), inset 0 1px 0 rgba(244, 196, 48, 0.5); }
   .slot.moving .slot-circle { box-shadow: 0 8px 24px rgba(0,0,0,0.9); transform: scale(1.1); }
+
+  /* ===== 포지션 카테고리별 슬롯 색상 (GK 노랑 · 수비 파랑 · 미들 초록 · 공격 빨강) ===== */
+  .slot.cat-GK { --slotc: #facc15; --slotc-soft: rgba(250,204,21,0.28); }
+  .slot.cat-DF { --slotc: #3b82f6; --slotc-soft: rgba(59,130,246,0.28); }
+  .slot.cat-MF { --slotc: #4ade80; --slotc-soft: rgba(74,222,128,0.28); }
+  .slot.cat-FW { --slotc: #f43f5e; --slotc-soft: rgba(244,63,94,0.28); }
+  /* 빈 슬롯: 카테고리 색 점선 */
+  .slot:not(.filled) .slot-circle { border-color: var(--slotc); color: var(--slotc); }
+  /* 채워진 슬롯: 카테고리 색 테두리 + 링, 번호는 흰색 */
+  .slot.filled:not(.drag-over) .slot-circle {
+    background: linear-gradient(145deg, #14181f 0%, #0a0a0a 100%);
+    border: 2.5px solid var(--slotc);
+    color: #ffffff;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.75), 0 0 0 3px var(--slotc-soft), inset 0 1px 0 rgba(255,255,255,0.12);
+  }
+  .slot.filled:not(.drag-over):hover .slot-circle { transform: scale(1.08); box-shadow: 0 8px 22px rgba(0,0,0,0.85), 0 0 0 3px var(--slotc), inset 0 1px 0 rgba(255,255,255,0.15); }
+  .slot .slot-role-tag { color: var(--slotc); border-color: var(--slotc); }
+  /* 드래그 오버 시 강조는 그대로 유지 */
+  .slot.drag-over .slot-circle { background: var(--gold-warm); border-color: white; color: #0a0a0a; transform: scale(1.15); box-shadow: 0 6px 24px var(--gold-glow); }
+
+  /* 색상 범례 */
+  .field-legend {
+    position: absolute; top: 8px; right: 8px;
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end;
+    max-width: 45%;
+    background: rgba(8,12,10,0.72); border: 1px solid rgba(255,255,255,0.12);
+    padding: 4px 9px; border-radius: 20px; z-index: 3; pointer-events: none;
+    backdrop-filter: blur(4px);
+  }
+  .field-legend .lg { display: flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.85); white-space: nowrap; }
+  .field-legend .lg i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
   .field-hint {
     position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
     background: rgba(15, 23, 42, 0.75); color: white;
@@ -2408,6 +2439,12 @@
             <div class="zone-label attack">공격 지역</div>
             <div class="zone-label midfield">미드필드</div>
             <div class="zone-label defense">수비 지역</div>
+            <div class="field-legend">
+              <span class="lg"><i style="background:#facc15"></i>GK</span>
+              <span class="lg"><i style="background:#3b82f6"></i>수비</span>
+              <span class="lg"><i style="background:#4ade80"></i>미들</span>
+              <span class="lg"><i style="background:#f43f5e"></i>공격</span>
+            </div>
           </div>
         </div>
         <div class="player-tooltip" id="tooltip"></div>
@@ -4256,7 +4293,8 @@ function renderField() {
   const slots = ensureSquadSlots(squad);
   slots.forEach((slot, i) => {
     const el = document.createElement('div');
-    el.className = 'slot';
+    const cat = ROLES[slot.role]?.cat || 'MF';
+    el.className = 'slot cat-' + cat;
     el.style.left = slot.x + '%';
     el.style.top = slot.y + '%';
     el.dataset.slotIndex = i;
