@@ -1299,6 +1299,49 @@
   .trait-avg-sub { font-size: 9px; color: var(--text-3); font-weight: 400; display: block; }
   .trait-myval { font-size: 11px; color: #93c5fd; min-width: 28px; text-align: center; }
 
+  /* Card: overall badge + mini category strip + colored chips */
+  .trait-card-ovr {
+    margin-left: auto; min-width: 34px; height: 26px; padding: 0 8px;
+    border: 1.5px solid var(--gold); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-brand); font-weight: 700; font-size: 15px; background: rgba(0,0,0,0.35);
+  }
+  .tcm-strip { display: flex; align-items: flex-end; gap: 3px; height: 30px; margin-bottom: 10px; padding: 4px 2px 0; }
+  .tcm-seg { flex: 1; height: 100%; display: flex; align-items: flex-end; background: rgba(255,255,255,0.04); border-radius: 3px; overflow: hidden; }
+  .tcm-seg i { display: block; width: 100%; border-radius: 3px 3px 0 0; transition: height .3s; }
+  .trait-top-chip .ttc-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+
+  /* Trait modal: mode tabs */
+  .trait-mode-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+  .tmt-btn {
+    flex: 1; background: var(--bg-3); border: 1px solid var(--border-2); color: var(--text-2);
+    border-radius: 9px; padding: 9px 10px; font-family: var(--font-brand); font-weight: 700;
+    font-size: 14px; cursor: pointer; transition: all .15s;
+  }
+  .tmt-btn.active { background: linear-gradient(180deg, var(--gold-warm), var(--gold)); color: #0a0a0a; border-color: var(--gold-2); box-shadow: 0 2px 12px var(--gold-glow); }
+
+  /* Trait graph view */
+  .trait-graph-top { display: flex; align-items: center; gap: 14px; justify-content: center; margin-bottom: 18px; flex-wrap: wrap; }
+  .trait-radar-wrap { width: 280px; max-width: 100%; }
+  .trait-radar { width: 100%; height: auto; display: block; }
+  .trait-overall { text-align: center; }
+  .trait-overall-val { font-family: var(--font-brand); font-weight: 700; font-size: 46px; line-height: 1; }
+  .trait-overall-label { font-size: 12px; color: var(--text-3); margin-top: 4px; letter-spacing: .05em; }
+  .trait-graph-cat { margin-bottom: 14px; }
+  .tg-cat-head {
+    font-family: var(--font-brand); font-size: 14px; font-weight: 700; color: var(--gold);
+    letter-spacing: .04em; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .tg-cat-avg { margin-left: auto; min-width: 30px; text-align: center; border-radius: 6px; padding: 2px 7px; font-size: 13px; font-weight: 700; }
+  .tg-bar { display: grid; grid-template-columns: 96px 1fr 56px; align-items: center; gap: 10px; padding: 5px 0; }
+  .tg-bar-name { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tg-bar-track { height: 14px; background: rgba(255,255,255,0.05); border-radius: 7px; overflow: hidden; }
+  .tg-bar-fill { height: 100%; border-radius: 7px; min-width: 2px; transition: width .4s ease; }
+  .tg-bar-val { text-align: right; font-family: var(--font-brand); font-weight: 700; font-size: 14px; }
+  .tg-bar-val .tg-cnt { display: block; font-size: 9px; color: var(--text-3); font-weight: 400; }
+  .tg-empty { font-size: 12px; color: var(--text-3); padding: 10px; text-align: center; }
+
   /* ==================== Admin view ==================== */
   .admin-view {
     display: flex; flex-direction: column;
@@ -1742,6 +1785,14 @@
     .trait-avg-badge { grid-area: avg; }
     .trait-slider-wrap { grid-area: slider; }
     .trait-slider { height: 22px; }
+
+    /* Graph view on phones */
+    .trait-graph-top { gap: 8px; }
+    .trait-radar-wrap { width: 240px; }
+    .trait-overall-val { font-size: 38px; }
+    .tg-bar { grid-template-columns: 84px 1fr 46px; gap: 8px; }
+    .tg-bar-name { font-size: 12px; }
+    .tcm-strip { height: 26px; }
 
     /* Slots slightly smaller labels on phones */
     .slot { width: 84px; height: 90px; }
@@ -2557,7 +2608,11 @@
 <div class="modal-overlay" id="traitModal">
   <div class="modal wide">
     <h3 id="traitModalTitle">특성 평가</h3>
-    <div class="trait-note">🎭 슬라이더를 움직여 평가하면 저장돼요. 화면 값은 <b>전체 평균</b>이고, 여러분의 점수도 함께 반영됩니다.</div>
+    <div class="trait-mode-tabs">
+      <button class="tmt-btn active" data-tmode="graph">📊 그래프</button>
+      <button class="tmt-btn" data-tmode="rate">✏️ 평가하기</button>
+    </div>
+    <div class="trait-note" id="traitNote">📊 팀원들이 매긴 <b>평균</b>을 그래프로 보여줘요. 「✏️ 평가하기」를 눌러 직접 점수를 매길 수 있어요.</div>
     <div id="traitSections"></div>
     <div class="modal-footer">
       <button class="btn-cancel" id="btnCancelTrait">닫기</button>
@@ -5507,8 +5562,55 @@ function topTraits(playerId, n) {
   out.sort((x,y) => y.avg - x.avg);
   return out.slice(0, n);
 }
+// 카테고리 평균 (평가된 특성만)
+function catAvg(playerId, cat) {
+  const avgs = (cat.traits||[]).map(t => traitAvg(playerId, t.id)).filter(a => a.avg != null).map(a => a.avg);
+  if (!avgs.length) return null;
+  return Math.round(avgs.reduce((a,b)=>a+b,0)/avgs.length);
+}
+// 종합 점수 (평가된 모든 특성 평균)
+function overallTraitScore(playerId) {
+  const all = [];
+  traitCats().forEach(c => (c.traits||[]).forEach(t => { const a = traitAvg(playerId, t.id); if (a.avg!=null) all.push(a.avg); }));
+  if (!all.length) return null;
+  return Math.round(all.reduce((a,b)=>a+b,0)/all.length);
+}
+// 값(0~100) → 색상: 빨강(낮음)→주황→노랑→연두→초록(높음)
+function traitValColor(v) {
+  if (v == null) return 'var(--border-2)';
+  const h = Math.max(0, Math.min(130, (v/100)*130)); // 0=red, 130=green
+  return `hsl(${h.toFixed(0)}, 78%, 52%)`;
+}
+// 레이더(방사형) 차트 SVG — 카테고리 평균 시각화
+function traitRadarSvg(playerId) {
+  const cats = traitCats();
+  const n = cats.length;
+  if (n < 3) return '';
+  const size = 280, cx = size/2, cy = size/2, R = size/2 - 46;
+  const rings = [0.25,0.5,0.75,1].map(f => {
+    let d='';
+    for (let i=0;i<n;i++){ const ang=-Math.PI/2 + i*2*Math.PI/n; const x=cx+Math.cos(ang)*R*f; const y=cy+Math.sin(ang)*R*f; d+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)+' '; }
+    return `<path d="${d}Z" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>`;
+  }).join('');
+  let axes='', dataD='', dots='', labels='';
+  for (let i=0;i<n;i++){
+    const ang=-Math.PI/2 + i*2*Math.PI/n;
+    const ax=cx+Math.cos(ang)*R, ay=cy+Math.sin(ang)*R;
+    axes += `<line x1="${cx}" y1="${cy}" x2="${ax.toFixed(1)}" y2="${ay.toFixed(1)}" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>`;
+    const v = catAvg(playerId, cats[i]); const vv = v==null?0:v;
+    const rx=cx+Math.cos(ang)*R*(vv/100), ry=cy+Math.sin(ang)*R*(vv/100);
+    dataD += (i?'L':'M')+rx.toFixed(1)+' '+ry.toFixed(1)+' ';
+    dots += `<circle cx="${rx.toFixed(1)}" cy="${ry.toFixed(1)}" r="3.2" fill="${traitValColor(v)}" stroke="#000" stroke-width="0.5"/>`;
+    const lx=cx+Math.cos(ang)*(R+20), ly=cy+Math.sin(ang)*(R+20);
+    labels += `<text x="${lx.toFixed(1)}" y="${(ly+5).toFixed(1)}" text-anchor="middle" font-size="16">${cats[i].emoji||'🏷️'}</text>`;
+  }
+  return `<svg viewBox="0 0 ${size} ${size}" class="trait-radar" xmlns="http://www.w3.org/2000/svg">${rings}${axes}
+    <path d="${dataD}Z" fill="rgba(244,196,48,0.20)" stroke="var(--gold)" stroke-width="2" stroke-linejoin="round"/>
+    ${dots}${labels}</svg>`;
+}
 
 let traitViewPlayerId = null;
+let traitModalMode = 'graph'; // 'graph' | 'rate'
 let _traitDirty = {}; // traitId → value (changed sliders this session)
 
 function renderTraits() {
@@ -5521,16 +5623,22 @@ function renderTraits() {
     return;
   }
   players.sort((a,b) => (a.number||999) - (b.number||999));
+  const cats = traitCats();
   container.innerHTML = players.map(p => {
     const tops = topTraits(p.id, 3);
     const chips = tops.length
-      ? tops.map(t => `<span class="trait-top-chip">${escapeHtml(t.name)} <b>${t.avg}</b></span>`).join('')
+      ? tops.map(t => `<span class="trait-top-chip" style="border-color:${traitValColor(t.avg)}66"><span class="ttc-dot" style="background:${traitValColor(t.avg)}"></span>${escapeHtml(t.name)} <b style="color:${traitValColor(t.avg)}">${t.avg}</b></span>`).join('')
       : '<span class="trait-card-empty">아직 평가 없음 · 눌러서 평가하기</span>';
+    const overall = overallTraitScore(p.id);
+    // 미니 카테고리 막대 (평가된 카테고리만)
+    const mini = cats.map(c => { const ca = catAvg(p.id, c); return ca==null ? '' : `<div class="tcm-seg" title="${escapeHtml(c.label)} ${ca}"><i style="height:${Math.max(8,ca)}%; background:${traitValColor(ca)}"></i></div>`; }).filter(Boolean).join('');
     return `<div class="trait-card" data-id="${p.id}">
       <div class="trait-card-head">
         <div class="trait-card-num">${p.number || '?'}</div>
         <div class="trait-card-name">${escapeHtml(p.name)}</div>
+        ${overall!=null ? `<div class="trait-card-ovr" style="border-color:${traitValColor(overall)}; color:${traitValColor(overall)}">${overall}</div>` : ''}
       </div>
+      ${mini ? `<div class="tcm-strip">${mini}</div>` : ''}
       <div class="trait-card-tags">${chips}</div>
     </div>`;
   }).join('');
@@ -5540,11 +5648,57 @@ function renderTraits() {
 function openTraitModal(playerId) {
   traitViewPlayerId = playerId;
   _traitDirty = {};
+  traitModalMode = 'graph';
   const p = getPlayer(playerId);
   if (!p) return;
-  document.getElementById('traitModalTitle').textContent = `🎭 #${p.number||'?'} ${p.name} · 특성 평가`;
-  renderTraitSections();
+  document.getElementById('traitModalTitle').textContent = `🎭 #${p.number||'?'} ${p.name} · 특성`;
+  setTraitMode('graph');
   document.getElementById('traitModal').classList.add('show');
+}
+function setTraitMode(mode) {
+  traitModalMode = mode;
+  document.querySelectorAll('.tmt-btn').forEach(b => b.classList.toggle('active', b.dataset.tmode === mode));
+  const note = document.getElementById('traitNote');
+  const saveBtn = document.getElementById('btnSaveTrait');
+  if (mode === 'graph') {
+    if (note) note.innerHTML = '📊 팀원들이 매긴 <b>평균</b>을 그래프로 보여줘요. 막대 색은 점수(빨강↔초록)! 「✏️ 평가하기」로 직접 매길 수 있어요.';
+    if (saveBtn) saveBtn.style.display = 'none';
+    renderTraitGraph();
+  } else {
+    if (note) note.innerHTML = '✏️ 슬라이더를 움직여 평가하면 저장돼요. 화면 값은 <b>전체 평균</b>이고, 여러분의 점수도 함께 반영됩니다.';
+    if (saveBtn) saveBtn.style.display = '';
+    renderTraitSections();
+  }
+}
+function renderTraitGraph() {
+  const pid = traitViewPlayerId;
+  const cats = traitCats();
+  const overall = overallTraitScore(pid);
+  let html = `<div class="trait-graph-top">
+    <div class="trait-radar-wrap">${traitRadarSvg(pid) || '<div class="tg-empty">카테고리가 3개 이상이면 방사형 그래프가 표시돼요</div>'}</div>
+    <div class="trait-overall">
+      <div class="trait-overall-val" style="color:${traitValColor(overall)}">${overall==null?'—':overall}</div>
+      <div class="trait-overall-label">종합 점수</div>
+    </div>
+  </div>`;
+  html += cats.map(c => {
+    const ca = catAvg(pid, c);
+    const bars = (c.traits||[]).map(t => {
+      const a = traitAvg(pid, t.id);
+      const v = a.avg;
+      const w = v==null?0:v;
+      return `<div class="tg-bar">
+        <div class="tg-bar-name">${escapeHtml(t.name)}</div>
+        <div class="tg-bar-track"><div class="tg-bar-fill" style="width:${w}%; background:${traitValColor(v)}"></div></div>
+        <div class="tg-bar-val" style="color:${v==null?'var(--text-3)':traitValColor(v)}">${v==null?'-':v}<span class="tg-cnt">${a.count?(a.count+'명'):''}</span></div>
+      </div>`;
+    }).join('') || '<div class="tg-empty">특성이 없습니다</div>';
+    return `<div class="trait-graph-cat">
+      <div class="tg-cat-head">${c.emoji||'🏷️'} ${escapeHtml(c.label)}<span class="tg-cat-avg" style="background:${ca==null?'var(--bg-3)':traitValColor(ca)}; color:${ca==null?'var(--text-3)':'#0a0a0a'}">${ca==null?'—':ca}</span></div>
+      ${bars}
+    </div>`;
+  }).join('');
+  document.getElementById('traitSections').innerHTML = html;
 }
 function renderTraitSections() {
   const pid = traitViewPlayerId;
@@ -5632,7 +5786,7 @@ function addTraitCategory() {
   if (!store.traitCats) store.traitCats = defaultTraitCats();
   store.traitCats.push({ id: 'c_' + uid(), emoji, label: lb, traits: [], createdBy: currentUser().id });
   saveState();
-  if (document.getElementById('traitModal').classList.contains('show')) renderTraitSections();
+  if (document.getElementById('traitModal').classList.contains('show')) setTraitMode(traitModalMode);
   toast(`「${lb}」 카테고리 추가`);
 }
 function deleteTrait(catId, traitId) {
@@ -5847,6 +6001,7 @@ function bindEvents() {
   document.getElementById('btnAddTraitCat').addEventListener('click', addTraitCategory);
   document.getElementById('btnCancelTrait').addEventListener('click', closeTraitModal);
   document.getElementById('btnSaveTrait').addEventListener('click', saveTraitModal);
+  document.querySelectorAll('.tmt-btn').forEach(b => b.addEventListener('click', () => setTraitMode(b.dataset.tmode)));
   document.getElementById('traitModal').addEventListener('click', e => { if (e.target.id === 'traitModal') closeTraitModal(); });
 
   document.addEventListener('keydown', e => {
