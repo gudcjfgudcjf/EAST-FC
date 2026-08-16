@@ -1251,6 +1251,61 @@
   .admin-role-badge.owner { background: linear-gradient(180deg, var(--gold-warm), var(--gold)); color: #0a0a0a; }
   .admin-role-badge.admin { background: rgba(96,165,250,0.2); color: #93c5fd; border: 1px solid rgba(96,165,250,0.4); }
   .admin-role-badge.member { background: rgba(163,163,163,0.15); color: var(--text-2); border: 1px solid var(--border); }
+  /* ==================== Condition badge ==================== */
+  .cond-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--bg-3);
+    border: 1px solid var(--border-2);
+    border-radius: 8px;
+    padding: 4px 9px 4px 7px;
+    cursor: default;
+    font-size: 12px;
+    white-space: nowrap;
+    transition: border-color 0.15s, transform 0.1s;
+  }
+  .cond-badge.editable { cursor: pointer; }
+  .cond-badge.editable:hover { border-color: var(--cond-color); transform: translateY(-1px); }
+  .cond-badge .cond-name { font-family: var(--font-brand); font-weight: 700; letter-spacing: 0.02em; }
+  .cond-badge.cond-glow { box-shadow: 0 0 10px color-mix(in srgb, var(--cond-color) 55%, transparent); border-color: var(--cond-color); }
+  .cond-badge.cond-flash { animation: condSiren 0.7s steps(1,end) infinite; border-color: #ff1111; }
+  @keyframes condSiren {
+    0%, 49% { background: rgba(255, 17, 17, 0.22); box-shadow: 0 0 12px rgba(255,17,17,0.7); }
+    50%, 100% { background: var(--bg-3); box-shadow: none; }
+  }
+
+  .cond-picker {
+    position: fixed;
+    z-index: 300;
+    width: 190px;
+    background: linear-gradient(160deg, #1a1a1a, #0f0f0f);
+    border: 1px solid var(--border-2);
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 16px 44px rgba(0,0,0,0.85);
+  }
+  .cond-picker-title {
+    font-family: var(--font-brand);
+    font-size: 11px; color: var(--text-2);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    padding: 4px 6px 8px;
+  }
+  .cond-opt {
+    display: flex; align-items: center; gap: 8px;
+    width: 100%;
+    background: var(--bg-3);
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 7px 9px;
+    margin-bottom: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    text-align: left;
+  }
+  .cond-opt:last-child { margin-bottom: 0; }
+  .cond-opt:hover { border-color: var(--cond-color); }
+  .cond-opt.active { border-color: var(--cond-color); background: color-mix(in srgb, var(--cond-color) 12%, var(--bg-3)); }
+  .cond-opt.cond-flash { animation: condSiren 0.7s steps(1,end) infinite; }
+
   .admin-player-select { max-width: 210px; }
   .admin-link-chip {
     display: inline-flex; align-items: center; gap: 4px;
@@ -1342,16 +1397,24 @@
     .nav-menu-btn { display: flex; order: 4; }
     /* Tab strip: full-width horizontally scrollable row */
     .tab-strip {
-      order: 10; width: 100%; height: 46px;
+      order: 10; width: 100%; height: 48px;
       overflow-x: auto; overflow-y: hidden;
       flex-wrap: nowrap;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
       border-top: 1px solid var(--border);
-      margin-top: 4px; padding-top: 2px;
+      margin-top: 4px;
+      align-items: stretch;
     }
     .tab-strip::-webkit-scrollbar { display: none; }
-    .tab-btn { padding: 0 14px; font-size: 14px; flex: 0 0 auto; height: 44px; }
+    .tab-btn { padding: 0 14px; font-size: 14px; flex: 0 0 auto; height: 48px; border-bottom-width: 0; }
+    /* Active tab: clear tint + top accent bar (always visible, never clipped) */
+    .tab-btn.active {
+      background: rgba(244, 196, 48, 0.10);
+      border-bottom: none;
+      box-shadow: inset 0 3px 0 var(--gold);
+      border-radius: 8px 8px 0 0;
+    }
     /* Utility buttons collapse into a dropdown */
     .nav-utils {
       display: none;
@@ -1413,17 +1476,24 @@
     /* Tables scroll horizontally with a hint */
     .players-table-wrap, .admin-table-wrap { -webkit-overflow-scrolling: touch; }
 
-    /* Admin: stack side panel below table */
-    .admin-body { grid-template-columns: 1fr; }
+    /* Admin view: let the WHOLE view scroll so the side panels below are reachable */
+    #view-admin { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .admin-view { height: auto; min-height: 100%; }
+    .admin-body { grid-template-columns: 1fr; overflow: visible; }
+    .admin-main { overflow: visible; }
+    .admin-table-wrap { overflow-x: auto; overflow-y: visible; }
+    .admin-side { overflow: visible; }
     .admin-stats { grid-template-columns: repeat(2, 1fr); }
 
-    /* Calendar: tighter cells */
-    .cal-grid { grid-auto-rows: minmax(58px, 1fr); }
+    /* Calendar view: let the WHOLE view scroll so the bottom (다가오는 경기) is reachable */
+    #view-calendar { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .calendar-view { height: auto; min-height: 100%; }
+    .cal-grid { flex: 0 0 auto; grid-auto-rows: minmax(52px, auto); }
     .cal-title { font-size: 20px; min-width: 120px; }
-    .cal-day { padding: 4px; }
+    .cal-day { padding: 4px; min-height: 52px; }
     .cal-day-num { font-size: 12px; }
     .cal-match { font-size: 9px; padding: 2px 4px; }
-    .cal-upcoming { max-height: 120px; }
+    .cal-upcoming { max-height: none; }
 
     /* Modals: use most of the screen, comfortable padding */
     .modal { padding: 18px; border-radius: 14px; width: 94%; max-height: 92vh; }
@@ -1888,6 +1958,7 @@
               <th data-sort="number">#</th>
               <th data-sort="name">이름</th>
               <th data-sort="positions">역할</th>
+              <th data-sort="condition" title="컨디션 · 감독/운영진과 본인만 조정 가능">컨디션</th>
               <th data-sort="foot">주발</th>
               <th data-sort="bestOvr">최고 OVR</th>
               <th data-sort="avg_1" class="stat-cell">🏃 신체</th>
@@ -3556,6 +3627,108 @@ function renderSquadList() {
   }).join('');
 }
 
+/* ==================== Condition (컨디션) ==================== */
+// level 1 = best ... 8 = worst. deg = arrow rotation (0=12시/up, 90=3시/right, 180=6시/down)
+const CONDITIONS = [
+  null,
+  { level: 1, name: '최상',      color: '#39ff14', deg: 0,   glow: true },
+  { level: 2, name: '좋음',      color: '#22c55e', deg: 0 },
+  { level: 3, name: '양호',      color: '#15803d', deg: 30 },
+  { level: 4, name: '보통',      color: '#fde047', deg: 60 },
+  { level: 5, name: '저하',      color: '#ca8a04', deg: 90 },
+  { level: 6, name: '나쁨',      color: '#991b1b', deg: 120 },
+  { level: 7, name: '매우 나쁨', color: '#ef4444', deg: 150 },
+  { level: 8, name: '위험',      color: '#ff1111', deg: 180, flash: true },
+];
+function getCondition(p) {
+  const c = p && p.condition;
+  return (typeof c === 'number' && c >= 1 && c <= 8) ? c : 2; // default 좋음
+}
+function canEditCondition(player) {
+  if (!isLoggedIn()) return false;
+  if (isManagerActive()) return true;          // 감독/운영진
+  const u = currentUser();
+  return !!(player && player.userId && player.userId === u.id); // 본인 프로필
+}
+function conditionArrowSvg(level, size) {
+  const c = CONDITIONS[level] || CONDITIONS[2];
+  const s = size || 18;
+  return `<svg viewBox="0 0 24 24" width="${s}" height="${s}" style="transform:rotate(${c.deg}deg); flex-shrink:0;">
+    <path d="M12 4 L12 20 M12 4 L6.5 10 M12 4 L17.5 10" stroke="${c.color}" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+}
+function conditionBadgeHtml(p) {
+  const level = getCondition(p);
+  const c = CONDITIONS[level];
+  const editable = canEditCondition(p);
+  const cls = ['cond-badge'];
+  if (c.glow) cls.push('cond-glow');
+  if (c.flash) cls.push('cond-flash');
+  if (editable) cls.push('editable');
+  return `<button type="button" class="${cls.join(' ')}" data-cond-player="${p.id}"
+            title="컨디션: ${c.name}${editable ? ' (클릭해서 변경)' : ''}"
+            style="--cond-color:${c.color}">
+      ${conditionArrowSvg(level, 16)}
+      <span class="cond-name" style="color:${c.color}">${c.name}</span>
+    </button>`;
+}
+let _condPickerEl = null;
+function closeConditionPicker() {
+  if (_condPickerEl) { _condPickerEl.remove(); _condPickerEl = null; }
+}
+function openConditionPicker(playerId, anchorEl) {
+  closeConditionPicker();
+  const p = getPlayer(playerId);
+  if (!p) return;
+  const cur = getCondition(p);
+  const el = document.createElement('div');
+  el.className = 'cond-picker';
+  el.innerHTML = `
+    <div class="cond-picker-title">컨디션 선택</div>
+    ${CONDITIONS.slice(1).map(c => `
+      <button type="button" class="cond-opt ${c.level===cur?'active':''} ${c.flash?'cond-flash':''} ${c.glow?'cond-glow':''}" data-level="${c.level}" style="--cond-color:${c.color}">
+        ${conditionArrowSvg(c.level, 18)}
+        <span style="color:${c.color}; font-weight:700;">${c.name}</span>
+        ${c.level===cur?'<span style="margin-left:auto; color:var(--text-2); font-size:11px;">현재</span>':''}
+      </button>
+    `).join('')}
+  `;
+  document.body.appendChild(el);
+  _condPickerEl = el;
+  // Position near anchor
+  const r = anchorEl.getBoundingClientRect();
+  const pw = 190, ph = el.offsetHeight || 320;
+  let left = r.left;
+  let top = r.bottom + 6;
+  if (left + pw > window.innerWidth - 8) left = window.innerWidth - pw - 8;
+  if (top + ph > window.innerHeight - 8) top = Math.max(8, r.top - ph - 6);
+  el.style.left = left + 'px';
+  el.style.top = top + 'px';
+  el.querySelectorAll('.cond-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setPlayerCondition(playerId, +btn.dataset.level);
+      closeConditionPicker();
+    });
+  });
+  // Close on outside click / escape
+  setTimeout(() => {
+    document.addEventListener('click', _condOutside, { once: true });
+  }, 0);
+}
+function _condOutside(e) {
+  if (_condPickerEl && !_condPickerEl.contains(e.target)) closeConditionPicker();
+}
+function setPlayerCondition(playerId, level) {
+  const p = getPlayer(playerId);
+  if (!p) return;
+  if (!canEditCondition(p)) { toast('권한이 없습니다'); return; }
+  p.condition = level;
+  saveState();
+  if (currentTab === 'players') renderPlayersTable();
+  if (currentTab === 'squad') renderPlayerList();
+  toast(`컨디션 → ${CONDITIONS[level].name}`);
+}
+
 /* ==================== Players table ==================== */
 let sortState = { key: 'bestOvr', dir: 'desc' };
 function renderPlayersTable() {
@@ -3571,6 +3744,7 @@ function renderPlayersTable() {
     if (key === 'bestOvr') { av = bestRoleForPlayer(a).ovr; bv = bestRoleForPlayer(b).ovr; }
     else if (key === 'positions') { av = (a.positions||[]).join(','); bv = (b.positions||[]).join(','); }
     else if (key.startsWith('avg_')) { const sid = +key.slice(4); av = sectionAvg(a, sid); bv = sectionAvg(b, sid); }
+    else if (key === 'condition') { av = getCondition(a); bv = getCondition(b); }
     else { av = a[key]; bv = b[key]; }
     if (typeof av === 'string') { av = av.toLowerCase(); bv = (bv||'').toString().toLowerCase(); }
     if (av < bv) return dir === 'asc' ? -1 : 1;
@@ -3582,7 +3756,7 @@ function renderPlayersTable() {
     if (th.dataset.sort === key) th.classList.add(dir === 'asc' ? 'sort-asc' : 'sort-desc');
   });
   if (list.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="12" class="empty">${store.players.length === 0 ? '오른쪽 위 [+ 선수 추가]를 눌러 첫 선수를 추가해 보세요' : '검색 결과 없음'}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="13" class="empty">${store.players.length === 0 ? '오른쪽 위 [+ 선수 추가]를 눌러 첫 선수를 추가해 보세요' : '검색 결과 없음'}</td></tr>`;
     return;
   }
   tbody.innerHTML = list.map(p => {
@@ -3600,6 +3774,7 @@ function renderPlayersTable() {
         <td>${p.number || '-'}</td>
         <td><strong>${escapeHtml(p.name)}</strong></td>
         <td><div class="positions-cell">${roleBadges}</div></td>
+        <td>${conditionBadgeHtml(p)}</td>
         <td>${footLabel(p.foot)}</td>
         <td><span class="ovr-badge">${best.ovr}<span class="ovr-role">${escapeHtml(best.name)}</span></span></td>
         ${SECTIONS.map(sec => avgTd(sectionAvg(p, sec.id))).join('')}
@@ -4820,6 +4995,16 @@ function bindEvents() {
     });
   });
   $('#playersTableBody').addEventListener('click', e => {
+    // Condition badge click → open picker (don't open the full edit modal)
+    const condBtn = e.target.closest('.cond-badge');
+    if (condBtn) {
+      e.stopPropagation();
+      const pid = condBtn.dataset.condPlayer;
+      const p = getPlayer(pid);
+      if (canEditCondition(p)) openConditionPicker(pid, condBtn);
+      else toast('컨디션은 감독/운영진과 본인만 조정할 수 있어요');
+      return;
+    }
     const row = e.target.closest('tr[data-id]');
     if (!row) return;
     openPlayerModal(row.dataset.id);
