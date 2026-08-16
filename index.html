@@ -1224,6 +1224,81 @@
     line-height: 1.5;
   }
 
+  /* ==================== Traits (특성) ==================== */
+  .traits-view { display: flex; flex-direction: column; height: 100%; padding: 20px; overflow: hidden; }
+  .traits-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+  .traits-header h1 { font-family: var(--font-brand); font-size: 24px; color: var(--text); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 700; }
+  .traits-header .spacer { flex: 1; }
+  .traits-header .search { max-width: 220px; }
+  .traits-header button {
+    background: linear-gradient(180deg, var(--gold-warm), var(--gold)); color: #0a0a0a;
+    border: 1px solid var(--gold-2); padding: 8px 16px; border-radius: 8px;
+    font-family: var(--font-brand); font-size: 14px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 2px 12px var(--gold-glow); white-space: nowrap;
+  }
+  .traits-content {
+    flex: 1; overflow-y: auto;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px; padding-right: 4px; align-content: start;
+  }
+  .trait-card {
+    background: linear-gradient(155deg, var(--bg-3) 0%, var(--bg-2) 100%);
+    border: 1px solid var(--border); border-radius: 14px; padding: 14px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .trait-card:hover { border-color: var(--gold); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+  .trait-card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .trait-card-num {
+    width: 38px; height: 38px; flex-shrink: 0;
+    background: linear-gradient(145deg, #1a1a1a, #000); border: 1.5px solid var(--gold); color: var(--gold);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-brand); font-weight: 700; font-size: 15px;
+  }
+  .trait-card-name { font-family: var(--font-brand); font-size: 16px; font-weight: 700; }
+  .trait-card-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+  .trait-top-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--bg-2); border: 1px solid var(--border-2); border-radius: 8px;
+    padding: 2px 8px; font-size: 11px; color: var(--text);
+  }
+  .trait-top-chip b { color: var(--gold-warm); font-family: var(--font-brand); }
+  .trait-card-empty { font-size: 11px; color: var(--text-3); }
+
+  /* Trait modal */
+  .trait-note {
+    background: rgba(167,139,250,0.08); border: 1px solid rgba(167,139,250,0.25);
+    border-radius: 8px; padding: 10px 12px; color: #c4b5fd; font-size: 12px;
+    margin-bottom: 14px; text-align: center; line-height: 1.5;
+  }
+  .trait-cat { margin-bottom: 16px; }
+  .trait-cat-title {
+    font-family: var(--font-brand); font-size: 14px; font-weight: 700; color: var(--gold);
+    letter-spacing: 0.04em; margin-bottom: 8px; padding-bottom: 6px;
+    border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px;
+  }
+  .trait-cat-title .tct-actions { margin-left: auto; display: flex; gap: 6px; }
+  .trait-cat-add, .trait-cat-del {
+    background: var(--bg-3); border: 1px solid var(--border-2); color: var(--text-2);
+    border-radius: 6px; padding: 3px 8px; font-size: 11px; cursor: pointer; font-weight: 600;
+  }
+  .trait-cat-add:hover { border-color: var(--gold); color: var(--gold); }
+  .trait-cat-del:hover { border-color: var(--danger); color: var(--danger); }
+  .trait-row {
+    display: grid; grid-template-columns: 96px 1fr 52px; align-items: center;
+    gap: 10px; padding: 7px 0;
+  }
+  .trait-row-name { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+  .trait-row-name .trait-del { color: var(--text-4); cursor: pointer; font-size: 12px; }
+  .trait-row-name .trait-del:hover { color: var(--danger); }
+  .trait-slider-wrap { display: flex; align-items: center; gap: 8px; }
+  .trait-slider { flex: 1; accent-color: var(--gold); }
+  .trait-avg-badge {
+    text-align: right; font-family: var(--font-brand); font-weight: 700; font-size: 14px;
+    color: var(--gold-warm);
+  }
+  .trait-avg-sub { font-size: 9px; color: var(--text-3); font-weight: 400; display: block; }
+  .trait-myval { font-size: 11px; color: #93c5fd; min-width: 28px; text-align: center; }
+
   /* ==================== Admin view ==================== */
   .admin-view {
     display: flex; flex-direction: column;
@@ -1654,6 +1729,20 @@
     .amr-btns { width: 100%; }
     .amr-btn { flex: 1; text-align: center; padding: 7px 4px; }
 
+    /* Traits: card grid + modal rows stack on phones */
+    .traits-view { padding: 12px; }
+    .traits-header h1 { font-size: 19px; }
+    .traits-header .search { max-width: none; flex: 1 1 140px; }
+    .traits-content { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .trait-row {
+      grid-template-columns: 1fr auto; grid-template-areas: "name avg" "slider slider";
+      gap: 4px 10px; padding: 8px 0; border-bottom: 1px solid var(--border);
+    }
+    .trait-row-name { grid-area: name; font-size: 14px; }
+    .trait-avg-badge { grid-area: avg; }
+    .trait-slider-wrap { grid-area: slider; }
+    .trait-slider { height: 22px; }
+
     /* Slots slightly smaller labels on phones */
     .slot { width: 84px; height: 90px; }
     .slot-circle { width: 42px; height: 42px; }
@@ -1666,6 +1755,7 @@
     .tab-btn { font-size: 13px; padding: 0 12px; }
     .dor-content { grid-template-columns: 1fr 1fr; }
     .org-cards { grid-template-columns: 1fr; }
+    .traits-content { grid-template-columns: 1fr; }
   }
 
   /* ==================== Auth ==================== */
@@ -2001,6 +2091,7 @@
     <button class="tab-btn" data-tab="org">🏢 조직도</button>
     <button class="tab-btn" data-tab="board">📝 게시판</button>
     <button class="tab-btn" data-tab="dor">💛 이스트도르</button>
+    <button class="tab-btn" data-tab="traits">🎭 특성</button>
     <button class="tab-btn" data-tab="admin" id="tabAdmin" style="display:none">🛡️ 관리자</button>
   </div>
   <div class="spacer"></div>
@@ -2181,6 +2272,22 @@
         <div style="color:var(--text-2); font-size:12px;">선수를 클릭해 익명으로 호감도 (-5 ~ +5)를 표현하세요</div>
       </div>
       <div class="dor-content" id="dorContent"></div>
+    </div>
+  </section>
+
+  <!-- ============ TRAITS VIEW ============ -->
+  <section class="view" id="view-traits">
+    <div class="traits-view">
+      <div class="traits-header">
+        <h1>🎭 특성</h1>
+        <div class="spacer"></div>
+        <input type="search" class="search" id="traitSearch" placeholder="선수 검색..." />
+        <button id="btnAddTraitCat">+ 카테고리</button>
+      </div>
+      <div style="font-size:12px; color:var(--text-2); margin-bottom:8px;">
+        선수를 눌러 특성을 0~100으로 평가하세요. 모두가 참여하며 값은 전체 평균이에요. 특성·카테고리는 자유롭게 추가할 수 있어요.
+      </div>
+      <div class="traits-content" id="traitsContent"></div>
     </div>
   </section>
 
@@ -2446,6 +2553,19 @@
   </div>
 </div>
 
+<!-- Trait rating modal -->
+<div class="modal-overlay" id="traitModal">
+  <div class="modal wide">
+    <h3 id="traitModalTitle">특성 평가</h3>
+    <div class="trait-note">🎭 슬라이더를 움직여 평가하면 저장돼요. 화면 값은 <b>전체 평균</b>이고, 여러분의 점수도 함께 반영됩니다.</div>
+    <div id="traitSections"></div>
+    <div class="modal-footer">
+      <button class="btn-cancel" id="btnCancelTrait">닫기</button>
+      <button class="btn-primary" id="btnSaveTrait">내 평가 저장</button>
+    </div>
+  </div>
+</div>
+
 <!-- ============ Manager unlock modal ============ -->
 <div class="modal-overlay" id="managerUnlockModal">
   <div class="modal" style="max-width:420px">
@@ -2541,6 +2661,13 @@ function normalizeStore(s) {
   s.staff = Array.isArray(s.staff) ? s.staff : (s.staff ? Object.values(s.staff) : []);
   s.posts = Array.isArray(s.posts) ? s.posts : (s.posts ? Object.values(s.posts) : []);
   s.customDepts = Array.isArray(s.customDepts) ? s.customDepts : (s.customDepts ? Object.values(s.customDepts) : []);
+  // Traits: seed defaults once (undefined → first time), fix array shapes from Firebase
+  if (s.traitCats === undefined || s.traitCats === null) s.traitCats = defaultTraitCats();
+  else {
+    if (!Array.isArray(s.traitCats)) s.traitCats = Object.values(s.traitCats);
+    s.traitCats.forEach(c => { if (c && c.traits && !Array.isArray(c.traits)) c.traits = Object.values(c.traits); if (c && !c.traits) c.traits = []; });
+  }
+  s.traitRatings = s.traitRatings || {};
   s.dorVotes = s.dorVotes || {};
   // dorVotes: each entry should be an array
   Object.keys(s.dorVotes).forEach(k => {
@@ -3350,8 +3477,77 @@ let store = {
   posts: [],
   dorVotes: {},  // { playerId: [{ id, voterId, value, reason, createdAt }] }
   customDepts: [], // [{ key, label, order, createdBy, createdAt }]
+  traitCats: undefined, // [{ id, emoji, label, traits:[{id,name,createdBy?}], createdBy? }]  (undefined → seed defaults once)
+  traitRatings: {},      // { playerId: { traitId: { userId: value 0-100 } } }
   currentSquadId: null,
 };
+
+// 기본 특성 카테고리 (고정 id → 여러 기기에서 동일하게 seed)
+function defaultTraitCats() {
+  const T = (id, name) => ({ id, name });
+  return [
+    { id:'tc_human', emoji:'🧠', label:'인간성', traits:[
+      T('tt_h1','구라쟁이'),T('tt_h2','돈미새'),T('tt_h3','여미새'),T('tt_h4','음란함'),
+      T('tt_h5','성실함'),T('tt_h6','오지랖'),T('tt_h7','프로불편러'),T('tt_h8','인싸력'),
+      T('tt_h9','착함'),T('tt_h10','다혈질'),T('tt_h11','허세'),T('tt_h12','츤데레'),
+      T('tt_h13','예의'),T('tt_h14','뒷담화'),T('tt_h15','솔직함'),T('tt_h16','의리'),
+      T('tt_h17','이중인격'),T('tt_h18','착한척'),T('tt_h19','관종'),T('tt_h20','낯가림'),
+    ]},
+    { id:'tc_intel', emoji:'📚', label:'지능', traits:[
+      T('tt_i1','수학'),T('tt_i2','영어'),T('tt_i3','과학'),T('tt_i4','역사'),
+      T('tt_i5','상식'),T('tt_i6','눈치'),T('tt_i7','암기력'),T('tt_i8','순발력'),
+      T('tt_i9','국어'),T('tt_i10','코딩'),T('tt_i11','금융/경제'),T('tt_i12','시사'),
+      T('tt_i13','길눈'),T('tt_i14','논리력'),T('tt_i15','창의력'),T('tt_i16','기억력'),
+      T('tt_i17','계산 빠름'),T('tt_i18','허당'),
+    ]},
+    { id:'tc_look', emoji:'😎', label:'외모', traits:[
+      T('tt_l1','미남'),T('tt_l2','추남'),T('tt_l3','동안'),T('tt_l4','노안'),
+      T('tt_l5','멸치'),T('tt_l6','돼지'),T('tt_l7','거인'),T('tt_l8','난쟁이'),
+      T('tt_l9','패션센스'),T('tt_l10','피지컬'),T('tt_l11','두상'),T('tt_l12','청결'),
+      T('tt_l13','머리숱'),T('tt_l14','피부'),T('tt_l15','근육'),T('tt_l16','배'),
+      T('tt_l17','키'),T('tt_l18','목소리'),T('tt_l19','향수'),T('tt_l20','웃상'),
+    ]},
+    { id:'tc_talent', emoji:'🎮', label:'재능/기타', traits:[
+      T('tt_t1','게임'),T('tt_t2','노래'),T('tt_t3','춤'),T('tt_t4','요리'),
+      T('tt_t5','주량'),T('tt_t6','몸치'),T('tt_t7','손재주'),T('tt_t8','운전'),
+      T('tt_t9','악기'),T('tt_t10','그림'),T('tt_t11','사진'),T('tt_t12','글솜씨'),
+      T('tt_t13','만능스포츠'),T('tt_t14','방향치'),T('tt_t15','기계치'),T('tt_t16','정리정돈'),
+    ]},
+    { id:'tc_soccer', emoji:'⚽', label:'축구 스타일', traits:[
+      T('tt_s1','발재간'),T('tt_s2','수비 근성'),T('tt_s3','슛 욕심'),T('tt_s4','패스 마스터'),
+      T('tt_s5','체력'),T('tt_s6','오버런'),T('tt_s7','침착함'),T('tt_s8','투지'),
+      T('tt_s9','몸싸움'),T('tt_s10','볼 욕심'),T('tt_s11','위치선정'),T('tt_s12','헤딩'),
+      T('tt_s13','스피드'),T('tt_s14','킥력'),T('tt_s15','시야'),T('tt_s16','근성'),
+      T('tt_s17','유리몸'),T('tt_s18','골 결정력'),
+    ]},
+    { id:'tc_mental', emoji:'🔥', label:'멘탈/성격', traits:[
+      T('tt_m1','멘탈갑'),T('tt_m2','유리멘탈'),T('tt_m3','긍정왕'),T('tt_m4','불평러'),
+      T('tt_m5','리더십'),T('tt_m6','배려심'),T('tt_m7','고집'),T('tt_m8','승부욕'),
+      T('tt_m9','참을성'),T('tt_m10','다혈질'),T('tt_m11','쿨함'),T('tt_m12','소심함'),
+      T('tt_m13','책임감'),T('tt_m14','융통성'),T('tt_m15','집중력'),T('tt_m16','기복'),
+    ]},
+    { id:'tc_life', emoji:'🍺', label:'생활/습관', traits:[
+      T('tt_v1','지각쟁이'),T('tt_v2','약속왕'),T('tt_v3','술고래'),T('tt_v4','담배'),
+      T('tt_v5','부지런'),T('tt_v6','게으름'),T('tt_v7','기부천사'),T('tt_v8','짠돌이'),
+      T('tt_v9','계획형'),T('tt_v10','즉흥형'),T('tt_v11','잠꾸러기'),T('tt_v12','아침형'),
+      T('tt_v13','먹보'),T('tt_v14','편식'),T('tt_v15','운동중독'),T('tt_v16','집순이'),
+    ]},
+    { id:'tc_fun', emoji:'🎤', label:'분위기/유머', traits:[
+      T('tt_f1','개그감'),T('tt_f2','분위기메이커'),T('tt_f3','아재개그'),T('tt_f4','드립력'),
+      T('tt_f5','텐션'),T('tt_f6','예능감'),T('tt_f7','분위기깨기'),T('tt_f8','리액션'),
+      T('tt_f9','성대모사'),T('tt_f10','드립 타이밍'),T('tt_f11','노잼'),T('tt_f12','병맛'),
+    ]},
+    { id:'tc_love', emoji:'💘', label:'연애/이성', traits:[
+      T('tt_r1','금사빠'),T('tt_r2','모태솔로'),T('tt_r3','바람기'),T('tt_r4','순정파'),
+      T('tt_r5','인기'),T('tt_r6','작업멘트'),T('tt_r7','애처가'),T('tt_r8','철벽'),
+      T('tt_r9','밀당'),T('tt_r10','다정함'),T('tt_r11','츤데레'),T('tt_r12','연애고자'),
+    ]},
+    { id:'tc_money', emoji:'💰', label:'경제력', traits:[
+      T('tt_c1','재력'),T('tt_c2','플렉스'),T('tt_c3','절약왕'),T('tt_c4','투자감각'),
+      T('tt_c5','한턱쏨'),T('tt_c6','더치페이'),T('tt_c7','명품'),T('tt_c8','카푸어'),
+    ]},
+  ];
+}
 
 function getAllDepts() {
   const merged = Object.entries(DEPTS).map(([key, info]) => ({ key, ...info, builtin: true }));
@@ -3396,6 +3592,8 @@ function loadState() {
       if (!store.posts) store.posts = [];
       if (!store.dorVotes) store.dorVotes = {};
       if (!store.customDepts) store.customDepts = [];
+      if (store.traitCats === undefined) store.traitCats = defaultTraitCats();
+      if (!store.traitRatings) store.traitRatings = {};
       migrateData();
     }
   } catch (e) { console.warn('로드 실패:', e); }
@@ -3484,6 +3682,8 @@ function migrateData() {
     if (!m.attendance || typeof m.attendance !== 'object' || Array.isArray(m.attendance)) m.attendance = {};
     if (!m.color) m.color = MATCH_COLORS[i % MATCH_COLORS.length];
   });
+  if (store.traitCats === undefined) store.traitCats = defaultTraitCats();
+  if (!store.traitRatings) store.traitRatings = {};
 }
 
 /* ==================== Utilities ==================== */
@@ -3573,6 +3773,7 @@ function switchTab(name) {
   if (name === 'org') renderOrg();
   if (name === 'board') renderBoard();
   if (name === 'dor') renderDor();
+  if (name === 'traits') renderTraits();
   if (name === 'admin') renderAdmin();
   if (name === 'squad') { renderPlayerList(); renderField(); renderSquadList(); }
 }
@@ -5280,6 +5481,187 @@ function saveDorVote() {
   toast('익명 투표가 누적되었습니다 💛');
 }
 
+/* ==================== Traits (특성) ==================== */
+function traitCats() { return Array.isArray(store.traitCats) ? store.traitCats : []; }
+function findTrait(traitId) {
+  for (const c of traitCats()) { const t = (c.traits||[]).find(x => x.id === traitId); if (t) return { cat: c, trait: t }; }
+  return null;
+}
+function traitAvg(playerId, traitId) {
+  const r = (store.traitRatings[playerId] || {})[traitId] || {};
+  const vals = Object.values(r).filter(v => typeof v === 'number');
+  if (vals.length === 0) return { avg: null, count: 0 };
+  return { avg: Math.round(vals.reduce((a,b)=>a+b,0) / vals.length), count: vals.length };
+}
+function myTraitRating(playerId, traitId) {
+  const u = currentUser(); if (!u) return null;
+  const r = (store.traitRatings[playerId] || {})[traitId] || {};
+  return typeof r[u.id] === 'number' ? r[u.id] : null;
+}
+function topTraits(playerId, n) {
+  const out = [];
+  traitCats().forEach(c => (c.traits||[]).forEach(t => {
+    const a = traitAvg(playerId, t.id);
+    if (a.avg != null) out.push({ name: t.name, avg: a.avg });
+  }));
+  out.sort((x,y) => y.avg - x.avg);
+  return out.slice(0, n);
+}
+
+let traitViewPlayerId = null;
+let _traitDirty = {}; // traitId → value (changed sliders this session)
+
+function renderTraits() {
+  const container = document.getElementById('traitsContent');
+  const q = (document.getElementById('traitSearch').value || '').toLowerCase().trim();
+  let players = store.players.slice();
+  if (q) players = players.filter(p => p.name.toLowerCase().includes(q) || String(p.number).includes(q));
+  if (players.length === 0) {
+    container.innerHTML = '<div class="empty" style="grid-column:1/-1; padding:50px 20px;">「선수 관리」 탭에서 선수를 먼저 등록해 주세요</div>';
+    return;
+  }
+  players.sort((a,b) => (a.number||999) - (b.number||999));
+  container.innerHTML = players.map(p => {
+    const tops = topTraits(p.id, 3);
+    const chips = tops.length
+      ? tops.map(t => `<span class="trait-top-chip">${escapeHtml(t.name)} <b>${t.avg}</b></span>`).join('')
+      : '<span class="trait-card-empty">아직 평가 없음 · 눌러서 평가하기</span>';
+    return `<div class="trait-card" data-id="${p.id}">
+      <div class="trait-card-head">
+        <div class="trait-card-num">${p.number || '?'}</div>
+        <div class="trait-card-name">${escapeHtml(p.name)}</div>
+      </div>
+      <div class="trait-card-tags">${chips}</div>
+    </div>`;
+  }).join('');
+  container.querySelectorAll('.trait-card').forEach(c => c.addEventListener('click', () => openTraitModal(c.dataset.id)));
+}
+
+function openTraitModal(playerId) {
+  traitViewPlayerId = playerId;
+  _traitDirty = {};
+  const p = getPlayer(playerId);
+  if (!p) return;
+  document.getElementById('traitModalTitle').textContent = `🎭 #${p.number||'?'} ${p.name} · 특성 평가`;
+  renderTraitSections();
+  document.getElementById('traitModal').classList.add('show');
+}
+function renderTraitSections() {
+  const pid = traitViewPlayerId;
+  const container = document.getElementById('traitSections');
+  const cats = traitCats();
+  const canDel = isAdmin();
+  container.innerHTML = cats.map(c => {
+    const rows = (c.traits||[]).map(t => {
+      const a = traitAvg(pid, t.id);
+      const my = myTraitRating(pid, t.id);
+      const start = (_traitDirty[t.id] != null) ? _traitDirty[t.id] : (my != null ? my : (a.avg != null ? a.avg : 50));
+      const u = currentUser();
+      const canDelTrait = isAdmin() || (t.createdBy && u && t.createdBy === u.id);
+      return `<div class="trait-row">
+        <div class="trait-row-name">${escapeHtml(t.name)}${canDelTrait ? `<span class="trait-del" data-del-trait="${t.id}" data-cat="${c.id}" title="특성 삭제">✕</span>` : ''}</div>
+        <div class="trait-slider-wrap">
+          <input type="range" class="trait-slider" min="0" max="100" value="${start}" data-trait="${t.id}" />
+          <span class="trait-myval" id="tmv_${t.id}">${_traitDirty[t.id] != null ? _traitDirty[t.id] : (my != null ? my : '—')}</span>
+        </div>
+        <div class="trait-avg-badge">${a.avg != null ? a.avg : '-'}<span class="trait-avg-sub">${a.count}명</span></div>
+      </div>`;
+    }).join('') || '<div style="font-size:12px; color:var(--text-3); padding:6px 0;">특성이 없습니다. 아래 + 특성으로 추가하세요.</div>';
+    const canDelCat = isAdmin() || (c.createdBy && currentUser() && c.createdBy === currentUser().id);
+    return `<div class="trait-cat">
+      <div class="trait-cat-title">${c.emoji || '🏷️'} ${escapeHtml(c.label)}
+        <div class="tct-actions">
+          <button class="trait-cat-add" data-add-trait="${c.id}">+ 특성</button>
+          ${canDelCat ? `<button class="trait-cat-del" data-del-cat="${c.id}">🗑️</button>` : ''}
+        </div>
+      </div>
+      ${rows}
+    </div>`;
+  }).join('');
+  // sliders
+  container.querySelectorAll('.trait-slider').forEach(sl => {
+    sl.addEventListener('input', e => {
+      const tid = e.target.dataset.trait;
+      _traitDirty[tid] = Number(e.target.value);
+      const mv = document.getElementById('tmv_' + tid);
+      if (mv) mv.textContent = e.target.value;
+    });
+  });
+  container.querySelectorAll('[data-add-trait]').forEach(b => b.addEventListener('click', () => addTraitToCat(b.dataset.addTrait)));
+  container.querySelectorAll('[data-del-cat]').forEach(b => b.addEventListener('click', () => deleteTraitCategory(b.dataset.delCat)));
+  container.querySelectorAll('[data-del-trait]').forEach(b => b.addEventListener('click', () => deleteTrait(b.dataset.cat, b.dataset.delTrait)));
+}
+function closeTraitModal() { document.getElementById('traitModal').classList.remove('show'); traitViewPlayerId = null; _traitDirty = {}; }
+function saveTraitModal() {
+  const u = currentUser();
+  if (!u || !traitViewPlayerId) return;
+  const changed = Object.keys(_traitDirty);
+  if (changed.length === 0) { toast('변경한 특성이 없어요'); closeTraitModal(); return; }
+  if (!store.traitRatings[traitViewPlayerId]) store.traitRatings[traitViewPlayerId] = {};
+  const pr = store.traitRatings[traitViewPlayerId];
+  changed.forEach(tid => {
+    if (!pr[tid]) pr[tid] = {};
+    pr[tid][u.id] = _traitDirty[tid];
+  });
+  saveState();
+  closeTraitModal();
+  renderTraits();
+  toast(`${changed.length}개 특성 평가 반영`);
+}
+function addTraitToCat(catId) {
+  if (!isLoggedIn()) { toast('로그인이 필요합니다'); return; }
+  const c = traitCats().find(x => x.id === catId);
+  if (!c) return;
+  const name = prompt('추가할 특성 이름:', '');
+  if (!name || !name.trim()) return;
+  const nm = name.trim();
+  if ((c.traits||[]).some(t => t.name === nm)) { alert('이미 있는 특성입니다'); return; }
+  if (!c.traits) c.traits = [];
+  c.traits.push({ id: uid(), name: nm, createdBy: currentUser().id });
+  saveState();
+  renderTraitSections();
+  toast(`「${nm}」 특성 추가`);
+}
+function addTraitCategory() {
+  if (!isLoggedIn()) { toast('로그인이 필요합니다'); return; }
+  const label = prompt('새 카테고리 이름 (이모지 앞에 붙여도 됨, 예: "💪 신체"):', '🏷️ 새 카테고리');
+  if (!label || !label.trim()) return;
+  let lb = label.trim(), emoji = '🏷️';
+  const mEmoji = lb.match(/^(\p{Extended_Pictographic})\s*/u);
+  if (mEmoji) { emoji = mEmoji[1]; lb = lb.slice(mEmoji[0].length).trim() || '새 카테고리'; }
+  if (!store.traitCats) store.traitCats = defaultTraitCats();
+  store.traitCats.push({ id: 'c_' + uid(), emoji, label: lb, traits: [], createdBy: currentUser().id });
+  saveState();
+  if (document.getElementById('traitModal').classList.contains('show')) renderTraitSections();
+  toast(`「${lb}」 카테고리 추가`);
+}
+function deleteTrait(catId, traitId) {
+  const c = traitCats().find(x => x.id === catId);
+  if (!c) return;
+  const u = currentUser();
+  const t = (c.traits||[]).find(x => x.id === traitId);
+  if (!isAdmin() && !(t && t.createdBy && u && t.createdBy === u.id)) { toast('본인이 추가한 특성 또는 관리자만 삭제 가능'); return; }
+  if (!confirm(`「${t?.name}」 특성을 삭제할까요? (모든 평가도 삭제됩니다)`)) return;
+  c.traits = (c.traits||[]).filter(x => x.id !== traitId);
+  Object.values(store.traitRatings).forEach(pr => { if (pr[traitId]) delete pr[traitId]; });
+  saveState();
+  renderTraitSections();
+  toast('특성 삭제');
+}
+function deleteTraitCategory(catId) {
+  const c = traitCats().find(x => x.id === catId);
+  if (!c) return;
+  const u = currentUser();
+  if (!isAdmin() && !(c.createdBy && u && c.createdBy === u.id)) { toast('본인이 추가한 카테고리 또는 관리자만 삭제 가능'); return; }
+  if (!confirm(`「${c.label}」 카테고리를 삭제할까요? (안의 특성·평가 모두 삭제)`)) return;
+  const traitIds = (c.traits||[]).map(t => t.id);
+  store.traitCats = traitCats().filter(x => x.id !== catId);
+  Object.values(store.traitRatings).forEach(pr => traitIds.forEach(tid => { if (pr[tid]) delete pr[tid]; }));
+  saveState();
+  renderTraitSections();
+  toast('카테고리 삭제');
+}
+
 /* ==================== Event bindings ==================== */
 let _eventsBound = false;
 function bindEvents() {
@@ -5460,11 +5842,18 @@ function bindEvents() {
   document.getElementById('btnSaveDor').addEventListener('click', saveDorVote);
   document.getElementById('dorModal').addEventListener('click', e => { if (e.target.id === 'dorModal') closeDorModal(); });
 
+  // Traits
+  document.getElementById('traitSearch').addEventListener('input', renderTraits);
+  document.getElementById('btnAddTraitCat').addEventListener('click', addTraitCategory);
+  document.getElementById('btnCancelTrait').addEventListener('click', closeTraitModal);
+  document.getElementById('btnSaveTrait').addEventListener('click', saveTraitModal);
+  document.getElementById('traitModal').addEventListener('click', e => { if (e.target.id === 'traitModal') closeTraitModal(); });
+
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       closePlayerModal(); closeAssignModal(); closeMatchModal();
       closeDayModal(); closeRoleEditor(); closeStaffModal();
-      closePostModal(); closeDorModal();
+      closePostModal(); closeDorModal(); closeTraitModal();
     }
   });
 }
@@ -5573,6 +5962,10 @@ function seedSampleData() {
       upvotes: [], downvotes: [],
     });
   }
+
+  // 특성 기본 카테고리
+  store.traitCats = defaultTraitCats();
+  store.traitRatings = {};
 
   saveState();
 }
