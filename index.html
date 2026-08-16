@@ -1251,6 +1251,7 @@
   .admin-role-badge.owner { background: linear-gradient(180deg, var(--gold-warm), var(--gold)); color: #0a0a0a; }
   .admin-role-badge.admin { background: rgba(96,165,250,0.2); color: #93c5fd; border: 1px solid rgba(96,165,250,0.4); }
   .admin-role-badge.member { background: rgba(163,163,163,0.15); color: var(--text-2); border: 1px solid var(--border); }
+  .admin-player-select { max-width: 210px; }
   .admin-link-chip {
     display: inline-flex; align-items: center; gap: 4px;
     background: var(--bg-3); border: 1px solid var(--border-2);
@@ -1988,7 +1989,7 @@
                   <th>회원</th>
                   <th>아이디</th>
                   <th>등급</th>
-                  <th>선수 프로필</th>
+                  <th title="회원 계정을 선수 명단의 선수와 연결합니다. 연결하면 본인은 자기 능력치를 조정할 수 없어요(자기평가 방지).">선수 프로필 🔗</th>
                   <th>가입일</th>
                   <th>활동</th>
                   <th>관리</th>
@@ -2732,10 +2733,7 @@ function renderAdminTable() {
 
   tbody.innerHTML = list.map(u => {
     const avatarCls = u.role === 'owner' ? 'owner' : u.role === 'admin' ? 'admin' : '';
-    const linkedPlayer = u.playerId ? store.players.find(p => p.id === u.playerId) : null;
-    const linkChip = linkedPlayer
-      ? `<span class="admin-link-chip linked">⚽ #${linkedPlayer.number||'?'} ${escapeHtml(linkedPlayer.name)}</span>`
-      : `<span class="admin-link-chip unlinked">미연결</span>`;
+    const linkSelect = `<select class="admin-role-select admin-player-select" data-link-user="${u.id}">${playerLinkOptions(u.playerId||'', u.id)}</select>`;
     const joined = u.createdAt ? new Date(u.createdAt).toLocaleDateString('ko-KR', {year:'2-digit', month:'2-digit', day:'2-digit'}) : '-';
     const act = adminActivityFor(u.id);
     const isSelf = u.id === session.currentUserId;
@@ -2756,11 +2754,7 @@ function renderAdminTable() {
 
     // Delete: owner can delete anyone except self/other owners; admin cannot delete
     const canDel = meIsOwner && u.role !== 'owner' && !isSelf;
-    // Unlink player: admin+
-    const canUnlink = !!u.playerId;
-
     const actions = [];
-    if (canUnlink) actions.push(`<button data-unlink-user="${u.id}" title="선수 프로필 연결 해제">🔗</button>`);
     if (canDel) actions.push(`<button class="danger" data-del-user="${u.id}" title="회원 삭제">🗑️</button>`);
     const actionsHtml = actions.length ? actions.join('') : '<span style="color:var(--text-4); font-size:11px;">—</span>';
 
@@ -2776,7 +2770,7 @@ function renderAdminTable() {
         </td>
         <td class="admin-user-id">@${escapeHtml(u.username)}</td>
         <td>${roleControl}</td>
-        <td>${linkChip}</td>
+        <td>${linkSelect}</td>
         <td style="color:var(--text-2); white-space:nowrap;">${joined}</td>
         <td class="admin-activity">📝 ${act.posts} · 💛 ${act.dorVotes}</td>
         <td><div class="admin-actions">${actionsHtml}</div></td>
@@ -2814,22 +2808,51 @@ function renderAdminTable() {
       toast('회원을 삭제했어요');
     });
   });
-  // Unlink player profile
-  tbody.querySelectorAll('[data-unlink-user]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const uid = btn.dataset.unlinkUser;
+  // Link/unlink player profile via dropdown
+  tbody.querySelectorAll('[data-link-user]').forEach(sel => {
+    sel.addEventListener('change', e => {
+      const uid = e.target.dataset.linkUser;
       const u = authStore.users.find(x => x.id === uid);
-      if (!confirm(`${u?.displayName}님의 선수 프로필 연결을 해제하시겠습니까?`)) return;
-      if (u?.playerId) {
-        const p = store.players.find(pl => pl.id === u.playerId);
-        if (p) delete p.userId;
+      if (!u) return;
+      const newPid = e.target.value;
+      const oldPid = u.playerId || '';
+      if (newPid === oldPid) return;
+      if (newPid) {
+        // If that player is already linked to another user, offer to reassign
+        const other = authStore.users.find(x => x.id !== uid && x.playerId === newPid);
+        if (other && !confirm(`이 선수는 현재 「${other.displayName}」님과 연결돼 있어요.\n${u.displayName}님에게로 옮기시겠습니까?`)) {
+          renderAdmin(); return;
+        }
+        if (other) delete other.playerId;
+        // Unlink this user's previous player
+        if (oldPid) { const op = store.players.find(p => p.id === oldPid); if (op) delete op.userId; }
+        const np = store.players.find(p => p.id === newPid);
+        if (np) np.userId = u.id;
+        u.playerId = newPid;
+        toast(`${u.displayName} ↔ ${np ? np.name : ''} 연결 완료`);
+      } else {
+        if (oldPid) { const op = store.players.find(p => p.id === oldPid); if (op) delete op.userId; }
         delete u.playerId;
-        saveAuth(); saveState();
-        renderAdmin();
         toast('연결을 해제했어요');
       }
+      saveAuth(); saveState();
+      renderAdmin();
     });
   });
+}
+
+// Build <option> list for the player-link dropdown, noting players already taken by others
+function playerLinkOptions(selectedPlayerId, currentUserId) {
+  const opts = ['<option value="">— 미연결 —</option>'];
+  store.players.slice()
+    .sort((a,b) => (a.number||0) - (b.number||0))
+    .forEach(p => {
+      const owner = authStore.users.find(x => x.playerId === p.id);
+      const takenByOther = owner && owner.id !== currentUserId;
+      const label = `#${p.number||'?'} ${p.name}` + (takenByOther ? ` (${owner.displayName})` : '');
+      opts.push(`<option value="${p.id}" ${p.id===selectedPlayerId?'selected':''}>${escapeHtml(label)}</option>`);
+    });
+  return opts.join('');
 }
 
 function renderMgrPassStatus() {
