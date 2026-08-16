@@ -403,7 +403,15 @@
     box-shadow: 0 2px 12px rgba(244, 196, 48, 0.15);
   }
   .squad-item-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
-  .squad-item-meta { font-size: 11px; color: var(--text-2); }
+  .squad-item-meta { font-size: 11px; color: var(--text-2); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .squad-match-tag {
+    display: inline-block;
+    padding: 1px 7px; border-radius: 8px;
+    border: 1px solid transparent;
+    font-size: 10px; font-weight: 700;
+    font-family: var(--font-brand); letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
   .icon-btn { background: none; border: none; color: var(--text-3); cursor: pointer; font-size: 13px; padding: 4px 6px; border-radius: 4px; }
   .icon-btn:hover { color: var(--text); background: var(--border-2); }
   .panel-footer { padding: 10px; border-top: 1px solid var(--bg-3); display: flex; flex-direction: column; gap: 6px; }
@@ -2289,6 +2297,7 @@
       </div>
     </div>
     <div class="form-group"><label>메모</label><textarea id="mNotes" placeholder="경기 관련 메모..."></textarea></div>
+    <div id="matchAttendSection"></div>
     <div class="modal-footer">
       <button class="btn-danger" id="btnDeleteMatch" style="display:none">삭제</button>
       <button class="btn-cancel" id="btnCancelMatch">취소</button>
@@ -2519,11 +2528,12 @@ function normalizeStore(s) {
   s.players.forEach(p => {
     if (p.positions && !Array.isArray(p.positions)) p.positions = Object.values(p.positions);
   });
-  // Matches: ensure quarters array (migrate old single squadId) + attendance map
-  s.matches.forEach(m => {
+  // Matches: ensure quarters array (migrate old single squadId) + attendance map + color
+  s.matches.forEach((m, i) => {
     if (m.quarters && !Array.isArray(m.quarters)) m.quarters = Object.values(m.quarters);
     if (!Array.isArray(m.quarters)) m.quarters = m.squadId ? [{ label: '', squadId: m.squadId }] : [];
     if (!m.attendance || typeof m.attendance !== 'object' || Array.isArray(m.attendance)) m.attendance = m.attendance && !Array.isArray(m.attendance) ? m.attendance : {};
+    if (!m.color) m.color = MATCH_COLORS[i % MATCH_COLORS.length];
   });
   if (!s.currentSquadId) s.currentSquadId = s.squads[0]?.id || null;
   return s;
@@ -3428,10 +3438,11 @@ function migrateData() {
     });
   });
   store.squads.forEach(s => ensureSquadSlots(s));
-  // Matches: migrate old single squadId → quarters array + ensure attendance map
-  (store.matches || []).forEach(m => {
+  // Matches: migrate old single squadId → quarters array + ensure attendance map + color
+  (store.matches || []).forEach((m, i) => {
     if (!Array.isArray(m.quarters)) m.quarters = m.squadId ? [{ label: '', squadId: m.squadId }] : [];
     if (!m.attendance || typeof m.attendance !== 'object' || Array.isArray(m.attendance)) m.attendance = {};
+    if (!m.color) m.color = MATCH_COLORS[i % MATCH_COLORS.length];
   });
 }
 
@@ -3730,13 +3741,17 @@ function renderSquadList() {
   }
   list.innerHTML = store.squads.map(s => {
     const count = Object.keys(s.assignments || {}).length;
+    const lm = matchForSquad(s.id);
+    const color = lm ? matchColorFor(lm) : null;
+    const borderStyle = color ? `border-left:4px solid ${color};` : '';
+    const matchTag = lm ? `<span class="squad-match-tag" style="background:${color}22; color:${color}; border-color:${color}66;">🗓️ ${escapeHtml(shortMatchLabel(lm))}</span>` : '';
     return `
-      <div class="squad-item ${s.id === store.currentSquadId ? 'active' : ''}" data-id="${s.id}">
+      <div class="squad-item ${s.id === store.currentSquadId ? 'active' : ''}" data-id="${s.id}" style="${borderStyle}">
         <div class="squad-item-name">
           <span>${escapeHtml(s.name)}</span>
           <button class="icon-btn" data-action="delete-squad" title="삭제">🗑️</button>
         </div>
-        <div class="squad-item-meta">${s.formation} · ${count}/11명</div>
+        <div class="squad-item-meta">${s.formation} · ${count}/11명 ${matchTag}</div>
       </div>`;
   }).join('');
 }
@@ -4400,6 +4415,7 @@ function makeDayCell(d, otherMonth, todayStr) {
   matches.slice(0, 3).forEach(m => {
     const mel = document.createElement('div');
     mel.className = 'cal-match ' + (m.homeAway || 'home');
+    mel.style.borderLeft = `4px solid ${matchColorFor(m)}`;
     const scoreStr = (m.scoreUs != null && m.scoreThem != null && m.scoreUs !== '' && m.scoreThem !== '') ? ` ${m.scoreUs}:${m.scoreThem}` : '';
     mel.textContent = `${m.time || ''} ${m.opponent || '상대'}${scoreStr}`;
     mel.title = `${m.time || ''} ${m.homeAway === 'away' ? '원정' : '홈'} vs ${m.opponent}${m.location ? ' @ ' + m.location : ''}`;
@@ -4447,6 +4463,19 @@ function matchQuarters(m) {
   if (Array.isArray(m?.quarters)) return m.quarters;
   if (m?.squadId) return [{ label: '', squadId: m.squadId }];
   return [];
+}
+
+/* ==================== Match color / squad linkage ==================== */
+const MATCH_COLORS = ['#38bdf8','#22c55e','#f472b6','#a78bfa','#fb923c','#facc15','#2dd4bf','#f87171','#818cf8','#4ade80'];
+function nextMatchColor() { return MATCH_COLORS[store.matches.length % MATCH_COLORS.length]; }
+function matchColorFor(match) { return (match && match.color) ? match.color : '#38bdf8'; }
+// The match that a squad belongs to (first one referencing it), for color/linkage
+function matchForSquad(squadId) {
+  return store.matches.find(m => matchQuarters(m).some(q => q.squadId === squadId)) || null;
+}
+function shortMatchLabel(m) {
+  const d = parseYmd(m.date);
+  return `${d.getMonth()+1}/${d.getDate()} vs ${m.opponent}`;
 }
 function squadOptionsHtml(selectedId) {
   return '<option value="">— 스쿼드 선택 —</option>' +
@@ -4508,6 +4537,14 @@ function openMatchModal(matchId, defaultDate) {
   $('#mScoreUs').value = m?.scoreUs ?? '';
   $('#mScoreThem').value = m?.scoreThem ?? '';
   $('#mNotes').value = m?.notes || '';
+  // Attendance voting — only for existing matches (can't vote on an unsaved one)
+  const attSec = document.getElementById('matchAttendSection');
+  if (m) {
+    attSec.innerHTML = attendanceSectionHtml(m);
+    bindAttendanceButtons(attSec);
+  } else {
+    attSec.innerHTML = '<div class="attend-empty" style="border-top:1px solid var(--border); margin-top:12px; padding-top:12px;">경기를 먼저 저장하면 참석 투표가 열려요</div>';
+  }
   $('#matchModal').classList.add('show');
   setTimeout(() => $('#mOpponent').focus(), 50);
 }
@@ -4533,10 +4570,24 @@ function saveMatchFromModal() {
     Object.assign(store.matches.find(m => m.id === editingMatchId), data);
     toast('경기 정보 업데이트');
   } else {
-    store.matches.push({ id: uid(), ...data });
-    toast('경기 추가 완료');
+    const newMatch = { id: uid(), color: nextMatchColor(), ...data };
+    // 쿼터를 직접 지정하지 않았으면 "M/D vs 상대팀" 스쿼드를 자동 생성해 1쿼터로 연결
+    if (!newMatch.quarters || newMatch.quarters.length === 0) {
+      const dt = parseYmd(newMatch.date);
+      const sqName = `${dt.getMonth()+1}/${dt.getDate()} vs ${newMatch.opponent}`;
+      const squad = { id: uid(), name: sqName, formation: '4-4-2', slots: [], assignments: {} };
+      ensureSquadSlots(squad);
+      store.squads.push(squad);
+      newMatch.quarters = [{ label: '1쿼터', squadId: squad.id }];
+      newMatch.squadId = squad.id;
+      toast('경기 추가 · 스쿼드 자동 생성');
+    } else {
+      toast('경기 추가 완료');
+    }
+    store.matches.push(newMatch);
   }
   saveState(); closeMatchModal(); closeDayModal(); renderCalendar();
+  if (currentTab === 'squad') renderSquadList();
 }
 function deleteCurrentMatch() {
   if (!editingMatchId) return;
@@ -4560,6 +4611,26 @@ function attendCounts(m) {
   return c;
 }
 function myAttend(m) { const u = currentUser(); return u ? (getMatchAttendance(m)[u.id] || null) : null; }
+// Shared attendance voting UI (used in day modal + match edit modal)
+function attendanceSectionHtml(m) {
+  const counts = attendCounts(m);
+  const mine = myAttend(m);
+  const voterChips = buildVoterChips(m);
+  const attendBtns = ['attend','hold','absent'].map(s => {
+    const meta = ATTEND_META[s];
+    return `<button class="attend-btn ${s} ${mine===s?'on':''}" data-att="${s}" data-match="${m.id}">${meta.icon} ${meta.label} <b>${counts[s]}</b></button>`;
+  }).join('');
+  return `<div class="match-attend">
+    <div class="attend-label">참석 투표 <span style="color:var(--text-3); font-weight:400;">· 참석자는 스쿼드 배치 우선순위로 앞에 떠요</span></div>
+    <div class="attend-row">${attendBtns}</div>
+    ${voterChips ? `<div class="attend-voters">${voterChips}</div>` : '<div class="attend-empty">아직 투표한 사람이 없어요</div>'}
+  </div>`;
+}
+function bindAttendanceButtons(root) {
+  root.querySelectorAll('.attend-btn').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); setMatchAttendance(btn.dataset.match, btn.dataset.att); });
+  });
+}
 function setMatchAttendance(matchId, status) {
   const u = currentUser();
   if (!u) { toast('로그인이 필요합니다'); return; }
@@ -4569,7 +4640,12 @@ function setMatchAttendance(matchId, status) {
   if (m.attendance[u.id] === status) delete m.attendance[u.id]; // 다시 누르면 취소
   else m.attendance[u.id] = status;
   saveState();
-  if (currentDayStr) openDayModal(currentDayStr);
+  // Refresh the match edit modal's attendance section (the only place voting lives)
+  const sec = document.getElementById('matchAttendSection');
+  if (sec && editingMatchId === matchId) {
+    sec.innerHTML = attendanceSectionHtml(m);
+    bindAttendanceButtons(sec);
+  }
   const meta = ATTEND_META[status];
   toast(m.attendance[u.id] ? `${meta.icon} ${meta.label}` : '투표 취소');
 }
@@ -4619,18 +4695,12 @@ function openDayModal(dateStr) {
   } else {
     list.innerHTML = matches.map(m => {
       const scoreStr = (m.scoreUs != null && m.scoreThem != null) ? ` · ${m.scoreUs}:${m.scoreThem}` : '';
+      const mColor = matchColorFor(m);
       const qs = matchQuarters(m);
       const quarterChips = qs.map(q => {
         const sq = store.squads.find(s => s.id === q.squadId);
         if (!sq) return '';
-        return `<span class="match-squad-chip">${escapeHtml(q.label || '쿼터')}: ${escapeHtml(sq.name)}</span>`;
-      }).join('');
-      const counts = attendCounts(m);
-      const mine = myAttend(m);
-      const voterChips = buildVoterChips(m);
-      const attendBtns = ['attend','hold','absent'].map(s => {
-        const meta = ATTEND_META[s];
-        return `<button class="attend-btn ${s} ${mine===s?'on':''}" data-att="${s}" data-match="${m.id}">${meta.icon} ${meta.label} <b>${counts[s]}</b></button>`;
+        return `<span class="match-squad-chip" style="background:${mColor}22; color:${mColor}; border-color:${mColor}66;">${escapeHtml(q.label || '쿼터')}: ${escapeHtml(sq.name)}</span>`;
       }).join('');
       return `<div class="day-match-item" data-id="${m.id}">
         <div class="dm-top">
@@ -4644,18 +4714,10 @@ function openDayModal(dateStr) {
           </div>
           <button class="icon-btn" data-action="edit-match" title="경기 편집">✏️</button>
         </div>
-        <div class="match-attend">
-          <div class="attend-label">참석 투표 <span style="color:var(--text-3); font-weight:400;">· 참석자는 스쿼드 배치 우선순위로 앞에 떠요</span></div>
-          <div class="attend-row">${attendBtns}</div>
-          ${voterChips ? `<div class="attend-voters">${voterChips}</div>` : '<div class="attend-empty">아직 투표한 사람이 없어요</div>'}
-        </div>
       </div>`;
     }).join('');
     list.querySelectorAll('.dm-top').forEach(top => {
       top.addEventListener('click', () => openMatchModal(top.closest('.day-match-item').dataset.id));
-    });
-    list.querySelectorAll('.attend-btn').forEach(btn => {
-      btn.addEventListener('click', e => { e.stopPropagation(); setMatchAttendance(btn.dataset.match, btn.dataset.att); });
     });
   }
   $('#dayModal').classList.add('show');
@@ -5374,12 +5436,15 @@ function seedSampleData() {
     { d: 10, t: '14:00', op: '용산 유나이티드', ha: 'away', loc: '용산 스포츠센터', note: '' },
     { d: 17, t: '16:30', op: '한강 FC', ha: 'home', loc: '월드컵공원', note: '' },
     { d: -7, t: '15:00', op: '서울 파이터스', ha: 'away', loc: '잠실 축구장', us: 2, them: 1 },
-  ].forEach(m => {
+  ].forEach((m, i) => {
     const dt = new Date(now); dt.setDate(dt.getDate() + m.d);
     store.matches.push({
       id: uid(), date: ymd(dt), time: m.t, opponent: m.op,
       homeAway: m.ha, location: m.loc, notes: m.note || '',
-      squadId: squad.id, scoreUs: m.us ?? null, scoreThem: m.them ?? null,
+      squadId: squad.id, quarters: [{ label: '1쿼터', squadId: squad.id }],
+      color: MATCH_COLORS[i % MATCH_COLORS.length],
+      attendance: {},
+      scoreUs: m.us ?? null, scoreThem: m.them ?? null,
     });
   });
 
