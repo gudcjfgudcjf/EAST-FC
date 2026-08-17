@@ -742,6 +742,7 @@
   .role-picker { background: var(--bg-2); border: 1px solid var(--border-2); border-radius: 8px; padding: 10px; }
   .role-cat-title { font-size: 11px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.05em; margin: 8px 0 6px; font-weight: 700; }
   .role-cat-title:first-child { margin-top: 0; }
+  .role-subcat-title { font-size: 10px; color: var(--text-2); font-weight: 700; margin: 5px 0 4px 2px; letter-spacing: 0.03em; }
   .role-options { display: flex; flex-wrap: wrap; gap: 4px; }
   .role-option {
     padding: 4px 10px;
@@ -1611,6 +1612,8 @@
   .guide-cat-title { font-family: var(--font-brand); font-size: 15px; font-weight: 700; letter-spacing: .03em; margin: 16px 0 10px; display: flex; align-items: center; gap: 8px; }
   .guide-cat-title:first-child { margin-top: 2px; }
   .guide-cat-dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+  .guide-subcat-title { font-size: 12px; font-weight: 700; letter-spacing: .02em; opacity: .82; margin: 8px 0 6px 4px; display: flex; align-items: center; gap: 6px; }
+  .guide-subcat-title::before { content: ''; width: 10px; height: 2px; border-radius: 2px; background: currentColor; display: inline-block; }
   .guide-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
   .guide-card { background: var(--bg-2); border: 1px solid var(--border); border-left-width: 4px; border-radius: 12px; padding: 13px 15px; }
   .guide-head { display: flex; align-items: center; gap: 9px; margin-bottom: 8px; }
@@ -4205,11 +4208,24 @@ const ROLES = {
 };
 
 const ROLE_CATEGORIES = {
-  GK: { label: '🧤 골키퍼',    codes: ['GK','SK'] },
-  DF: { label: '🛡️ 수비수',    codes: ['CB','BPD','SW','FB','WB','IWB'] },
-  MF: { label: '⚙️ 미드필더',  codes: ['CDM','DLP','ANC','BBM','CM','MEZ','CAM','REG','WM'] },
-  FW: { label: '⚽ 공격수',    codes: ['ST','SS','POA','CF','TGT','F9','DLF','IF','WNG','IW'] },
+  GK: { label: '🧤 골키퍼', subs: [
+    { label: '', codes: ['GK','SK'] },
+  ]},
+  DF: { label: '🛡️ 수비수', subs: [
+    { label: '센터백', codes: ['CB','BPD','SW'] },
+    { label: '사이드백', codes: ['FB','WB','IWB'] },
+  ]},
+  MF: { label: '⚙️ 미드필더', subs: [
+    { label: '수비형', codes: ['CDM','DLP','ANC','BBM','REG'] },
+    { label: '공격형', codes: ['CM','MEZ','CAM','WM'] },
+  ]},
+  FW: { label: '⚽ 공격수', subs: [
+    { label: '스트라이커', codes: ['ST','CF','SS','POA','TGT','F9','DLF'] },
+    { label: '윙어', codes: ['WNG','IW','IF'] },
+  ]},
 };
+// 편의: 카테고리별 전체 코드(평탄화)
+Object.values(ROLE_CATEGORIES).forEach(c => { c.codes = c.subs.flatMap(s => s.codes); });
 // 포지션 카테고리 색상 (스쿼드 슬롯 색과 동일)
 const CAT_COLOR = { GK: '#facc15', DF: '#3b82f6', MF: '#4ade80', FW: '#f43f5e' };
 // 역할별 지향 플레이 설명
@@ -4985,6 +5001,18 @@ const ROLE_ZONE = {
   ST:'ST', POA:'ST', CF:'ST', TGT:'ST', F9:'ST', DLF:'ST',
 };
 function canonZone(role) { return ROLE_ZONE[role] || role; }
+// 선수 배치 정렬용 '역할 그룹' 분류 (스쿼드에서 이 자리를 하려는 사람 먼저 보이게)
+//  윙어 / 스트라이커 / 공격형MF / 수비형MF / 사이드백 / 센터백 / GK
+const POS_GROUP = {
+  GK:'GK', SK:'GK',
+  CB:'CB', BPD:'CB', SW:'CB',                          // 센터백
+  FB:'FB', WB:'FB', IWB:'FB',                          // 사이드백(LWB/RWB 포함)
+  CDM:'DMID', DLP:'DMID', ANC:'DMID', BBM:'DMID', REG:'DMID', // 수비형 MF(DM 포함)
+  CAM:'AMID', CM:'AMID', MEZ:'AMID', WM:'AMID',        // 공격형 MF(LM/RM 포함)
+  WNG:'WING', IW:'WING', IF:'WING',                    // 윙어(LW/RW 무관)
+  ST:'ST', CF:'ST', SS:'ST', POA:'ST', TGT:'ST', F9:'ST', DLF:'ST', // 스트라이커
+};
+function posGroup(role) { return POS_GROUP[role] || null; }
 // 점선(경계) 근처에서 태그가 확확 안 바뀌게 하는 유도리 폭(%)
 const ZONE_HYS = 5;
 // 드래그 중 세로 유도리: 이전 계열이 현재 위치 ±폭 안에 들면 유지, 아니면 위치 계열로.
@@ -5425,13 +5453,16 @@ function buildRolePicker() {
   const container = $('#rolePicker');
   container.innerHTML = Object.entries(ROLE_CATEGORIES).map(([cat, info]) => `
     <div class="role-cat-title">${info.label}</div>
-    <div class="role-options">
-      ${info.codes.map(code => `
-        <div class="role-option" data-role="${code}" title="${escapeHtml(ROLES[code].name)}">
-          ${code} <span style="color:var(--text-2); font-size:10px;">${escapeHtml(ROLES[code].name)}</span>
-        </div>
-      `).join('')}
-    </div>
+    ${info.subs.map(sub => `
+      ${sub.label ? `<div class="role-subcat-title">${sub.label}</div>` : ''}
+      <div class="role-options">
+        ${sub.codes.map(code => `
+          <div class="role-option" data-role="${code}" title="${escapeHtml(ROLES[code].name)}">
+            ${code} <span style="color:var(--text-2); font-size:10px;">${escapeHtml(ROLES[code].name)}</span>
+          </div>
+        `).join('')}
+      </div>
+    `).join('')}
   `).join('');
   container.querySelectorAll('.role-option').forEach(el => {
     el.addEventListener('click', () => {
@@ -5783,7 +5814,7 @@ function openAssignModal(slotIndex, roleName) {
   const zoneTag = tagForSideRole(sideZone(slot.x), currentRoleCode);
   // Get all roles applicable to this slot's zone
   const applicable = (LABEL_ROLES[zoneTag] || LABEL_ROLES[currentRoleCode] || [currentRoleCode]);
-  const slotCat = ROLES[currentRoleCode]?.cat || 'MF';   // 이 지역 카테고리(GK/DF/MF/FW)
+  const slotGroup = posGroup(currentRoleCode);   // 이 자리의 역할 그룹(윙어/ST/공격형/수비형/사이드백/센터백)
 
   $('#assignSlotLabel').textContent = `→ ${zoneTag} 지역`;
   const assigned = new Set(Object.values(squad.assignments));
@@ -5816,15 +5847,12 @@ function openAssignModal(slotIndex, roleName) {
       const bestRole = sortedRoles[0];
       const attStatus = upMatch ? playerAttendStatus(p, upMatch) : null;
       const attRank = upMatch ? attendRankForPlayer(p, upMatch) : 2;
-      // 희망 역할 = 선수 탭에서 본인이 '선택해 둔' 역할(positions).
-      //  0 = 이 자리의 역할(예: CB/BPD/SW)을 직접 눌러둠 · 1 = 같은 계열(예: FB/WB 등 수비) 눌러둠 · 2 = 없음
-      const pos = p.positions || [];
-      const hasExact = pos.some(rc => applicable.includes(rc));
-      const hasCat = pos.some(rc => (ROLES[rc]?.cat || 'MF') === slotCat);
-      const prefRank = hasExact ? 0 : (hasCat ? 1 : 2);
+      // 희망 역할 = 선수 탭에서 '선택해 둔' 역할 중, 이 자리와 같은 그룹이 있으면 우선(0), 없으면(1)
+      const prefers = !!slotGroup && (p.positions || []).some(rc => posGroup(rc) === slotGroup);
+      const prefRank = prefers ? 0 : 1;
       return { p, ovrsByRole, sortedRoles, bestOvr, bestRole, attStatus, attRank, prefRank };
     });
-    // 정렬 우선순위: ① 참석여부 → ② 희망 역할(직접 선택) → ③ 이 지역 OVR
+    // 정렬 우선순위: ① 참석여부 → ② 이 역할을 하려는 사람(같은 그룹) → ③ 이 지역 OVR
     withOvrs.sort((a,b) =>
       (upMatch ? (a.attRank - b.attRank) : 0) ||
       (a.prefRank - b.prefRank) ||
@@ -7505,28 +7533,33 @@ function renderGuide() {
   const el = document.getElementById('guideContent');
   const q = (document.getElementById('guideSearch').value || '').toLowerCase().trim();
   let html = '';
+  const matchCode = code => {
+    if (!q) return true;
+    const nm = (ROLES[code]?.name || '').toLowerCase();
+    return code.toLowerCase().includes(q) || nm.includes(q) || (ROLE_GUIDE[code] || '').toLowerCase().includes(q);
+  };
+  const cardHtml = (code, col) => {
+    const r = ROLES[code]; if (!r) return '';
+    const keys = roleKeyStats(code, 4);
+    return `<div class="guide-card" data-role-guide="${code}" style="border-left-color:${col}">
+      <div class="guide-head">
+        <span class="guide-code" style="background:${col}">${code}</span>
+        <span class="guide-name">${escapeHtml(r.name)}</span>
+        <span class="guide-play" style="color:${col}">▶ 움직임</span>
+      </div>
+      <div class="guide-desc">${escapeHtml(ROLE_GUIDE[code] || '설명 준비 중')}</div>
+      <div class="guide-keys">${keys.map(k => `<span class="guide-key">${escapeHtml(k)}</span>`).join('')}</div>
+    </div>`;
+  };
   Object.entries(ROLE_CATEGORIES).forEach(([cat, info]) => {
     const col = CAT_COLOR[cat] || '#9ca3af';
-    const codes = info.codes.filter(code => {
-      if (!q) return true;
-      const nm = (ROLES[code]?.name || '').toLowerCase();
-      return code.toLowerCase().includes(q) || nm.includes(q) || (ROLE_GUIDE[code] || '').toLowerCase().includes(q);
-    });
-    if (!codes.length) return;
+    const subs = info.subs.map(sub => ({ label: sub.label, codes: sub.codes.filter(matchCode) })).filter(sub => sub.codes.length);
+    if (!subs.length) return;
     html += `<div class="guide-cat-title" style="color:${col}"><span class="guide-cat-dot" style="background:${col}"></span>${info.label}</div>`;
-    html += '<div class="guide-grid">' + codes.map(code => {
-      const r = ROLES[code]; if (!r) return '';
-      const keys = roleKeyStats(code, 4);
-      return `<div class="guide-card" data-role-guide="${code}" style="border-left-color:${col}">
-        <div class="guide-head">
-          <span class="guide-code" style="background:${col}">${code}</span>
-          <span class="guide-name">${escapeHtml(r.name)}</span>
-          <span class="guide-play" style="color:${col}">▶ 움직임</span>
-        </div>
-        <div class="guide-desc">${escapeHtml(ROLE_GUIDE[code] || '설명 준비 중')}</div>
-        <div class="guide-keys">${keys.map(k => `<span class="guide-key">${escapeHtml(k)}</span>`).join('')}</div>
-      </div>`;
-    }).join('') + '</div>';
+    subs.forEach(sub => {
+      if (sub.label) html += `<div class="guide-subcat-title" style="color:${col}">${sub.label}</div>`;
+      html += '<div class="guide-grid">' + sub.codes.map(code => cardHtml(code, col)).join('') + '</div>';
+    });
   });
   el.innerHTML = html || '<div class="podium-empty">검색 결과가 없어요</div>';
   el.querySelectorAll('[data-role-guide]').forEach(c => c.addEventListener('click', () => openTacticModal(c.dataset.roleGuide)));
