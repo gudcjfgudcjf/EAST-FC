@@ -3582,9 +3582,12 @@ function renderPresence() {
   if (!isOwner()) { el.innerHTML = '<div class="podium-empty">오너 전용 화면이에요</div>'; return; }
   if (!USE_FIREBASE) { el.innerHTML = '<div class="podium-empty">온라인(팀 공유) 모드에서만 실시간 접속을 확인할 수 있어요</div>'; return; }
   const now = Date.now();
+  const lastAt = id => (_presenceData[id] && _presenceData[id].at) || 0;
   const users = authStore.users.slice().sort((a, b) => {
     const oa = isUserOnline(a.id, now) ? 0 : 1, ob = isUserOnline(b.id, now) ? 0 : 1;
-    if (oa !== ob) return oa - ob;
+    if (oa !== ob) return oa - ob;                 // 온라인 먼저
+    const ta = lastAt(a.id), tb = lastAt(b.id);
+    if (ta !== tb) return tb - ta;                 // 최근 접속 순(내림차순), 기록 없음(0)은 맨 아래
     return (a.displayName || a.username).localeCompare(b.displayName || b.username);
   });
   const onlineCount = users.filter(u => isUserOnline(u.id, now)).length;
