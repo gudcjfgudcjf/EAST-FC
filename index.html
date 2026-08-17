@@ -1565,6 +1565,21 @@
   #chemScoreTag { font-weight: 700; }
   .chem-cat-select { width: 100%; background: var(--bg-3); color: var(--text); border: 1px solid var(--border-2); border-radius: 8px; padding: 9px; font-size: 14px; }
 
+  /* ==================== 실시간 접속 ==================== */
+  .presence-summary { font-size: 14px; color: var(--text); font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .presence-summary b { color: #22c55e; font-family: var(--font-brand); font-size: 18px; }
+  .presence-summary .presence-hint { font-size: 11px; color: var(--text-3); font-weight: 400; }
+  .presence-list { display: flex; flex-direction: column; gap: 7px; }
+  .presence-row { display: flex; align-items: center; gap: 10px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; padding: 11px 14px; }
+  .presence-row.on { border-color: rgba(34,197,94,0.4); background: rgba(34,197,94,0.06); }
+  .presence-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--text-4); flex-shrink: 0; }
+  .presence-dot.on { background: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,0.25); animation: presPulse 1.6s ease-in-out infinite; }
+  @keyframes presPulse { 0%,100% { box-shadow: 0 0 0 3px rgba(34,197,94,0.25); } 50% { box-shadow: 0 0 0 5px rgba(34,197,94,0.08); } }
+  .presence-name { flex: 1; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .presence-role { font-size: 11px; color: var(--text-3); font-weight: 400; margin-left: 4px; }
+  .presence-status { font-size: 12px; color: var(--text-2); white-space: nowrap; flex-shrink: 0; }
+  .presence-row.on .presence-status { color: #22c55e; font-weight: 700; }
+
   /* ==================== 프로필 (사진) ==================== */
   .profile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
   .profile-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; padding: 14px 10px; text-align: center; cursor: pointer; transition: transform .12s, border-color .12s, box-shadow .12s; }
@@ -2506,6 +2521,7 @@
     <button class="tab-btn" data-tab="records">🏅 기록</button>
     <button class="tab-btn" data-tab="attend">📅 출석</button>
     <button class="tab-btn" data-tab="hall">👑 전당</button>
+    <button class="tab-btn" data-tab="presence" id="tabPresence" style="display:none">🟢 접속</button>
     <button class="tab-btn" data-tab="admin" id="tabAdmin" style="display:none">🛡️ 관리자</button>
   </div>
   <div class="spacer"></div>
@@ -2569,8 +2585,8 @@
             <div class="goal-box bottom"></div>
             <div class="zone-line attack"></div>
             <div class="zone-line midfield"></div>
-            <div class="vgrid-line" style="left:40%"></div>
-            <div class="vgrid-line" style="left:60%"></div>
+            <div class="vgrid-line" style="left:33.33%"></div>
+            <div class="vgrid-line" style="left:66.66%"></div>
             <div class="zone-label attack">공격 지역</div>
             <div class="zone-label midfield">미드필드</div>
             <div class="zone-label defense">수비 지역</div>
@@ -2744,6 +2760,18 @@
       </div>
     </div>
   </div>
+
+  <!-- ============ 실시간 접속 (오너 전용) VIEW ============ -->
+  <section class="view" id="view-presence">
+    <div class="stats-view">
+      <div class="stats-header">
+        <h1>🟢 실시간 접속</h1>
+        <div class="spacer"></div>
+      </div>
+      <div style="font-size:12px; color:var(--text-2); margin-bottom:10px;">지금 EAST FC에 접속해 있는 계정을 보여줘요. <b>오너만</b> 볼 수 있어요. (앱을 열어두면 자동으로 온라인 표시, 닫으면 오프라인)</div>
+      <div id="presenceContent"></div>
+    </div>
+  </section>
 
   <!-- ============ 프로필 (사진 등록) VIEW ============ -->
   <section class="view" id="view-profile">
@@ -3229,7 +3257,8 @@ const FIREBASE_CONFIG = {
 
 /* ==================== Backend layer (Firebase or localStorage) ==================== */
 let USE_FIREBASE = false;
-let fbAuthRef = null, fbStoreRef = null;
+let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null;
+let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
 let _authLoaded = false, _storeLoaded = false;
 let _pendingRerender = false;
@@ -3253,6 +3282,7 @@ function initBackend() {
     const db = firebase.database();
     fbAuthRef = db.ref('east_fc/auth');
     fbStoreRef = db.ref('east_fc/store');
+    fbPresenceRef = db.ref('east_fc/presence');
     USE_FIREBASE = true;
   } catch (e) {
     console.warn('Firebase 초기화 실패, 오프라인 모드로 전환:', e);
@@ -3359,6 +3389,7 @@ function rerenderCurrent() {
   }
   else if (t === 'players') renderPlayersTable();
   else if (t === 'profile') renderProfile();
+  else if (t === 'presence' && isOwner()) renderPresence();
   else if (t === 'calendar') renderCalendar();
   else if (t === 'org') renderOrg();
   else if (t === 'board') renderBoard();
@@ -3446,6 +3477,78 @@ function isLoggedIn() { return !!currentUser(); }
 function isOwner() { return currentUser()?.role === 'owner'; }
 function isAdmin() { const u = currentUser(); return u && (u.role === 'owner' || u.role === 'admin'); }
 function isManagerActive() { return isAdmin() || session.managerModeActive; }
+
+/* ==================== 실시간 접속(프레즌스) — 오너 전용 ==================== */
+function heartbeatPresence() {
+  if (!USE_FIREBASE || !fbPresenceRef) return;
+  const u = currentUser(); if (!u) return;
+  fbPresenceRef.child(u.id).update({
+    name: u.displayName || u.username, role: u.role, online: true,
+    at: firebase.database.ServerValue.TIMESTAMP
+  }).catch(() => {});
+}
+function startPresence() {
+  if (!USE_FIREBASE || !fbPresenceRef) return;
+  const u = currentUser(); if (!u) return;
+  if (_presenceUid === u.id) return; // 이미 시작됨
+  _presenceUid = u.id;
+  const ref = fbPresenceRef.child(u.id);
+  try { ref.onDisconnect().update({ online: false, at: firebase.database.ServerValue.TIMESTAMP }); } catch (_) {}
+  heartbeatPresence();
+  clearInterval(_presenceTimer);
+  _presenceTimer = setInterval(heartbeatPresence, 45000);
+  if (!_presenceVisBound) {
+    _presenceVisBound = true;
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) heartbeatPresence(); });
+  }
+  // 오너만 전체 접속 현황을 구독 (데이터 절약)
+  if (u.role === 'owner' && !_presenceListening) {
+    _presenceListening = true;
+    fbPresenceRef.on('value', snap => { _presenceData = snap.val() || {}; if (currentTab === 'presence') renderPresence(); }, () => {});
+  }
+}
+function stopPresence(uid) {
+  clearInterval(_presenceTimer); _presenceTimer = null;
+  const id = uid || _presenceUid;
+  if (USE_FIREBASE && fbPresenceRef && id) fbPresenceRef.child(id).update({ online: false, at: firebase.database.ServerValue.TIMESTAMP }).catch(() => {});
+  _presenceUid = null;
+}
+function isUserOnline(uid, now) {
+  const pr = _presenceData[uid]; if (!pr) return false;
+  if (pr.online === false) return false;
+  return (now - (pr.at || 0)) < 90000; // 90초 이내 활동
+}
+function _timeAgo(ms) {
+  const s = Math.floor(ms / 1000);
+  if (s < 60) return '방금';
+  const m = Math.floor(s / 60); if (m < 60) return m + '분 전';
+  const hh = Math.floor(m / 60); if (hh < 24) return hh + '시간 전';
+  return Math.floor(hh / 24) + '일 전';
+}
+function renderPresence() {
+  const el = document.getElementById('presenceContent'); if (!el) return;
+  if (!isOwner()) { el.innerHTML = '<div class="podium-empty">오너 전용 화면이에요</div>'; return; }
+  if (!USE_FIREBASE) { el.innerHTML = '<div class="podium-empty">온라인(팀 공유) 모드에서만 실시간 접속을 확인할 수 있어요</div>'; return; }
+  const now = Date.now();
+  const users = authStore.users.slice().sort((a, b) => {
+    const oa = isUserOnline(a.id, now) ? 0 : 1, ob = isUserOnline(b.id, now) ? 0 : 1;
+    if (oa !== ob) return oa - ob;
+    return (a.displayName || a.username).localeCompare(b.displayName || b.username);
+  });
+  const onlineCount = users.filter(u => isUserOnline(u.id, now)).length;
+  el.innerHTML = `<div class="presence-summary"><span class="presence-dot on"></span> 지금 접속 중 <b>${onlineCount}</b>명 · 전체 ${users.length}명 <span class="presence-hint">(45초마다 갱신)</span></div>` +
+    '<div class="presence-list">' + users.map(u => {
+      const on = isUserOnline(u.id, now);
+      const pr = _presenceData[u.id];
+      const last = (pr && pr.at) ? _timeAgo(now - pr.at) : '기록 없음';
+      const roleLabel = u.role === 'owner' ? '오너' : u.role === 'admin' ? '운영진' : '회원';
+      return `<div class="presence-row ${on ? 'on' : ''}">
+        <span class="presence-dot ${on ? 'on' : ''}"></span>
+        <span class="presence-name">${escapeHtml(u.displayName || u.username)} <span class="presence-role">${roleLabel}</span></span>
+        <span class="presence-status">${on ? '🟢 온라인' : '⚫ ' + last}</span>
+      </div>`;
+    }).join('') + '</div>';
+}
 
 function canManageSquad() { return isManagerActive(); }
 function canManageMatches() { return isLoggedIn(); } // 경기 추가/편집은 로그인한 모든 회원 가능
@@ -3617,6 +3720,7 @@ function hideAuthGate() {
 
 function logout() {
   if (!confirm('로그아웃 하시겠습니까?')) return;
+  stopPresence();
   clearSession();
   showAuthGate();
   toast('로그아웃 되었습니다');
@@ -3646,6 +3750,9 @@ function refreshUserUI() {
   document.getElementById('managerBadge').classList.toggle('show', session.managerModeActive && !isAdmin());
   // Admin tab visible only to admins (owner + 운영진)
   document.getElementById('tabAdmin').style.display = isAdmin() ? 'flex' : 'none';
+  // 접속 현황 탭은 오너 전용
+  document.getElementById('tabPresence').style.display = isOwner() ? 'flex' : 'none';
+  startPresence();
 }
 
 /* ==================== Manager unlock ==================== */
@@ -4695,9 +4802,9 @@ function switchTab(name) {
   currentTab = name;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + name));
-  if (name === 'admin' && !isAdmin()) {
-    // Guard: non-admins cannot open admin tab
-    toast('관리자 전용 탭입니다');
+  if ((name === 'admin' && !isAdmin()) || (name === 'presence' && !isOwner())) {
+    // Guard: 관리자 탭은 운영진+, 접속 탭은 오너만
+    toast(name === 'presence' ? '오너 전용 탭입니다' : '관리자 전용 탭입니다');
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === 'squad'));
     document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-squad'));
     currentTab = 'squad';
@@ -4706,6 +4813,7 @@ function switchTab(name) {
   }
   if (name === 'players') renderPlayersTable();
   if (name === 'profile') renderProfile();
+  if (name === 'presence') renderPresence();
   if (name === 'calendar') renderCalendar();
   if (name === 'org') renderOrg();
   if (name === 'board') renderBoard();
@@ -4771,20 +4879,36 @@ function renderPlayerList() {
 
 /* ==================== Squad tab: field ==================== */
 // 슬롯 위치(좌/우) 기준 태그: 풀백 LB/RB · 윙백 LWB/RWB · 윙어 LW/RW (미드필더 등은 역할 그대로)
-// 필드 3구간: 왼쪽(40%미만) · 중앙(40~60%) · 오른쪽(60%초과)
-function sideZone(x) { return x < 40 ? 'L' : x > 60 ? 'R' : 'C'; }
+// 필드 좌/중앙/우 3:3:3
+function sideZone(x) { return x < 33.34 ? 'L' : x > 66.66 ? 'R' : 'C'; }
 // 드래그 중 히스테리시스(유도리) — 한 번 정해지면 경계를 더 넘어야 바뀜 → 핸드폰에서 안 흔들림
 function sideZoneHys(prev, x) {
-  if (prev === 'L') return x > 46 ? (x > 60 ? 'R' : 'C') : 'L';
-  if (prev === 'R') return x < 54 ? (x < 40 ? 'L' : 'C') : 'R';
-  if (x < 34) return 'L';
-  if (x > 66) return 'R';
+  if (prev === 'L') return x > 40 ? (x > 66.66 ? 'R' : 'C') : 'L';
+  if (prev === 'R') return x < 60 ? (x < 33.34 ? 'L' : 'C') : 'R';
+  if (x < 27) return 'L';
+  if (x > 73) return 'R';
   return 'C';
 }
+// 그리드 위치(칸) → 역할 자동 배정 (col: L/C/R · y: 0위=공격 ~ 100아래=수비)
+function zoneRoleByCol(col, y) {
+  if (col === 'C') {
+    if (y > 84) return 'GK';
+    if (y > 66) return 'CB';
+    if (y > 55) return 'CDM';
+    if (y > 43) return 'CM';
+    if (y > 30) return 'CAM';
+    return 'ST';
+  }
+  if (y > 60) return 'FB';   // 측면 수비
+  if (y > 42) return 'WM';   // 측면 미드
+  return 'WNG';              // 윙어
+}
+function zoneRole(x, y) { return zoneRoleByCol(sideZone(x), y); }
 function tagForSideRole(side, role) {
   if (side === 'L' || side === 'R') {
     if (role === 'FB') return side + 'B';                          // LB / RB
     if (role === 'WB' || role === 'IWB') return side + 'WB';       // LWB / RWB
+    if (role === 'WM') return side + 'M';                          // LM / RM
     if (role === 'WNG' || role === 'IW' || role === 'IF') return side + 'W'; // LW / RW
   }
   return role;   // 중앙 · 미드필더 등은 역할 그대로
@@ -4868,6 +4992,7 @@ function assignPlayerToSlot(slotIndex, playerId) {
 function attachSlotDrag(slotEl, slotIndex) {
   const CLICK_THRESHOLD = 5;
   let startX = 0, startY = 0, moved = false, fieldRect = null, pointerId = null;
+  let origRole = null, origZR = null;
   function onDown(e) {
     if (e.button != null && e.button !== 0) return;
     if (!canManageSquad()) {
@@ -4877,7 +5002,10 @@ function attachSlotDrag(slotEl, slotIndex) {
     startX = e.clientX; startY = e.clientY; moved = false;
     fieldRect = document.getElementById('field').getBoundingClientRect();
     const _sq = getCurrentSquad();
-    slotEl.dataset.side = sideZone(_sq && _sq.slots[slotIndex] ? _sq.slots[slotIndex].x : 50);
+    const s0 = _sq && _sq.slots[slotIndex];
+    origRole = s0 ? s0.role : 'CM';
+    origZR = s0 ? zoneRole(s0.x, s0.y) : 'CM';
+    slotEl.dataset.side = sideZone(s0 ? s0.x : 50);
     slotEl.setPointerCapture(pointerId);
     hideTooltip();
     e.preventDefault();
@@ -4893,14 +5021,14 @@ function attachSlotDrag(slotEl, slotIndex) {
       x = Math.max(2, Math.min(98, x)); y = Math.max(2, Math.min(98, y));
       slotEl.style.left = x + '%';
       slotEl.style.top = y + '%';
-      // 좌/우 위치에 따라 역할 태그 실시간 갱신 (히스테리시스로 확확 안 바뀜)
+      // 그리드 위치에 따라 역할/태그 실시간 갱신 (히스테리시스로 확확 안 바뀜)
       const _tag = slotEl.querySelector('.slot-role-tag');
-      const _sq = getCurrentSquad();
-      if (_tag && _sq && _sq.slots[slotIndex]) {
-        const prev = slotEl.dataset.side || sideZone(x);
-        const side = sideZoneHys(prev, x);
-        slotEl.dataset.side = side;
-        _tag.textContent = tagForSideRole(side, _sq.slots[slotIndex].role);
+      if (_tag) {
+        const col = sideZoneHys(slotEl.dataset.side || sideZone(x), x);
+        slotEl.dataset.side = col;
+        const curZR = zoneRoleByCol(col, y);
+        const roleShow = (curZR !== origZR) ? curZR : origRole;  // 존 바뀌면 새 역할, 아니면 원래(수동) 역할 유지
+        _tag.textContent = tagForSideRole(col, roleShow);
       }
     }
   }
@@ -4914,8 +5042,11 @@ function attachSlotDrag(slotEl, slotIndex) {
       if (squad?.slots?.[slotIndex]) {
         squad.slots[slotIndex].x = parseFloat(slotEl.style.left);
         squad.slots[slotIndex].y = parseFloat(slotEl.style.top);
+        // 존(칸)이 바뀌면 역할 자동 조정 (같은 칸이면 수동 세부역할 유지)
+        const newZR = zoneRole(squad.slots[slotIndex].x, squad.slots[slotIndex].y);
+        if (newZR !== origZR) squad.slots[slotIndex].role = newZR;
         saveState();
-        renderTeamPanel();
+        renderField(); renderTeamPanel();
       }
     } else {
       const squad = getCurrentSquad();
