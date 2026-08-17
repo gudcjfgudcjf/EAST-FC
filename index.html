@@ -2593,8 +2593,8 @@
             <div class="goal-box bottom"></div>
             <div class="zone-line attack"></div>
             <div class="zone-line midfield"></div>
-            <div class="vgrid-line" style="left:33.33%"></div>
-            <div class="vgrid-line" style="left:66.66%"></div>
+            <div class="vgrid-line" style="left:28%"></div>
+            <div class="vgrid-line" style="left:72%"></div>
             <div class="zone-label attack">공격 지역</div>
             <div class="zone-label midfield">미드필드</div>
             <div class="zone-label defense">수비 지역</div>
@@ -4483,7 +4483,7 @@ const FORMATIONS = {
   '3-5-2': [
     { label: 'GK', x: 50, y: 92 },
     { label: 'CB', x: 25, y: 78 }, { label: 'CB', x: 50, y: 80 }, { label: 'CB', x: 75, y: 78 },
-    { label: 'LWB', x: 12, y: 55 }, { label: 'CM', x: 35, y: 55 }, { label: 'CM', x: 50, y: 58 }, { label: 'CM', x: 65, y: 55 }, { label: 'RWB', x: 88, y: 55 },
+    { label: 'LWB', x: 12, y: 68 }, { label: 'CM', x: 35, y: 55 }, { label: 'CM', x: 50, y: 58 }, { label: 'CM', x: 65, y: 55 }, { label: 'RWB', x: 88, y: 68 },
     { label: 'ST', x: 38, y: 22 }, { label: 'ST', x: 62, y: 22 },
   ],
   '5-3-2': [
@@ -4939,17 +4939,18 @@ function renderPlayerList() {
 
 /* ==================== Squad tab: field ==================== */
 // 슬롯 위치(좌/우) 기준 태그: 풀백 LB/RB · 윙백 LWB/RWB · 윙어 LW/RW (미드필더 등은 역할 그대로)
-// 필드 좌/중앙/우 3:3:3
-function sideZone(x) { return x < 33.34 ? 'L' : x > 66.66 ? 'R' : 'C'; }
+// 필드 좌/중앙/우 28:44:28 (가운데를 넓게)
+function sideZone(x) { return x < 28 ? 'L' : x > 72 ? 'R' : 'C'; }
 // 드래그 중 히스테리시스(유도리) — 한 번 정해지면 경계를 더 넘어야 바뀜 → 핸드폰에서 안 흔들림
 function sideZoneHys(prev, x) {
-  if (prev === 'L') return x > 40 ? (x > 66.66 ? 'R' : 'C') : 'L';
-  if (prev === 'R') return x < 60 ? (x < 33.34 ? 'L' : 'C') : 'R';
-  if (x < 27) return 'L';
-  if (x > 73) return 'R';
+  if (prev === 'L') return x > 34 ? (x > 72 ? 'R' : 'C') : 'L';
+  if (prev === 'R') return x < 66 ? (x < 28 ? 'L' : 'C') : 'R';
+  if (x < 28) return 'L';
+  if (x > 72) return 'R';
   return 'C';
 }
-// 그리드 위치(칸) → 역할 자동 배정. 경계값은 화면의 점선(공격선 32% · 수비선 65%)과 정확히 일치시킴.
+// 그리드 위치(칸) → 역할 자동 배정. 경계값은 화면의 점선(공격선 32% · 수비선 65%)과 정확히 일치.
+// 측면 y구간은 중앙과 같은 높이로 대응: LW=ST/CAM · LM=CM · DM=CDM · LWB=수비선 바로 아래 · LB=깊은 수비
 // (col: L/C/R · y: 0위=공격 ~ 100아래=수비)
 function zoneRoleByCol(col, y) {
   if (col === 'C') {
@@ -4960,10 +4961,11 @@ function zoneRoleByCol(col, y) {
     if (y > 32) return 'CAM';   // 공격선(32%)~미드
     return 'ST';                // 공격선 위
   }
-  if (y > 65) return 'FB';    // 수비선 아래 → 풀백(LB/RB)
-  if (y > 48) return 'WB';    // 수비선~미드 → 윙백(LWB/RWB)  ← 미드라인에 가까우면 LWB
-  if (y > 32) return 'WM';    // 미드 → 측면 MF(LM/RM)
-  return 'WNG';               // 공격선 위 → 윙어(LW/RW)      ← 공격선 넘어야 LW
+  if (y > 73) return 'FB';     // 깊은 수비 → 풀백(LB/RB)
+  if (y > 65) return 'WB';     // 수비선 바로 아래(가까이) → 윙백(LWB/RWB)
+  if (y > 55) return 'CDM';    // 수비형 미드 높이(센터라인 벗어난 CDM) → DM
+  if (y > 32) return 'WM';     // 미드 → 측면 MF(LM/RM)
+  return 'WNG';                // 공격선 위 → 윙어(LW/RW)
 }
 function zoneRole(x, y) { return zoneRoleByCol(sideZone(x), y); }
 // 각 역할이 속한 '존 계열'. 세부 변형(IWB·IW·DLP 등)을 대표 존으로 묶어, 같은 계열 안에서는 수동 선택을 유지.
@@ -4980,15 +4982,25 @@ const ROLE_ZONE = {
   ST:'ST', POA:'ST', CF:'ST', TGT:'ST', F9:'ST', DLF:'ST',
 };
 function canonZone(role) { return ROLE_ZONE[role] || role; }
-// 화면에 실제로 보여줄 역할: 위치가 가리키는 계열과 저장된 역할의 계열이 다르면 위치를 우선(=선과 항상 일치).
+// 점선(경계) 근처에서 태그가 확확 안 바뀌게 하는 유도리 폭(%)
+const ZONE_HYS = 5;
+// 드래그 중 세로 유도리: 이전 계열이 현재 위치 ±폭 안에 들면 유지, 아니면 위치 계열로.
+function zoneRoleHys(prevFam, col, y) {
+  if (zoneRoleByCol(col, y - ZONE_HYS) === prevFam || zoneRoleByCol(col, y + ZONE_HYS) === prevFam) return prevFam;
+  return zoneRoleByCol(col, y);
+}
+// 화면에 실제로 보여줄 역할: 저장된 역할 계열이 위치 ±유도리 안이면 그대로, 아니면 위치 우선(=선과 일치).
 function effRole(slot) {
-  const pf = zoneRole(slot.x, slot.y);
-  return (canonZone(slot.role) === pf) ? slot.role : pf;
+  const fam = canonZone(slot.role);
+  const col = sideZone(slot.x);
+  if (zoneRoleByCol(col, slot.y - ZONE_HYS) === fam || zoneRoleByCol(col, slot.y + ZONE_HYS) === fam) return slot.role;
+  return zoneRole(slot.x, slot.y);
 }
 function tagForSideRole(side, role) {
   if (side === 'L' || side === 'R') {
     if (role === 'FB') return side + 'B';                          // LB / RB
     if (role === 'WB' || role === 'IWB') return side + 'WB';       // LWB / RWB
+    if (role === 'CDM' || role === 'ANC' || role === 'DLP') return 'DM'; // 센터라인 벗어난 수비형 미드 → DM
     if (role === 'WM') return side + 'M';                          // LM / RM
     if (role === 'WNG' || role === 'IW' || role === 'IF') return side + 'W'; // LW / RW
   }
@@ -5092,6 +5104,7 @@ function attachSlotDrag(slotEl, slotIndex) {
     const s0 = _sq && _sq.slots[slotIndex];
     origRole = s0 ? s0.role : 'CM';
     slotEl.dataset.side = sideZone(s0 ? s0.x : 50);
+    slotEl.dataset.yfam = s0 ? canonZone(effRole(s0)) : 'CM';  // 세로 유도리 기준(현재 표시 계열)
     slotEl.setPointerCapture(pointerId);
     hideTooltip();
     e.preventDefault();
@@ -5111,10 +5124,12 @@ function attachSlotDrag(slotEl, slotIndex) {
       x = Math.max(2, Math.min(98, x)); y = Math.max(2, Math.min(98, y));
       slotEl.style.left = x + '%';
       slotEl.style.top = y + '%';
-      // 위치에 따라 역할/태그/색을 실시간 갱신 (좌우는 히스테리시스로 확확 안 바뀜)
+      // 위치에 따라 역할/태그/색 실시간 갱신 (좌우·상하 모두 점선 근처에서 유도리로 확확 안 바뀜)
       const col = sideZoneHys(slotEl.dataset.side || sideZone(x), x);
       slotEl.dataset.side = col;
-      const posFam = zoneRoleByCol(col, y);
+      const prevFam = slotEl.dataset.yfam || zoneRoleByCol(col, y);
+      const posFam = zoneRoleHys(prevFam, col, y);
+      slotEl.dataset.yfam = posFam;
       // 같은 계열이면 원래(수동) 역할 유지, 계열이 바뀌면 위치 역할로
       const roleShow = (canonZone(origRole) === posFam) ? origRole : posFam;
       const tag = tagForSideRole(col, roleShow);
@@ -5133,8 +5148,8 @@ function attachSlotDrag(slotEl, slotIndex) {
       if (squad?.slots?.[slotIndex]) {
         squad.slots[slotIndex].x = parseFloat(slotEl.style.left);
         squad.slots[slotIndex].y = parseFloat(slotEl.style.top);
-        // 위치가 가리키는 계열과 역할 계열이 다르면 위치 역할로 동기화 (같은 계열이면 수동 세부역할 유지)
-        const newFam = zoneRole(squad.slots[slotIndex].x, squad.slots[slotIndex].y);
+        // 마지막으로 화면에 보여준 계열(유도리 반영)로 확정 → 미리보기와 결과가 항상 일치
+        const newFam = slotEl.dataset.yfam || zoneRole(squad.slots[slotIndex].x, squad.slots[slotIndex].y);
         if (canonZone(squad.slots[slotIndex].role) !== newFam) squad.slots[slotIndex].role = newFam;
         saveState();
         renderField(); renderTeamPanel();
@@ -5760,11 +5775,14 @@ function openAssignModal(slotIndex, roleName) {
   assigningSlotIndex = slotIndex;
   const squad = getCurrentSquad();
   const slot = squad.slots[slotIndex];
-  const currentRoleCode = slot.role;
+  // 표시와 동일하게 '유효 역할'(위치 보정) 기준으로 지역/역할을 잡음
+  const currentRoleCode = effRole(slot);
+  const zoneTag = tagForSideRole(sideZone(slot.x), currentRoleCode);
   // Get all roles applicable to this slot's zone
-  const applicable = (LABEL_ROLES[slot.label] || [currentRoleCode]);
+  const applicable = (LABEL_ROLES[zoneTag] || LABEL_ROLES[currentRoleCode] || [currentRoleCode]);
+  const slotCat = ROLES[currentRoleCode]?.cat || 'MF';   // 이 지역 카테고리(GK/DF/MF/FW)
 
-  $('#assignSlotLabel').textContent = `→ ${slot.label} 지역`;
+  $('#assignSlotLabel').textContent = `→ ${zoneTag} 지역`;
   const assigned = new Set(Object.values(squad.assignments));
   const available = store.players.filter(p => !assigned.has(p.id));
   const list = $('#assignPlayerList');
@@ -5795,11 +5813,17 @@ function openAssignModal(slotIndex, roleName) {
       const bestRole = sortedRoles[0];
       const attStatus = upMatch ? playerAttendStatus(p, upMatch) : null;
       const attRank = upMatch ? attendRankForPlayer(p, upMatch) : 2;
-      return { p, ovrsByRole, sortedRoles, bestOvr, bestRole, attStatus, attRank };
+      // 희망 역할: 선수가 등록한 포지션 중 이 지역과 같은 카테고리가 있으면 우선(0), 없으면 1
+      const prefers = (p.positions || []).some(rc => (ROLES[rc]?.cat || 'MF') === slotCat);
+      const prefRank = prefers ? 0 : 1;
+      return { p, ovrsByRole, sortedRoles, bestOvr, bestRole, attStatus, attRank, prefRank };
     });
-    // Sort: attendance first (if there's an upcoming match), then by OVR
-    if (upMatch) withOvrs.sort((a,b) => (a.attRank - b.attRank) || (b.bestOvr - a.bestOvr));
-    else withOvrs.sort((a,b) => b.bestOvr - a.bestOvr);
+    // 정렬 우선순위: ① 참석여부 → ② 희망 역할(이 지역 선호) → ③ 이 지역 OVR
+    withOvrs.sort((a,b) =>
+      (upMatch ? (a.attRank - b.attRank) : 0) ||
+      (a.prefRank - b.prefRank) ||
+      (b.bestOvr - a.bestOvr)
+    );
 
     list.innerHTML = attHint + hintHtml + withOvrs.map(({p, ovrsByRole, sortedRoles, bestRole, attStatus}) => {
       const preferredRoles = new Set(p.positions || []);
