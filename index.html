@@ -424,6 +424,12 @@
     font-size: 12px; cursor: pointer;
   }
   .btn-reset-positions:hover, .btn-role-edit:hover { background: var(--border-2); color: var(--text); }
+  .btn-autofill {
+    background: linear-gradient(135deg, #16a34a, #22c55e); color: #04210f;
+    border: 1px solid #16a34a; padding: 6px 12px; border-radius: 6px;
+    font-size: 12px; font-weight: 700; cursor: pointer;
+  }
+  .btn-autofill:hover { filter: brightness(1.08); }
 
   /* ---------- Right panel (squads) ---------- */
   .right-panel { background: var(--bg-2); border-left: 1px solid var(--bg-3); display: flex; flex-direction: column; overflow: hidden; }
@@ -451,6 +457,15 @@
     white-space: nowrap;
   }
   .icon-btn { background: none; border: none; color: var(--text-3); cursor: pointer; font-size: 13px; padding: 4px 6px; border-radius: 4px; }
+  /* 지난 경기 스쿼드 (접이식) */
+  .past-squads { margin-top: 6px; border-top: 1px dashed var(--border-2); padding-top: 8px; }
+  .past-squads > summary { list-style: none; cursor: pointer; font-size: 12px; font-weight: 700; color: var(--text-2); padding: 6px 4px; display: flex; align-items: center; gap: 6px; }
+  .past-squads > summary::-webkit-details-marker { display: none; }
+  .past-squads > summary::before { content: '▸'; transition: transform .15s; color: var(--text-3); }
+  .past-squads[open] > summary::before { transform: rotate(90deg); }
+  .past-count { background: var(--bg-3); color: var(--text-2); border-radius: 8px; padding: 0 7px; font-size: 11px; }
+  .past-squads-list { padding-top: 6px; opacity: 0.82; }
+  .past-squads-list .squad-item { filter: grayscale(0.35); }
   .icon-btn:hover { color: var(--text); background: var(--border-2); }
   .panel-footer { padding: 10px; border-top: 1px solid var(--bg-3); display: flex; flex-direction: column; gap: 6px; }
   .panel-footer button {
@@ -971,9 +986,24 @@
   .attend-manage { margin-top: 12px; border-top: 1px dashed var(--border-2); padding-top: 10px; }
   .attend-manage-title { font-family: var(--font-brand); font-size: 12px; font-weight: 700; color: #93c5fd; margin-bottom: 8px; }
   .attend-manage-list { max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 5px; }
-  .amr { display: flex; align-items: center; gap: 8px; justify-content: space-between; padding: 3px 2px; }
+  .amr { display: flex; flex-direction: column; gap: 4px; padding: 4px 2px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .amr-top { display: flex; align-items: center; gap: 8px; justify-content: space-between; }
   .amr-name { font-size: 12px; color: var(--text); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .amr-btns { display: flex; gap: 3px; flex-shrink: 0; }
+  /* 가능 쿼터 접이식 선택기 */
+  .amr-qd { margin: 2px 0 0 2px; }
+  .amr-qd > summary { list-style: none; cursor: pointer; font-size: 11px; color: var(--text-2); display: flex; align-items: center; gap: 6px; padding: 3px 0; }
+  .amr-qd > summary::-webkit-details-marker { display: none; }
+  .amr-qsum b { color: var(--text); }
+  .amr-qsum.restricted b { color: #fdba74; }
+  .amr-qedit { color: var(--gold); font-weight: 700; font-size: 10px; margin-left: auto; }
+  .amr-quarters { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; padding: 4px 0 2px; }
+  .amr-quarters.self { margin-top: 4px; }
+  .amr-q-label { font-size: 10px; color: var(--text-3); font-weight: 700; margin-right: 2px; }
+  .amr-qhint { font-size: 10px; color: var(--text-3); margin-left: 2px; }
+  .amr-q { min-width: 34px; padding: 5px 8px; border-radius: 7px; font-size: 11px; font-weight: 700; cursor: pointer; background: var(--bg-2); border: 1px solid var(--border-2); color: var(--text-3); }
+  .amr-q.on { background: rgba(34,197,94,0.18); border-color: #22c55e; color: #4ade80; }
+  .amr-q:not(.on) { text-decoration: line-through; opacity: 0.7; }
   .amr-btn { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; background: var(--bg-2); border: 1px solid var(--border-2); color: var(--text-2); white-space: nowrap; }
   .amr-btn:hover { border-color: var(--gold); }
   .amr-btn.attend.on { background: rgba(34,197,94,0.2); border-color: #22c55e; color: #4ade80; }
@@ -999,6 +1029,8 @@
   .att-chip.attend { background: #22c55e; color: #04210f; }
   .att-chip.hold { background: #facc15; color: #3a2e00; }
   .att-chip.absent { background: #ef4444; color: #2a0606; }
+  .att-chip.cantplay { background: #7c2d12; color: #fdba74; border: 1px solid #ea580c; }
+  .assign-player-item.cantplay { opacity: 0.55; box-shadow: inset 3px 0 0 #ea580c; }
 
   /* Quarter → squad rows in match modal */
   .quarter-row {
@@ -2582,6 +2614,7 @@
             <option value="3-4-3">3-4-3</option>
           </select>
           <div class="spacer"></div>
+          <button id="btnAutoFill" class="btn-autofill">⚡ 자동 배치</button>
           <button id="btnRoleEdit" class="btn-role-edit">🎯 역할 편집</button>
           <button id="btnResetPositions" class="btn-reset-positions">↺ 위치 초기화</button>
           <button id="btnClearField" class="danger">필드 비우기</button>
@@ -3383,6 +3416,9 @@ function normalizeStore(s) {
     if (m.quarters && !Array.isArray(m.quarters)) m.quarters = Object.values(m.quarters);
     if (!Array.isArray(m.quarters)) m.quarters = m.squadId ? [{ label: '', squadId: m.squadId }] : [];
     if (!m.attendance || typeof m.attendance !== 'object' || Array.isArray(m.attendance)) m.attendance = m.attendance && !Array.isArray(m.attendance) ? m.attendance : {};
+    // 선수별 '가능 쿼터' 맵: { playerId: [1,3,4] }. 없으면(=undefined) 전 쿼터 가능.
+    if (!m.availQ || typeof m.availQ !== 'object' || Array.isArray(m.availQ)) m.availQ = {};
+    else { for (const k in m.availQ) { if (m.availQ[k] && !Array.isArray(m.availQ[k])) m.availQ[k] = Object.values(m.availQ[k]); } }
     if (!m.color) m.color = MATCH_COLORS[i % MATCH_COLORS.length];
     if (!m.records || typeof m.records !== 'object' || Array.isArray(m.records)) m.records = {};
     if (!m.momVotes || typeof m.momVotes !== 'object' || Array.isArray(m.momVotes)) m.momVotes = {};
@@ -4761,6 +4797,7 @@ function migrateData() {
   (store.matches || []).forEach((m, i) => {
     if (!Array.isArray(m.quarters)) m.quarters = m.squadId ? [{ label: '', squadId: m.squadId }] : [];
     if (!m.attendance || typeof m.attendance !== 'object' || Array.isArray(m.attendance)) m.attendance = {};
+    if (!m.availQ || typeof m.availQ !== 'object' || Array.isArray(m.availQ)) m.availQ = {};
     if (!m.color) m.color = MATCH_COLORS[i % MATCH_COLORS.length];
     if (!m.records || typeof m.records !== 'object' || Array.isArray(m.records)) m.records = {};
     if (!m.momVotes || typeof m.momVotes !== 'object' || Array.isArray(m.momVotes)) m.momVotes = {};
@@ -5235,13 +5272,28 @@ function showTooltip(player, slot, slotEl) {
 function hideTooltip() { $('#tooltip').style.display = 'none'; }
 
 /* ==================== Squad list ==================== */
+// 경기 종료 시각(시작+3시간 여유, 시간 없으면 그 날 자정) 이후면 '지난 경기'
+function matchEndTime(m) {
+  const d = parseYmd(m.date);
+  if (m.time && /^\d{1,2}:\d{2}/.test(m.time)) {
+    const [hh, mm] = m.time.split(':').map(Number);
+    d.setHours(hh, mm, 0, 0);
+    d.setHours(d.getHours() + 3); // 경기 진행 여유 3시간
+  } else {
+    d.setHours(23, 59, 59, 0);
+  }
+  return d;
+}
+function matchIsPast(m) { return !!m && new Date() > matchEndTime(m); }
+// 이 스쿼드가 '끝난 경기'에 묶여 있으면 그 경기를 반환 (없으면 null → 예정/미연결 스쿼드는 항상 활성)
+function squadPastMatch(squadId) { const m = matchForSquad(squadId); return matchIsPast(m) ? m : null; }
 function renderSquadList() {
   const list = $('#squadList');
   if (store.squads.length === 0) {
     list.innerHTML = '<div class="empty">스쿼드가 없습니다.<br>[+ 새 스쿼드]를 눌러보세요.</div>';
     return;
   }
-  list.innerHTML = store.squads.map(s => {
+  const squadItemHtml = s => {
     const count = Object.keys(s.assignments || {}).length;
     const lm = matchForSquad(s.id);
     const color = lm ? matchColorFor(lm) : null;
@@ -5255,7 +5307,64 @@ function renderSquadList() {
         </div>
         <div class="squad-item-meta">${s.formation} · ${count}/11명 ${matchTag}</div>
       </div>`;
-  }).join('');
+  };
+  const active = [], past = [];
+  store.squads.forEach(s => (squadPastMatch(s.id) ? past : active).push(s));
+  let html = active.length ? active.map(squadItemHtml).join('')
+    : '<div class="empty" style="padding:12px;">다음 경기 스쿼드가 아직 없어요.<br>[+ 새 스쿼드] 또는 일정을 추가해보세요.</div>';
+  if (past.length) {
+    html += `<details class="past-squads">
+      <summary>🗄️ 지난 경기 스쿼드 <span class="past-count">${past.length}</span></summary>
+      <div class="past-squads-list">${past.map(squadItemHtml).join('')}</div>
+    </details>`;
+  }
+  list.innerHTML = html;
+}
+
+// 참석·가능쿼터·주포지션 기준으로 현재 스쿼드를 자동 배치
+function autoFillSquad() {
+  if (!canManageSquad()) { toast('감독 권한이 필요합니다 · 상단 🔒 감독 버튼'); return; }
+  const squad = getCurrentSquad();
+  if (!squad) { toast('스쿼드가 없어요'); return; }
+  const slots = ensureSquadSlots(squad);
+  const upMatch = getUpcomingMatchForSquad(squad.id);
+  const squadQs = upMatch ? matchQuarters(upMatch).map((q, i) => q.squadId === squad.id ? i + 1 : null).filter(Boolean) : [];
+  const canPlay = p => !upMatch || squadQs.length === 0 || squadQs.some(q => playerAvailQuarters(upMatch, p.id).includes(q));
+  // 후보 풀: (경기 연결 시) 참석자 우선 → 부족하면 보류 포함 → 그래도 부족하면 전체. 못 뛰는 쿼터는 제외.
+  let pool;
+  if (upMatch) {
+    const att = getMatchAttendance(upMatch);
+    const attendees = store.players.filter(p => att[p.id] === 'attend' && canPlay(p));
+    if (attendees.length >= slots.length) pool = attendees;
+    else {
+      const withHold = store.players.filter(p => (att[p.id] === 'attend' || att[p.id] === 'hold') && canPlay(p));
+      pool = withHold.length >= slots.length ? withHold : store.players.filter(canPlay);
+    }
+  } else {
+    pool = store.players.slice();
+  }
+  const qtxt = (upMatch && squadQs.length) ? squadQs.map(q => q + '쿼터').join('·') + ' ' : '';
+  if (!confirm(`「${squad.name}」을(를) ${qtxt}참석·가능 인원으로 자동 배치할까요?\n현재 배치는 새로 채워집니다.`)) return;
+  // 슬롯마다 남은 후보 중 (주포지션 적합도 → OVR) 최상위를 배치
+  squad.assignments = {};
+  const used = new Set();
+  slots.forEach((slot, i) => {
+    const er = effRole(slot);
+    const grp = posGroup(er);
+    let best = null, bestKey = null;
+    for (const p of pool) {
+      if (used.has(p.id)) continue;
+      const posArr = p.positions || [];
+      const inG = grp ? posArr.filter(rc => posGroup(rc) === grp).length : 0;
+      const prefScore = posArr.length ? inG / posArr.length : 0;
+      const key = prefScore * 1000 + ovrForRole(p, er); // 적합도 우선, OVR 보조
+      if (best === null || key > bestKey) { best = p; bestKey = key; }
+    }
+    if (best) { squad.assignments[i] = best.id; used.add(best.id); }
+  });
+  saveState();
+  renderPlayerList(); renderField(); renderSquadList();
+  toast(`⚡ 자동 배치 완료 · ${used.size}명`);
 }
 
 /* ==================== Condition (컨디션) ==================== */
@@ -5823,6 +5932,11 @@ function openAssignModal(slotIndex, roleName) {
 
   // Attendance priority: nearest upcoming match that uses this squad
   const upMatch = getUpcomingMatchForSquad(squad.id);
+  // 이 스쿼드가 쓰이는 쿼터(들) → 해당 쿼터에 못 뛰는 참석자는 뒤로 밀고 표시
+  const squadQs = upMatch ? matchQuarters(upMatch).map((q, i) => q.squadId === squad.id ? i + 1 : null).filter(Boolean) : [];
+  const qLabel = squadQs.length ? squadQs.map(q => q + '쿼터').join('·') : '';
+  const availForSquad = p => !upMatch || squadQs.length === 0 || squadQs.some(q => playerAvailQuarters(upMatch, p.id).includes(q));
+  if (qLabel) $('#assignSlotLabel').textContent = `→ ${zoneTag} 지역 · ${qLabel}`;
   const attHint = upMatch ? `<div class="assign-hint" style="border-color:rgba(34,197,94,0.35); background:rgba(34,197,94,0.06); color:#86efac;">
     🗓️ 다가오는 경기 <b>vs ${escapeHtml(upMatch.opponent)}</b> 참석 투표 반영 · <b>참석자</b>가 맨 위로 정렬됩니다
     <span style="color:var(--text-2);">(🟢참석 · 🟡보류 · 🔴불참)</span>
@@ -5830,8 +5944,8 @@ function openAssignModal(slotIndex, roleName) {
 
   // Hint banner
   const hintHtml = `<div class="assign-hint">
-    💡 정렬: ${upMatch ? '<b>참석자</b> → ' : ''}<b>이 자리를 주 포지션으로 하는 선수</b> → OVR(최하위).
-    역할 뱃지를 클릭하면 그 역할로 배치돼요. ⭐ = 선수가 선택해 둔 역할 · 현재 슬롯 역할: <strong style="color:var(--gold)">${currentRoleCode}</strong>
+    💡 정렬: ${qLabel ? `<b>${qLabel} 가능</b> → ` : ''}${upMatch ? '<b>참석자</b> → ' : ''}<b>이 자리를 주 포지션으로 하는 선수</b> → OVR(최하위).
+    ${qLabel ? `<b>${qLabel}</b>에 못 뛰는 참석자는 맨 뒤로 밀리고 <span style="color:#fca5a5;">불가 표시</span>가 떠요. ` : ''}역할 뱃지를 클릭하면 배치 · ⭐ = 선수가 선택해 둔 역할
   </div>`;
 
   if (available.length === 0) {
@@ -5852,16 +5966,19 @@ function openAssignModal(slotIndex, roleName) {
       const posArr = p.positions || [];
       const inGroup = slotGroup ? posArr.filter(rc => posGroup(rc) === slotGroup).length : 0;
       const prefScore = posArr.length ? inGroup / posArr.length : 0;
-      return { p, ovrsByRole, sortedRoles, bestOvr, bestRole, attStatus, attRank, prefScore };
+      // 이 스쿼드(쿼터)에 못 뛰는 참석자 → 맨 뒤로. 못 뛰면 1, 뛸 수 있으면 0.
+      const cantPlay = availForSquad(p) ? 0 : 1;
+      return { p, ovrsByRole, sortedRoles, bestOvr, bestRole, attStatus, attRank, prefScore, cantPlay };
     });
-    // 정렬 우선순위: ① 참석여부 → ② 이 역할을 주로 하는 정도 → ③(최하위) OVR
+    // 정렬 우선순위: ① 이 쿼터 가능 여부 → ② 참석여부 → ③ 이 역할을 주로 하는 정도 → ④(최하위) OVR
     withOvrs.sort((a,b) =>
+      (a.cantPlay - b.cantPlay) ||
       (upMatch ? (a.attRank - b.attRank) : 0) ||
       (b.prefScore - a.prefScore) ||
       (b.bestOvr - a.bestOvr)
     );
 
-    list.innerHTML = attHint + hintHtml + withOvrs.map(({p, ovrsByRole, sortedRoles, bestRole, attStatus}) => {
+    list.innerHTML = attHint + hintHtml + withOvrs.map(({p, ovrsByRole, sortedRoles, bestRole, attStatus, cantPlay}) => {
       const preferredRoles = new Set(p.positions || []);
       const roleButtons = sortedRoles.map(rc => {
         const isPreferred = preferredRoles.has(rc);
@@ -5883,11 +6000,12 @@ function openAssignModal(slotIndex, roleName) {
         return `<span class="role-chip ${cat}">${code}</span>`;
       }).join('');
       const attChip = attStatus ? `<span class="att-chip ${attStatus}">${ATTEND_META[attStatus].label}</span>` : '';
+      const availChip = (upMatch && cantPlay) ? `<span class="att-chip cantplay">⏱ ${qLabel} 불가 · ${availQSummary(upMatch, p.id)} 가능</span>` : '';
       return `
-      <div class="assign-player-item ${attStatus ? 'att-' + attStatus : ''}">
+      <div class="assign-player-item ${attStatus ? 'att-' + attStatus : ''}${cantPlay ? ' cantplay' : ''}">
         <div class="player-num">${p.number || '?'}</div>
         <div class="player-info">
-          <div class="player-name">${escapeHtml(p.name)}${attChip}</div>
+          <div class="player-name">${escapeHtml(p.name)}${attChip}${availChip}</div>
           <div class="player-meta" style="margin-top:2px;">${preferredBadges}</div>
           <div class="assign-role-row">${roleButtons}</div>
         </div>
@@ -6267,6 +6385,8 @@ function attendanceSectionHtml(m) {
       return `<button class="attend-btn ${s} ${mine===s?'on':''}" data-att="${s}" data-match="${m.id}">${meta.icon} ${meta.label} <b>${counts[s]}</b></button>`;
     }).join('');
     selfArea = `<div class="attend-selfname">내 참석 (#${mp.number||'?'} ${escapeHtml(mp.name)})</div><div class="attend-row">${attendBtns}</div>`;
+    // 참석을 누른 회원 본인도 '뛸 수 있는 쿼터'를 직접 조정 가능 (기본 접힘)
+    if (mine === 'attend') selfArea += quarterPickerHtml(m, mp.id, '내가 뛸 수 있는 쿼터');
   } else {
     const cnt = `<div style="display:flex; gap:6px; font-size:12px; color:var(--text-2); margin-bottom:6px;">현재 ✅${counts.attend} · ⏸️${counts.hold} · ❌${counts.absent}</div>`;
     selfArea = cnt + `<div class="attend-empty" style="margin-top:0;">본인 선수 프로필이 연결돼 있어야 직접 참석 투표할 수 있어요. (관리자 탭에서 연결)</div>`;
@@ -6278,8 +6398,42 @@ function attendanceSectionHtml(m) {
     ${isManagerActive() ? managerRosterHtml(m) : ''}
   </div>`;
 }
+// 이 경기의 쿼터 개수 (기본 4)
+function matchQuarterCount(m) { const n = matchQuarters(m).length; return n > 0 ? n : 4; }
+// 선수의 가능 쿼터 배열 (미설정이면 전 쿼터 가능)
+function playerAvailQuarters(m, pid) {
+  const nq = matchQuarterCount(m);
+  const v = m.availQ && m.availQ[pid];
+  if (!Array.isArray(v)) return Array.from({ length: nq }, (_, i) => i + 1); // 전체
+  return v.filter(q => q >= 1 && q <= nq);
+}
+function availQIsRestricted(m, pid) { return playerAvailQuarters(m, pid).length < matchQuarterCount(m); }
+// 가능 쿼터 요약 문자열: 전 쿼터 / 3~4Q / 1·3Q
+function availQSummary(m, pid) {
+  const nq = matchQuarterCount(m);
+  const av = playerAvailQuarters(m, pid).slice().sort((a, b) => a - b);
+  if (av.length >= nq) return '전 쿼터';
+  let contiguous = true;
+  for (let i = 1; i < av.length; i++) if (av[i] !== av[i - 1] + 1) contiguous = false;
+  return contiguous ? `${av[0]}~${av[av.length - 1]}Q` : av.map(q => q + 'Q').join('·');
+}
+// 접이식(details) 가능-쿼터 선택기 — 기본은 접혀 있고, 일부만 가능한 사람만 펼쳐짐
+function quarterPickerHtml(m, pid, label) {
+  const nq = matchQuarterCount(m);
+  if (nq <= 1) return '';
+  const av = playerAvailQuarters(m, pid);
+  const restricted = av.length < nq;
+  const chips = Array.from({ length: nq }, (_, i) => i + 1).map(q =>
+    `<button class="amr-q ${av.includes(q) ? 'on' : ''}" data-q="${q}" data-player="${pid}" data-match="${m.id}">${q}Q</button>`
+  ).join('');
+  return `<details class="amr-qd" ${restricted ? 'open' : ''}>
+    <summary class="amr-qsum ${restricted ? 'restricted' : ''}">⏱ ${label || '가능 쿼터'}: <b>${availQSummary(m, pid)}</b><span class="amr-qedit">조정 ▾</span></summary>
+    <div class="amr-quarters">${chips}<span class="amr-qhint">못 뛰는 쿼터는 꺼주세요</span></div>
+  </details>`;
+}
 function managerRosterHtml(m) {
   const att = getMatchAttendance(m);
+  const nq = matchQuarterCount(m);
   const players = store.players.slice().sort((a, b) => (a.number || 999) - (b.number || 999) || (a.name || '').localeCompare(b.name || ''));
   const rows = players.map(p => {
     const cur = att[p.id] || '';
@@ -6288,10 +6442,13 @@ function managerRosterHtml(m) {
     const btns = ['attend','hold','absent'].map(s =>
       `<button class="amr-btn ${s} ${cur===s?'on':''}" data-set="${s}" data-player="${p.id}" data-match="${m.id}">${ATTEND_META[s].label}</button>`
     ).join('') + `<button class="amr-btn clear ${cur===''?'on':''}" data-set="" data-player="${p.id}" data-match="${m.id}">미투표</button>`;
-    return `<div class="amr"><span class="amr-name">${nm}</span><div class="amr-btns">${btns}</div></div>`;
+    // 참석자에게만 '가능 쿼터' 접이식 선택기 (기본 접힘 · 일부만 가능하면 펼쳐짐)
+    const qRow = cur === 'attend' ? quarterPickerHtml(m, p.id) : '';
+    return `<div class="amr"><div class="amr-top"><span class="amr-name">${nm}</span><div class="amr-btns">${btns}</div></div>${qRow}</div>`;
   }).join('');
   return `<div class="attend-manage">
     <div class="attend-manage-title">🛡️ 감독/운영진 · 선수단 참석 직접 관리 <span style="color:var(--text-3); font-weight:400; font-size:11px;">(미가입 선수도 대신 체크 가능)</span></div>
+    <div style="font-size:11px; color:var(--text-3); margin:-2px 0 6px;">참석자는 <b>가능 쿼터</b>를 켜고 끌 수 있어요. 끈 쿼터 스쿼드에선 배치 우선순위에서 뒤로 밀리고 표시가 떠요.</div>
     <div class="attend-manage-list">${rows}</div>
   </div>`;
 }
@@ -6302,6 +6459,28 @@ function bindAttendanceButtons(root) {
   root.querySelectorAll('.amr-btn').forEach(btn => {
     btn.addEventListener('click', e => { e.stopPropagation(); setMatchAttendanceForPlayer(btn.dataset.match, btn.dataset.player, btn.dataset.set); });
   });
+  root.querySelectorAll('.amr-q').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); toggleAvailQuarter(btn.dataset.match, btn.dataset.player, parseInt(btn.dataset.q, 10)); });
+  });
+}
+// '가능 쿼터' 토글 (감독은 아무나, 회원은 본인만). 다 켜지면 저장 최소화 위해 배열 유지.
+function toggleAvailQuarter(matchId, playerId, q) {
+  const m = store.matches.find(x => x.id === matchId);
+  if (!m) return;
+  const isSelf = myPlayer() && myPlayer().id === playerId;
+  if (!isManagerActive() && !isSelf) { toast('본인 또는 감독/운영진만 가능해요'); return; }
+  if (!m.availQ || typeof m.availQ !== 'object' || Array.isArray(m.availQ)) m.availQ = {};
+  const nq = matchQuarterCount(m);
+  let cur = Array.isArray(m.availQ[playerId]) ? m.availQ[playerId].slice() : Array.from({ length: nq }, (_, i) => i + 1);
+  if (cur.includes(q)) cur = cur.filter(x => x !== q);
+  else cur.push(q);
+  cur = cur.filter(x => x >= 1 && x <= nq).sort((a, b) => a - b);
+  if (cur.length === 0) { toast('최소 한 쿼터는 가능해야 해요'); return; }
+  // 전 쿼터 다 켜졌으면 맵에서 제거(=기본 전체)
+  if (cur.length === nq) delete m.availQ[playerId];
+  else m.availQ[playerId] = cur;
+  saveState();
+  refreshAttendSection(matchId);
 }
 function refreshAttendSection(matchId) {
   const m = store.matches.find(x => x.id === matchId);
@@ -7984,6 +8163,8 @@ function bindEvents() {
   });
   $('#btnNewSquad').addEventListener('click', newSquad);
   $('#btnSaveSquad').addEventListener('click', saveCurrentSquad);
+  const _btnAuto = document.getElementById('btnAutoFill');
+  if (_btnAuto) _btnAuto.addEventListener('click', autoFillSquad);
   $('#btnClearField').addEventListener('click', clearField);
 
   $('#pmSearch').addEventListener('input', renderPlayersTable);
