@@ -3270,6 +3270,17 @@ let _booted = false;
 let _authLoaded = false, _storeLoaded = false;
 let _pendingRerender = false;
 let _lastWriteAt = 0;
+// Per-device (local) squad selection — NOT synced, so each user views a squad independently.
+const LOCAL_SQUAD_KEY = 'east_fc_local_squad_v1';
+let localSquadId = null;
+try { localSquadId = localStorage.getItem(LOCAL_SQUAD_KEY) || null; } catch(e) {}
+function setLocalSquad(id) {
+  localSquadId = id || null;
+  try { id ? localStorage.setItem(LOCAL_SQUAD_KEY, id) : localStorage.removeItem(LOCAL_SQUAD_KEY); } catch(e) {}
+}
+// Remote-update re-render: debounced + scroll-preserving + defers while the user is interacting.
+let _rerenderTimer = null;
+let _lastScrollAt = 0;
 
 function backendConfigured() {
   return FIREBASE_CONFIG &&
@@ -3408,6 +3419,40 @@ function rerenderCurrent() {
   else if (t === 'attend') renderAttend();
   else if (t === 'hall') renderHall();
   else if (t === 'admin' && isAdmin()) renderAdmin();
+}
+
+// True while the user is doing something a re-render would disrupt.
+function userIsInteracting() {
+  if (document.querySelector('.slot.moving, .slot.dragging, .player-item.dragging')) return true;
+  if (document.querySelector('.modal-overlay.show')) return true;
+  const ae = document.activeElement;
+  if (ae && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA' || ae.tagName === 'SELECT' || ae.isContentEditable)) return true;
+  if (Date.now() - _lastScrollAt < 900) return true;
+  return false;
+}
+// Debounced entry point for remote (another user's) updates.
+function scheduleRerender() {
+  if (_rerenderTimer) return;
+  _rerenderTimer = setTimeout(runScheduledRerender, 500);
+}
+function runScheduledRerender() {
+  _rerenderTimer = null;
+  if (userIsInteracting()) { _rerenderTimer = setTimeout(runScheduledRerender, 700); return; }
+  rerenderPreserveScroll();
+}
+// Re-render the active tab without yanking the user's scroll position to the top.
+function rerenderPreserveScroll() {
+  const active = document.querySelector('.view.active');
+  const saved = [];
+  if (active) {
+    if (active.scrollTop > 0) saved.push([active, active.scrollTop]);
+    active.querySelectorAll('[id]').forEach(el => { if (el.scrollTop > 0) saved.push([el, el.scrollTop]); });
+  }
+  const docEl = document.scrollingElement || document.documentElement;
+  const docTop = docEl ? docEl.scrollTop : 0;
+  rerenderCurrent();
+  saved.forEach(([el, top]) => { try { el.scrollTop = top; } catch(e) {} });
+  if (docEl && docTop) { try { docEl.scrollTop = docTop; } catch(e) {} }
 }
 
 function closeNavMenu() {
@@ -4713,7 +4758,11 @@ function migrateData() {
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 function $(sel) { return document.querySelector(sel); }
 function getPlayer(id) { return store.players.find(p => p.id === id); }
-function getCurrentSquad() { return store.squads.find(s => s.id === store.currentSquadId); }
+function getCurrentSquad() {
+  let s = store.squads.find(sq => sq.id === localSquadId);
+  if (!s) { s = store.squads[0] || null; localSquadId = s ? s.id : null; }
+  return s;
+}
 function toast(msg) {
   const t = $('#toast');
   t.textContent = msg;
@@ -5118,7 +5167,7 @@ function renderSquadList() {
     const borderStyle = color ? `border-left:4px solid ${color};` : '';
     const matchTag = lm ? `<span class="squad-match-tag" style="background:${color}22; color:${color}; border-color:${color}66;">🗓️ ${escapeHtml(shortMatchLabel(lm))}</span>` : '';
     return `
-      <div class="squad-item ${s.id === store.currentSquadId ? 'active' : ''}" data-id="${s.id}" style="${borderStyle}">
+      <div class="squad-item ${s.id === localSquadId ? 'active' : ''}" data-id="${s.id}" style="${borderStyle}">
         <div class="squad-item-name">
           <span>${escapeHtml(s.name)}</span>
           <button class="icon-btn" data-action="delete-squad" title="삭제">🗑️</button>
@@ -5812,7 +5861,7 @@ function newSquad() {
   const squad = { id: uid(), name: name.trim(), formation: '4-4-2', slots: [], assignments: {} };
   ensureSquadSlots(squad);
   store.squads.push(squad);
-  store.currentSquadId = squad.id;
+  setLocalSquad(squad.id);
   saveState();
   renderPlayerList(); renderField(); renderSquadList();
   $('#squadName').value = squad.name;
@@ -5820,17 +5869,18 @@ function newSquad() {
   toast('새 스쿼드를 만들었어요');
 }
 function selectSquad(id) {
-  store.currentSquadId = id;
+  // Local-only view switch — does NOT write to the shared store, so other
+  // users' squad views are never dragged along.
+  setLocalSquad(id);
   const s = getCurrentSquad();
-  if (s) { $('#squadName').value = s.name; $('#formationSelect').value = s.formation; }
-  saveState();
+  if (s) { const nm=$('#squadName'); const fs=$('#formationSelect'); if(nm) nm.value=s.name; if(fs) fs.value=s.formation; }
   renderPlayerList(); renderField(); renderSquadList();
 }
 function deleteSquad(id) {
   if (!canManageSquad()) { toast('감독 권한이 필요합니다'); return; }
   if (!confirm('이 스쿼드를 삭제하시겠습니까?')) return;
   store.squads = store.squads.filter(s => s.id !== id);
-  if (store.currentSquadId === id) store.currentSquadId = store.squads[0]?.id || null;
+  if (localSquadId === id) setLocalSquad(store.squads[0]?.id || null);
   store.matches.forEach(m => {
     if (m.squadId === id) m.squadId = '';
     if (Array.isArray(m.quarters)) m.quarters = m.quarters.filter(q => q.squadId !== id);
@@ -6470,9 +6520,9 @@ function importData(file) {
         players: parsed.players, squads: parsed.squads,
         matches: parsed.matches || [],
         staff: parsed.staff || [],
-        currentSquadId: parsed.currentSquadId || parsed.squads[0]?.id || null,
       };
       migrateData();
+      setLocalSquad(parsed.currentSquadId || parsed.squads[0]?.id || null);
       saveState();
       renderPlayerList(); renderField(); renderSquadList();
       renderPlayersTable(); renderCalendar(); renderOrg();
@@ -7764,10 +7814,14 @@ function bindEvents() {
   // Re-render when a live remote update arrived while a modal was open
   if (typeof MutationObserver !== 'undefined') {
     const mo = new MutationObserver(() => {
-      if (_pendingRerender && !document.querySelector('.modal-overlay.show')) rerenderCurrent();
+      if (_pendingRerender && !document.querySelector('.modal-overlay.show')) rerenderPreserveScroll();
     });
     document.querySelectorAll('.modal-overlay').forEach(m => mo.observe(m, { attributes: true, attributeFilter: ['class'] }));
   }
+
+  // Track recent scrolling so remote re-renders defer while the user is scrolling.
+  document.addEventListener('scroll', () => { _lastScrollAt = Date.now(); }, { capture: true, passive: true });
+  document.addEventListener('touchmove', () => { _lastScrollAt = Date.now(); }, { capture: true, passive: true });
 
   $('#btnAddPlayer').addEventListener('click', () => openPlayerModal(null));
   $('#btnCancelPlayer').addEventListener('click', closePlayerModal);
@@ -8042,7 +8096,7 @@ function seedSampleData() {
     }
   });
   store.squads.push(squad);
-  store.currentSquadId = squad.id;
+  setLocalSquad(squad.id);
 
   // Sample matches
   const now = new Date();
@@ -8145,9 +8199,9 @@ function onRemoteData(fbTimeout) {
     updateBackendStatusUI();
     if (currentUser()) hideAuthGate(); else showAuthGate();
   } else {
-    // Live update pushed by another user
+    // Live update pushed by another user — debounced & scroll-preserving.
     if (isLoggedIn() && !document.getElementById('authGate').classList.contains('show')) {
-      rerenderCurrent();
+      scheduleRerender();
     } else if (document.getElementById('authGate').classList.contains('show')) {
       updateAuthUI();
     }
