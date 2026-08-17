@@ -5830,9 +5830,8 @@ function openAssignModal(slotIndex, roleName) {
 
   // Hint banner
   const hintHtml = `<div class="assign-hint">
-    💡 각 선수 옆에 이 지역의 모든 역할별 OVR이 표시됩니다.
-    <strong>원하는 역할 뱃지를 클릭</strong>하면 그 역할로 배치됩니다.
-    ⭐ = 선수가 선호하는 역할 · 현재 슬롯 역할: <strong style="color:var(--gold)">${currentRoleCode}</strong>
+    💡 정렬: ${upMatch ? '<b>참석자</b> → ' : ''}<b>이 자리를 주 포지션으로 하는 선수</b> → OVR(최하위).
+    역할 뱃지를 클릭하면 그 역할로 배치돼요. ⭐ = 선수가 선택해 둔 역할 · 현재 슬롯 역할: <strong style="color:var(--gold)">${currentRoleCode}</strong>
   </div>`;
 
   if (available.length === 0) {
@@ -5847,15 +5846,18 @@ function openAssignModal(slotIndex, roleName) {
       const bestRole = sortedRoles[0];
       const attStatus = upMatch ? playerAttendStatus(p, upMatch) : null;
       const attRank = upMatch ? attendRankForPlayer(p, upMatch) : 2;
-      // 희망 역할 = 선수 탭에서 '선택해 둔' 역할 중, 이 자리와 같은 그룹이 있으면 우선(0), 없으면(1)
-      const prefers = !!slotGroup && (p.positions || []).some(rc => posGroup(rc) === slotGroup);
-      const prefRank = prefers ? 0 : 1;
-      return { p, ovrsByRole, sortedRoles, bestOvr, bestRole, attStatus, attRank, prefRank };
+      // 이 역할을 '주로 하는 정도' = 선수가 선택해 둔 역할 중 이 자리 그룹의 비중(0~1).
+      //  비중이 높을수록(=이 포지션이 주 포지션일수록) 위로. OVR은 최하위(동률일 때만).
+      //  예) 윙어만 등록(1.0) > 윙어 2/공격 5(0.4) > 윙어 1/수비 6(0.17) > 미등록(0)
+      const posArr = p.positions || [];
+      const inGroup = slotGroup ? posArr.filter(rc => posGroup(rc) === slotGroup).length : 0;
+      const prefScore = posArr.length ? inGroup / posArr.length : 0;
+      return { p, ovrsByRole, sortedRoles, bestOvr, bestRole, attStatus, attRank, prefScore };
     });
-    // 정렬 우선순위: ① 참석여부 → ② 이 역할을 하려는 사람(같은 그룹) → ③ 이 지역 OVR
+    // 정렬 우선순위: ① 참석여부 → ② 이 역할을 주로 하는 정도 → ③(최하위) OVR
     withOvrs.sort((a,b) =>
       (upMatch ? (a.attRank - b.attRank) : 0) ||
-      (a.prefRank - b.prefRank) ||
+      (b.prefScore - a.prefScore) ||
       (b.bestOvr - a.bestOvr)
     );
 
