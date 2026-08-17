@@ -791,6 +791,23 @@
   .peer-btn.up:active { transform: scale(0.9); background: rgba(34,197,94,0.28); }
   .peer-btn.down { color: #f87171; } .peer-btn.down:hover { background: rgba(248,113,113,0.16); border-color: #f87171; }
   .peer-btn.down:active { transform: scale(0.9); background: rgba(248,113,113,0.28); }
+  /* 팀원 평가: 카테고리 아코디언 → 세부 능력치 */
+  .peer-secs { display: flex; flex-direction: column; gap: 6px; }
+  .peer-sec-head { width: 100%; display: flex; align-items: center; gap: 9px; background: var(--bg-3); border: 1px solid var(--border-2); border-radius: 9px; padding: 10px 12px; cursor: pointer; text-align: left; }
+  .peer-sec-head:hover { border-color: rgba(56,189,248,0.5); }
+  .peer-sec-caret { color: var(--text-3); font-size: 12px; transition: transform .15s; }
+  .peer-sec.open .peer-sec-caret { transform: rotate(90deg); }
+  .peer-sec-label { flex: 1; font-family: var(--font-brand); font-weight: 700; font-size: 13px; color: var(--text); }
+  .peer-sec-avg { font-family: var(--font-brand); font-weight: 700; font-size: 17px; }
+  .peer-sec-body { display: none; padding: 8px 4px 4px; grid-template-columns: 1fr 1fr; gap: 6px 16px; }
+  .peer-sec.open .peer-sec-body { display: grid; }
+  .peer-stat-row { display: grid; grid-template-columns: 88px 1fr 30px; align-items: center; gap: 8px; }
+  .peer-stat-row.ro { grid-template-columns: 1fr 30px; }
+  .peer-stat-name { min-width: 0; font-size: 12px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .peer-neg { font-size: 9px; color: #f87171; }
+  .peer-slider { width: 100%; accent-color: #38bdf8; }
+  .peer-slider.inv { accent-color: #f87171; }
+  .peer-stat-val { font-family: var(--font-brand); font-weight: 700; font-size: 15px; min-width: 26px; text-align: right; }
 
   .live-ovr-panel { background: var(--bg-2); border: 1px solid var(--border-2); border-radius: 8px; padding: 10px; margin-top: 14px; }
   .live-ovr-panel h4 { margin-top: 0; margin-bottom: 8px; }
@@ -2075,11 +2092,15 @@
     .player-radar-wrap { width: 210px; }
     .player-radar-ovr { font-size: 40px; }
     .stat-grid { grid-template-columns: 1fr; }
-    /* 팀원 평가 모바일 — 한 줄에 한 카테고리, 버튼 크게 */
-    .peer-cats { grid-template-columns: 1fr; gap: 6px; }
-    .peer-cat-name { font-size: 13px; }
-    .peer-cat-val { font-size: 20px; }
-    .peer-btn { width: 42px; height: 38px; font-size: 15px; }
+    /* 팀원 평가 모바일 — 세부 능력치 1열, 슬라이더는 이름 밑으로 */
+    .peer-sec.open .peer-sec-body { grid-template-columns: 1fr; gap: 10px; }
+    .peer-sec-head { padding: 12px; }
+    .peer-sec-label { font-size: 14px; }
+    .peer-stat-row { grid-template-columns: 1fr auto; grid-template-areas: "name val" "slider slider"; gap: 3px 8px; }
+    .peer-stat-row.ro { grid-template-columns: 1fr auto; grid-template-areas: "name val"; }
+    .peer-stat-name { grid-area: name; font-size: 13px; }
+    .peer-stat-val { grid-area: val; font-size: 16px; }
+    .peer-slider { grid-area: slider; height: 26px; }
     .peer-step input { width: 60px; padding: 7px 8px; }
 
     /* 팀 능력치 · 팀컬러 모바일 */
@@ -3217,10 +3238,17 @@ function normalizeStore(s) {
     if (p.downvotes && !Array.isArray(p.downvotes)) p.downvotes = Object.values(p.downvotes);
     if (!p.upvotes) p.upvotes = [];
     if (!p.downvotes) p.downvotes = [];
-    if (!p.peerScores || typeof p.peerScores !== 'object' || Array.isArray(p.peerScores)) {
-      const oldVals = Object.values(p.peerRatings || {}).filter(v => typeof v === 'number');
-      const base = typeof p.peerScore === 'number' ? p.peerScore : (oldVals.length ? Math.round(oldVals.reduce((a,b)=>a+b,0)/oldVals.length) : 70);
-      p.peerScores = {}; for (let sid = 1; sid <= 7; sid++) p.peerScores[sid] = base;
+    if (!p.peerStats || typeof p.peerStats !== 'object' || Array.isArray(p.peerStats)) {
+      p.peerStats = {};
+      STAT_KEYS.forEach(k => {
+        let base = STAT_DEFAULT(k);
+        if (!STATS[k].invert) {
+          const sid = STATS[k].section;
+          if (p.peerScores && typeof p.peerScores[sid] === 'number') base = p.peerScores[sid];
+          else if (typeof p.peerScore === 'number') base = p.peerScore;
+        }
+        p.peerStats[k] = base;
+      });
     }
   });
   // Players positions arrays
@@ -4463,10 +4491,17 @@ function migrateData() {
     STAT_KEYS.forEach(k => {
       if (typeof s[k] !== 'number') s[k] = STAT_DEFAULT(k);
     });
-    if (!p.peerScores || typeof p.peerScores !== 'object' || Array.isArray(p.peerScores)) {
-      const oldVals = Object.values(p.peerRatings || {}).filter(v => typeof v === 'number');
-      const base = typeof p.peerScore === 'number' ? p.peerScore : (oldVals.length ? Math.round(oldVals.reduce((a,b)=>a+b,0)/oldVals.length) : 70);
-      p.peerScores = {}; for (let sid = 1; sid <= 7; sid++) p.peerScores[sid] = base;
+    if (!p.peerStats || typeof p.peerStats !== 'object' || Array.isArray(p.peerStats)) {
+      p.peerStats = {};
+      STAT_KEYS.forEach(k => {
+        let base = STAT_DEFAULT(k);
+        if (!STATS[k].invert) {
+          const sid = STATS[k].section;
+          if (p.peerScores && typeof p.peerScores[sid] === 'number') base = p.peerScores[sid];
+          else if (typeof p.peerScore === 'number') base = p.peerScore;
+        }
+        p.peerStats[k] = base;
+      });
     }
   });
   store.squads.forEach(s => ensureSquadSlots(s));
@@ -5145,13 +5180,20 @@ function updateLiveOvr() {
   }).join('');
 }
 
-let peerStep = 1; // 올리고 내리는 단위 (자유 설정)
-function peerScoreOf(p, sid) { const m = (p && p.peerScores) || {}; return typeof m[sid] === 'number' ? m[sid] : 70; }
-function adjustPeerScore(playerId, sid, delta) {
+let peerStep = 1;                 // 올리고 내리는 단위 (자유 설정)
+let _peerOpen = new Set();        // 펼친 카테고리(섹션) 집합
+function defaultPeerStats() { const o = {}; STAT_KEYS.forEach(k => o[k] = STAT_DEFAULT(k)); return o; }
+function peerStatOf(p, k) { const m = (p && p.peerStats) || {}; return typeof m[k] === 'number' ? m[k] : STAT_DEFAULT(k); }
+function peerCatAvg(p, sid) {
+  const keys = STAT_KEYS.filter(k => STATS[k].section === sid);
+  const q = keys.map(k => statQualityVal(k, peerStatOf(p, k)));
+  return q.length ? Math.round(q.reduce((a,b)=>a+b,0)/q.length) : 0;
+}
+function setPeerStat(playerId, k, val) {
   const p = getPlayer(playerId); if (!p) return;
   if (!canPeerRate(p)) { toast('본인은 조정할 수 없어요'); return; }
-  if (!p.peerScores || typeof p.peerScores !== 'object' || Array.isArray(p.peerScores)) p.peerScores = {};
-  p.peerScores[sid] = Math.max(0, Math.min(100, peerScoreOf(p, sid) + delta));
+  if (!p.peerStats || typeof p.peerStats !== 'object' || Array.isArray(p.peerStats)) p.peerStats = {};
+  p.peerStats[k] = Math.max(0, Math.min(100, Math.round(val)));
   saveState();
   renderPeerPanel(p);
   if (currentTab === 'players') renderPlayersTable();
@@ -5164,19 +5206,45 @@ function renderPeerPanel(p) {
   const u = currentUser();
   const isSelf = !!(u && p.userId === u.id);
   const canAdj = !!u && !isSelf;
-  const stepCtrl = canAdj ? `<label class="peer-step">조정 단위 <input type="number" id="peerStep" min="1" max="50" value="${peerStep}"></label>` : '';
+  const stepCtrl = canAdj ? `<label class="peer-step">슬라이더 단위 <input type="number" id="peerStep" min="1" max="50" value="${peerStep}"></label>` : '';
   const note = !u ? '<div class="peer-selfnote">로그인하면 조정할 수 있어요</div>'
     : (isSelf ? '<div class="peer-selfnote">🙅 본인 프로필이라 조정할 수 없어요</div>' : '');
-  const rows = SECTIONS.map(s => {
-    const v = peerScoreOf(p, s.id);
-    const btns = canAdj ? `<button class="peer-btn down" data-pd="${s.id}" title="내리기">▼</button><button class="peer-btn up" data-pu="${s.id}" title="올리기">▲</button>` : '';
-    return `<div class="peer-cat-row"><div class="peer-cat-name">${s.label}</div><div class="peer-cat-val" style="color:${traitValColor(v)}">${v}</div>${btns}</div>`;
+  const secs = SECTIONS.map(s => {
+    const cavg = peerCatAvg(p, s.id);
+    const open = _peerOpen.has(s.id);
+    const keys = STAT_KEYS.filter(k => STATS[k].section === s.id);
+    const statRows = keys.map(k => {
+      const v = peerStatOf(p, k);
+      const col = traitValColor(statQualityVal(k, v));
+      const nm = `<div class="peer-stat-name">${STATS[k].name}${STATS[k].invert?' <span class="peer-neg">↓감점</span>':''}</div>`;
+      if (!canAdj) return `<div class="peer-stat-row ro">${nm}<div class="peer-stat-val" style="color:${col}">${v}</div></div>`;
+      return `<div class="peer-stat-row">${nm}<input type="range" class="peer-slider${STATS[k].invert?' inv':''}" min="0" max="100" step="${peerStep}" value="${v}" data-ps="${k}"><div class="peer-stat-val" id="pv_${k}" style="color:${col}">${v}</div></div>`;
+    }).join('');
+    return `<div class="peer-sec ${open?'open':''}">
+      <button class="peer-sec-head" data-sec="${s.id}">
+        <span class="peer-sec-caret">▸</span>
+        <span class="peer-sec-label">${s.label}</span>
+        <span class="peer-sec-avg" style="color:${traitValColor(cavg)}">${cavg}</span>
+      </button>
+      <div class="peer-sec-body">${statRows}</div>
+    </div>`;
   }).join('');
-  el.innerHTML = `<div class="peer-head">🤝 팀원 평가 능력치 <span class="peer-sub">팀원이 익명으로 카테고리별 조정 · 본인 제외</span>${stepCtrl}</div>${note}<div class="peer-cats">${rows}</div>`;
+  el.innerHTML = `<div class="peer-head">🤝 팀원 평가 능력치 <span class="peer-sub">카테고리를 눌러 세부 능력치를 슬라이더로 조정 · 익명 · 본인 제외</span>${stepCtrl}</div>${note}<div class="peer-secs">${secs}</div>`;
   const stepInput = document.getElementById('peerStep');
-  if (stepInput) stepInput.addEventListener('input', e => { peerStep = Math.max(1, Math.min(50, parseInt(e.target.value) || 1)); });
-  el.querySelectorAll('[data-pu]').forEach(b => b.addEventListener('click', () => adjustPeerScore(p.id, +b.dataset.pu, peerStep)));
-  el.querySelectorAll('[data-pd]').forEach(b => b.addEventListener('click', () => adjustPeerScore(p.id, +b.dataset.pd, -peerStep)));
+  if (stepInput) stepInput.addEventListener('change', e => { peerStep = Math.max(1, Math.min(50, parseInt(e.target.value) || 1)); renderPeerPanel(p); });
+  el.querySelectorAll('.peer-sec-head').forEach(b => b.addEventListener('click', () => {
+    const sid = +b.dataset.sec;
+    if (_peerOpen.has(sid)) _peerOpen.delete(sid); else _peerOpen.add(sid);
+    renderPeerPanel(p);
+  }));
+  el.querySelectorAll('.peer-slider').forEach(sl => {
+    sl.addEventListener('input', e => {
+      const k = e.target.dataset.ps, v = +e.target.value;
+      const pv = document.getElementById('pv_' + k);
+      if (pv) { pv.textContent = v; pv.style.color = traitValColor(statQualityVal(k, v)); }
+    });
+    sl.addEventListener('change', e => setPeerStat(p.id, e.target.dataset.ps, +e.target.value));
+  });
 }
 function openPlayerModal(playerId) {
   editingPlayerId = playerId || null;
@@ -5310,7 +5378,7 @@ function savePlayerFromModal() {
       positions: Array.from(selectedRoles),
       stats,
       ratings: {},
-      peerScores: { 1:70, 2:70, 3:70, 4:70, 5:70, 6:70, 7:70 },
+      peerStats: defaultPeerStats(),
     };
     // If a member is adding without a player profile yet, auto-link
     if (u && !isAdmin() && !u.playerId) {
