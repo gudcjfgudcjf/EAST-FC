@@ -299,7 +299,7 @@
     z-index: 1;
     pointer-events: none;
   }
-  .zone-line.attack { top: 35%; }
+  .zone-line.attack { top: 32%; }
   .zone-line.midfield { top: 65%; }
   .zone-label {
     position: absolute;
@@ -342,6 +342,7 @@
     font-size: 9px; padding: 1px 5px; border-radius: 8px;
     border: 1px solid var(--gold-warm); font-weight: 700; white-space: nowrap;
   }
+  .slot-pos { font-size: 12px; font-weight: 800; letter-spacing: -0.3px; line-height: 1; }
   /* 좌/중앙/우 구분 격자선 (은은하게) */
   .vgrid-line { position: absolute; top: 0; bottom: 0; width: 0; border-left: 1px dashed rgba(255,255,255,0.09); pointer-events: none; z-index: 0; }
   .slot-circle.has-photo { color: transparent; background-color: #000; }
@@ -4469,7 +4470,7 @@ const FORMATIONS = {
   '4-3-3': [
     { label: 'GK', x: 50, y: 92 },
     { label: 'LB', x: 15, y: 75 }, { label: 'CB', x: 38, y: 78 }, { label: 'CB', x: 62, y: 78 }, { label: 'RB', x: 85, y: 75 },
-    { label: 'CM', x: 30, y: 55 }, { label: 'CDM', x: 50, y: 60 }, { label: 'CM', x: 70, y: 55 },
+    { label: 'CM', x: 38, y: 55 }, { label: 'CDM', x: 50, y: 60 }, { label: 'CM', x: 62, y: 55 },
     { label: 'LW', x: 18, y: 25 }, { label: 'ST', x: 50, y: 18 }, { label: 'RW', x: 82, y: 25 },
   ],
   '4-2-3-1': [
@@ -4488,13 +4489,13 @@ const FORMATIONS = {
   '5-3-2': [
     { label: 'GK', x: 50, y: 92 },
     { label: 'LWB', x: 12, y: 72 }, { label: 'CB', x: 32, y: 78 }, { label: 'CB', x: 50, y: 80 }, { label: 'CB', x: 68, y: 78 }, { label: 'RWB', x: 88, y: 72 },
-    { label: 'CM', x: 30, y: 50 }, { label: 'CM', x: 50, y: 53 }, { label: 'CM', x: 70, y: 50 },
+    { label: 'CM', x: 38, y: 50 }, { label: 'CM', x: 50, y: 53 }, { label: 'CM', x: 62, y: 50 },
     { label: 'ST', x: 38, y: 22 }, { label: 'ST', x: 62, y: 22 },
   ],
   '4-5-1': [
     { label: 'GK', x: 50, y: 92 },
     { label: 'LB', x: 15, y: 75 }, { label: 'CB', x: 38, y: 78 }, { label: 'CB', x: 62, y: 78 }, { label: 'RB', x: 85, y: 75 },
-    { label: 'LM', x: 12, y: 50 }, { label: 'CM', x: 32, y: 55 }, { label: 'CM', x: 50, y: 58 }, { label: 'CM', x: 68, y: 55 }, { label: 'RM', x: 88, y: 50 },
+    { label: 'LM', x: 12, y: 50 }, { label: 'CM', x: 38, y: 55 }, { label: 'CM', x: 50, y: 58 }, { label: 'CM', x: 62, y: 55 }, { label: 'RM', x: 88, y: 50 },
     { label: 'ST', x: 50, y: 18 },
   ],
   '3-4-3': [
@@ -4948,21 +4949,42 @@ function sideZoneHys(prev, x) {
   if (x > 73) return 'R';
   return 'C';
 }
-// 그리드 위치(칸) → 역할 자동 배정 (col: L/C/R · y: 0위=공격 ~ 100아래=수비)
+// 그리드 위치(칸) → 역할 자동 배정. 경계값은 화면의 점선(공격선 32% · 수비선 65%)과 정확히 일치시킴.
+// (col: L/C/R · y: 0위=공격 ~ 100아래=수비)
 function zoneRoleByCol(col, y) {
   if (col === 'C') {
     if (y > 84) return 'GK';
-    if (y > 66) return 'CB';
+    if (y > 65) return 'CB';    // 수비선(65%) 아래
     if (y > 55) return 'CDM';
-    if (y > 43) return 'CM';
-    if (y > 30) return 'CAM';
-    return 'ST';
+    if (y > 44) return 'CM';
+    if (y > 32) return 'CAM';   // 공격선(32%)~미드
+    return 'ST';                // 공격선 위
   }
-  if (y > 60) return 'FB';   // 측면 수비
-  if (y > 42) return 'WM';   // 측면 미드
-  return 'WNG';              // 윙어
+  if (y > 65) return 'FB';    // 수비선 아래 → 풀백(LB/RB)
+  if (y > 48) return 'WB';    // 수비선~미드 → 윙백(LWB/RWB)  ← 미드라인에 가까우면 LWB
+  if (y > 32) return 'WM';    // 미드 → 측면 MF(LM/RM)
+  return 'WNG';               // 공격선 위 → 윙어(LW/RW)      ← 공격선 넘어야 LW
 }
 function zoneRole(x, y) { return zoneRoleByCol(sideZone(x), y); }
+// 각 역할이 속한 '존 계열'. 세부 변형(IWB·IW·DLP 등)을 대표 존으로 묶어, 같은 계열 안에서는 수동 선택을 유지.
+const ROLE_ZONE = {
+  GK:'GK', SK:'GK',
+  CB:'CB', BPD:'CB', SW:'CB',
+  FB:'FB',
+  WB:'WB', IWB:'WB',
+  CDM:'CDM', ANC:'CDM',
+  DLP:'CM', CM:'CM', BBM:'CM', MEZ:'CM',
+  WM:'WM',
+  CAM:'CAM', REG:'CAM', SS:'CAM',
+  WNG:'WNG', IW:'WNG', IF:'WNG',
+  ST:'ST', POA:'ST', CF:'ST', TGT:'ST', F9:'ST', DLF:'ST',
+};
+function canonZone(role) { return ROLE_ZONE[role] || role; }
+// 화면에 실제로 보여줄 역할: 위치가 가리키는 계열과 저장된 역할의 계열이 다르면 위치를 우선(=선과 항상 일치).
+function effRole(slot) {
+  const pf = zoneRole(slot.x, slot.y);
+  return (canonZone(slot.role) === pf) ? slot.role : pf;
+}
 function tagForSideRole(side, role) {
   if (side === 'L' || side === 'R') {
     if (role === 'FB') return side + 'B';                          // LB / RB
@@ -4972,7 +4994,7 @@ function tagForSideRole(side, role) {
   }
   return role;   // 중앙 · 미드필더 등은 역할 그대로
 }
-function slotTag(slot) { return tagForSideRole(sideZone(slot.x), slot.role); }
+function slotTag(slot) { return tagForSideRole(sideZone(slot.x), effRole(slot)); }
 function renderField() {
   const field = $('#field');
   field.querySelectorAll('.slot').forEach(el => el.remove());
@@ -4981,33 +5003,39 @@ function renderField() {
   const slots = ensureSquadSlots(squad);
   slots.forEach((slot, i) => {
     const el = document.createElement('div');
-    const cat = ROLES[slot.role]?.cat || 'MF';
+    // 표시·능력치 모두 '유효 역할'(위치와 일치하도록 보정된 역할)로 통일 → 라벨/뱃지/색 뒤죽박죽 방지
+    const er = effRole(slot);
+    const cat = ROLES[er]?.cat || 'MF';
     el.className = 'slot cat-' + cat;
     el.style.left = slot.x + '%';
     el.style.top = slot.y + '%';
     el.dataset.slotIndex = i;
     const assignedId = squad.assignments[i];
     const player = assignedId ? getPlayer(assignedId) : null;
-    const roleName = ROLES[slot.role]?.name || slot.role;
+    const roleName = ROLES[er]?.name || er;
+    const tag = tagForSideRole(sideZone(slot.x), er);
     if (player) el.classList.add('filled');
-    let sub = '';
-    if (player) {
-      const footShort = player.foot === 'L' ? 'L' : player.foot === 'B' ? 'B' : 'R';
-      const ovr = ovrForRole(player, slot.role);
-      sub = `<div class="slot-sub"><span class="foot-badge">${footShort}</span> <span class="ovr-mini">${ovr}</span></div>`;
-    } else {
-      sub = `<div class="slot-sub" style="color:var(--text)">${escapeHtml(roleName)}</div>`;
-    }
     const hasPhoto = !!(player && player.photo);
     const circleStyle = hasPhoto ? ` style="background-image:url('${player.photo}'); background-size:cover; background-position:center;"` : '';
-    const circleInner = hasPhoto ? '' : (player ? (player.number || '?') : slot.label);
-    const nameLabel = player
-      ? `${player.number ? `<span class="slot-no">NO.${player.number}</span> ` : ''}${escapeHtml(player.name)}`
-      : escapeHtml(slot.label);
+    let sub = '';
+    let circleInner, nameLabel, badge;
+    if (player) {
+      const footShort = player.foot === 'L' ? 'L' : player.foot === 'B' ? 'B' : 'R';
+      const ovr = ovrForRole(player, er);
+      sub = `<div class="slot-sub"><span class="foot-badge">${footShort}</span> <span class="ovr-mini">${ovr}</span></div>`;
+      circleInner = hasPhoto ? '' : (player.number || '?');
+      nameLabel = `${player.number ? `<span class="slot-no">NO.${player.number}</span> ` : ''}${escapeHtml(player.name)}`;
+      badge = `<span class="slot-role-tag">${tag}</span>`;
+    } else {
+      // 빈 슬롯: 가운데=포지션 태그, 아래=역할 이름 (모두 위치 기준으로 일치)
+      circleInner = `<span class="slot-pos">${tag}</span>`;
+      nameLabel = escapeHtml(roleName);
+      badge = '';
+    }
     el.innerHTML = `
       <div class="slot-circle${hasPhoto ? ' has-photo' : ''}"${circleStyle}>
         ${circleInner}
-        <span class="slot-role-tag">${slotTag(slot)}</span>
+        ${badge}
       </div>
       <div class="slot-label">${nameLabel}</div>
       ${sub}
@@ -5051,7 +5079,7 @@ function assignPlayerToSlot(slotIndex, playerId) {
 function attachSlotDrag(slotEl, slotIndex) {
   const CLICK_THRESHOLD = 5;
   let startX = 0, startY = 0, moved = false, fieldRect = null, pointerId = null;
-  let origRole = null, origZR = null;
+  let origRole = null;
   function onDown(e) {
     if (e.button != null && e.button !== 0) return;
     if (!canManageSquad()) {
@@ -5063,11 +5091,14 @@ function attachSlotDrag(slotEl, slotIndex) {
     const _sq = getCurrentSquad();
     const s0 = _sq && _sq.slots[slotIndex];
     origRole = s0 ? s0.role : 'CM';
-    origZR = s0 ? zoneRole(s0.x, s0.y) : 'CM';
     slotEl.dataset.side = sideZone(s0 ? s0.x : 50);
     slotEl.setPointerCapture(pointerId);
     hideTooltip();
     e.preventDefault();
+  }
+  function setSlotCat(role) {
+    slotEl.classList.remove('cat-GK','cat-DF','cat-MF','cat-FW');
+    slotEl.classList.add('cat-' + (ROLES[role]?.cat || 'MF'));
   }
   function onMove(e) {
     if (pointerId == null || e.pointerId !== pointerId) return;
@@ -5080,15 +5111,16 @@ function attachSlotDrag(slotEl, slotIndex) {
       x = Math.max(2, Math.min(98, x)); y = Math.max(2, Math.min(98, y));
       slotEl.style.left = x + '%';
       slotEl.style.top = y + '%';
-      // 그리드 위치에 따라 역할/태그 실시간 갱신 (히스테리시스로 확확 안 바뀜)
-      const _tag = slotEl.querySelector('.slot-role-tag');
-      if (_tag) {
-        const col = sideZoneHys(slotEl.dataset.side || sideZone(x), x);
-        slotEl.dataset.side = col;
-        const curZR = zoneRoleByCol(col, y);
-        const roleShow = (curZR !== origZR) ? curZR : origRole;  // 존 바뀌면 새 역할, 아니면 원래(수동) 역할 유지
-        _tag.textContent = tagForSideRole(col, roleShow);
-      }
+      // 위치에 따라 역할/태그/색을 실시간 갱신 (좌우는 히스테리시스로 확확 안 바뀜)
+      const col = sideZoneHys(slotEl.dataset.side || sideZone(x), x);
+      slotEl.dataset.side = col;
+      const posFam = zoneRoleByCol(col, y);
+      // 같은 계열이면 원래(수동) 역할 유지, 계열이 바뀌면 위치 역할로
+      const roleShow = (canonZone(origRole) === posFam) ? origRole : posFam;
+      const tag = tagForSideRole(col, roleShow);
+      const tagEl = slotEl.querySelector('.slot-role-tag') || slotEl.querySelector('.slot-pos');
+      if (tagEl) tagEl.textContent = tag;
+      setSlotCat(roleShow);
     }
   }
   function onUp(e) {
@@ -5101,9 +5133,9 @@ function attachSlotDrag(slotEl, slotIndex) {
       if (squad?.slots?.[slotIndex]) {
         squad.slots[slotIndex].x = parseFloat(slotEl.style.left);
         squad.slots[slotIndex].y = parseFloat(slotEl.style.top);
-        // 존(칸)이 바뀌면 역할 자동 조정 (같은 칸이면 수동 세부역할 유지)
-        const newZR = zoneRole(squad.slots[slotIndex].x, squad.slots[slotIndex].y);
-        if (newZR !== origZR) squad.slots[slotIndex].role = newZR;
+        // 위치가 가리키는 계열과 역할 계열이 다르면 위치 역할로 동기화 (같은 계열이면 수동 세부역할 유지)
+        const newFam = zoneRole(squad.slots[slotIndex].x, squad.slots[slotIndex].y);
+        if (canonZone(squad.slots[slotIndex].role) !== newFam) squad.slots[slotIndex].role = newFam;
         saveState();
         renderField(); renderTeamPanel();
       }
