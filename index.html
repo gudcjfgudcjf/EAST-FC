@@ -4451,11 +4451,12 @@ const LABEL_ROLES = {
   CM:  ['CM', 'BBM', 'MEZ', 'DLP'],
   LM:  ['WM', 'WNG', 'IW'],
   RM:  ['WM', 'WNG', 'IW'],
-  CAM: ['CAM', 'REG', 'SS', 'F9'],
-  LAM: ['CAM', 'SS', 'IF', 'IW'],
-  RAM: ['CAM', 'SS', 'IF', 'IW'],
+  CAM: ['CAM', 'REG', 'F9'],
+  LAM: ['CAM', 'IF', 'IW'],
+  RAM: ['CAM', 'IF', 'IW'],
   LW:  ['WNG', 'IW', 'IF'],
   RW:  ['WNG', 'IW', 'IF'],
+  SS:  ['SS', 'F9', 'ST', 'CF'],
   ST:  ['ST', 'POA', 'CF', 'TGT', 'F9', 'DLF'],
 };
 
@@ -4959,7 +4960,8 @@ function zoneRoleByCol(col, y) {
     if (y > 55) return 'CDM';
     if (y > 44) return 'CM';
     if (y > 32) return 'CAM';   // 공격선(32%)~미드
-    return 'ST';                // 공격선 위
+    if (y > 25) return 'SS';    // 최전방 조금 아래(작은 구간) → 섀도우 스트라이커
+    return 'ST';                // 최전방
   }
   if (y > 73) return 'FB';     // 깊은 수비 → 풀백(LB/RB)
   if (y > 65) return 'WB';     // 수비선 바로 아래(가까이) → 윙백(LWB/RWB)
@@ -4977,7 +4979,8 @@ const ROLE_ZONE = {
   CDM:'CDM', ANC:'CDM',
   DLP:'CM', CM:'CM', BBM:'CM', MEZ:'CM',
   WM:'WM',
-  CAM:'CAM', REG:'CAM', SS:'CAM',
+  CAM:'CAM', REG:'CAM',
+  SS:'SS',
   WNG:'WNG', IW:'WNG', IF:'WNG',
   ST:'ST', POA:'ST', CF:'ST', TGT:'ST', F9:'ST', DLF:'ST',
 };
@@ -5813,12 +5816,15 @@ function openAssignModal(slotIndex, roleName) {
       const bestRole = sortedRoles[0];
       const attStatus = upMatch ? playerAttendStatus(p, upMatch) : null;
       const attRank = upMatch ? attendRankForPlayer(p, upMatch) : 2;
-      // 희망 역할: 선수가 등록한 포지션 중 이 지역과 같은 카테고리가 있으면 우선(0), 없으면 1
-      const prefers = (p.positions || []).some(rc => (ROLES[rc]?.cat || 'MF') === slotCat);
-      const prefRank = prefers ? 0 : 1;
+      // 희망 역할 = 선수 탭에서 본인이 '선택해 둔' 역할(positions).
+      //  0 = 이 자리의 역할(예: CB/BPD/SW)을 직접 눌러둠 · 1 = 같은 계열(예: FB/WB 등 수비) 눌러둠 · 2 = 없음
+      const pos = p.positions || [];
+      const hasExact = pos.some(rc => applicable.includes(rc));
+      const hasCat = pos.some(rc => (ROLES[rc]?.cat || 'MF') === slotCat);
+      const prefRank = hasExact ? 0 : (hasCat ? 1 : 2);
       return { p, ovrsByRole, sortedRoles, bestOvr, bestRole, attStatus, attRank, prefRank };
     });
-    // 정렬 우선순위: ① 참석여부 → ② 희망 역할(이 지역 선호) → ③ 이 지역 OVR
+    // 정렬 우선순위: ① 참석여부 → ② 희망 역할(직접 선택) → ③ 이 지역 OVR
     withOvrs.sort((a,b) =>
       (upMatch ? (a.attRank - b.attRank) : 0) ||
       (a.prefRank - b.prefRank) ||
