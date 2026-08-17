@@ -2740,6 +2740,7 @@
       <div class="form-group">
         <label>어떤 능력치를 올릴까요?</label>
         <select id="chemCat" class="chem-cat-select"></select>
+        <div style="font-size:11px; color:var(--text-3); margin-top:6px; line-height:1.5;">같은 멤버 조합으로도 <b style="color:var(--gold-warm)">여러 개 겹쳐서</b> 만들 수 있어요 (예: 공격 +5 · 수비 +4 따로따로). 배치하면 각각 발동돼 합산돼요.</div>
       </div>
       <div class="form-group">
         <label>시너지 보너스 <span id="chemScoreLbl" style="color:var(--gold);font-weight:700">+5</span> <span style="text-transform:none;letter-spacing:0;color:var(--text-3);font-weight:400">OVR</span> · <span id="chemScoreTag"></span></label>
@@ -7028,6 +7029,11 @@ function chemSynergy(l) {
 // 케미가 올리는 능력치 카테고리 ('all'=종합 / 1~7=섹션)
 function chemCat(l) { return (typeof l.cat === 'number' && l.cat >= 1 && l.cat <= 7) ? l.cat : 'all'; }
 function chemCatLabel(cat) { return cat === 'all' ? '💫 종합' : (SECTIONS.find(s => s.id === cat)?.label || '💫 종합'); }
+// 능력치 카테고리별 색 (수비=하늘색 등) + 시너지 색과 혼합
+const SECTION_COLOR = { 1:'#fb923c', 2:'#f43f5e', 3:'#a78bfa', 4:'#38bdf8', 5:'#22c55e', 6:'#facc15', 7:'#2dd4bf', all:'#f4c430' };
+function chemCatColor(cat) { return SECTION_COLOR[cat] || SECTION_COLOR.all; }
+function _hx(h) { h = h.replace('#',''); if (h.length===3) h = h.split('').map(c=>c+c).join(''); return [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)]; }
+function hexMix(a, b, t) { const pa=_hx(a), pb=_hx(b); const m=(i)=>Math.round(pa[i]*t + pb[i]*(1-t)); return `rgb(${m(0)},${m(1)},${m(2)})`; }
 function chemCatShort(cat) { return cat === 'all' ? '💫종합' : (SECTIONS.find(s => s.id === cat)?.emoji || '💫') + (SECTIONS.find(s => s.id === cat)?.label.replace(/^\S+\s/, '') || ''); }
 // 시너지 값 → 라벨
 function chemLabel(syn) {
@@ -7098,7 +7104,8 @@ function renderTeamPanel() {
     const c = g.contrib >= 0 ? '#22c55e' : '#f87171';
     const s = g.contrib > 0 ? '+' : '';
     const title = g.link.note ? escapeHtml(g.link.note) : names.join(' · ');
-    const catBadge = `<span class="tp-link-cat">${escapeHtml(chemCatShort(g.cat))}</span>`;
+    const cc = chemCatColor(g.cat);
+    const catBadge = `<span class="tp-link-cat" style="color:${cc}; background:${cc}1f">${escapeHtml(chemCatShort(g.cat))}</span>`;
     return `<div class="tp-link"><span class="tp-link-names">${title} <span style="color:var(--text-4)">(${g.placedCount}/${g.total})</span></span>${catBadge}<span class="tp-link-val" style="color:${c}">${s}${g.contrib.toFixed(1)}</span></div>`;
   }).join('');
   el.innerHTML = `
@@ -7290,11 +7297,14 @@ function renderChemistry() {
     if (members.length < 2) return '';
     const syn = chemSynergy(l);
     const lab = chemLabel(syn);
+    const cat = chemCat(l);
+    const catCol = chemCatColor(cat);
+    const blended = hexMix(catCol, lab.c, 0.6); // 카테고리 색 60% + 시너지 색 40%
     const canDel = isAdmin() || (l.createdBy && u && l.createdBy === u.id);
     const chips = members.map(p => `<span class="chem-p"><span class="chem-num">${p.number||'?'}</span>${escapeHtml(p.name)}</span>`).join('');
-    return `<div class="chem-card" style="border-left-color:${lab.c}">
+    return `<div class="chem-card" style="border-left-color:${blended}; background:linear-gradient(90deg, ${catCol}12, var(--bg-2) 60%)">
       <div class="chem-main">
-        <div class="chem-name">${l.note ? escapeHtml(l.note) + ' ' : ''}<span class="chem-mcount">${members.length}명</span> <span class="chem-catchip">${escapeHtml(chemCatLabel(chemCat(l)))}</span></div>
+        <div class="chem-name" style="color:${blended}">${l.note ? escapeHtml(l.note) + ' ' : ''}<span class="chem-mcount">${members.length}명</span> <span class="chem-catchip" style="color:${catCol}; border-color:${catCol}66; background:${catCol}1f">${escapeHtml(chemCatLabel(cat))}</span></div>
         <div class="chem-pair">${chips}</div>
       </div>
       <div class="chem-right">
@@ -7361,14 +7371,11 @@ function saveChemFromModal() {
   const cat = catRaw === 'all' ? 'all' : (parseInt(catRaw) >= 1 && parseInt(catRaw) <= 7 ? parseInt(catRaw) : 'all');
   if (members.length < 2) { alert('2명 이상의 선수를 선택하세요'); return; }
   if (!Array.isArray(store.chemistry)) store.chemistry = [];
-  const dup = findChemSet(members);
   if (editingChemId) {
     const l = chemistryLinks().find(x => x.id === editingChemId);
     if (l) { l.members = members; delete l.a; delete l.b; delete l.score; l.synergy = synergy; l.cat = cat; l.note = note; l.updatedBy = u.id; }
-  } else if (dup) {
-    dup.members = members; delete dup.a; delete dup.b; delete dup.score; dup.synergy = synergy; dup.cat = cat; dup.note = note; dup.updatedBy = u.id;
-    toast('이미 있는 조합이라 케미를 업데이트했어요');
   } else {
+    // 같은 멤버 조합도 중복 허용 → 여러 시너지를 겹쳐서 쌓을 수 있음
     store.chemistry.push({ id: uid(), members, synergy, cat, note, createdBy: u.id, createdAt: Date.now() });
   }
   saveState();
