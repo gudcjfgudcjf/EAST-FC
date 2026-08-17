@@ -1539,6 +1539,29 @@
   .guide-desc { font-size: 13px; color: var(--text-2); line-height: 1.6; }
   .guide-keys { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
   .guide-key { font-size: 10px; font-weight: 700; color: var(--text-3); background: var(--bg-3); border: 1px solid var(--border-2); border-radius: 20px; padding: 2px 8px; }
+  .guide-card { cursor: pointer; transition: transform .12s, border-color .12s, box-shadow .12s; }
+  .guide-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.45); }
+  .guide-play { margin-left: auto; font-size: 11px; font-weight: 700; white-space: nowrap; opacity: .9; }
+
+  /* ==================== 역할 움직임 전술판 ==================== */
+  .tactic-modal { max-width: 440px; }
+  .tactic-board { display: flex; justify-content: center; margin-bottom: 10px; }
+  .tac-svg { height: 54vh; max-height: 560px; width: auto; max-width: 100%; display: block; border-radius: 12px; box-shadow: 0 8px 28px rgba(0,0,0,0.6); }
+  .tac-arrow { stroke: rgba(244,63,94,0.45); stroke-width: 1.3; fill: none; stroke-dasharray: 3 2.5; }
+  .tac-arrow.active { stroke: #f43f5e; stroke-width: 2; animation: tacDash 0.8s linear infinite; }
+  @keyframes tacDash { to { stroke-dashoffset: -11; } }
+  .tac-stop circle { fill: rgba(0,0,0,0.55); stroke: rgba(255,255,255,0.55); stroke-width: 0.5; }
+  .tac-stop text { fill: #fff; font-weight: 700; font-family: var(--font-brand); }
+  .tac-pl-ring { opacity: .35; transform-box: fill-box; transform-origin: center; animation: tacPulse 1.5s ease-in-out infinite; }
+  @keyframes tacPulse { 0%,100% { transform: scale(0.7); opacity: .5; } 50% { transform: scale(1.25); opacity: .12; } }
+  .tac-pl-t { fill: #0a0a0a; font-weight: 700; font-family: var(--font-brand); }
+  .tactic-caption { text-align: center; font-size: 14px; color: var(--text); font-weight: 600; min-height: 22px; margin-bottom: 8px; line-height: 1.4; }
+  .tactic-caption .tc-step { display: inline-block; font-family: var(--font-brand); font-size: 11px; font-weight: 700; color: #0a0a0a; background: var(--gold); border-radius: 5px; padding: 1px 7px; margin-right: 6px; vertical-align: middle; }
+  .tactic-dots { display: flex; justify-content: center; gap: 7px; margin-bottom: 12px; }
+  .tac-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border-2); transition: all .2s; }
+  .tac-dot.on { background: var(--gold); transform: scale(1.35); }
+  .tactic-controls { justify-content: center; }
+  .tactic-controls button { min-width: 96px; }
   /* 선수 표: 시너지 셀 */
   .syn-cell { display: flex; flex-wrap: wrap; gap: 3px; justify-content: center; max-width: 130px; }
   .syn-chip { font-size: 10px; font-weight: 700; border: 1px solid; border-radius: 20px; padding: 1px 6px; white-space: nowrap; background: rgba(0,0,0,0.25); }
@@ -2028,6 +2051,11 @@
     .tp-ovr { font-size: 34px; }
     /* 역할 가이드 모바일 */
     .guide-grid { grid-template-columns: 1fr; }
+    /* 전술판 모바일 */
+    .tac-svg { height: 52vh; }
+    .tactic-caption { font-size: 13px; }
+    .tactic-controls { flex-wrap: wrap; gap: 6px; }
+    .tactic-controls button { min-width: 0; flex: 1; }
     .chem-card { flex-wrap: wrap; gap: 8px; }
     .chem-main { flex-basis: 100%; }
     .chem-right { min-width: 0; margin-left: auto; text-align: right; display: flex; align-items: baseline; gap: 6px; }
@@ -2609,6 +2637,21 @@
       <div id="guideContent"></div>
     </div>
   </section>
+
+  <!-- ============ 역할 움직임 전술판 모달 ============ -->
+  <div class="modal-overlay" id="tacticModal">
+    <div class="modal tactic-modal">
+      <h3 id="tacticTitle">역할 움직임</h3>
+      <div class="tactic-board" id="tacticBoard"></div>
+      <div class="tactic-caption" id="tacticCaption"></div>
+      <div class="tactic-dots" id="tacticDots"></div>
+      <div class="modal-footer tactic-controls">
+        <button class="btn-cancel" id="tacReplay">↺ 처음부터</button>
+        <button class="btn-cancel" id="tacToggle">⏸ 일시정지</button>
+        <button class="btn-primary" id="tacClose">닫기</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ============ 팀컬러 (케미) VIEW ============ -->
   <section class="view" id="view-chem">
@@ -3872,6 +3915,36 @@ const ROLE_GUIDE = {
   IF:  '측면에서 안쪽으로 좁혀 득점에 집중하는 공격수. 드리블 돌파 후 직접 슈팅으로 골을 노린다.',
   WNG: '측면을 폭넓게 쓰는 돌파형 공격수. 빠른 스피드와 드리블로 수비를 제치고 크로스·컷백으로 기회를 창출한다.',
   IW:  '반대발 측면 공격수. 측면에서 중앙으로 접어 들어와 감아차기 슈팅과 침투로 직접 득점을 노린다.',
+};
+// 역할별 움직임 경로: [x(0~100 좌우), y(0~100 위=공격), 설명]  (위쪽이 상대 골문)
+const ROLE_MOVE = {
+  GK:  [[50,90,'골문 앞 기본 위치'],[50,82,'수비 뒤 공간 커버 (스위핑)'],[36,86,'측면으로 벌려 패스 각 형성'],[50,90,'세이브 후 원위치']],
+  SK:  [[50,86,'평소보다 높게 전진'],[50,74,'수비 뒤 공간 청소'],[38,82,'풀백에게 짧은 빌드업'],[64,80,'롱패스로 전환']],
+  CB:  [[42,78,'파트너와 간격 유지'],[42,66,'전진하는 공격수 대인 추적'],[50,74,'커버 위치로 좁히기'],[42,78,'수비 라인 복귀']],
+  BPD: [[42,76,'수비 위치에서 볼 소유'],[42,62,'압박 벗어나 전진'],[58,56,'전진 패스 배급'],[42,76,'복귀']],
+  SW:  [[50,82,'최종 수비 라인 뒤'],[38,72,'배후 공간 커버'],[60,76,'인터셉트 후 전개'],[50,82,'원위치']],
+  FB:  [[80,72,'측면 수비 위치'],[80,80,'상대 윙어 대인 방어'],[82,46,'오버래핑 전진'],[82,32,'크로스 올리기'],[80,72,'복귀']],
+  WB:  [[82,66,'측면 대기'],[84,38,'측면 폭넓게 전진'],[78,22,'크로스·컷백'],[82,66,'빠른 복귀']],
+  IWB: [[80,70,'측면 수비'],[60,58,'안쪽(하프스페이스)로 좁히기'],[54,54,'중원 빌드업 가담'],[80,70,'복귀']],
+  CDM: [[50,62,'수비라인 앞 보호'],[40,66,'공간 커버·차단'],[58,56,'볼 회수 후 배급'],[50,62,'위치 유지']],
+  DLP: [[50,64,'후방 깊은 위치'],[40,60,'볼 받으러 내려옴'],[68,46,'롱패스로 전개'],[50,64,'템포 조율']],
+  ANC: [[50,64,'중앙에 고정'],[43,60,'패스 길목 차단'],[57,62,'간결한 배급'],[50,64,'자리 지킴']],
+  BBM: [[55,58,'중원 기본 위치'],[48,70,'수비 가담'],[52,26,'박스 침투'],[55,58,'복귀']],
+  CM:  [[50,56,'중원 중앙'],[38,52,'볼 순환'],[62,46,'전진 패스'],[50,56,'균형 유지']],
+  MEZ: [[64,54,'하프스페이스 위치'],[74,38,'측면-중앙 사이 침투'],[60,32,'슈팅·키패스'],[64,54,'복귀']],
+  CAM: [[50,42,'공격형 위치'],[44,30,'라인 사이 침투'],[60,26,'키패스 배급'],[50,42,'찬스 메이킹']],
+  REG: [[50,60,'딥라잉 위치'],[40,56,'볼 받아 조율'],[74,28,'한 번에 전선 전환'],[50,60,'복귀']],
+  WM:  [[80,52,'측면 미드 위치'],[80,66,'풀백 보호 수비'],[80,32,'측면 전진 크로스'],[80,52,'복귀']],
+  ST:  [[50,16,'최전방 중앙'],[42,10,'수비 뒤로 침투'],[56,22,'내려와 연계'],[48,9,'마무리 슈팅']],
+  SS:  [[50,26,'스트라이커 뒤'],[46,13,'2선 침투'],[60,20,'공간 창출'],[46,10,'골 마무리']],
+  POA: [[50,14,'박스 안 대기'],[42,11,'문전 침투'],[58,12,'반대 포스트 쇄도'],[48,9,'원터치 마무리']],
+  CF:  [[50,20,'최전방'],[50,32,'내려와 연계'],[38,14,'측면으로 침투'],[56,11,'마무리']],
+  TGT: [[50,18,'최전방 기준점'],[50,30,'롱볼 받아 지킴'],[44,16,'헤더 경합'],[58,20,'연계 후 침투']],
+  F9:  [[50,20,'가짜 9번'],[50,38,'중앙으로 내려옴'],[34,26,'수비 끌어내기'],[62,20,'2선 침투 공간 오픈']],
+  DLF: [[50,24,'처진 공격수'],[50,38,'내려와 볼 연결'],[42,20,'등지고 연계'],[56,14,'2선 득점']],
+  IF:  [[22,28,'측면에서 시작'],[40,20,'안쪽으로 좁히기'],[48,13,'슈팅 각 잡기'],[46,9,'직접 마무리']],
+  WNG: [[82,30,'측면 넓게 벌림'],[84,16,'스피드로 돌파'],[68,12,'크로스·컷백'],[82,30,'복귀']],
+  IW:  [[80,30,'반대발 측면'],[62,20,'중앙으로 접기'],[52,14,'감아차기 슈팅'],[62,24,'침투']],
 };
 
 const LABEL_TO_ROLE = {
@@ -6722,10 +6795,11 @@ function renderGuide() {
     html += '<div class="guide-grid">' + codes.map(code => {
       const r = ROLES[code]; if (!r) return '';
       const keys = roleKeyStats(code, 4);
-      return `<div class="guide-card" style="border-left-color:${col}">
+      return `<div class="guide-card" data-role-guide="${code}" style="border-left-color:${col}">
         <div class="guide-head">
           <span class="guide-code" style="background:${col}">${code}</span>
           <span class="guide-name">${escapeHtml(r.name)}</span>
+          <span class="guide-play" style="color:${col}">▶ 움직임</span>
         </div>
         <div class="guide-desc">${escapeHtml(ROLE_GUIDE[code] || '설명 준비 중')}</div>
         <div class="guide-keys">${keys.map(k => `<span class="guide-key">${escapeHtml(k)}</span>`).join('')}</div>
@@ -6733,7 +6807,95 @@ function renderGuide() {
     }).join('') + '</div>';
   });
   el.innerHTML = html || '<div class="podium-empty">검색 결과가 없어요</div>';
+  el.querySelectorAll('[data-role-guide]').forEach(c => c.addEventListener('click', () => openTacticModal(c.dataset.roleGuide)));
 }
+
+/* ---- 역할 움직임 전술판 (동영상처럼 재생) ---- */
+const tac = { code: null, pts: [], phases: [], i: 0, playing: false, raf: 0, timer: 0, cur: { x: 50, y: 75 } };
+function tacXY(p) { return { x: p[0], y: p[1] * 1.5 }; } // 데이터 y(0~100) → viewBox y(0~150)
+function tacPitchSvg() {
+  let bands = '';
+  for (let i = 0; i < 6; i++) bands += `<rect x="0" y="${i*25}" width="100" height="25" fill="${i%2?'rgba(255,255,255,0.05)':'rgba(0,0,0,0.05)'}"/>`;
+  const ln = 'stroke="rgba(255,255,255,0.4)" stroke-width="0.7" fill="none"';
+  return `
+    <rect x="0" y="0" width="100" height="150" fill="#0c3f1c"/>${bands}
+    <rect x="1" y="1" width="98" height="148" ${ln}/>
+    <line x1="1" y1="75" x2="99" y2="75" ${ln}/>
+    <circle cx="50" cy="75" r="11" ${ln}/>
+    <circle cx="50" cy="75" r="1.1" fill="rgba(255,255,255,0.5)"/>
+    <rect x="25" y="1" width="50" height="24" ${ln}/>
+    <rect x="38" y="1" width="24" height="10" ${ln}/>
+    <rect x="25" y="125" width="50" height="24" ${ln}/>
+    <rect x="38" y="139" width="24" height="10" ${ln}/>
+    <rect x="43" y="0" width="14" height="2" fill="rgba(255,255,255,0.6)"/>
+    <rect x="43" y="148" width="14" height="2" fill="rgba(255,255,255,0.6)"/>
+    <text x="50" y="8" text-anchor="middle" font-size="4" fill="rgba(255,255,255,0.6)">▲ 공격 방향</text>`;
+}
+function buildTacticBoard(code) {
+  const phases = ROLE_MOVE[code] || [[50,50,'움직임 데이터 없음']];
+  const pts = phases.map(tacXY);
+  const cat = ROLES[code]?.cat || 'MF';
+  const col = CAT_COLOR[cat] || '#f43f5e';
+  let arrows = '';
+  for (let i = 1; i < pts.length; i++) arrows += `<path class="tac-arrow" data-seg="${i}" d="M${pts[i-1].x} ${pts[i-1].y} L${pts[i].x} ${pts[i].y}" marker-end="url(#tacHead)"/>`;
+  const stops = pts.map((p,i) => `<g class="tac-stop"><circle cx="${p.x}" cy="${p.y}" r="4.6"/><text x="${p.x}" y="${p.y+2.4}" text-anchor="middle" font-size="5.4">${i+1}</text></g>`).join('');
+  const player = `<g id="tacPlayer" transform="translate(${pts[0].x},${pts[0].y})">
+    <circle class="tac-pl-ring" r="8" fill="${col}"/>
+    <circle class="tac-pl" r="6" fill="${col}" stroke="#0a0a0a" stroke-width="0.7"/>
+    <text class="tac-pl-t" y="2.4" text-anchor="middle" font-size="5">${code}</text></g>`;
+  document.getElementById('tacticBoard').innerHTML =
+    `<svg viewBox="0 0 100 150" class="tac-svg" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="tacHead" markerWidth="5" markerHeight="5" refX="3.4" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="#f43f5e"/></marker></defs>
+      ${tacPitchSvg()}${arrows}${stops}${player}</svg>`;
+  document.getElementById('tacticDots').innerHTML = phases.map((p,i) => `<span class="tac-dot" data-i="${i}"></span>`).join('');
+  tac.code = code; tac.pts = pts; tac.phases = phases; tac.i = 0; tac.cur = { x: pts[0].x, y: pts[0].y };
+  tacSetPhase(0, false);
+}
+function tacSetPhase(i, animate) {
+  if (!tac.pts.length) return;
+  tac.i = i;
+  const p = tac.pts[i];
+  document.getElementById('tacticCaption').innerHTML = `<span class="tc-step">STEP ${i+1}</span> ${escapeHtml(tac.phases[i][2])}`;
+  document.querySelectorAll('#tacticDots .tac-dot').forEach((d,di) => d.classList.toggle('on', di === i));
+  document.querySelectorAll('#tacticBoard .tac-arrow').forEach(a => a.classList.toggle('active', +a.dataset.seg === i));
+  if (animate) tacMoveTo(p.x, p.y, 820);
+  else { const g = document.getElementById('tacPlayer'); if (g) g.setAttribute('transform', `translate(${p.x},${p.y})`); tac.cur = { x: p.x, y: p.y }; }
+}
+function tacMoveTo(x, y, dur) {
+  const g = document.getElementById('tacPlayer'); if (!g) return;
+  const x0 = tac.cur.x, y0 = tac.cur.y; let start = null;
+  cancelAnimationFrame(tac.raf);
+  function frame(t) {
+    if (start == null) start = t;
+    let k = Math.min(1, (t - start) / dur);
+    const e = k < 0.5 ? 2*k*k : 1 - Math.pow(-2*k+2, 2)/2;
+    const cx = x0 + (x-x0)*e, cy = y0 + (y-y0)*e;
+    g.setAttribute('transform', `translate(${cx.toFixed(2)},${cy.toFixed(2)})`);
+    if (k < 1) tac.raf = requestAnimationFrame(frame); else tac.cur = { x, y };
+  }
+  tac.raf = requestAnimationFrame(frame);
+}
+function tacPlay() {
+  tac.playing = true;
+  const b = document.getElementById('tacToggle'); if (b) b.textContent = '⏸ 일시정지';
+  clearInterval(tac.timer);
+  tac.timer = setInterval(() => { tacSetPhase((tac.i + 1) % tac.pts.length, true); }, 1600);
+}
+function tacPause() {
+  tac.playing = false;
+  const b = document.getElementById('tacToggle'); if (b) b.textContent = '▶ 재생';
+  clearInterval(tac.timer); cancelAnimationFrame(tac.raf);
+}
+function tacToggle() { tac.playing ? tacPause() : tacPlay(); }
+function tacReplay() { tacSetPhase(0, false); tacPlay(); }
+function openTacticModal(code) {
+  if (!ROLE_MOVE[code]) return;
+  document.getElementById('tacticTitle').textContent = `${code} · ${ROLES[code]?.name || ''} 움직임`;
+  buildTacticBoard(code);
+  document.getElementById('tacticModal').classList.add('show');
+  tacPlay();
+}
+function closeTacticModal() { tacPause(); document.getElementById('tacticModal').classList.remove('show'); }
 
 /* ---- 선수별 시너지 (선수 관리 표에서 확인) ---- */
 function playerChemGroups(playerId) { return chemistryLinks().filter(l => chemMembers(l).includes(playerId)); }
@@ -7046,8 +7208,12 @@ function bindEvents() {
   document.querySelectorAll('.tmt-btn').forEach(b => b.addEventListener('click', () => setTraitMode(b.dataset.tmode)));
   document.getElementById('traitModal').addEventListener('click', e => { if (e.target.id === 'traitModal') closeTraitModal(); });
 
-  // 역할 가이드
+  // 역할 가이드 + 전술판
   document.getElementById('guideSearch').addEventListener('input', renderGuide);
+  document.getElementById('tacToggle').addEventListener('click', tacToggle);
+  document.getElementById('tacReplay').addEventListener('click', tacReplay);
+  document.getElementById('tacClose').addEventListener('click', closeTacticModal);
+  document.getElementById('tacticModal').addEventListener('click', e => { if (e.target.id === 'tacticModal') closeTacticModal(); });
 
   // 팀컬러 / 케미
   document.getElementById('btnAddChem').addEventListener('click', () => openChemModal(null));
@@ -7069,7 +7235,7 @@ function bindEvents() {
     if (e.key === 'Escape') {
       closePlayerModal(); closeAssignModal(); closeMatchModal();
       closeDayModal(); closeRoleEditor(); closeStaffModal();
-      closePostModal(); closeDorModal(); closeTraitModal(); closeRecordModal(); closeChemModal();
+      closePostModal(); closeDorModal(); closeTraitModal(); closeRecordModal(); closeChemModal(); closeTacticModal();
     }
   });
 }
