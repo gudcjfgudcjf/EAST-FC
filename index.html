@@ -1546,7 +1546,7 @@
   /* ==================== 역할 움직임 전술판 ==================== */
   .tactic-modal { max-width: 440px; }
   .tactic-board { display: flex; justify-content: center; margin-bottom: 10px; }
-  .tac-svg { height: 54vh; max-height: 560px; width: auto; max-width: 100%; display: block; border-radius: 12px; box-shadow: 0 8px 28px rgba(0,0,0,0.6); }
+  .tac-svg { height: 50vh; max-height: 540px; width: auto; max-width: 100%; display: block; border-radius: 12px; box-shadow: 0 8px 28px rgba(0,0,0,0.6); }
   .tac-arrow { stroke: rgba(244,63,94,0.45); stroke-width: 1.3; fill: none; stroke-dasharray: 3 2.5; }
   .tac-arrow.active { stroke: #f43f5e; stroke-width: 2; animation: tacDash 0.8s linear infinite; }
   @keyframes tacDash { to { stroke-dashoffset: -11; } }
@@ -1562,6 +1562,14 @@
   .tac-dot.on { background: var(--gold); transform: scale(1.35); }
   .tactic-controls { justify-content: center; }
   .tactic-controls button { min-width: 96px; }
+  /* 동료(회색) + 시나리오 탭 */
+  .tac-mate circle { fill: rgba(148,163,184,0.55); stroke: rgba(255,255,255,0.3); stroke-width: 0.4; }
+  .tac-mate text { fill: rgba(255,255,255,0.8); font-family: var(--font-brand); font-weight: 700; }
+  #tacBall { filter: drop-shadow(0 1px 1px rgba(0,0,0,0.6)); }
+  .tactic-scenarios { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 10px; }
+  .tac-scn { background: var(--bg-3); border: 1px solid var(--border-2); color: var(--text-2); border-radius: 20px; padding: 5px 12px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all .12s; }
+  .tac-scn:hover { border-color: var(--gold-2); }
+  .tac-scn.on { background: linear-gradient(180deg, var(--gold-warm), var(--gold)); color: #0a0a0a; border-color: var(--gold-2); }
   /* 선수 표: 시너지 셀 */
   .syn-cell { display: flex; flex-wrap: wrap; gap: 3px; justify-content: center; max-width: 130px; }
   .syn-chip { font-size: 10px; font-weight: 700; border: 1px solid; border-radius: 20px; padding: 1px 6px; white-space: nowrap; background: rgba(0,0,0,0.25); }
@@ -2052,10 +2060,11 @@
     /* 역할 가이드 모바일 */
     .guide-grid { grid-template-columns: 1fr; }
     /* 전술판 모바일 */
-    .tac-svg { height: 52vh; }
+    .tac-svg { height: 48vh; }
     .tactic-caption { font-size: 13px; }
     .tactic-controls { flex-wrap: wrap; gap: 6px; }
     .tactic-controls button { min-width: 0; flex: 1; }
+    .tac-scn { font-size: 11px; padding: 5px 10px; }
     .chem-card { flex-wrap: wrap; gap: 8px; }
     .chem-main { flex-basis: 100%; }
     .chem-right { min-width: 0; margin-left: auto; text-align: right; display: flex; align-items: baseline; gap: 6px; }
@@ -2642,6 +2651,7 @@
   <div class="modal-overlay" id="tacticModal">
     <div class="modal tactic-modal">
       <h3 id="tacticTitle">역할 움직임</h3>
+      <div class="tactic-scenarios" id="tacticScenarios"></div>
       <div class="tactic-board" id="tacticBoard"></div>
       <div class="tactic-caption" id="tacticCaption"></div>
       <div class="tactic-dots" id="tacticDots"></div>
@@ -3916,35 +3926,128 @@ const ROLE_GUIDE = {
   WNG: '측면을 폭넓게 쓰는 돌파형 공격수. 빠른 스피드와 드리블로 수비를 제치고 크로스·컷백으로 기회를 창출한다.',
   IW:  '반대발 측면 공격수. 측면에서 중앙으로 접어 들어와 감아차기 슈팅과 침투로 직접 득점을 노린다.',
 };
-// 역할별 움직임 경로: [x(0~100 좌우), y(0~100 위=공격), 설명]  (위쪽이 상대 골문)
-const ROLE_MOVE = {
-  GK:  [[50,90,'골문 앞 기본 위치'],[50,82,'수비 뒤 공간 커버 (스위핑)'],[36,86,'측면으로 벌려 패스 각 형성'],[50,90,'세이브 후 원위치']],
-  SK:  [[50,86,'평소보다 높게 전진'],[50,74,'수비 뒤 공간 청소'],[38,82,'풀백에게 짧은 빌드업'],[64,80,'롱패스로 전환']],
-  CB:  [[42,78,'파트너와 간격 유지'],[42,66,'전진하는 공격수 대인 추적'],[50,74,'커버 위치로 좁히기'],[42,78,'수비 라인 복귀']],
-  BPD: [[42,76,'수비 위치에서 볼 소유'],[42,62,'압박 벗어나 전진'],[58,56,'전진 패스 배급'],[42,76,'복귀']],
-  SW:  [[50,82,'최종 수비 라인 뒤'],[38,72,'배후 공간 커버'],[60,76,'인터셉트 후 전개'],[50,82,'원위치']],
-  FB:  [[80,72,'측면 수비 위치'],[80,80,'상대 윙어 대인 방어'],[82,46,'오버래핑 전진'],[82,32,'크로스 올리기'],[80,72,'복귀']],
-  WB:  [[82,66,'측면 대기'],[84,38,'측면 폭넓게 전진'],[78,22,'크로스·컷백'],[82,66,'빠른 복귀']],
-  IWB: [[80,70,'측면 수비'],[60,58,'안쪽(하프스페이스)로 좁히기'],[54,54,'중원 빌드업 가담'],[80,70,'복귀']],
-  CDM: [[50,62,'수비라인 앞 보호'],[40,66,'공간 커버·차단'],[58,56,'볼 회수 후 배급'],[50,62,'위치 유지']],
-  DLP: [[50,64,'후방 깊은 위치'],[40,60,'볼 받으러 내려옴'],[68,46,'롱패스로 전개'],[50,64,'템포 조율']],
-  ANC: [[50,64,'중앙에 고정'],[43,60,'패스 길목 차단'],[57,62,'간결한 배급'],[50,64,'자리 지킴']],
-  BBM: [[55,58,'중원 기본 위치'],[48,70,'수비 가담'],[52,26,'박스 침투'],[55,58,'복귀']],
-  CM:  [[50,56,'중원 중앙'],[38,52,'볼 순환'],[62,46,'전진 패스'],[50,56,'균형 유지']],
-  MEZ: [[64,54,'하프스페이스 위치'],[74,38,'측면-중앙 사이 침투'],[60,32,'슈팅·키패스'],[64,54,'복귀']],
-  CAM: [[50,42,'공격형 위치'],[44,30,'라인 사이 침투'],[60,26,'키패스 배급'],[50,42,'찬스 메이킹']],
-  REG: [[50,60,'딥라잉 위치'],[40,56,'볼 받아 조율'],[74,28,'한 번에 전선 전환'],[50,60,'복귀']],
-  WM:  [[80,52,'측면 미드 위치'],[80,66,'풀백 보호 수비'],[80,32,'측면 전진 크로스'],[80,52,'복귀']],
-  ST:  [[50,16,'최전방 중앙'],[42,10,'수비 뒤로 침투'],[56,22,'내려와 연계'],[48,9,'마무리 슈팅']],
-  SS:  [[50,26,'스트라이커 뒤'],[46,13,'2선 침투'],[60,20,'공간 창출'],[46,10,'골 마무리']],
-  POA: [[50,14,'박스 안 대기'],[42,11,'문전 침투'],[58,12,'반대 포스트 쇄도'],[48,9,'원터치 마무리']],
-  CF:  [[50,20,'최전방'],[50,32,'내려와 연계'],[38,14,'측면으로 침투'],[56,11,'마무리']],
-  TGT: [[50,18,'최전방 기준점'],[50,30,'롱볼 받아 지킴'],[44,16,'헤더 경합'],[58,20,'연계 후 침투']],
-  F9:  [[50,20,'가짜 9번'],[50,38,'중앙으로 내려옴'],[34,26,'수비 끌어내기'],[62,20,'2선 침투 공간 오픈']],
-  DLF: [[50,24,'처진 공격수'],[50,38,'내려와 볼 연결'],[42,20,'등지고 연계'],[56,14,'2선 득점']],
-  IF:  [[22,28,'측면에서 시작'],[40,20,'안쪽으로 좁히기'],[48,13,'슈팅 각 잡기'],[46,9,'직접 마무리']],
-  WNG: [[82,30,'측면 넓게 벌림'],[84,16,'스피드로 돌파'],[68,12,'크로스·컷백'],[82,30,'복귀']],
-  IW:  [[80,30,'반대발 측면'],[62,20,'중앙으로 접기'],[52,14,'감아차기 슈팅'],[62,24,'침투']],
+// 가이드 기준 포메이션 4-3-3 (11명 위치) — 위쪽이 상대 골문(공격 방향)
+const BASE_433 = {
+  GK:[50,92], LB:[15,72], LCB:[37,80], RCB:[63,80], RB:[85,72],
+  DM:[50,64], LCM:[33,52], RCM:[67,52], LW:[20,28], ST:[50,15], RW:[80,28],
+};
+const MATE_LABEL = { GK:'GK', LB:'LB', LCB:'CB', RCB:'CB', RB:'RB', DM:'DM', LCM:'CM', RCM:'CM', LW:'LW', ST:'ST', RW:'RW' };
+// 각 역할이 4-3-3에서 차지하는 홈 슬롯(이 자리는 하이라이트 선수가 대신 서고, 나머지 10명은 회색으로 표시)
+const ROLE_HOME = {
+  GK:'GK', SK:'GK', CB:'LCB', BPD:'LCB', SW:'LCB', FB:'RB', WB:'RB', IWB:'RB',
+  CDM:'DM', ANC:'DM', DLP:'DM', REG:'DM', CM:'RCM', BBM:'RCM', MEZ:'RCM', CAM:'RCM',
+  WM:'RW', ST:'ST', POA:'ST', CF:'ST', TGT:'ST', F9:'ST', DLF:'ST', SS:'ST', IF:'LW', WNG:'RW', IW:'RW',
+};
+// 역할별 가이드 시나리오 (여러 개). phase = [선수x, 선수y, 공x, 공y, 설명]
+const ROLE_SCENARIOS = {
+  GK: [
+    { name:'빌드업 시작', phases:[[50,90,50,90,'골키퍼가 볼 소유·수비 조율'],[37,87,37,87,'측면으로 벌려 각 형성'],[37,87,15,72,'풀백에게 짧은 배급'],[50,90,33,58,'전개 후 골문 복귀']] },
+    { name:'스위핑', phases:[[50,88,45,52,'상대 침투 롱볼 상황'],[50,80,48,62,'적극적으로 전진'],[46,77,46,73,'수비 뒤 공간 처리'],[50,90,50,84,'클리어 후 복귀']] },
+  ],
+  SK: [
+    { name:'리베로 빌드업', phases:[[50,86,50,86,'높은 위치서 볼 소유'],[50,76,50,76,'수비 라인처럼 전진'],[64,78,67,52,'중원으로 롱패스'],[50,86,50,70,'복귀']] },
+    { name:'광범위 커버', phases:[[50,84,42,48,'상대 뒷공간 노림'],[48,72,48,66,'박스 밖까지 나와 차단'],[40,78,40,74,'발밑으로 처리'],[50,86,50,80,'복귀']] },
+  ],
+  CB: [
+    { name:'대인 방어', phases:[[37,80,55,40,'상대 공격 전개'],[45,66,50,54,'전진 공격수 추적'],[45,66,45,64,'대인 경합·차단'],[37,80,30,72,'라인 복귀']] },
+    { name:'커버 & 빌드업', phases:[[37,80,37,80,'후방 볼 소유'],[40,72,40,72,'짧게 전진'],[40,72,55,58,'전진 패스'],[37,80,55,50,'라인 유지']] },
+  ],
+  BPD: [
+    { name:'전진 빌드업', phases:[[37,80,37,80,'볼 소유'],[43,66,43,66,'압박 벗어나 드리블'],[43,66,67,50,'라인 가르는 패스'],[38,78,60,42,'복귀']] },
+    { name:'측면 전환', phases:[[37,80,37,80,'후방 소유'],[40,74,40,74,'시야 확보'],[40,74,80,40,'반대 측면 롱 스위치'],[38,80,80,38,'라인 정비']] },
+  ],
+  SW: [
+    { name:'배후 청소', phases:[[40,82,45,45,'상대 침투 시도'],[38,72,44,60,'배후 공간 커버'],[38,72,38,70,'인터셉트'],[45,80,55,60,'전개 후 복귀']] },
+    { name:'후방 조율', phases:[[40,82,40,82,'최후방 소유'],[42,76,42,76,'라인 조율'],[42,76,60,58,'안정적 배급'],[40,82,60,52,'복귀']] },
+  ],
+  FB: [
+    { name:'오버래핑', phases:[[85,72,68,48,'측면 공격 전개'],[85,52,80,42,'윙어 뒤로 오버래핑'],[85,34,85,34,'측면 돌파'],[83,30,55,18,'크로스 후 복귀']] },
+    { name:'수비 대인', phases:[[85,72,25,52,'반대편 공격'],[83,66,42,60,'윙어 대인 압박'],[83,66,83,64,'태클로 차단'],[85,72,70,58,'복귀']] },
+  ],
+  WB: [
+    { name:'측면 폭 활용', phases:[[85,68,60,50,'전환 시작'],[86,42,84,40,'측면 폭넓게 전진'],[80,24,80,24,'컷백 지점 도달'],[83,66,50,16,'컷백 후 복귀']] },
+    { name:'수비 복귀', phases:[[85,52,30,40,'역습 피격'],[85,62,50,55,'빠르게 내려옴'],[85,70,72,66,'측면 차단'],[85,68,70,60,'자리 유지']] },
+  ],
+  IWB: [
+    { name:'중앙 침투', phases:[[85,70,50,58,'빌드업 시작'],[64,60,55,56,'안쪽으로 좁혀 들어감'],[58,54,58,54,'중원 숫자 우위'],[85,70,50,44,'복귀']] },
+    { name:'하프스페이스 연결', phases:[[85,68,85,68,'측면서 소유'],[66,58,66,58,'안쪽으로 이동'],[66,58,50,42,'전진 패스'],[85,70,50,42,'복귀']] },
+  ],
+  CDM: [
+    { name:'차단 & 배급', phases:[[50,64,45,45,'상대 공격'],[44,58,48,52,'패스 길목 차단'],[44,58,44,56,'볼 회수'],[50,64,67,52,'간결히 배급']] },
+    { name:'수비 보호', phases:[[50,64,50,40,'상대 침투'],[46,68,50,58,'수비 앞 공간 보호'],[46,68,46,66,'커버·차단'],[50,64,50,60,'위치 유지']] },
+  ],
+  DLP: [
+    { name:'후방 조율', phases:[[50,64,50,64,'볼 받으러 내려옴'],[40,60,40,60,'압박 회피'],[40,60,80,30,'롱패스 전개'],[50,64,80,30,'템포 조율']] },
+    { name:'전진 배급', phases:[[50,64,50,64,'소유'],[50,56,50,56,'전진'],[50,56,50,16,'전방 침투 패스'],[50,64,50,20,'복귀']] },
+  ],
+  ANC: [
+    { name:'중앙 봉쇄', phases:[[50,64,45,45,'상대 공격'],[48,60,50,54,'중앙 길목 차단'],[48,60,48,58,'차단'],[50,64,55,60,'간결히 배급']] },
+    { name:'고정 지역', phases:[[50,64,62,50,'측면 전개'],[50,62,55,55,'중앙 지역 유지'],[44,62,48,58,'커버'],[50,64,50,60,'복귀']] },
+  ],
+  BBM: [
+    { name:'박스 침투', phases:[[67,52,50,58,'중원 소유'],[60,36,55,40,'전방으로 침투'],[55,22,52,26,'박스 도착'],[55,20,54,18,'슈팅 마무리']] },
+    { name:'수비 가담', phases:[[67,52,30,58,'상대 역습'],[60,64,50,60,'내려와 수비 가담'],[58,66,56,62,'볼 탈취'],[67,52,60,55,'복귀']] },
+  ],
+  CM: [
+    { name:'볼 순환', phases:[[67,52,67,52,'볼 소유'],[58,50,58,50,'중앙으로 이동'],[58,50,33,52,'반대편 순환'],[67,52,33,52,'균형 유지']] },
+    { name:'전진 지원', phases:[[67,52,50,58,'전개'],[64,40,60,42,'전진 지원'],[64,40,64,38,'2선 침투'],[67,52,55,28,'복귀']] },
+  ],
+  MEZ: [
+    { name:'하프스페이스 침투', phases:[[67,52,50,58,'중원 소유'],[74,40,66,44,'측면-중앙 사이로'],[66,30,66,30,'슈팅 각'],[70,32,66,28,'중거리 슈팅']] },
+    { name:'연계 후 침투', phases:[[67,52,80,40,'측면 지원'],[70,44,78,38,'하프스페이스 침투'],[66,34,72,36,'원투 패스'],[67,52,66,30,'복귀']] },
+  ],
+  CAM: [
+    { name:'라인 사이 침투', phases:[[55,44,40,55,'라인 사이 위치'],[46,32,50,42,'수비 사이로 침투'],[46,32,46,30,'키패스 받기'],[50,42,48,18,'찬스 창출']] },
+    { name:'슈팅 기회', phases:[[55,44,55,44,'볼 소유'],[52,34,52,34,'전진 드리블'],[52,34,52,32,'슈팅 각 형성'],[52,28,52,24,'중거리 슈팅']] },
+  ],
+  REG: [
+    { name:'롱패스 전환', phases:[[50,62,50,62,'딥라잉 소유'],[42,58,42,58,'볼 받아 조율'],[42,58,82,26,'전선 전환 롱패스'],[50,62,82,26,'복귀']] },
+    { name:'템포 조절', phases:[[50,62,50,62,'소유'],[50,58,50,58,'전진 각도'],[50,58,20,28,'반대 윙어에 배급'],[50,62,20,28,'복귀']] },
+  ],
+  WM: [
+    { name:'측면 크로스', phases:[[80,45,80,45,'측면 소유'],[80,32,80,32,'전진'],[80,24,80,24,'크로스 지점'],[80,45,50,16,'크로스 후 복귀']] },
+    { name:'풀백 보호', phases:[[80,45,25,40,'반대편 공격'],[82,58,60,55,'내려와 수비'],[82,60,80,58,'측면 차단'],[80,45,70,50,'복귀']] },
+  ],
+  ST: [
+    { name:'침투 마무리', phases:[[50,16,50,54,'미드필더 소유'],[42,10,50,40,'수비 뒤로 침투'],[42,10,44,14,'스루패스 받기'],[46,9,46,8,'마무리 슈팅']] },
+    { name:'연계 플레이', phases:[[50,16,50,50,'전개'],[55,24,54,30,'내려와 볼 받기'],[55,24,68,30,'연계 후 원투'],[48,12,60,20,'침투 마무리']] },
+  ],
+  SS: [
+    { name:'2선 침투', phases:[[50,26,50,50,'전개'],[46,13,50,36,'스트라이커 뒤 침투'],[46,13,47,16,'스루패스 받기'],[46,10,46,9,'골 마무리']] },
+    { name:'공간 활용', phases:[[50,26,50,44,'소유'],[60,20,55,28,'측면 공간 이동'],[60,20,60,20,'연계'],[46,12,54,16,'침투 마무리']] },
+  ],
+  POA: [
+    { name:'문전 침투', phases:[[50,14,80,26,'측면 크로스 준비'],[44,12,78,22,'문전 침투'],[58,12,60,16,'반대 포스트 쇄도'],[50,11,52,12,'원터치 마무리']] },
+    { name:'리바운드', phases:[[50,14,50,30,'슈팅 상황'],[48,13,49,18,'박스 안 대기'],[46,12,47,14,'튕겨나온 볼 포착'],[46,10,46,9,'재차 마무리']] },
+  ],
+  CF: [
+    { name:'만능 연계', phases:[[50,18,50,50,'전개'],[50,32,50,40,'내려와 연계'],[50,32,38,20,'측면으로 연결'],[42,14,40,16,'침투 마무리']] },
+    { name:'직접 득점', phases:[[50,18,50,44,'전방 소유'],[44,14,48,30,'수비 등지고 턴'],[44,14,45,15,'드리블 돌파'],[48,11,48,10,'슈팅']] },
+  ],
+  TGT: [
+    { name:'포스트 플레이', phases:[[50,18,50,54,'롱볼 상황'],[50,28,50,40,'내려와 받기'],[50,28,66,44,'헤더로 연결'],[55,18,64,26,'2차 침투']] },
+    { name:'제공권 마무리', phases:[[50,18,82,28,'측면 크로스'],[50,16,74,22,'문전 침투'],[48,14,52,16,'헤더 경합'],[48,11,48,10,'헤더 골']] },
+  ],
+  F9: [
+    { name:'공간 창출', phases:[[50,20,50,50,'전개'],[50,38,50,44,'중앙으로 내려옴'],[50,38,66,30,'수비 끌고나옴'],[66,22,66,24,'2선 침투 공간 오픈']] },
+    { name:'링크 플레이', phases:[[50,20,50,44,'소유'],[46,34,48,38,'내려와 받기'],[46,34,66,26,'2선 선수에 연결'],[50,20,66,20,'복귀']] },
+  ],
+  DLF: [
+    { name:'연결고리', phases:[[50,24,50,50,'전개'],[50,38,50,42,'내려와 볼 연결'],[42,22,46,28,'등지고 연계'],[54,16,50,20,'2선 득점']] },
+    { name:'침투', phases:[[50,24,50,44,'소유'],[46,18,48,30,'배후 침투'],[46,18,47,17,'스루패스 받기'],[50,12,50,11,'마무리']] },
+  ],
+  IF: [
+    { name:'안쪽 침투', phases:[[20,28,20,50,'측면 전개'],[40,20,30,32,'안쪽으로 좁힘'],[48,14,42,18,'컷인 후 슈팅 각'],[46,10,46,9,'직접 마무리']] },
+    { name:'연계 후 침투', phases:[[20,28,30,40,'측면 소유'],[34,22,34,22,'하프스페이스 이동'],[34,22,50,18,'원투 패스'],[46,12,48,16,'침투 골']] },
+  ],
+  WNG: [
+    { name:'돌파 크로스', phases:[[80,30,80,30,'측면 볼 소유'],[84,16,84,16,'스피드로 돌파'],[68,12,68,12,'컷백 지점'],[80,30,50,14,'컷백 후 복귀']] },
+    { name:'컷인 슈팅', phases:[[80,30,80,44,'측면 전개'],[70,20,74,26,'안쪽으로 접기'],[60,16,62,18,'슈팅 각'],[58,14,58,12,'슈팅']] },
+  ],
+  IW: [
+    { name:'컷인 감아차기', phases:[[80,30,80,30,'반대발 측면 소유'],[62,20,62,20,'중앙으로 접기'],[52,14,52,14,'감아차기 각'],[54,10,54,9,'감아차기 골']] },
+    { name:'침투 연계', phases:[[80,30,50,40,'측면 지원'],[66,22,60,28,'안쪽 침투'],[66,22,52,18,'원투 패스'],[58,14,54,16,'침투 마무리']] },
+  ],
 };
 
 const LABEL_TO_ROLE = {
@@ -6810,9 +6913,9 @@ function renderGuide() {
   el.querySelectorAll('[data-role-guide]').forEach(c => c.addEventListener('click', () => openTacticModal(c.dataset.roleGuide)));
 }
 
-/* ---- 역할 움직임 전술판 (동영상처럼 재생) ---- */
-const tac = { code: null, pts: [], phases: [], i: 0, playing: false, raf: 0, timer: 0, cur: { x: 50, y: 75 } };
-function tacXY(p) { return { x: p[0], y: p[1] * 1.5 }; } // 데이터 y(0~100) → viewBox y(0~150)
+/* ---- 역할 움직임 전술판 (4-3-3 · 동료 · 공까지 · 동영상처럼) ---- */
+const tac = { code: null, s: 0, phases: [], ppts: [], bpts: [], i: 0, playing: false, raf: 0, timer: 0, curP: { x: 50, y: 75 }, curB: { x: 50, y: 75 } };
+function tacScale(x, y) { return { x, y: y * 1.5 }; } // 데이터 y(0~100) → viewBox y(0~150)
 function tacPitchSvg() {
   let bands = '';
   for (let i = 0; i < 6; i++) bands += `<rect x="0" y="${i*25}" width="100" height="25" fill="${i%2?'rgba(255,255,255,0.05)':'rgba(0,0,0,0.05)'}"/>`;
@@ -6831,67 +6934,75 @@ function tacPitchSvg() {
     <rect x="43" y="148" width="14" height="2" fill="rgba(255,255,255,0.6)"/>
     <text x="50" y="8" text-anchor="middle" font-size="4" fill="rgba(255,255,255,0.6)">▲ 공격 방향</text>`;
 }
-function buildTacticBoard(code) {
-  const phases = ROLE_MOVE[code] || [[50,50,'움직임 데이터 없음']];
-  const pts = phases.map(tacXY);
-  const cat = ROLES[code]?.cat || 'MF';
-  const col = CAT_COLOR[cat] || '#f43f5e';
+function tacMatesSvg(homeKey) {
+  return Object.entries(BASE_433).filter(([k]) => k !== homeKey).map(([k, pos]) => {
+    const p = tacScale(pos[0], pos[1]);
+    return `<g class="tac-mate"><circle cx="${p.x}" cy="${p.y}" r="4.4"/><text x="${p.x}" y="${p.y+1.9}" text-anchor="middle" font-size="4">${MATE_LABEL[k]||''}</text></g>`;
+  }).join('');
+}
+function tacBallSvg(x, y) {
+  return `<g id="tacBall" transform="translate(${x},${y})"><circle r="3" fill="#fff" stroke="#111" stroke-width="0.5"/><circle r="1" fill="#111"/><circle cx="-1.5" cy="1.3" r="0.6" fill="#111"/><circle cx="1.5" cy="1.3" r="0.6" fill="#111"/><circle cx="0" cy="-1.9" r="0.6" fill="#111"/></g>`;
+}
+function buildTacticBoard(code, sIdx) {
+  const scns = ROLE_SCENARIOS[code]; if (!scns) return;
+  sIdx = Math.max(0, Math.min(scns.length - 1, sIdx || 0));
+  const phases = scns[sIdx].phases;
+  const ppts = phases.map(p => tacScale(p[0], p[1]));
+  const bpts = phases.map(p => tacScale(p[2], p[3]));
+  const home = ROLE_HOME[code] || 'ST';
+  const col = CAT_COLOR[ROLES[code]?.cat || 'MF'] || '#f43f5e';
   let arrows = '';
-  for (let i = 1; i < pts.length; i++) arrows += `<path class="tac-arrow" data-seg="${i}" d="M${pts[i-1].x} ${pts[i-1].y} L${pts[i].x} ${pts[i].y}" marker-end="url(#tacHead)"/>`;
-  const stops = pts.map((p,i) => `<g class="tac-stop"><circle cx="${p.x}" cy="${p.y}" r="4.6"/><text x="${p.x}" y="${p.y+2.4}" text-anchor="middle" font-size="5.4">${i+1}</text></g>`).join('');
-  const player = `<g id="tacPlayer" transform="translate(${pts[0].x},${pts[0].y})">
+  for (let i = 1; i < ppts.length; i++) arrows += `<path class="tac-arrow" data-seg="${i}" d="M${ppts[i-1].x} ${ppts[i-1].y} L${ppts[i].x} ${ppts[i].y}" marker-end="url(#tacHead)"/>`;
+  const stops = ppts.map((p,i) => `<g class="tac-stop"><circle cx="${p.x}" cy="${p.y}" r="4.4"/><text x="${p.x}" y="${p.y+2.2}" text-anchor="middle" font-size="5">${i+1}</text></g>`).join('');
+  const player = `<g id="tacPlayer" transform="translate(${ppts[0].x},${ppts[0].y})">
     <circle class="tac-pl-ring" r="8" fill="${col}"/>
-    <circle class="tac-pl" r="6" fill="${col}" stroke="#0a0a0a" stroke-width="0.7"/>
+    <circle class="tac-pl" r="6" fill="${col}" stroke="#0a0a0a" stroke-width="0.8"/>
     <text class="tac-pl-t" y="2.4" text-anchor="middle" font-size="5">${code}</text></g>`;
   document.getElementById('tacticBoard').innerHTML =
     `<svg viewBox="0 0 100 150" class="tac-svg" xmlns="http://www.w3.org/2000/svg">
       <defs><marker id="tacHead" markerWidth="5" markerHeight="5" refX="3.4" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="#f43f5e"/></marker></defs>
-      ${tacPitchSvg()}${arrows}${stops}${player}</svg>`;
+      ${tacPitchSvg()}${tacMatesSvg(home)}${arrows}${stops}${player}${tacBallSvg(bpts[0].x, bpts[0].y)}</svg>`;
   document.getElementById('tacticDots').innerHTML = phases.map((p,i) => `<span class="tac-dot" data-i="${i}"></span>`).join('');
-  tac.code = code; tac.pts = pts; tac.phases = phases; tac.i = 0; tac.cur = { x: pts[0].x, y: pts[0].y };
+  document.getElementById('tacticScenarios').innerHTML = scns.map((s,idx) => `<button class="tac-scn ${idx===sIdx?'on':''}" data-scn="${idx}">${idx+1}. ${escapeHtml(s.name)}</button>`).join('');
+  document.querySelectorAll('#tacticScenarios .tac-scn').forEach(b => b.addEventListener('click', () => { tacPause(); buildTacticBoard(code, +b.dataset.scn); tacPlay(); }));
+  tac.code = code; tac.s = sIdx; tac.phases = phases; tac.ppts = ppts; tac.bpts = bpts; tac.i = 0;
+  tac.curP = { x: ppts[0].x, y: ppts[0].y }; tac.curB = { x: bpts[0].x, y: bpts[0].y };
   tacSetPhase(0, false);
 }
+function tacSetXY(id, p) { const g = document.getElementById(id); if (g) g.setAttribute('transform', `translate(${p.x.toFixed(2)},${p.y.toFixed(2)})`); }
 function tacSetPhase(i, animate) {
-  if (!tac.pts.length) return;
+  if (!tac.ppts.length) return;
   tac.i = i;
-  const p = tac.pts[i];
-  document.getElementById('tacticCaption').innerHTML = `<span class="tc-step">STEP ${i+1}</span> ${escapeHtml(tac.phases[i][2])}`;
+  document.getElementById('tacticCaption').innerHTML = `<span class="tc-step">STEP ${i+1}</span> ${escapeHtml(tac.phases[i][4])}`;
   document.querySelectorAll('#tacticDots .tac-dot').forEach((d,di) => d.classList.toggle('on', di === i));
   document.querySelectorAll('#tacticBoard .tac-arrow').forEach(a => a.classList.toggle('active', +a.dataset.seg === i));
-  if (animate) tacMoveTo(p.x, p.y, 820);
-  else { const g = document.getElementById('tacPlayer'); if (g) g.setAttribute('transform', `translate(${p.x},${p.y})`); tac.cur = { x: p.x, y: p.y }; }
+  const p = tac.ppts[i], b = tac.bpts[i];
+  if (animate) tacAnimate(p, b, 820);
+  else { tacSetXY('tacPlayer', p); tacSetXY('tacBall', b); tac.curP = { x: p.x, y: p.y }; tac.curB = { x: b.x, y: b.y }; }
 }
-function tacMoveTo(x, y, dur) {
-  const g = document.getElementById('tacPlayer'); if (!g) return;
-  const x0 = tac.cur.x, y0 = tac.cur.y; let start = null;
+function tacAnimate(pT, bT, dur) {
   cancelAnimationFrame(tac.raf);
+  const p0 = { x: tac.curP.x, y: tac.curP.y }, b0 = { x: tac.curB.x, y: tac.curB.y }; let start = null;
   function frame(t) {
     if (start == null) start = t;
     let k = Math.min(1, (t - start) / dur);
     const e = k < 0.5 ? 2*k*k : 1 - Math.pow(-2*k+2, 2)/2;
-    const cx = x0 + (x-x0)*e, cy = y0 + (y-y0)*e;
-    g.setAttribute('transform', `translate(${cx.toFixed(2)},${cy.toFixed(2)})`);
-    if (k < 1) tac.raf = requestAnimationFrame(frame); else tac.cur = { x, y };
+    tacSetXY('tacPlayer', { x: p0.x + (pT.x-p0.x)*e, y: p0.y + (pT.y-p0.y)*e });
+    tacSetXY('tacBall',   { x: b0.x + (bT.x-b0.x)*e, y: b0.y + (bT.y-b0.y)*e });
+    if (k < 1) tac.raf = requestAnimationFrame(frame);
+    else { tac.curP = { x: pT.x, y: pT.y }; tac.curB = { x: bT.x, y: bT.y }; }
   }
   tac.raf = requestAnimationFrame(frame);
 }
-function tacPlay() {
-  tac.playing = true;
-  const b = document.getElementById('tacToggle'); if (b) b.textContent = '⏸ 일시정지';
-  clearInterval(tac.timer);
-  tac.timer = setInterval(() => { tacSetPhase((tac.i + 1) % tac.pts.length, true); }, 1600);
-}
-function tacPause() {
-  tac.playing = false;
-  const b = document.getElementById('tacToggle'); if (b) b.textContent = '▶ 재생';
-  clearInterval(tac.timer); cancelAnimationFrame(tac.raf);
-}
+function tacSetToggle(t) { const b = document.getElementById('tacToggle'); if (b) b.textContent = t; }
+function tacPlay() { tac.playing = true; tacSetToggle('⏸ 일시정지'); clearInterval(tac.timer); tac.timer = setInterval(() => { tacSetPhase((tac.i + 1) % tac.ppts.length, true); }, 1700); }
+function tacPause() { tac.playing = false; tacSetToggle('▶ 재생'); clearInterval(tac.timer); cancelAnimationFrame(tac.raf); }
 function tacToggle() { tac.playing ? tacPause() : tacPlay(); }
 function tacReplay() { tacSetPhase(0, false); tacPlay(); }
 function openTacticModal(code) {
-  if (!ROLE_MOVE[code]) return;
+  if (!ROLE_SCENARIOS[code]) return;
   document.getElementById('tacticTitle').textContent = `${code} · ${ROLES[code]?.name || ''} 움직임`;
-  buildTacticBoard(code);
+  buildTacticBoard(code, 0);
   document.getElementById('tacticModal').classList.add('show');
   tacPlay();
 }
