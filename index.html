@@ -342,6 +342,10 @@
     font-size: 9px; padding: 1px 5px; border-radius: 8px;
     border: 1px solid var(--gold-warm); font-weight: 700; white-space: nowrap;
   }
+  /* 좌/중앙/우 구분 격자선 (은은하게) */
+  .vgrid-line { position: absolute; top: 0; bottom: 0; width: 0; border-left: 1px dashed rgba(255,255,255,0.09); pointer-events: none; z-index: 0; }
+  .slot-circle.has-photo { color: transparent; background-color: #000; }
+  .slot-no { color: var(--gold-warm); font-size: 10px; font-weight: 700; font-family: var(--font-brand); }
   .slot-label {
     margin-top: 3px; color: white;
     text-shadow: 0 1px 2px rgba(0,0,0,0.9);
@@ -1560,6 +1564,29 @@
   .chem-del:hover { border-color: var(--danger); }
   #chemScoreTag { font-weight: 700; }
   .chem-cat-select { width: 100%; background: var(--bg-3); color: var(--text); border: 1px solid var(--border-2); border-radius: 8px; padding: 9px; font-size: 14px; }
+
+  /* ==================== 프로필 (사진) ==================== */
+  .profile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
+  .profile-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; padding: 14px 10px; text-align: center; cursor: pointer; transition: transform .12s, border-color .12s, box-shadow .12s; }
+  .profile-card:hover { transform: translateY(-2px); border-color: var(--gold); box-shadow: 0 6px 18px rgba(0,0,0,0.45); }
+  .pf-avatar { width: 74px; height: 74px; border-radius: 50%; margin: 0 auto 9px; background: linear-gradient(145deg,#1a1a1a,#000); border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center; font-family: var(--font-brand); font-weight: 700; font-size: 26px; color: var(--gold); background-size: cover; background-position: center; }
+  .pf-name { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pf-no { color: var(--gold-warm); font-size: 11px; font-family: var(--font-brand); }
+  .pf-badge { font-size: 11px; color: var(--text-3); margin-top: 6px; }
+  .pf-badge.on { color: #7dd3fc; }
+
+  /* 사진 크롭 모달 */
+  .photo-crop { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .photo-stage { position: relative; width: 220px; height: 220px; border-radius: 50%; overflow: hidden; background: #0c0c0c; touch-action: none; cursor: grab; box-shadow: 0 6px 24px rgba(0,0,0,0.6); }
+  .photo-stage:active { cursor: grabbing; }
+  .photo-stage canvas { display: block; width: 220px; height: 220px; }
+  .photo-ring { position: absolute; inset: 0; border-radius: 50%; box-shadow: inset 0 0 0 3px var(--gold); pointer-events: none; }
+  .photo-empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--text-3); font-size: 13px; text-align: center; padding: 0 20px; }
+  .photo-controls { width: 100%; max-width: 280px; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+  .photo-pick { background: linear-gradient(180deg, var(--gold-warm), var(--gold)); color: #0a0a0a; border-radius: 9px; padding: 10px 18px; font-weight: 700; cursor: pointer; font-family: var(--font-brand); box-shadow: 0 2px 12px var(--gold-glow); }
+  .photo-zoom-row { display: flex; align-items: center; gap: 10px; width: 100%; font-size: 12px; color: var(--text-2); }
+  .photo-zoom-row input { flex: 1; accent-color: var(--gold); }
+  .photo-hint { font-size: 11px; color: var(--text-3); text-align: center; line-height: 1.5; }
   .chem-catchip { font-size: 10px; font-weight: 700; color: #7dd3fc; background: rgba(56,189,248,0.12); border: 1px solid rgba(56,189,248,0.35); border-radius: 10px; padding: 1px 7px; }
   .tp-link-cat { font-size: 10px; font-weight: 700; color: #7dd3fc; background: rgba(56,189,248,0.12); border-radius: 8px; padding: 1px 6px; flex-shrink: 0; }
   .chem-ovr-u { display: block; font-size: 9px; color: var(--text-3); font-weight: 400; letter-spacing: .04em; }
@@ -2108,6 +2135,9 @@
     .tp-ovr { font-size: 34px; }
     /* 역할 가이드 모바일 */
     .guide-grid { grid-template-columns: 1fr; }
+    /* 프로필 모바일 */
+    .profile-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .photo-stage, .photo-stage canvas { width: 200px; height: 200px; }
     /* 전술판 모바일 */
     .tac-svg { height: 48vh; }
     .tactic-caption { font-size: 13px; }
@@ -2465,6 +2495,7 @@
   <div class="tab-strip" id="tabStrip">
     <button class="tab-btn active" data-tab="squad">📋 스쿼드</button>
     <button class="tab-btn" data-tab="players">👥 선수</button>
+    <button class="tab-btn" data-tab="profile">📸 프로필</button>
     <button class="tab-btn" data-tab="calendar">📅 일정</button>
     <button class="tab-btn" data-tab="org">🏢 조직도</button>
     <button class="tab-btn" data-tab="board">📝 게시판</button>
@@ -2538,6 +2569,8 @@
             <div class="goal-box bottom"></div>
             <div class="zone-line attack"></div>
             <div class="zone-line midfield"></div>
+            <div class="vgrid-line" style="left:40%"></div>
+            <div class="vgrid-line" style="left:60%"></div>
             <div class="zone-label attack">공격 지역</div>
             <div class="zone-label midfield">미드필드</div>
             <div class="zone-label defense">수비 지역</div>
@@ -2708,6 +2741,43 @@
         <button class="btn-cancel" id="tacReplay">↺ 처음부터</button>
         <button class="btn-cancel" id="tacToggle">⏸ 일시정지</button>
         <button class="btn-primary" id="tacClose">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 프로필 (사진 등록) VIEW ============ -->
+  <section class="view" id="view-profile">
+    <div class="stats-view">
+      <div class="stats-header">
+        <h1>📸 프로필</h1>
+        <div class="spacer"></div>
+        <input type="search" class="search" id="profileSearch" placeholder="선수 검색..." style="max-width:200px;" />
+      </div>
+      <div style="font-size:12px; color:var(--text-2); margin-bottom:10px;">선수를 눌러 프로필 사진을 등록하세요. 등록한 사진은 <b>스쿼드 슬롯</b>에 원형으로 표시돼요. (사진이 없으면 등번호가 기본으로 표시)</div>
+      <div id="profileContent"></div>
+    </div>
+  </section>
+
+  <!-- ============ 프로필 사진 크롭 모달 ============ -->
+  <div class="modal-overlay" id="photoModal">
+    <div class="modal">
+      <h3 id="photoModalTitle">📸 프로필 사진</h3>
+      <div class="photo-crop">
+        <div class="photo-stage" id="photoStage">
+          <canvas id="photoCanvas"></canvas>
+          <div class="photo-ring"></div>
+          <div class="photo-empty" id="photoEmpty">사진을 선택하세요</div>
+        </div>
+        <div class="photo-controls">
+          <label class="photo-pick">📁 사진 선택<input type="file" id="photoFile" accept="image/*" hidden /></label>
+          <div class="photo-zoom-row"><span>확대</span><input type="range" id="photoZoom" min="1" max="3" step="0.01" value="1" /></div>
+          <div class="photo-hint">원 안이 스쿼드 슬롯에 올라갈 모습이에요 · 드래그로 위치, 슬라이더로 확대</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-danger" id="btnDeletePhoto" style="display:none">사진 삭제</button>
+        <button class="btn-cancel" id="btnCancelPhoto">취소</button>
+        <button class="btn-primary" id="btnSavePhoto">저장</button>
       </div>
     </div>
   </div>
@@ -3288,6 +3358,7 @@ function rerenderCurrent() {
     if (sq) { const nm=$('#squadName'); const fs=$('#formationSelect'); if(nm) nm.value=sq.name; if(fs) fs.value=sq.formation; }
   }
   else if (t === 'players') renderPlayersTable();
+  else if (t === 'profile') renderProfile();
   else if (t === 'calendar') renderCalendar();
   else if (t === 'org') renderOrg();
   else if (t === 'board') renderBoard();
@@ -4549,17 +4620,20 @@ const CAT_IQ_WEIGHTS = {
 function ovrForRole(player, roleCode) {
   const role = ROLES[roleCode];
   if (!role) return 0;
-  let total = 0, sumW = 0;
+  let total = 0, sumW = 0, penalty = 0;
   const add = (k, w) => {
     if (!w) return;
     const raw = player.stats?.[k];
-    if (typeof raw === 'number') { total += statQualityVal(k, raw) * w; sumW += w; }
+    if (typeof raw !== 'number') return;
+    if (STATS[k].invert) penalty += raw * (w / 100);   // 감점 스탯: 값에 비례해 OVR 차감
+    else { total += raw * w; sumW += w; }
   };
   for (const k in role.weights) add(k, role.weights[k]);
   for (const k in UNIV_WEIGHTS) add(k, UNIV_WEIGHTS[k]);
   const catIq = CAT_IQ_WEIGHTS[role.cat] || {};
   for (const k in catIq) add(k, catIq[k]);
-  return sumW > 0 ? Math.round(total / sumW) : 0;
+  const base = sumW > 0 ? total / sumW : 0;
+  return Math.max(0, Math.min(99, Math.round(base - penalty)));
 }
 function bestRoleForPlayer(player) {
   const positions = player.positions || [];
@@ -4572,10 +4646,21 @@ function bestRoleForPlayer(player) {
   });
   return best || { code: positions[0], name: ROLES[positions[0]]?.name || '?', ovr: 0 };
 }
+// 섹션 점수 = 양수 스탯 평균 − 감점(invert) 스탯 값 합 (빡대가리는 순수 −)
+function sectionScore(sectionId, getVal) {
+  const keys = STAT_KEYS.filter(k => STATS[k].section === sectionId);
+  let posSum = 0, posN = 0, penalty = 0;
+  keys.forEach(k => {
+    const v = getVal(k);
+    if (typeof v !== 'number') return;
+    if (STATS[k].invert) penalty += v;          // 감점 스탯: 값 그대로 차감
+    else { posSum += v; posN++; }
+  });
+  const posAvg = posN ? posSum / posN : 0;
+  return Math.max(0, Math.min(100, Math.round(posAvg - penalty)));
+}
 function sectionAvg(player, sectionId) {
-  const keys = STAT_KEYS.filter(k => STATS[k].section === sectionId && typeof player.stats?.[k] === 'number');
-  const qvals = keys.map(k => statQualityVal(k, player.stats[k]));
-  return qvals.length ? Math.round(qvals.reduce((a,b)=>a+b,0)/qvals.length) : 0;
+  return sectionScore(sectionId, k => (typeof player.stats?.[k] === 'number' ? player.stats[k] : null));
 }
 function footLabel(f) { return f === 'L' ? '왼발' : f === 'B' ? '양발' : '오른발'; }
 function escapeHtml(s) {
@@ -4620,6 +4705,7 @@ function switchTab(name) {
     return;
   }
   if (name === 'players') renderPlayersTable();
+  if (name === 'profile') renderProfile();
   if (name === 'calendar') renderCalendar();
   if (name === 'org') renderOrg();
   if (name === 'board') renderBoard();
@@ -4684,6 +4770,26 @@ function renderPlayerList() {
 }
 
 /* ==================== Squad tab: field ==================== */
+// 슬롯 위치(좌/우) 기준 태그: 풀백 LB/RB · 윙백 LWB/RWB · 윙어 LW/RW (미드필더 등은 역할 그대로)
+// 필드 3구간: 왼쪽(40%미만) · 중앙(40~60%) · 오른쪽(60%초과)
+function sideZone(x) { return x < 40 ? 'L' : x > 60 ? 'R' : 'C'; }
+// 드래그 중 히스테리시스(유도리) — 한 번 정해지면 경계를 더 넘어야 바뀜 → 핸드폰에서 안 흔들림
+function sideZoneHys(prev, x) {
+  if (prev === 'L') return x > 46 ? (x > 60 ? 'R' : 'C') : 'L';
+  if (prev === 'R') return x < 54 ? (x < 40 ? 'L' : 'C') : 'R';
+  if (x < 34) return 'L';
+  if (x > 66) return 'R';
+  return 'C';
+}
+function tagForSideRole(side, role) {
+  if (side === 'L' || side === 'R') {
+    if (role === 'FB') return side + 'B';                          // LB / RB
+    if (role === 'WB' || role === 'IWB') return side + 'WB';       // LWB / RWB
+    if (role === 'WNG' || role === 'IW' || role === 'IF') return side + 'W'; // LW / RW
+  }
+  return role;   // 중앙 · 미드필더 등은 역할 그대로
+}
+function slotTag(slot) { return tagForSideRole(sideZone(slot.x), slot.role); }
 function renderField() {
   const field = $('#field');
   field.querySelectorAll('.slot').forEach(el => el.remove());
@@ -4709,12 +4815,18 @@ function renderField() {
     } else {
       sub = `<div class="slot-sub" style="color:var(--text)">${escapeHtml(roleName)}</div>`;
     }
+    const hasPhoto = !!(player && player.photo);
+    const circleStyle = hasPhoto ? ` style="background-image:url('${player.photo}'); background-size:cover; background-position:center;"` : '';
+    const circleInner = hasPhoto ? '' : (player ? (player.number || '?') : slot.label);
+    const nameLabel = player
+      ? `${player.number ? `<span class="slot-no">NO.${player.number}</span> ` : ''}${escapeHtml(player.name)}`
+      : escapeHtml(slot.label);
     el.innerHTML = `
-      <div class="slot-circle">
-        ${player ? (player.number || '?') : slot.label}
-        <span class="slot-role-tag">${slot.role}</span>
+      <div class="slot-circle${hasPhoto ? ' has-photo' : ''}"${circleStyle}>
+        ${circleInner}
+        <span class="slot-role-tag">${slotTag(slot)}</span>
       </div>
-      <div class="slot-label">${player ? escapeHtml(player.name) : slot.label}</div>
+      <div class="slot-label">${nameLabel}</div>
       ${sub}
     `;
     el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('drag-over'); });
@@ -4764,6 +4876,8 @@ function attachSlotDrag(slotEl, slotIndex) {
     pointerId = e.pointerId;
     startX = e.clientX; startY = e.clientY; moved = false;
     fieldRect = document.getElementById('field').getBoundingClientRect();
+    const _sq = getCurrentSquad();
+    slotEl.dataset.side = sideZone(_sq && _sq.slots[slotIndex] ? _sq.slots[slotIndex].x : 50);
     slotEl.setPointerCapture(pointerId);
     hideTooltip();
     e.preventDefault();
@@ -4779,6 +4893,15 @@ function attachSlotDrag(slotEl, slotIndex) {
       x = Math.max(2, Math.min(98, x)); y = Math.max(2, Math.min(98, y));
       slotEl.style.left = x + '%';
       slotEl.style.top = y + '%';
+      // 좌/우 위치에 따라 역할 태그 실시간 갱신 (히스테리시스로 확확 안 바뀜)
+      const _tag = slotEl.querySelector('.slot-role-tag');
+      const _sq = getCurrentSquad();
+      if (_tag && _sq && _sq.slots[slotIndex]) {
+        const prev = slotEl.dataset.side || sideZone(x);
+        const side = sideZoneHys(prev, x);
+        slotEl.dataset.side = side;
+        _tag.textContent = tagForSideRole(side, _sq.slots[slotIndex].role);
+      }
     }
   }
   function onUp(e) {
@@ -5113,9 +5236,7 @@ function buildStatGrid() {
 }
 
 function updateSectionAvg(sectionId) {
-  const keys = STAT_KEYS.filter(k => STATS[k].section === sectionId);
-  const vals = keys.map(k => statQualityVal(k, +document.getElementById('stat_' + k).value));
-  const avg = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : 0;
+  const avg = sectionScore(sectionId, k => { const el = document.getElementById('stat_' + k); return el ? +el.value : null; });
   const el = document.getElementById('secAvg_' + sectionId);
   if (el) { el.textContent = '평균 ' + avg; el.style.color = traitValColor(avg); }
 }
@@ -5186,9 +5307,7 @@ let _peerOpen = new Set();        // 펼친 카테고리(섹션) 집합
 function defaultPeerStats() { const o = {}; STAT_KEYS.forEach(k => o[k] = STAT_DEFAULT(k)); return o; }
 function peerStatOf(p, k) { const m = (p && p.peerStats) || {}; return typeof m[k] === 'number' ? m[k] : STAT_DEFAULT(k); }
 function peerCatAvg(p, sid) {
-  const keys = STAT_KEYS.filter(k => STATS[k].section === sid);
-  const q = keys.map(k => statQualityVal(k, peerStatOf(p, k)));
-  return q.length ? Math.round(q.reduce((a,b)=>a+b,0)/q.length) : 0;
+  return sectionScore(sid, k => peerStatOf(p, k));
 }
 function setPeerStat(playerId, k, val) {
   const p = getPlayer(playerId); if (!p) return;
@@ -7032,6 +7151,7 @@ function chemCatLabel(cat) { return cat === 'all' ? '💫 종합' : (SECTIONS.fi
 // 능력치 카테고리별 색 (수비=하늘색 등) + 시너지 색과 혼합
 const SECTION_COLOR = { 1:'#fb923c', 2:'#f43f5e', 3:'#a78bfa', 4:'#38bdf8', 5:'#22c55e', 6:'#facc15', 7:'#2dd4bf', all:'#f4c430' };
 function chemCatColor(cat) { return SECTION_COLOR[cat] || SECTION_COLOR.all; }
+function chemCatEmoji(cat) { return cat === 'all' ? '💫' : (SECTIONS.find(s => s.id === cat)?.emoji || '💫'); }
 function _hx(h) { h = h.replace('#',''); if (h.length===3) h = h.split('').map(c=>c+c).join(''); return [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)]; }
 function hexMix(a, b, t) { const pa=_hx(a), pb=_hx(b); const m=(i)=>Math.round(pa[i]*t + pb[i]*(1-t)); return `rgb(${m(0)},${m(1)},${m(2)})`; }
 function chemCatShort(cat) { return cat === 'all' ? '💫종합' : (SECTIONS.find(s => s.id === cat)?.emoji || '💫') + (SECTIONS.find(s => s.id === cat)?.label.replace(/^\S+\s/, '') || ''); }
@@ -7308,7 +7428,7 @@ function renderChemistry() {
         <div class="chem-pair">${chips}</div>
       </div>
       <div class="chem-right">
-        <div class="chem-score" style="color:${lab.c}">${syn>0?'+':''}${syn}<span class="chem-ovr-u">OVR</span></div>
+        <div class="chem-score" style="color:${blended}">${chemCatEmoji(cat)} ${syn>0?'+':''}${syn}<span class="chem-ovr-u">OVR</span></div>
         <div class="chem-tag" style="color:${lab.c}">${lab.t}</div>
       </div>
       <div class="chem-actions">
@@ -7394,6 +7514,89 @@ function deleteChem(id) {
   renderChemistry();
   if (currentTab === 'squad') renderTeamPanel();
   toast('케미 삭제');
+}
+
+/* ==================== 프로필 사진 ==================== */
+function pfAvatar(p) {
+  return p.photo
+    ? `<div class="pf-avatar" style="background-image:url('${p.photo}')"></div>`
+    : `<div class="pf-avatar">${p.number || '?'}</div>`;
+}
+function renderProfile() {
+  const el = document.getElementById('profileContent');
+  const q = (document.getElementById('profileSearch').value || '').toLowerCase().trim();
+  let list = store.players.slice().sort((a,b) => (a.number||999) - (b.number||999));
+  if (q) list = list.filter(p => p.name.toLowerCase().includes(q) || String(p.number).includes(q));
+  if (!list.length) { el.innerHTML = '<div class="podium-empty">「선수 관리」 탭에서 선수를 먼저 등록해 주세요</div>'; return; }
+  el.innerHTML = '<div class="profile-grid">' + list.map(p => `<div class="profile-card" data-pf="${p.id}">
+    ${pfAvatar(p)}
+    <div class="pf-name">${p.number ? `<span class="pf-no">NO.${p.number}</span> ` : ''}${escapeHtml(p.name)}</div>
+    <div class="pf-badge ${p.photo?'on':''}">${p.photo ? '📸 사진 등록됨' : '＋ 사진 등록'}</div>
+  </div>`).join('') + '</div>';
+  el.querySelectorAll('[data-pf]').forEach(c => c.addEventListener('click', () => openPhotoModal(c.dataset.pf)));
+}
+const _crop = { playerId: null, img: null, baseMin: 1, zoom: 1, ox: 0, oy: 0, D: 220 };
+function openPhotoModal(playerId) {
+  const p = getPlayer(playerId); if (!p) return;
+  if (!canEditPlayerIdentity(p)) { toast('사진 등록은 감독/운영진 또는 본인만 가능해요'); return; }
+  _crop.playerId = playerId; _crop.img = null; _crop.zoom = 1;
+  document.getElementById('photoModalTitle').textContent = `📸 ${p.name} 프로필 사진`;
+  document.getElementById('photoFile').value = '';
+  document.getElementById('photoZoom').value = '1';
+  document.getElementById('btnDeletePhoto').style.display = p.photo ? 'inline-block' : 'none';
+  const empty = document.getElementById('photoEmpty');
+  clearCropCanvas();
+  if (p.photo) { empty.style.display = 'none'; loadCropImage(p.photo); }
+  else { empty.style.display = 'flex'; }
+  document.getElementById('photoModal').classList.add('show');
+}
+function closePhotoModal() { document.getElementById('photoModal').classList.remove('show'); _crop.img = null; }
+function clearCropCanvas() { const c = document.getElementById('photoCanvas'); if (c) { c.width = _crop.D; c.height = _crop.D; const x = c.getContext && c.getContext('2d'); if (x) x.clearRect(0,0,_crop.D,_crop.D); } }
+function loadCropImage(src) {
+  const img = new Image();
+  img.onload = () => {
+    _crop.img = img;
+    _crop.baseMin = Math.max(_crop.D / img.naturalWidth, _crop.D / img.naturalHeight);
+    _crop.zoom = parseFloat(document.getElementById('photoZoom').value) || 1;
+    centerCrop(); drawCrop();
+    document.getElementById('photoEmpty').style.display = 'none';
+  };
+  img.onerror = () => toast('이미지를 불러오지 못했어요');
+  img.src = src;
+}
+function centerCrop() { const s = _crop.baseMin * _crop.zoom; _crop.ox = (_crop.D - _crop.img.naturalWidth * s) / 2; _crop.oy = (_crop.D - _crop.img.naturalHeight * s) / 2; }
+function clampCrop() { if (!_crop.img) return; const s = _crop.baseMin * _crop.zoom; const w = _crop.img.naturalWidth*s, h = _crop.img.naturalHeight*s; _crop.ox = Math.min(0, Math.max(_crop.D - w, _crop.ox)); _crop.oy = Math.min(0, Math.max(_crop.D - h, _crop.oy)); }
+function drawCrop() {
+  const c = document.getElementById('photoCanvas'); if (!c) return;
+  c.width = _crop.D; c.height = _crop.D;
+  const ctx = c.getContext && c.getContext('2d'); if (!ctx) return;
+  ctx.clearRect(0,0,_crop.D,_crop.D);
+  if (!_crop.img) return;
+  const s = _crop.baseMin * _crop.zoom;
+  ctx.drawImage(_crop.img, _crop.ox, _crop.oy, _crop.img.naturalWidth*s, _crop.img.naturalHeight*s);
+}
+function savePhoto() {
+  const p = getPlayer(_crop.playerId); if (!p) return;
+  if (!_crop.img) { toast('사진을 선택하세요'); return; }
+  const OUT = 220;
+  const cv = document.createElement('canvas'); cv.width = OUT; cv.height = OUT;
+  const ctx = cv.getContext('2d'); const r = OUT / _crop.D; const s = _crop.baseMin * _crop.zoom;
+  ctx.drawImage(_crop.img, _crop.ox*r, _crop.oy*r, _crop.img.naturalWidth*s*r, _crop.img.naturalHeight*s*r);
+  p.photo = cv.toDataURL('image/jpeg', 0.82);
+  saveState(); closePhotoModal();
+  if (currentTab === 'profile') renderProfile();
+  if (currentTab === 'squad') { renderField(); renderPlayerList(); }
+  if (currentTab === 'players') renderPlayersTable();
+  toast('프로필 사진 저장 ✓');
+}
+function deletePhoto() {
+  const p = getPlayer(_crop.playerId); if (!p) return;
+  if (!confirm('프로필 사진을 삭제할까요?')) return;
+  delete p.photo;
+  saveState(); closePhotoModal();
+  if (currentTab === 'profile') renderProfile();
+  if (currentTab === 'squad') { renderField(); renderPlayerList(); }
+  toast('사진 삭제');
 }
 
 /* ==================== Event bindings ==================== */
@@ -7586,6 +7789,36 @@ function bindEvents() {
 
   // 역할 가이드 + 전술판
   document.getElementById('guideSearch').addEventListener('input', renderGuide);
+
+  // 프로필 사진
+  document.getElementById('profileSearch').addEventListener('input', renderProfile);
+  document.getElementById('btnSavePhoto').addEventListener('click', savePhoto);
+  document.getElementById('btnDeletePhoto').addEventListener('click', deletePhoto);
+  document.getElementById('btnCancelPhoto').addEventListener('click', closePhotoModal);
+  document.getElementById('photoModal').addEventListener('click', e => { if (e.target.id === 'photoModal') closePhotoModal(); });
+  document.getElementById('photoFile').addEventListener('change', e => {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    const fr = new FileReader();
+    fr.onload = () => { document.getElementById('photoZoom').value = '1'; _crop.zoom = 1; loadCropImage(fr.result); document.getElementById('btnDeletePhoto').style.display = 'inline-block'; };
+    fr.readAsDataURL(f);
+  });
+  document.getElementById('photoZoom').addEventListener('input', e => {
+    if (!_crop.img) return;
+    const sOld = _crop.baseMin * _crop.zoom;
+    const cxImg = (_crop.D/2 - _crop.ox) / sOld, cyImg = (_crop.D/2 - _crop.oy) / sOld;
+    _crop.zoom = parseFloat(e.target.value) || 1;
+    const sNew = _crop.baseMin * _crop.zoom;
+    _crop.ox = _crop.D/2 - cxImg * sNew; _crop.oy = _crop.D/2 - cyImg * sNew;
+    clampCrop(); drawCrop();
+  });
+  (function bindCropDrag() {
+    const stage = document.getElementById('photoStage'); if (!stage) return;
+    let dragging = false, lx = 0, ly = 0;
+    stage.addEventListener('pointerdown', e => { if (!_crop.img) return; dragging = true; lx = e.clientX; ly = e.clientY; try { stage.setPointerCapture(e.pointerId); } catch(_){} });
+    stage.addEventListener('pointermove', e => { if (!dragging || !_crop.img) return; _crop.ox += (e.clientX - lx); _crop.oy += (e.clientY - ly); lx = e.clientX; ly = e.clientY; clampCrop(); drawCrop(); });
+    stage.addEventListener('pointerup', () => { dragging = false; });
+    stage.addEventListener('pointercancel', () => { dragging = false; });
+  })();
   document.getElementById('tacToggle').addEventListener('click', tacToggle);
   document.getElementById('tacReplay').addEventListener('click', tacReplay);
   document.getElementById('tacClose').addEventListener('click', closeTacticModal);
@@ -7611,7 +7844,7 @@ function bindEvents() {
     if (e.key === 'Escape') {
       closePlayerModal(); closeAssignModal(); closeMatchModal();
       closeDayModal(); closeRoleEditor(); closeStaffModal();
-      closePostModal(); closeDorModal(); closeTraitModal(); closeRecordModal(); closeChemModal(); closeTacticModal();
+      closePostModal(); closeDorModal(); closeTraitModal(); closeRecordModal(); closeChemModal(); closeTacticModal(); closePhotoModal();
     }
   });
 }
