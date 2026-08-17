@@ -4536,7 +4536,7 @@ const FORMATIONS = {
   '4-3-3': [
     { label: 'GK', x: 50, y: 92 },
     { label: 'LB', x: 15, y: 75 }, { label: 'CB', x: 38, y: 78 }, { label: 'CB', x: 62, y: 78 }, { label: 'RB', x: 85, y: 75 },
-    { label: 'CM', x: 38, y: 55 }, { label: 'CDM', x: 50, y: 60 }, { label: 'CM', x: 62, y: 55 },
+    { label: 'CAM', x: 38, y: 40 }, { label: 'CDM', x: 50, y: 60 }, { label: 'CAM', x: 62, y: 40 },
     { label: 'LW', x: 18, y: 25 }, { label: 'ST', x: 50, y: 18 }, { label: 'RW', x: 82, y: 25 },
   ],
   '4-2-3-1': [
@@ -8150,6 +8150,7 @@ function bindEvents() {
   $('#formationSelect').addEventListener('change', e => {
     const squad = getCurrentSquad();
     if (!squad) return;
+    if (!canManageSquad()) { toast('감독/운영진만 가능해요 · 상단 🔒 감독 모드로 잠금 해제'); e.target.value = squad.formation; return; }
     squad.formation = e.target.value;
     resetSquadSlots(squad);
     const newLen = squad.slots.length;
@@ -8169,6 +8170,7 @@ function bindEvents() {
   $('#btnResetPositions').addEventListener('click', () => {
     const squad = getCurrentSquad();
     if (!squad) return;
+    if (!canManageSquad()) { toast('감독/운영진만 가능해요 · 상단 🔒 감독 모드로 잠금 해제'); return; }
     if (!confirm('슬롯 위치를 기본값으로 되돌리시겠습니까? (선수 배치는 유지)')) return;
     resetSquadSlots(squad);
     saveState();
