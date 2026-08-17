@@ -775,6 +775,23 @@
   .player-radar-ovr { font-family: var(--font-brand); font-weight: 700; font-size: 48px; line-height: 1; }
   .player-radar-ovr-sub { font-size: 12px; color: var(--text-3); margin-top: 4px; letter-spacing: .04em; }
 
+  /* 팀원 평가 패널 (시안 테마 — 스탯 금색과 구분) */
+  .peer-panel { background: rgba(56,189,248,0.07); border: 1px solid rgba(56,189,248,0.3); border-radius: 12px; padding: 12px 14px; margin: 0 0 16px; }
+  .peer-head { font-family: var(--font-brand); font-size: 14px; font-weight: 700; color: #7dd3fc; letter-spacing: .02em; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+  .peer-head .peer-sub { text-transform: none; letter-spacing: 0; font-size: 11px; color: var(--text-3); font-weight: 400; }
+  .peer-step { margin-left: auto; font-size: 11px; color: var(--text-2); font-weight: 600; display: flex; align-items: center; gap: 6px; text-transform: none; letter-spacing: 0; }
+  .peer-step input { width: 54px; background: var(--bg-3); border: 1px solid rgba(56,189,248,0.4); color: #7dd3fc; border-radius: 7px; padding: 5px 8px; font-size: 13px; font-weight: 700; text-align: center; }
+  .peer-selfnote { font-size: 12px; color: var(--text-2); background: var(--bg-3); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; margin-bottom: 10px; }
+  .peer-cats { display: grid; grid-template-columns: 1fr 1fr; gap: 7px 14px; }
+  .peer-cat-row { display: flex; align-items: center; gap: 8px; }
+  .peer-cat-name { flex: 1; min-width: 0; font-size: 12px; font-weight: 600; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .peer-cat-val { font-family: var(--font-brand); font-weight: 700; font-size: 19px; color: #38bdf8; min-width: 30px; text-align: right; }
+  .peer-btn { width: 34px; height: 32px; border-radius: 8px; border: 1.5px solid var(--border-2); background: var(--bg-3); font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .12s; user-select: none; flex-shrink: 0; }
+  .peer-btn.up { color: #22c55e; } .peer-btn.up:hover { background: rgba(34,197,94,0.16); border-color: #22c55e; }
+  .peer-btn.up:active { transform: scale(0.9); background: rgba(34,197,94,0.28); }
+  .peer-btn.down { color: #f87171; } .peer-btn.down:hover { background: rgba(248,113,113,0.16); border-color: #f87171; }
+  .peer-btn.down:active { transform: scale(0.9); background: rgba(248,113,113,0.28); }
+
   .live-ovr-panel { background: var(--bg-2); border: 1px solid var(--border-2); border-radius: 8px; padding: 10px; margin-top: 14px; }
   .live-ovr-panel h4 { margin-top: 0; margin-bottom: 8px; }
   .live-ovr-list { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -1525,6 +1542,9 @@
   .chem-edit:hover { border-color: var(--gold); }
   .chem-del:hover { border-color: var(--danger); }
   #chemScoreTag { font-weight: 700; }
+  .chem-cat-select { width: 100%; background: var(--bg-3); color: var(--text); border: 1px solid var(--border-2); border-radius: 8px; padding: 9px; font-size: 14px; }
+  .chem-catchip { font-size: 10px; font-weight: 700; color: #7dd3fc; background: rgba(56,189,248,0.12); border: 1px solid rgba(56,189,248,0.35); border-radius: 10px; padding: 1px 7px; }
+  .tp-link-cat { font-size: 10px; font-weight: 700; color: #7dd3fc; background: rgba(56,189,248,0.12); border-radius: 8px; padding: 1px 6px; flex-shrink: 0; }
   .chem-ovr-u { display: block; font-size: 9px; color: var(--text-3); font-weight: 400; letter-spacing: .04em; }
 
   /* ==================== 역할 가이드 탭 ==================== */
@@ -1570,6 +1590,8 @@
   .tac-scn { background: var(--bg-3); border: 1px solid var(--border-2); color: var(--text-2); border-radius: 20px; padding: 5px 12px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all .12s; }
   .tac-scn:hover { border-color: var(--gold-2); }
   .tac-scn.on { background: linear-gradient(180deg, var(--gold-warm), var(--gold)); color: #0a0a0a; border-color: var(--gold-2); }
+  .tac-scn.adv { border-color: rgba(244,63,94,0.4); color: #fca5b5; }
+  .tac-scn.adv.on { background: linear-gradient(180deg, #fb7185, #f43f5e); color: #0a0a0a; border-color: #f43f5e; }
   /* 선수 표: 시너지 셀 */
   .syn-cell { display: flex; flex-wrap: wrap; gap: 3px; justify-content: center; max-width: 130px; }
   .syn-chip { font-size: 10px; font-weight: 700; border: 1px solid; border-radius: 20px; padding: 1px 6px; white-space: nowrap; background: rgba(0,0,0,0.25); }
@@ -2053,6 +2075,12 @@
     .player-radar-wrap { width: 210px; }
     .player-radar-ovr { font-size: 40px; }
     .stat-grid { grid-template-columns: 1fr; }
+    /* 팀원 평가 모바일 — 한 줄에 한 카테고리, 버튼 크게 */
+    .peer-cats { grid-template-columns: 1fr; gap: 6px; }
+    .peer-cat-name { font-size: 13px; }
+    .peer-cat-val { font-size: 20px; }
+    .peer-btn { width: 42px; height: 38px; font-size: 15px; }
+    .peer-step input { width: 60px; padding: 7px 8px; }
 
     /* 팀 능력치 · 팀컬러 모바일 */
     .tp-radar { width: 120px; }
@@ -2689,6 +2717,10 @@
         <div class="chem-pick-list" id="chemPickList"></div>
       </div>
       <div class="form-group">
+        <label>어떤 능력치를 올릴까요?</label>
+        <select id="chemCat" class="chem-cat-select"></select>
+      </div>
+      <div class="form-group">
         <label>시너지 보너스 <span id="chemScoreLbl" style="color:var(--gold);font-weight:700">+5</span> <span style="text-transform:none;letter-spacing:0;color:var(--text-3);font-weight:400">OVR</span> · <span id="chemScoreTag"></span></label>
         <input type="range" id="chemScore" min="-10" max="15" value="5" style="width:100%; accent-color:var(--gold);" />
         <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--text-3); margin-top:2px;"><span>⚔️ 앙숙 −10</span><span>😐 0</span><span>💛 +15</span></div>
@@ -2854,6 +2886,9 @@
         <div class="player-radar-ovr-sub" id="playerRadarOvrSub">종합</div>
       </div>
     </div>
+
+    <!-- 팀원 평가 능력치 (본인 제외 크라우드 평가) -->
+    <div class="peer-panel" id="peerRatePanel"></div>
 
     <!-- stat sections will be built dynamically -->
     <div id="statSections"></div>
@@ -3182,6 +3217,11 @@ function normalizeStore(s) {
     if (p.downvotes && !Array.isArray(p.downvotes)) p.downvotes = Object.values(p.downvotes);
     if (!p.upvotes) p.upvotes = [];
     if (!p.downvotes) p.downvotes = [];
+    if (!p.peerScores || typeof p.peerScores !== 'object' || Array.isArray(p.peerScores)) {
+      const oldVals = Object.values(p.peerRatings || {}).filter(v => typeof v === 'number');
+      const base = typeof p.peerScore === 'number' ? p.peerScore : (oldVals.length ? Math.round(oldVals.reduce((a,b)=>a+b,0)/oldVals.length) : 70);
+      p.peerScores = {}; for (let sid = 1; sid <= 7; sid++) p.peerScores[sid] = base;
+    }
   });
   // Players positions arrays
   s.players.forEach(p => {
@@ -3340,6 +3380,19 @@ function canDeletePlayer(player) {
   if (isManagerActive()) return true;
   const u = currentUser();
   return player?.userId === u?.id;
+}
+// 팀원 평가(크라우드 능력치): 본인 프로필이 아니면 누구나 평가 가능
+function canPeerRate(player) { const u = currentUser(); return !!(u && player && player.userId !== u.id); }
+function peerAvg(player) {
+  const r = (player && player.peerRatings) || {};
+  const vals = Object.values(r).filter(v => typeof v === 'number');
+  if (!vals.length) return { avg: null, count: 0 };
+  return { avg: Math.round(vals.reduce((a,b)=>a+b,0)/vals.length), count: vals.length };
+}
+function myPeerRating(player) {
+  const u = currentUser(); if (!u || !player) return null;
+  const v = (player.peerRatings || {})[u.id];
+  return typeof v === 'number' ? v : null;
 }
 
 /* ==================== Auth UI ==================== */
@@ -4049,6 +4102,72 @@ const ROLE_SCENARIOS = {
     { name:'침투 연계', phases:[[80,30,50,40,'측면 지원'],[66,22,60,28,'안쪽 침투'],[66,22,52,18,'원투 패스'],[58,14,54,16,'침투 마무리']] },
   ],
 };
+// 포지션별 추가 기본 시나리오 2개
+const ROLE_SC_MORE = {
+  GK: [ {name:'롱볼 배급', phases:[[50,90,50,90,'볼 소유'],[52,86,52,86,'전방 주시'],[60,84,80,30,'전방으로 롱볼'],[50,90,80,30,'복귀']]}, {name:'세컨볼 대비', phases:[[50,88,45,40,'상대 공중볼'],[46,86,46,60,'낙하 지점 예측'],[50,88,50,64,'세컨볼 처리'],[50,90,50,70,'복귀']]} ],
+  SK: [ {name:'전진 스위핑', phases:[[50,84,40,45,'상대 롱볼'],[48,70,46,60,'박스 밖 차단'],[48,70,60,58,'처리 후 배급'],[50,84,60,55,'복귀']]}, {name:'빌드업 지원', phases:[[50,84,50,84,'볼 소유'],[46,78,46,78,'수비와 삼각'],[46,78,33,60,'전개'],[50,84,33,55,'복귀']]} ],
+  CB: [ {name:'전진 수비', phases:[[37,80,50,50,'상대 전개'],[42,64,48,52,'전진 압박'],[42,64,42,62,'차단'],[37,80,55,58,'복귀']]}, {name:'세트피스 수비', phases:[[37,80,50,20,'상대 코너'],[48,22,50,18,'박스 안 마킹'],[48,22,48,20,'헤더 클리어'],[37,80,50,50,'복귀']]} ],
+  BPD:[ {name:'중앙 배급', phases:[[37,80,37,80,'소유'],[45,70,45,70,'전진'],[45,70,67,50,'중원 연결'],[37,80,60,45,'복귀']]}, {name:'롱 스위치', phases:[[37,80,37,80,'소유'],[40,74,40,74,'시야 확보'],[40,74,80,32,'측면 전환'],[38,80,80,32,'정비']]} ],
+  SW: [ {name:'라인 컨트롤', phases:[[40,82,55,45,'상대 침투'],[42,74,50,58,'라인 관리'],[42,74,42,72,'커트'],[40,82,55,58,'복귀']]}, {name:'전진 캐리', phases:[[40,82,40,82,'소유'],[46,70,46,70,'전진 드리블'],[46,70,60,55,'배급'],[40,82,60,52,'복귀']]} ],
+  FB: [ {name:'언더래핑', phases:[[85,72,70,50,'전개'],[70,50,66,48,'안쪽 언더랩'],[62,38,60,36,'침투'],[85,72,55,30,'복귀']]}, {name:'측면 협력수비', phases:[[85,72,80,55,'측면 피격'],[83,62,78,58,'윙어와 협력'],[83,62,83,60,'협력 차단'],[85,72,70,58,'복귀']]} ],
+  WB: [ {name:'하프스페이스 침투', phases:[[85,68,66,48,'전개'],[70,44,64,44,'안쪽 침투'],[62,30,60,30,'박스 접근'],[85,68,55,22,'복귀']]}, {name:'측면 커버', phases:[[85,58,30,45,'반대 전개'],[85,66,55,55,'내려와 커버'],[85,68,80,60,'차단'],[85,68,72,55,'유지']]} ],
+  IWB:[ {name:'더블 피벗', phases:[[85,70,50,58,'빌드업'],[58,60,54,58,'중앙으로'],[54,58,54,56,'피벗 형성'],[85,70,50,45,'복귀']]}, {name:'측면 복귀', phases:[[64,58,30,40,'역습'],[76,64,55,55,'측면 복귀'],[85,70,72,62,'차단'],[85,70,70,60,'유지']]} ],
+  CDM:[ {name:'전진 차단', phases:[[50,64,50,44,'상대 전개'],[48,54,50,50,'전진 압박'],[48,54,48,52,'인터셉트'],[50,64,60,55,'배급']]}, {name:'세컨볼 장악', phases:[[50,64,50,30,'롱볼 경합'],[50,56,50,50,'낙하 지점'],[50,56,52,54,'세컨볼 회수'],[50,64,64,54,'배급']]} ],
+  DLP:[ {name:'하프턴 전개', phases:[[50,64,50,64,'등지고 수신'],[46,60,46,60,'하프턴'],[46,60,74,34,'전진 패스'],[50,64,74,34,'복귀']]}, {name:'측면 배급', phases:[[50,64,50,64,'소유'],[44,60,44,60,'각도 형성'],[44,60,82,30,'측면 전개'],[50,64,82,30,'복귀']]} ],
+  ANC:[ {name:'커버 섀도', phases:[[50,64,50,44,'상대 10번'],[50,58,50,52,'패스길 섀도'],[50,58,50,56,'차단'],[50,64,58,58,'배급']]}, {name:'양 측면 커버', phases:[[50,64,72,50,'우측 전개'],[58,60,66,54,'우측 커버'],[42,60,34,54,'좌측 커버'],[50,64,50,58,'복귀']]} ],
+  BBM:[ {name:'전방 압박', phases:[[67,52,55,40,'상대 빌드업'],[60,38,55,36,'전방 압박'],[60,38,58,38,'압박 성공'],[67,52,60,44,'복귀']]}, {name:'후방 침투 지원', phases:[[67,52,67,52,'소유'],[64,44,64,44,'전진'],[64,44,55,28,'침투 패스'],[67,52,55,28,'복귀']]} ],
+  CM: [ {name:'스위칭', phases:[[67,52,67,52,'소유'],[58,48,58,48,'중앙 이동'],[58,48,20,30,'측면 스위치'],[67,52,20,30,'복귀']]}, {name:'수비 밸런스', phases:[[67,52,40,45,'좌측 전개'],[55,56,48,52,'커버 이동'],[55,56,55,54,'차단'],[67,52,60,52,'복귀']]} ],
+  MEZ:[ {name:'침투 득점', phases:[[67,52,55,50,'전개'],[64,34,60,38,'하프 침투'],[62,22,60,24,'박스 접근'],[62,18,61,16,'마무리']]}, {name:'측면 연계', phases:[[67,52,80,45,'측면 지원'],[72,42,78,40,'오버랩 유도'],[72,42,80,30,'연계'],[67,52,70,32,'복귀']]} ],
+  CAM:[ {name:'하프 침투', phases:[[55,44,50,52,'라인 사이'],[58,32,55,40,'우측 하프 침투'],[58,26,58,26,'키패스 수신'],[55,42,55,18,'찬스']]}, {name:'2선 슈팅', phases:[[55,44,55,44,'소유'],[50,34,50,34,'전진'],[50,34,50,32,'슈팅 각'],[50,30,50,26,'중거리 슈팅']]} ],
+  REG:[ {name:'대각 전환', phases:[[50,62,50,62,'딥라잉 소유'],[44,58,44,58,'조율'],[44,58,80,28,'대각 롱패스'],[50,62,80,28,'복귀']]}, {name:'전진 스루', phases:[[50,62,50,62,'소유'],[50,56,50,56,'전진 각도'],[50,56,50,18,'스루패스'],[50,62,50,20,'복귀']]} ],
+  WM: [ {name:'인사이드 이동', phases:[[80,48,80,48,'측면 소유'],[66,44,66,44,'안쪽 이동'],[66,44,50,30,'중앙 연결'],[80,48,55,30,'복귀']]}, {name:'측면 2대1', phases:[[80,48,80,48,'소유'],[80,38,80,38,'풀백과 2대1'],[80,30,80,30,'배후 침투'],[80,48,64,22,'복귀']]} ],
+  ST: [ {name:'등지고 연계', phases:[[50,16,50,50,'전개'],[52,26,52,34,'내려와 등지기'],[52,26,66,30,'벽 패스'],[46,14,58,22,'침투 마무리']]}, {name:'측면 이동', phases:[[50,16,80,28,'우측 크로스 준비'],[62,18,74,24,'측면 이동'],[46,14,52,16,'니어 쇄도'],[46,11,46,10,'마무리']]} ],
+  SS: [ {name:'하프 침투', phases:[[50,26,55,44,'전개'],[58,16,55,28,'우측 하프 침투'],[58,16,58,18,'수신'],[52,11,52,10,'마무리']]}, {name:'중거리 슈팅', phases:[[50,26,50,26,'소유'],[50,22,50,22,'전진 드리블'],[50,22,50,20,'슈팅 각'],[50,20,50,16,'중거리 슈팅']]} ],
+  POA:[ {name:'니어 쇄도', phases:[[50,14,20,30,'좌측 크로스'],[42,12,28,24,'니어 포스트'],[42,12,42,12,'수신'],[42,10,42,9,'마무리']]}, {name:'오프사이드 탈출', phases:[[50,15,50,40,'전개'],[52,15,50,30,'라인 평행 대기'],[46,10,48,20,'타이밍 침투'],[46,9,46,8,'마무리']]} ],
+  CF: [ {name:'포스트 연계', phases:[[50,20,50,50,'롱볼'],[50,30,50,40,'내려와 지키기'],[50,30,66,30,'2선 연결'],[52,16,62,22,'침투']]}, {name:'측면 침투', phases:[[50,20,80,30,'우측 전개'],[64,20,72,26,'측면 침투'],[64,20,64,18,'수신'],[52,14,58,16,'컷백 마무리']]} ],
+  TGT:[ {name:'플릭온', phases:[[50,18,50,52,'롱볼'],[50,26,50,40,'경합 위치'],[50,26,60,30,'헤더 플릭'],[56,16,60,24,'2선 침투']]}, {name:'박스 점유', phases:[[50,18,80,28,'우측 크로스'],[50,16,74,22,'박스 점유'],[50,14,52,15,'헤더 경합'],[50,11,50,10,'헤더 골']]} ],
+  F9: [ {name:'풀백 유도', phases:[[50,20,50,48,'전개'],[50,36,50,42,'내려옴'],[66,30,66,30,'측면 공간 오픈'],[50,20,66,24,'복귀']]}, {name:'직접 침투', phases:[[50,20,50,44,'소유'],[46,14,48,28,'수비 뒤 침투'],[46,14,46,14,'수신'],[48,10,48,9,'마무리']]} ],
+  DLF:[ {name:'스루 지원', phases:[[50,24,50,48,'전개'],[50,36,50,42,'내려와 연결'],[50,36,64,26,'스루패스'],[50,24,64,24,'복귀']]}, {name:'하프 침투', phases:[[50,24,60,40,'우측 전개'],[58,20,60,30,'하프 침투'],[58,20,58,18,'수신'],[52,13,54,15,'마무리']]} ],
+  IF: [ {name:'컷인 슈팅', phases:[[20,28,25,45,'측면 소유'],[38,20,32,30,'컷인'],[46,14,42,18,'슈팅 각'],[48,10,48,9,'감아차기']]}, {name:'배후 침투', phases:[[20,28,35,40,'전개'],[30,18,30,30,'풀백 뒤 침투'],[30,18,32,18,'수신'],[42,11,40,13,'컷백 마무리']]} ],
+  WNG:[ {name:'백포스트 쇄도', phases:[[80,30,20,26,'좌측 크로스'],[72,18,40,20,'백포스트 침투'],[64,14,56,16,'수신'],[60,11,60,10,'마무리']]}, {name:'1대1 돌파', phases:[[80,30,80,30,'측면 소유'],[82,22,82,22,'1대1'],[84,16,84,16,'바깥 돌파'],[80,30,64,14,'크로스']]} ],
+  IW: [ {name:'하프 콤비네이션', phases:[[80,30,80,30,'측면 소유'],[66,24,66,24,'하프스페이스'],[66,24,52,18,'원투'],[58,14,54,16,'침투 마무리']]}, {name:'백포스트 득점', phases:[[80,30,25,26,'좌측 크로스'],[70,18,45,20,'중앙 침투'],[62,14,56,16,'백포스트'],[58,11,58,10,'마무리']]} ],
+};
+// 포지션별 심화: 온더볼(t:'on') / 오프더볼(t:'off')
+const ROLE_SC_ADV = {
+  GK: [ {name:'온더볼 · 빌드업 옵션',t:'on',phases:[[50,90,50,90,'발밑 볼'],[38,88,38,88,'측면 이동'],[38,88,15,72,'풀백에 배급'],[50,90,33,55,'복귀']]}, {name:'오프더볼 · 커버',t:'off',phases:[[50,88,62,45,'볼 반대편'],[58,86,62,50,'볼쪽 커버'],[50,86,50,55,'뒷공간 대비'],[50,90,50,62,'원위치']]} ],
+  SK: [ {name:'온더볼 · 전진 캐리',t:'on',phases:[[50,84,50,84,'소유'],[50,74,50,74,'전진'],[50,74,67,50,'롱패스'],[50,84,60,50,'복귀']]}, {name:'오프더볼 · 커버 스위핑',t:'off',phases:[[50,84,40,48,'상대 침투'],[48,72,45,60,'배후 커버'],[48,72,48,68,'대기'],[50,84,50,60,'복귀']]} ],
+  CB: [ {name:'온더볼 · 전진 드리블',t:'on',phases:[[37,80,37,80,'소유'],[42,68,42,68,'전진'],[42,68,60,54,'배급'],[37,80,58,50,'복귀']]}, {name:'오프더볼 · 커버 & 마킹',t:'off',phases:[[37,80,55,45,'반대 전개'],[45,68,50,55,'마킹 이동'],[45,68,45,66,'대인'],[37,80,55,55,'복귀']]} ],
+  BPD:[ {name:'온더볼 · 라인 브레이킹',t:'on',phases:[[37,80,37,80,'소유'],[43,66,43,66,'드리블 전진'],[43,66,67,48,'라인 가르기'],[38,78,60,44,'복귀']]}, {name:'오프더볼 · 커버',t:'off',phases:[[37,80,60,50,'우측 전개'],[46,70,52,58,'커버'],[46,70,46,68,'차단'],[37,80,55,55,'복귀']]} ],
+  SW: [ {name:'온더볼 · 리베로 전진',t:'on',phases:[[40,82,40,82,'소유'],[46,68,46,68,'전진 캐리'],[46,68,62,52,'배급'],[40,82,60,50,'복귀']]}, {name:'오프더볼 · 배후 커버',t:'off',phases:[[40,82,55,42,'상대 침투'],[42,70,50,55,'배후 커버'],[42,70,42,68,'대기'],[40,82,55,55,'복귀']]} ],
+  FB: [ {name:'온더볼 · 오버랩 크로스',t:'on',phases:[[85,72,85,72,'측면 소유'],[85,48,85,48,'오버랩'],[85,32,85,32,'크로스 지점'],[83,30,55,18,'크로스']]}, {name:'오프더볼 · 오버랩 런',t:'off',phases:[[85,72,68,50,'윙어 소유'],[85,48,66,46,'오버랩 런'],[85,34,70,34,'폭 벌리기'],[83,30,80,32,'수신 크로스']]} ],
+  WB: [ {name:'온더볼 · 측면 돌파',t:'on',phases:[[85,68,85,68,'소유'],[86,44,86,44,'전진 드리블'],[80,24,80,24,'컷백 지점'],[83,66,50,16,'컷백']]}, {name:'오프더볼 · 폭 유지 런',t:'off',phases:[[85,60,60,48,'중앙 소유'],[86,40,64,42,'측면 폭 런'],[84,26,80,28,'침투'],[85,68,80,26,'수신']]} ],
+  IWB:[ {name:'온더볼 · 중앙 캐리',t:'on',phases:[[85,70,85,70,'측면 소유'],[64,60,64,60,'안쪽 캐리'],[58,54,58,54,'전진 패스'],[85,70,52,44,'복귀']]}, {name:'오프더볼 · 언더랩 런',t:'off',phases:[[85,70,66,52,'전개'],[66,56,60,52,'안쪽 언더랩'],[58,44,56,44,'침투'],[85,70,55,40,'복귀']]} ],
+  CDM:[ {name:'온더볼 · 템포 조율',t:'on',phases:[[50,64,50,64,'수신'],[46,60,46,60,'하프턴'],[46,60,70,48,'배급'],[50,64,70,48,'복귀']]}, {name:'오프더볼 · 공간 보호',t:'off',phases:[[50,64,50,44,'상대 전진'],[48,58,50,52,'공간 보호'],[48,58,48,56,'차단 준비'],[50,64,50,58,'유지']]} ],
+  DLP:[ {name:'온더볼 · 딕테이팅',t:'on',phases:[[50,64,50,64,'수신'],[42,60,42,60,'조율'],[42,60,78,32,'롱패스'],[50,64,78,32,'복귀']]}, {name:'오프더볼 · 앵글 형성',t:'off',phases:[[50,64,66,56,'우측 소유'],[44,60,58,54,'패스 각 형성'],[44,60,44,58,'수신 준비'],[50,64,50,56,'복귀']]} ],
+  ANC:[ {name:'온더볼 · 간결 배급',t:'on',phases:[[50,64,50,64,'수신'],[50,60,50,60,'간결 처리'],[50,60,64,54,'배급'],[50,64,64,54,'복귀']]}, {name:'오프더볼 · 패스길 차단',t:'off',phases:[[50,64,50,46,'상대 10번'],[50,58,50,52,'패스길 위치'],[50,58,50,56,'차단'],[50,64,58,56,'복귀']]} ],
+  BBM:[ {name:'온더볼 · 드라이브',t:'on',phases:[[67,52,67,52,'수신'],[62,40,62,40,'전방 드라이브'],[62,40,55,28,'침투 패스'],[67,52,55,28,'복귀']]}, {name:'오프더볼 · 박스 침투 런',t:'off',phases:[[67,52,50,50,'중앙 소유'],[60,34,54,40,'박스로 런'],[55,24,54,28,'침투'],[54,18,54,16,'마무리']]} ],
+  CM: [ {name:'온더볼 · 볼 순환',t:'on',phases:[[67,52,67,52,'수신'],[58,50,58,50,'전환'],[58,50,30,50,'반대 순환'],[67,52,30,50,'복귀']]}, {name:'오프더볼 · 전진 지원 런',t:'off',phases:[[67,52,50,52,'소유'],[64,42,58,46,'전진 런'],[64,42,64,40,'수신'],[67,52,60,32,'복귀']]} ],
+  MEZ:[ {name:'온더볼 · 컷인 슈팅',t:'on',phases:[[67,52,67,52,'수신'],[70,40,70,40,'하프 캐리'],[64,30,64,30,'슈팅 각'],[64,26,64,24,'슈팅']]}, {name:'오프더볼 · 하프 런',t:'off',phases:[[67,52,50,52,'중앙 소유'],[72,38,60,44,'하프 런'],[66,26,60,28,'침투'],[64,20,60,20,'수신']]} ],
+  CAM:[ {name:'온더볼 · 키패스',t:'on',phases:[[55,44,55,44,'수신'],[52,36,52,36,'전진'],[52,36,40,22,'키패스'],[55,44,40,22,'복귀']]}, {name:'오프더볼 · 라인 침투 런',t:'off',phases:[[55,44,45,52,'좌측 소유'],[48,30,46,40,'라인 사이 런'],[48,26,48,26,'수신'],[50,18,50,16,'마무리']]} ],
+  REG:[ {name:'온더볼 · 전선 전환',t:'on',phases:[[50,62,50,62,'수신'],[44,58,44,58,'조율'],[44,58,82,26,'전환'],[50,62,82,26,'복귀']]}, {name:'오프더볼 · 낮은 앵글',t:'off',phases:[[50,62,64,54,'우측 소유'],[46,60,58,54,'낮게 벌려 각'],[46,60,46,58,'수신 준비'],[50,62,50,56,'복귀']]} ],
+  WM: [ {name:'온더볼 · 크로스',t:'on',phases:[[80,48,80,48,'수신'],[80,32,80,32,'전진'],[80,24,80,24,'크로스 지점'],[80,48,50,16,'크로스']]}, {name:'오프더볼 · 측면 폭 유지',t:'off',phases:[[80,48,50,44,'중앙 소유'],[82,38,60,42,'폭 유지 런'],[82,30,78,32,'침투'],[80,48,80,30,'수신']]} ],
+  ST: [ {name:'온더볼 · 등지고 턴',t:'on',phases:[[50,16,50,16,'수신'],[52,22,52,22,'등지고 지키기'],[50,18,50,18,'턴'],[48,12,48,11,'슈팅']]}, {name:'오프더볼 · 뒷공간 침투',t:'off',phases:[[50,18,50,50,'미드 소유'],[42,10,50,38,'수비 뒤 런'],[42,10,44,14,'수신'],[46,9,46,8,'마무리']]} ],
+  SS: [ {name:'온더볼 · 컷인',t:'on',phases:[[50,26,50,26,'수신'],[52,20,52,20,'전진'],[52,20,52,18,'슈팅 각'],[50,14,50,12,'슈팅']]}, {name:'오프더볼 · 2선 침투',t:'off',phases:[[50,26,50,48,'전개'],[46,13,50,34,'2선 런'],[46,13,47,15,'수신'],[46,10,46,9,'마무리']]} ],
+  POA:[ {name:'온더볼 · 원터치',t:'on',phases:[[50,14,50,16,'박스 안 수신'],[48,12,48,12,'원터치 조정'],[48,12,48,11,'슈팅 준비'],[48,10,48,9,'마무리']]}, {name:'오프더볼 · 문전 침투 런',t:'off',phases:[[50,14,78,26,'우측 크로스'],[44,12,72,22,'니어 런'],[44,12,46,13,'수신'],[46,10,46,9,'마무리']]} ],
+  CF: [ {name:'온더볼 · 홀드업',t:'on',phases:[[50,20,50,22,'수신'],[50,30,50,30,'등지고 홀드'],[50,30,64,28,'연계'],[52,16,60,22,'침투']]}, {name:'오프더볼 · 채널 런',t:'off',phases:[[50,20,50,46,'전개'],[42,14,48,30,'채널 침투'],[42,14,44,15,'수신'],[48,10,48,9,'마무리']]} ],
+  TGT:[ {name:'온더볼 · 포스트업',t:'on',phases:[[50,18,50,20,'수신'],[50,28,50,28,'등지고 지키기'],[50,28,62,30,'플릭'],[54,18,60,24,'침투']]}, {name:'오프더볼 · 니어 헤더',t:'off',phases:[[50,18,80,28,'우측 크로스'],[48,15,72,22,'니어 침투'],[48,14,50,15,'헤더'],[48,11,48,10,'헤더 골']]} ],
+  F9: [ {name:'온더볼 · 드롭 & 턴',t:'on',phases:[[50,20,50,22,'수신'],[50,36,50,36,'중앙 드롭'],[50,36,66,28,'턴 & 연결'],[50,20,66,24,'복귀']]}, {name:'오프더볼 · 공간 창출 런',t:'off',phases:[[50,20,50,44,'전개'],[50,36,50,42,'내려와 유도'],[64,26,60,30,'측면 공간 오픈'],[50,20,60,24,'복귀']]} ],
+  DLF:[ {name:'온더볼 · 링크 & 턴',t:'on',phases:[[50,24,50,26,'수신'],[50,36,50,36,'드롭'],[50,36,46,26,'등지고 연계'],[52,16,50,22,'2선 득점']]}, {name:'오프더볼 · 배후 런',t:'off',phases:[[50,24,50,46,'전개'],[46,16,48,32,'배후 런'],[46,16,47,17,'수신'],[50,11,50,10,'마무리']]} ],
+  IF: [ {name:'온더볼 · 컷인 슈팅',t:'on',phases:[[20,28,22,30,'측면 수신'],[38,20,32,26,'컷인 드리블'],[46,14,42,18,'슈팅 각'],[48,10,48,9,'슈팅']]}, {name:'오프더볼 · 반대 침투',t:'off',phases:[[20,28,66,30,'우측 크로스'],[34,18,52,22,'반대편 침투'],[42,13,44,15,'수신'],[46,10,46,9,'마무리']]} ],
+  WNG:[ {name:'온더볼 · 아웃사이드 돌파',t:'on',phases:[[80,30,80,30,'수신'],[82,22,82,22,'1대1'],[84,16,84,16,'바깥 돌파'],[80,30,52,14,'크로스']]}, {name:'오프더볼 · 백포스트 런',t:'off',phases:[[80,30,22,26,'좌측 크로스'],[70,18,44,20,'백포스트 런'],[62,14,56,16,'수신'],[60,11,60,10,'마무리']]} ],
+  IW: [ {name:'온더볼 · 감아차기',t:'on',phases:[[80,30,80,30,'수신'],[64,22,64,22,'중앙 접기'],[54,15,54,15,'감아차기 각'],[54,10,54,9,'슈팅']]}, {name:'오프더볼 · 하프 침투 런',t:'off',phases:[[80,30,50,40,'중앙 소유'],[66,22,58,28,'하프 런'],[66,22,54,18,'수신'],[58,14,54,16,'마무리']]} ],
+};
+// 병합: 기존(2) + 추가 기본(2) + 심화 온/오프(2) = 6개
+Object.keys(ROLE_SCENARIOS).forEach(code => {
+  ROLE_SCENARIOS[code].forEach(s => { if (!s.t) s.t = 'basic'; });
+  (ROLE_SC_MORE[code] || []).forEach(s => ROLE_SCENARIOS[code].push({ name: s.name, t: 'basic', phases: s.phases }));
+  (ROLE_SC_ADV[code] || []).forEach(s => ROLE_SCENARIOS[code].push(s));
+});
 
 const LABEL_TO_ROLE = {
   GK: 'GK', LB: 'FB', RB: 'FB', LWB: 'WB', RWB: 'WB', CB: 'CB',
@@ -4344,6 +4463,11 @@ function migrateData() {
     STAT_KEYS.forEach(k => {
       if (typeof s[k] !== 'number') s[k] = STAT_DEFAULT(k);
     });
+    if (!p.peerScores || typeof p.peerScores !== 'object' || Array.isArray(p.peerScores)) {
+      const oldVals = Object.values(p.peerRatings || {}).filter(v => typeof v === 'number');
+      const base = typeof p.peerScore === 'number' ? p.peerScore : (oldVals.length ? Math.round(oldVals.reduce((a,b)=>a+b,0)/oldVals.length) : 70);
+      p.peerScores = {}; for (let sid = 1; sid <= 7; sid++) p.peerScores[sid] = base;
+    }
   });
   store.squads.forEach(s => ensureSquadSlots(s));
   // Matches: migrate old single squadId → quarters array + ensure attendance map + color
@@ -4942,7 +5066,9 @@ function buildStatGrid() {
   }).join('');
   container.querySelectorAll('input[type=range]').forEach(inp => {
     inp.addEventListener('input', e => {
-      document.getElementById('lbl_' + e.target.dataset.key).textContent = e.target.value;
+      const k = e.target.dataset.key, val = +e.target.value;
+      const lbl = document.getElementById('lbl_' + k);
+      lbl.textContent = val; lbl.style.color = traitValColor(statQualityVal(k, val));
       updateSectionAvg(+e.target.dataset.section);
       updateLiveOvr();
       updatePlayerRadar();
@@ -4955,7 +5081,7 @@ function updateSectionAvg(sectionId) {
   const vals = keys.map(k => statQualityVal(k, +document.getElementById('stat_' + k).value));
   const avg = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : 0;
   const el = document.getElementById('secAvg_' + sectionId);
-  if (el) el.textContent = '평균 ' + avg;
+  if (el) { el.textContent = '평균 ' + avg; el.style.color = traitValColor(avg); }
 }
 // 현재 모달 슬라이더 기준 임시 선수 객체
 function modalTempPlayer() {
@@ -5019,6 +5145,39 @@ function updateLiveOvr() {
   }).join('');
 }
 
+let peerStep = 1; // 올리고 내리는 단위 (자유 설정)
+function peerScoreOf(p, sid) { const m = (p && p.peerScores) || {}; return typeof m[sid] === 'number' ? m[sid] : 70; }
+function adjustPeerScore(playerId, sid, delta) {
+  const p = getPlayer(playerId); if (!p) return;
+  if (!canPeerRate(p)) { toast('본인은 조정할 수 없어요'); return; }
+  if (!p.peerScores || typeof p.peerScores !== 'object' || Array.isArray(p.peerScores)) p.peerScores = {};
+  p.peerScores[sid] = Math.max(0, Math.min(100, peerScoreOf(p, sid) + delta));
+  saveState();
+  renderPeerPanel(p);
+  if (currentTab === 'players') renderPlayersTable();
+}
+function renderPeerPanel(p) {
+  const el = document.getElementById('peerRatePanel');
+  if (!el) return;
+  if (!p) { el.style.display = 'none'; el.innerHTML = ''; return; }
+  el.style.display = '';
+  const u = currentUser();
+  const isSelf = !!(u && p.userId === u.id);
+  const canAdj = !!u && !isSelf;
+  const stepCtrl = canAdj ? `<label class="peer-step">조정 단위 <input type="number" id="peerStep" min="1" max="50" value="${peerStep}"></label>` : '';
+  const note = !u ? '<div class="peer-selfnote">로그인하면 조정할 수 있어요</div>'
+    : (isSelf ? '<div class="peer-selfnote">🙅 본인 프로필이라 조정할 수 없어요</div>' : '');
+  const rows = SECTIONS.map(s => {
+    const v = peerScoreOf(p, s.id);
+    const btns = canAdj ? `<button class="peer-btn down" data-pd="${s.id}" title="내리기">▼</button><button class="peer-btn up" data-pu="${s.id}" title="올리기">▲</button>` : '';
+    return `<div class="peer-cat-row"><div class="peer-cat-name">${s.label}</div><div class="peer-cat-val" style="color:${traitValColor(v)}">${v}</div>${btns}</div>`;
+  }).join('');
+  el.innerHTML = `<div class="peer-head">🤝 팀원 평가 능력치 <span class="peer-sub">팀원이 익명으로 카테고리별 조정 · 본인 제외</span>${stepCtrl}</div>${note}<div class="peer-cats">${rows}</div>`;
+  const stepInput = document.getElementById('peerStep');
+  if (stepInput) stepInput.addEventListener('input', e => { peerStep = Math.max(1, Math.min(50, parseInt(e.target.value) || 1)); });
+  el.querySelectorAll('[data-pu]').forEach(b => b.addEventListener('click', () => adjustPeerScore(p.id, +b.dataset.pu, peerStep)));
+  el.querySelectorAll('[data-pd]').forEach(b => b.addEventListener('click', () => adjustPeerScore(p.id, +b.dataset.pd, -peerStep)));
+}
 function openPlayerModal(playerId) {
   editingPlayerId = playerId || null;
   const p = playerId ? getPlayer(playerId) : null;
@@ -5093,7 +5252,8 @@ function openPlayerModal(playerId) {
       v = p?.stats?.[k] ?? STAT_DEFAULT(k);
     }
     document.getElementById('stat_' + k).value = v;
-    document.getElementById('lbl_' + k).textContent = v;
+    const lbl = document.getElementById('lbl_' + k);
+    lbl.textContent = v; lbl.style.color = traitValColor(statQualityVal(k, v));
   });
 
   // Enable/disable stat sliders based on stat edit permission
@@ -5105,6 +5265,7 @@ function openPlayerModal(playerId) {
   SECTIONS.forEach(sec => updateSectionAvg(sec.id));
   updateLiveOvr();
   updatePlayerRadar();
+  renderPeerPanel(p);
   $('#playerModal').classList.add('show');
   setTimeout(() => {
     if (!identityDisabled) $('#pName').focus();
@@ -5149,6 +5310,7 @@ function savePlayerFromModal() {
       positions: Array.from(selectedRoles),
       stats,
       ratings: {},
+      peerScores: { 1:70, 2:70, 3:70, 4:70, 5:70, 6:70, 7:70 },
     };
     // If a member is adding without a player profile yet, auto-link
     if (u && !isAdmin() && !u.playerId) {
@@ -6795,6 +6957,10 @@ function chemSynergy(l) {
         : (typeof l.score === 'number') ? Math.round((l.score - 50) / 50 * 8) : 5;
   return Math.max(CHEM_SYN_MIN, Math.min(CHEM_SYN_MAX, v));
 }
+// 케미가 올리는 능력치 카테고리 ('all'=종합 / 1~7=섹션)
+function chemCat(l) { return (typeof l.cat === 'number' && l.cat >= 1 && l.cat <= 7) ? l.cat : 'all'; }
+function chemCatLabel(cat) { return cat === 'all' ? '💫 종합' : (SECTIONS.find(s => s.id === cat)?.label || '💫 종합'); }
+function chemCatShort(cat) { return cat === 'all' ? '💫종합' : (SECTIONS.find(s => s.id === cat)?.emoji || '💫') + (SECTIONS.find(s => s.id === cat)?.label.replace(/^\S+\s/, '') || ''); }
 // 시너지 값 → 라벨
 function chemLabel(syn) {
   if (syn >= 8)  return { t: '💛 환상의 케미', c: '#f4c430' };
@@ -6816,10 +6982,10 @@ function squadStats(squad) {
   const count = placed.length;
   if (!count) return { count: 0 };
   const baseAvg = Math.round(placed.reduce((a, x) => a + x.ovr, 0) / count);
-  const sectionVals = SECTIONS.map(s => Math.round(placed.reduce((a, x) => a + sectionAvg(x.p, s.id), 0) / count));
+  const baseSectionVals = SECTIONS.map(s => Math.round(placed.reduce((a, x) => a + sectionAvg(x.p, s.id), 0) / count));
   const posById = {}; placed.forEach(x => { posById[x.p.id] = x.slot; });
   const placedIds = new Set(placed.map(x => x.p.id));
-  let chemSum = 0; const activeGroups = [];
+  let chemSum = 0; const activeGroups = []; const sectionBonus = {};
   chemistryLinks().forEach(link => {
     const members = chemMembers(link);
     const here = members.filter(id => placedIds.has(id));
@@ -6837,11 +7003,15 @@ function squadStats(squad) {
     const placedRatio = here.length / members.length;
     const activation = placedRatio * closeFactor;
     const contrib = syn * activation;
+    const cat = chemCat(link);
     chemSum += contrib;
-    activeGroups.push({ link, contrib, placedCount: here.length, total: members.length, synergy: syn, activation });
+    if (cat !== 'all') sectionBonus[cat] = (sectionBonus[cat] || 0) + contrib;
+    activeGroups.push({ link, contrib, placedCount: here.length, total: members.length, synergy: syn, activation, cat });
   });
+  // 카테고리별 시너지는 레이더의 해당 능력치에 반영
+  const sectionVals = SECTIONS.map((s, idx) => Math.max(0, Math.min(99, Math.round(baseSectionVals[idx] + (sectionBonus[s.id] || 0)))));
   const chemBonus = Math.round(Math.max(CHEM_TOTAL_MIN, Math.min(CHEM_TOTAL_MAX, chemSum)));
-  return { count, placed, baseAvg, sectionVals, chemBonus, overall: Math.max(0, Math.min(99, baseAvg + chemBonus)), activeGroups };
+  return { count, placed, baseAvg, sectionVals, baseSectionVals, sectionBonus, chemBonus, overall: Math.max(0, Math.min(99, baseAvg + chemBonus)), activeGroups };
 }
 // 스쿼드 탭 오른쪽: 팀 능력치 패널(레이더 + 종합 OVR + 케미) 실시간 갱신
 function renderTeamPanel() {
@@ -6860,7 +7030,8 @@ function renderTeamPanel() {
     const c = g.contrib >= 0 ? '#22c55e' : '#f87171';
     const s = g.contrib > 0 ? '+' : '';
     const title = g.link.note ? escapeHtml(g.link.note) : names.join(' · ');
-    return `<div class="tp-link"><span class="tp-link-names">${title} <span style="color:var(--text-4)">(${g.placedCount}/${g.total})</span></span><span class="tp-link-val" style="color:${c}">${s}${g.contrib.toFixed(1)}</span></div>`;
+    const catBadge = `<span class="tp-link-cat">${escapeHtml(chemCatShort(g.cat))}</span>`;
+    return `<div class="tp-link"><span class="tp-link-names">${title} <span style="color:var(--text-4)">(${g.placedCount}/${g.total})</span></span>${catBadge}<span class="tp-link-val" style="color:${c}">${s}${g.contrib.toFixed(1)}</span></div>`;
   }).join('');
   el.innerHTML = `
     <div class="tp-title">🎨 팀 능력치 <span class="tp-count">${st.count}명</span></div>
@@ -6934,11 +7105,16 @@ function tacPitchSvg() {
     <rect x="43" y="148" width="14" height="2" fill="rgba(255,255,255,0.6)"/>
     <text x="50" y="8" text-anchor="middle" font-size="4" fill="rgba(255,255,255,0.6)">▲ 공격 방향</text>`;
 }
-function tacMatesSvg(homeKey) {
-  return Object.entries(BASE_433).filter(([k]) => k !== homeKey).map(([k, pos]) => {
-    const p = tacScale(pos[0], pos[1]);
-    return `<g class="tac-mate"><circle cx="${p.x}" cy="${p.y}" r="4.4"/><text x="${p.x}" y="${p.y+1.9}" text-anchor="middle" font-size="4">${MATE_LABEL[k]||''}</text></g>`;
-  }).join('');
+// 볼 위치에 따라 동료가 함께 이동(볼 쪽으로 압축·전진). 반환은 viewBox 좌표.
+function mateTargetScaled(key, mx, my, bx, by) {
+  const f = key === 'GK' ? 0.03 : 0.10, fy = key === 'GK' ? 0.02 : 0.06;
+  let nx = mx + (bx - mx) * f, ny = my + (by - my) * fy;
+  if (key === 'GK') ny = Math.max(84, ny);
+  nx = Math.max(6, Math.min(94, nx)); ny = Math.max(6, Math.min(94, ny));
+  return { x: nx, y: ny * 1.5 };
+}
+function tacMatesSvg(keys, initPos) {
+  return keys.map(k => `<g class="tac-mate" id="tacMate_${k}" transform="translate(${initPos[k].x.toFixed(2)},${initPos[k].y.toFixed(2)})"><circle r="4.4"/><text y="1.6" text-anchor="middle" font-size="4">${MATE_LABEL[k]||''}</text></g>`).join('');
 }
 function tacBallSvg(x, y) {
   return `<g id="tacBall" transform="translate(${x},${y})"><circle r="3" fill="#fff" stroke="#111" stroke-width="0.5"/><circle r="1" fill="#111"/><circle cx="-1.5" cy="1.3" r="0.6" fill="#111"/><circle cx="1.5" cy="1.3" r="0.6" fill="#111"/><circle cx="0" cy="-1.9" r="0.6" fill="#111"/></g>`;
@@ -6949,8 +7125,11 @@ function buildTacticBoard(code, sIdx) {
   const phases = scns[sIdx].phases;
   const ppts = phases.map(p => tacScale(p[0], p[1]));
   const bpts = phases.map(p => tacScale(p[2], p[3]));
+  const bdata = phases.map(p => [p[2], p[3]]);
   const home = ROLE_HOME[code] || 'ST';
   const col = CAT_COLOR[ROLES[code]?.cat || 'MF'] || '#f43f5e';
+  const mateKeys = Object.keys(BASE_433).filter(k => k !== home);
+  const initPos = {}; mateKeys.forEach(k => { initPos[k] = mateTargetScaled(k, BASE_433[k][0], BASE_433[k][1], bdata[0][0], bdata[0][1]); });
   let arrows = '';
   for (let i = 1; i < ppts.length; i++) arrows += `<path class="tac-arrow" data-seg="${i}" d="M${ppts[i-1].x} ${ppts[i-1].y} L${ppts[i].x} ${ppts[i].y}" marker-end="url(#tacHead)"/>`;
   const stops = ppts.map((p,i) => `<g class="tac-stop"><circle cx="${p.x}" cy="${p.y}" r="4.4"/><text x="${p.x}" y="${p.y+2.2}" text-anchor="middle" font-size="5">${i+1}</text></g>`).join('');
@@ -6961,12 +7140,13 @@ function buildTacticBoard(code, sIdx) {
   document.getElementById('tacticBoard').innerHTML =
     `<svg viewBox="0 0 100 150" class="tac-svg" xmlns="http://www.w3.org/2000/svg">
       <defs><marker id="tacHead" markerWidth="5" markerHeight="5" refX="3.4" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="#f43f5e"/></marker></defs>
-      ${tacPitchSvg()}${tacMatesSvg(home)}${arrows}${stops}${player}${tacBallSvg(bpts[0].x, bpts[0].y)}</svg>`;
+      ${tacPitchSvg()}${tacMatesSvg(mateKeys, initPos)}${arrows}${stops}${player}${tacBallSvg(bpts[0].x, bpts[0].y)}</svg>`;
   document.getElementById('tacticDots').innerHTML = phases.map((p,i) => `<span class="tac-dot" data-i="${i}"></span>`).join('');
-  document.getElementById('tacticScenarios').innerHTML = scns.map((s,idx) => `<button class="tac-scn ${idx===sIdx?'on':''}" data-scn="${idx}">${idx+1}. ${escapeHtml(s.name)}</button>`).join('');
+  document.getElementById('tacticScenarios').innerHTML = scns.map((s,idx) => { const badge = s.t === 'on' ? '⚽ ' : s.t === 'off' ? '🏃 ' : ''; return `<button class="tac-scn ${s.t&&s.t!=='basic'?'adv':''} ${idx===sIdx?'on':''}" data-scn="${idx}">${badge}${escapeHtml(s.name)}</button>`; }).join('');
   document.querySelectorAll('#tacticScenarios .tac-scn').forEach(b => b.addEventListener('click', () => { tacPause(); buildTacticBoard(code, +b.dataset.scn); tacPlay(); }));
-  tac.code = code; tac.s = sIdx; tac.phases = phases; tac.ppts = ppts; tac.bpts = bpts; tac.i = 0;
+  tac.code = code; tac.s = sIdx; tac.phases = phases; tac.ppts = ppts; tac.bpts = bpts; tac.bdata = bdata; tac.mateKeys = mateKeys; tac.i = 0;
   tac.curP = { x: ppts[0].x, y: ppts[0].y }; tac.curB = { x: bpts[0].x, y: bpts[0].y };
+  tac.mateCur = {}; mateKeys.forEach(k => tac.mateCur[k] = { x: initPos[k].x, y: initPos[k].y });
   tacSetPhase(0, false);
 }
 function tacSetXY(id, p) { const g = document.getElementById(id); if (g) g.setAttribute('transform', `translate(${p.x.toFixed(2)},${p.y.toFixed(2)})`); }
@@ -6977,20 +7157,26 @@ function tacSetPhase(i, animate) {
   document.querySelectorAll('#tacticDots .tac-dot').forEach((d,di) => d.classList.toggle('on', di === i));
   document.querySelectorAll('#tacticBoard .tac-arrow').forEach(a => a.classList.toggle('active', +a.dataset.seg === i));
   const p = tac.ppts[i], b = tac.bpts[i];
-  if (animate) tacAnimate(p, b, 820);
-  else { tacSetXY('tacPlayer', p); tacSetXY('tacBall', b); tac.curP = { x: p.x, y: p.y }; tac.curB = { x: b.x, y: b.y }; }
+  const mT = {}; (tac.mateKeys||[]).forEach(k => { mT[k] = mateTargetScaled(k, BASE_433[k][0], BASE_433[k][1], tac.bdata[i][0], tac.bdata[i][1]); });
+  if (animate) tacAnimateAll(p, b, mT, 820);
+  else {
+    tacSetXY('tacPlayer', p); tacSetXY('tacBall', b);
+    (tac.mateKeys||[]).forEach(k => { tacSetXY('tacMate_'+k, mT[k]); tac.mateCur[k] = { x: mT[k].x, y: mT[k].y }; });
+    tac.curP = { x: p.x, y: p.y }; tac.curB = { x: b.x, y: b.y };
+  }
 }
-function tacAnimate(pT, bT, dur) {
+function tacAnimateAll(pT, bT, mT, dur) {
   cancelAnimationFrame(tac.raf);
-  const p0 = { x: tac.curP.x, y: tac.curP.y }, b0 = { x: tac.curB.x, y: tac.curB.y }; let start = null;
-  function frame(t) {
-    if (start == null) start = t;
-    let k = Math.min(1, (t - start) / dur);
+  const movers = [{ id:'tacPlayer', f:{x:tac.curP.x,y:tac.curP.y}, t:pT }, { id:'tacBall', f:{x:tac.curB.x,y:tac.curB.y}, t:bT }];
+  (tac.mateKeys||[]).forEach(k => movers.push({ id:'tacMate_'+k, f:{x:tac.mateCur[k].x,y:tac.mateCur[k].y}, t:mT[k], mk:k }));
+  let start = null;
+  function frame(ts) {
+    if (start == null) start = ts;
+    let k = Math.min(1, (ts - start) / dur);
     const e = k < 0.5 ? 2*k*k : 1 - Math.pow(-2*k+2, 2)/2;
-    tacSetXY('tacPlayer', { x: p0.x + (pT.x-p0.x)*e, y: p0.y + (pT.y-p0.y)*e });
-    tacSetXY('tacBall',   { x: b0.x + (bT.x-b0.x)*e, y: b0.y + (bT.y-b0.y)*e });
+    movers.forEach(m => tacSetXY(m.id, { x: m.f.x + (m.t.x - m.f.x)*e, y: m.f.y + (m.t.y - m.f.y)*e }));
     if (k < 1) tac.raf = requestAnimationFrame(frame);
-    else { tac.curP = { x: pT.x, y: pT.y }; tac.curB = { x: bT.x, y: bT.y }; }
+    else { tac.curP = { x: pT.x, y: pT.y }; tac.curB = { x: bT.x, y: bT.y }; (tac.mateKeys||[]).forEach(kk => tac.mateCur[kk] = { x: mT[kk].x, y: mT[kk].y }); }
   }
   tac.raf = requestAnimationFrame(frame);
 }
@@ -7040,7 +7226,7 @@ function renderChemistry() {
     const chips = members.map(p => `<span class="chem-p"><span class="chem-num">${p.number||'?'}</span>${escapeHtml(p.name)}</span>`).join('');
     return `<div class="chem-card" style="border-left-color:${lab.c}">
       <div class="chem-main">
-        ${l.note ? `<div class="chem-name">${escapeHtml(l.note)} <span class="chem-mcount">${members.length}명</span></div>` : `<div class="chem-name"><span class="chem-mcount">${members.length}명 그룹</span></div>`}
+        <div class="chem-name">${l.note ? escapeHtml(l.note) + ' ' : ''}<span class="chem-mcount">${members.length}명</span> <span class="chem-catchip">${escapeHtml(chemCatLabel(chemCat(l)))}</span></div>
         <div class="chem-pair">${chips}</div>
       </div>
       <div class="chem-right">
@@ -7087,6 +7273,8 @@ function openChemModal(chemId) {
   document.getElementById('chemModalTitle').textContent = l ? '🤝 케미 수정' : '🤝 케미 만들기';
   chemPicked = new Set(l ? chemMembers(l) : []);
   document.getElementById('chemPickSearch').value = '';
+  document.getElementById('chemCat').innerHTML = '<option value="all">💫 종합 (전체 OVR)</option>' + SECTIONS.map(s => `<option value="${s.id}">${s.label}</option>`).join('');
+  document.getElementById('chemCat').value = l ? String(chemCat(l)) : 'all';
   document.getElementById('chemScore').value = l ? chemSynergy(l) : 5;
   document.getElementById('chemNote').value = l?.note || '';
   updateChemScoreLbl();
@@ -7101,17 +7289,19 @@ function saveChemFromModal() {
   let synergy = +document.getElementById('chemScore').value;
   synergy = Math.max(CHEM_SYN_MIN, Math.min(CHEM_SYN_MAX, synergy));
   const note = document.getElementById('chemNote').value.trim();
+  const catRaw = document.getElementById('chemCat').value;
+  const cat = catRaw === 'all' ? 'all' : (parseInt(catRaw) >= 1 && parseInt(catRaw) <= 7 ? parseInt(catRaw) : 'all');
   if (members.length < 2) { alert('2명 이상의 선수를 선택하세요'); return; }
   if (!Array.isArray(store.chemistry)) store.chemistry = [];
   const dup = findChemSet(members);
   if (editingChemId) {
     const l = chemistryLinks().find(x => x.id === editingChemId);
-    if (l) { l.members = members; delete l.a; delete l.b; delete l.score; l.synergy = synergy; l.note = note; l.updatedBy = u.id; }
+    if (l) { l.members = members; delete l.a; delete l.b; delete l.score; l.synergy = synergy; l.cat = cat; l.note = note; l.updatedBy = u.id; }
   } else if (dup) {
-    dup.members = members; delete dup.a; delete dup.b; delete dup.score; dup.synergy = synergy; dup.note = note; dup.updatedBy = u.id;
+    dup.members = members; delete dup.a; delete dup.b; delete dup.score; dup.synergy = synergy; dup.cat = cat; dup.note = note; dup.updatedBy = u.id;
     toast('이미 있는 조합이라 케미를 업데이트했어요');
   } else {
-    store.chemistry.push({ id: uid(), members, synergy, note, createdBy: u.id, createdAt: Date.now() });
+    store.chemistry.push({ id: uid(), members, synergy, cat, note, createdBy: u.id, createdAt: Date.now() });
   }
   saveState();
   closeChemModal();
