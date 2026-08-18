@@ -40,20 +40,22 @@
   html, body {
     height: 100%;
     font-family: var(--font-body);
-    background: var(--bg);
-    /* 정적 깊이감: 상단 골드 후광 + 코너 비네트 (순수 검정 완화, 박동하지 않음) */
-    background-image:
-      radial-gradient(130% 55% at 50% -12%, rgba(244, 196, 48, 0.07), transparent 55%),
-      radial-gradient(circle at 15% 20%, rgba(244, 196, 48, 0.04), transparent 40%),
-      radial-gradient(circle at 85% 80%, rgba(255, 153, 69, 0.035), transparent 42%),
-      radial-gradient(140% 120% at 50% 125%, rgba(0, 0, 0, 0.5), transparent 60%);
-    background-attachment: fixed;
     color: var(--text);
     overflow: hidden;
     font-weight: 400;
     letter-spacing: -0.005em;
   }
-  body { display: flex; flex-direction: column; }
+  /* 기본 색 + 정적 깊이감(상단 골드 후광 + 코너 비네트)은 html(캔버스)에.
+     body 배경은 투명으로 둬야 #appFx(z-index:-1) 애니메이션 배경이 가려지지 않고 보임 */
+  html {
+    background-color: var(--bg);
+    background-image:
+      radial-gradient(130% 55% at 50% -12%, rgba(244, 196, 48, 0.07), transparent 55%),
+      radial-gradient(circle at 15% 20%, rgba(244, 196, 48, 0.04), transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(255, 153, 69, 0.035), transparent 42%),
+      radial-gradient(140% 120% at 50% 125%, rgba(0, 0, 0, 0.5), transparent 60%);
+  }
+  body { display: flex; flex-direction: column; background: transparent; }
   /* iOS: use dynamic viewport height so the field/tabs aren't cut off by the URL bar */
   @supports (height: 100dvh) {
     html, body { height: 100dvh; }
