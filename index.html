@@ -1019,31 +1019,38 @@
   .day-match-meta { font-size: 12px; color: var(--text-2); }
 
   /* Attendance voting */
-  .match-attend { margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px; }
+  .match-attend { margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px; }
   .attend-label {
-    font-family: var(--font-brand); font-size: 12px; font-weight: 700;
-    color: var(--text); letter-spacing: 0.02em; margin-bottom: 8px;
+    font-family: var(--font-brand); font-size: 13px; font-weight: 700;
+    color: var(--text); letter-spacing: 0.02em; margin-bottom: 9px;
   }
-  .attend-row { display: flex; gap: 6px; }
+  .attend-row { display: flex; gap: 8px; }
+  /* 참석 투표 버튼: 선택 안 해도 색·글자가 또렷하게 (모든 기종 가독성) */
   .attend-btn {
-    flex: 1; padding: 8px 6px; border-radius: 8px; cursor: pointer;
-    background: var(--bg-2); border: 1px solid var(--border-2); color: var(--text-2);
-    font-size: 12px; font-weight: 600; font-family: var(--font-brand);
+    flex: 1 1 0; min-width: 0; padding: 12px 6px; border-radius: 11px; cursor: pointer;
+    background: var(--bg-3); border: 1.5px solid var(--border-2); color: var(--text);
+    font-size: 14px; font-weight: 700; font-family: var(--font-brand);
     display: flex; align-items: center; justify-content: center; gap: 5px;
-    transition: all 0.12s;
+    min-height: 48px; line-height: 1.1; transition: all 0.12s;
   }
-  .attend-btn b { font-size: 13px; }
-  .attend-btn:hover { border-color: var(--gold); }
-  .attend-btn.attend.on { background: rgba(34,197,94,0.18); border-color: #22c55e; color: #4ade80; }
-  .attend-btn.hold.on { background: rgba(250,204,21,0.16); border-color: #facc15; color: #fde047; }
-  .attend-btn.absent.on { background: rgba(239,68,68,0.16); border-color: #ef4444; color: #fca5a5; }
-  .attend-voters { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
-  .voter-chip { font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 600; border: 1px solid transparent; }
-  .voter-chip.attend { background: rgba(34,197,94,0.15); color: #4ade80; border-color: rgba(34,197,94,0.4); }
-  .voter-chip.hold { background: rgba(250,204,21,0.12); color: #fde047; border-color: rgba(250,204,21,0.35); }
-  .voter-chip.absent { background: rgba(239,68,68,0.12); color: #fca5a5; border-color: rgba(239,68,68,0.35); }
-  .attend-empty { font-size: 11px; color: var(--text-3); margin-top: 8px; }
-  .attend-selfname { font-size: 12px; color: var(--gold-warm); font-weight: 700; margin-bottom: 6px; }
+  .attend-btn b { font-size: 15px; font-weight: 800; }
+  /* 미선택 상태에도 옵션별 색을 은은히 입혀 항상 잘 보이게 */
+  .attend-btn.attend { color: #7ee2a8; border-color: rgba(34,197,94,0.55); background: rgba(34,197,94,0.10); }
+  .attend-btn.hold   { color: #fbe36a; border-color: rgba(250,204,21,0.5);  background: rgba(250,204,21,0.09); }
+  .attend-btn.absent { color: #f79a9a; border-color: rgba(239,68,68,0.5);   background: rgba(239,68,68,0.09); }
+  .attend-btn:active { transform: scale(0.97); }
+  /* 선택된 상태: 꽉 찬 색으로 확실히 구분 */
+  .attend-btn.attend.on { background: #22c55e; border-color: #22c55e; color: #04210f; box-shadow: 0 0 0 3px rgba(34,197,94,0.30); }
+  .attend-btn.hold.on   { background: #facc15; border-color: #facc15; color: #3a2c04; box-shadow: 0 0 0 3px rgba(250,204,21,0.30); }
+  .attend-btn.absent.on { background: #ef4444; border-color: #ef4444; color: #fff;     box-shadow: 0 0 0 3px rgba(239,68,68,0.30); }
+  .attend-btn.attend.on b, .attend-btn.hold.on b { color: inherit; }
+  .attend-voters { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+  .voter-chip { font-size: 12px; padding: 4px 9px; border-radius: 10px; font-weight: 700; border: 1px solid transparent; }
+  .voter-chip.attend { background: rgba(34,197,94,0.18); color: #7ee2a8; border-color: rgba(34,197,94,0.45); }
+  .voter-chip.hold { background: rgba(250,204,21,0.15); color: #fbe36a; border-color: rgba(250,204,21,0.4); }
+  .voter-chip.absent { background: rgba(239,68,68,0.15); color: #f79a9a; border-color: rgba(239,68,68,0.4); }
+  .attend-empty { font-size: 12px; color: var(--text-3); margin-top: 8px; }
+  .attend-selfname { font-size: 13px; color: var(--gold-warm); font-weight: 700; margin-bottom: 7px; }
   .amr-unlinked { font-size: 10px; color: var(--text-3); background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; padding: 0 5px; margin-left: 4px; }
 
   /* Manager roster: set anyone's attendance */
@@ -2145,6 +2152,13 @@
       box-shadow: inset 0 3px 0 var(--gold);
       border-radius: 8px 8px 0 0;
     }
+    /* 참석 투표 버튼: 폰에서도 큼직하고 또렷하게 (모든 기종 가독성) */
+    .match-attend { margin-top: 14px; padding-top: 14px; }
+    .attend-row { gap: 7px; }
+    .attend-btn { padding: 13px 4px; font-size: 14px; min-height: 52px; border-radius: 12px; }
+    .attend-btn b { font-size: 15px; }
+    .attend-label { font-size: 14px; }
+    .attend-selfname { font-size: 13.5px; }
     /* Utility buttons collapse into a dropdown */
     .nav-utils {
       display: none;
@@ -3470,7 +3484,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 7;
+const APP_VERSION = 8;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
