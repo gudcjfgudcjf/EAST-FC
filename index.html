@@ -1680,6 +1680,25 @@
   .chem-del:hover { border-color: var(--danger); }
   #chemScoreTag { font-weight: 700; }
   .chem-cat-select { width: 100%; background: var(--bg-3); color: var(--text); border: 1px solid var(--border-2); border-radius: 8px; padding: 9px; font-size: 14px; }
+  #chemTargets { display: flex; flex-direction: column; gap: 8px; }
+  .chem-target-row { display: flex; align-items: center; gap: 8px; }
+  .chem-target-row .chem-tg-cat { flex: 1; min-width: 0; }
+  .chem-target-row .chem-tg-val { width: 68px; flex-shrink: 0; background: var(--bg-3); color: var(--text); border: 1px solid var(--border-2); border-radius: 8px; padding: 9px 8px; font-size: 15px; font-weight: 700; text-align: center; -moz-appearance: textfield; }
+  .chem-target-row .chem-tg-del { flex-shrink: 0; width: 34px; height: 38px; background: var(--bg-3); border: 1px solid var(--border-2); border-radius: 8px; color: var(--text-3); font-size: 13px; cursor: pointer; }
+  .chem-target-row .chem-tg-del:hover { border-color: var(--danger); color: var(--danger); }
+  .chem-total-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding: 10px 12px; background: var(--bg-2); border: 1px solid var(--border-2); border-radius: 10px; font-size: 13px; color: var(--text-2); font-weight: 600; }
+  .chem-total-row b { font-family: var(--font-brand); font-size: 20px; color: var(--gold); }
+  .chem-total-row #chemTotalTag { margin-left: auto; font-weight: 700; }
+
+  /* ==================== 선수 변경 표시 (전구 아님) ==================== */
+  .change-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 3px rgba(244,196,48,0.18); vertical-align: middle; margin-left: 5px; animation: changePulse 1.7s ease-in-out infinite; }
+  @keyframes changePulse { 0%,100% { box-shadow: 0 0 0 3px rgba(244,196,48,0.20); } 50% { box-shadow: 0 0 0 6px rgba(244,196,48,0.02); } }
+  .stat-cell.cell-changed { position: relative; }
+  .stat-cell.cell-changed::after { content: ''; position: absolute; top: 4px; right: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 2px rgba(244,196,48,0.22); }
+  .stat-input.stat-changed { position: relative; }
+  .stat-input.stat-changed > label { color: var(--gold-warm); font-weight: 700; }
+  .stat-input.stat-changed > label::after { content: '변경'; margin-left: 6px; font-size: 9px; font-weight: 700; color: #000; background: var(--gold); padding: 1px 5px; border-radius: 8px; vertical-align: middle; letter-spacing: 0; }
+  .change-inline-tag { font-size: 11px; font-weight: 700; color: var(--gold-warm); text-transform: none; letter-spacing: 0; margin-left: 4px; }
 
   /* ==================== 실시간 접속 ==================== */
   .presence-summary { font-size: 14px; color: var(--text); font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -2966,15 +2985,11 @@
         <div class="chem-pick-list" id="chemPickList"></div>
       </div>
       <div class="form-group">
-        <label>어떤 능력치를 올릴까요?</label>
-        <select id="chemCat" class="chem-cat-select"></select>
-        <div style="font-size:11px; color:var(--text-3); margin-top:6px; line-height:1.5;">같은 멤버 조합으로도 <b style="color:var(--gold-warm)">여러 개 겹쳐서</b> 만들 수 있어요 (예: 공격 +5 · 수비 +4 따로따로). 배치하면 각각 발동돼 합산돼요.</div>
-      </div>
-      <div class="form-group">
-        <label>시너지 보너스 <span id="chemScoreLbl" style="color:var(--gold);font-weight:700">+5</span> <span style="text-transform:none;letter-spacing:0;color:var(--text-3);font-weight:400">OVR</span> · <span id="chemScoreTag"></span></label>
-        <input type="range" id="chemScore" min="-10" max="15" value="5" style="width:100%; accent-color:var(--gold);" />
-        <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--text-3); margin-top:2px;"><span>⚔️ 앙숙 −10</span><span>😐 0</span><span>💛 +15</span></div>
-        <div style="font-size:11px; color:var(--text-3); margin-top:6px; line-height:1.5;">이 그룹이 스쿼드에 함께 뛸 때 팀 종합 OVR에 더해질 값이에요. 그룹 전원이 가까이 배치될수록 최대치로 발동돼요. <b style="color:var(--gold-warm)">그룹당 최대 +15 · 팀 전체 합 최대 +20</b></div>
+        <label>어떤 능력치를 올릴까요? <span style="text-transform:none;letter-spacing:0;color:var(--text-3);font-weight:400">· 여러 개 선택 가능 (합계 최대 +15)</span></label>
+        <div id="chemTargets"></div>
+        <button type="button" class="btn-add-quarter" id="chemAddTarget" style="margin-top:8px;">+ 능력치 추가</button>
+        <div class="chem-total-row">합계 <b id="chemTotalVal">0</b> <span style="color:var(--text-3)">/ 15</span> <span id="chemTotalTag"></span></div>
+        <div style="font-size:11px; color:var(--text-3); margin-top:6px; line-height:1.5;">예) <b style="color:var(--gold-warm)">지능 +8 · 공격 +7 = 15</b>. 각 능력치는 −10~+15, 총합은 최대 +15예요. 그룹 전원이 가까이 배치될수록 최대치로 발동돼요.</div>
       </div>
       <div class="modal-footer">
         <button class="btn-cancel" id="btnCancelChem">취소</button>
@@ -3150,7 +3165,7 @@
     </div>
 
     <div class="form-group">
-      <label>가능한 역할 (여러 개 선택 가능)</label>
+      <label>가능한 역할 (여러 개 선택 가능) <span id="roleChangeTag" class="change-inline-tag" style="display:none;">● 최근 변경됨</span></label>
       <div class="role-picker" id="rolePicker"></div>
     </div>
 
@@ -3416,7 +3431,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 2;
+const APP_VERSION = 3;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -5482,6 +5497,45 @@ function updateCalendarBadge() {
   el.classList.toggle('off', !on);
   el.title = on ? '확인 안 한 일정이 있어요' : '새 일정 없음 (모두 확인함)';
 }
+
+// ===== 선수 변경 표시 (기기별) — 능력치/역할 변경 시 이름·능력치 옆에 표시, 열람하면 꺼짐 =====
+// player.rev: 변경마다 +1 · player.statRev[k]: 각 스탯이 마지막으로 바뀐 rev · player.posRev: 역할이 마지막으로 바뀐 rev
+// 저장(기기별): { playerId: 확인한 rev } · 선수 rev보다 낮으면 '변경됨'으로 표시
+const SEEN_PLAYERS_KEY = 'east_fc_seen_players_v1';
+function playerRev(p) { return (p && typeof p.rev === 'number') ? p.rev : 0; }
+function bumpPlayerRev(p) { if (p) p.rev = playerRev(p) + 1; return p ? p.rev : 0; }
+function getSeenPlayersMap() {
+  try { const o = JSON.parse(localStorage.getItem(SEEN_PLAYERS_KEY)); if (o && typeof o === 'object' && !Array.isArray(o)) return o; } catch(e) {}
+  return null;
+}
+function saveSeenPlayersMap(map) { try { localStorage.setItem(SEEN_PLAYERS_KEY, JSON.stringify(map)); } catch(e) {} }
+function markAllPlayersSeen() { const map = {}; (store.players || []).forEach(p => map[p.id] = playerRev(p)); saveSeenPlayersMap(map); }
+function _seenRevFor(id, map) { return (map && id in map) ? map[id] : 0; }
+// 이 선수가 확인 이후 능력치/역할이 바뀌었는지 (첫 실행이면 현재 상태를 본 것으로 초기화)
+function isPlayerUnseen(p) {
+  if (!p) return false;
+  const map = getSeenPlayersMap(); if (!map) { markAllPlayersSeen(); return false; }
+  return playerRev(p) > _seenRevFor(p.id, map);
+}
+function isPosUnseen(p) {
+  if (!p) return false;
+  const map = getSeenPlayersMap(); if (!map) { markAllPlayersSeen(); return false; }
+  return (typeof p.posRev === 'number' ? p.posRev : 0) > _seenRevFor(p.id, map);
+}
+// 확인 이후 바뀐 스탯 키 목록
+function changedStatsForPlayer(p) {
+  if (!p || !p.statRev) return [];
+  const map = getSeenPlayersMap(); if (!map) { markAllPlayersSeen(); return []; }
+  const sr = _seenRevFor(p.id, map);
+  return STAT_KEYS.filter(k => (p.statRev[k] || 0) > sr);
+}
+// 이 선수를 '확인함'으로 (현재 rev까지 봤다고 기록 → 표시 꺼짐)
+function markPlayerSeen(id) {
+  if (!id) return;
+  let map = getSeenPlayersMap(); if (!map) { markAllPlayersSeen(); map = getSeenPlayersMap() || {}; }
+  const p = getPlayer(id); if (!p) return;
+  map[id] = playerRev(p); saveSeenPlayersMap(map);
+}
 function renderSquadList() {
   const list = $('#squadList');
   if (store.squads.length === 0) {
@@ -5730,21 +5784,24 @@ function renderPlayersTable() {
       const cat = ROLES[code]?.cat || 'MF';
       return `<span class="role-chip ${cat}" title="${escapeHtml(ROLES[code]?.name || code)}">${code}</span>`;
     }).join('');
-    const avgTd = (v) => {
+    const changedSecs = new Set(changedStatsForPlayer(p).map(k => STATS[k].section));
+    const nameUnseen = isPlayerUnseen(p);
+    const posUnseen = isPosUnseen(p);
+    const avgTd = (v, secId) => {
       const cls = v >= 80 ? 'high' : v >= 60 ? 'mid' : 'low';
-      return `<td class="stat-cell ${cls}">${v}</td>`;
+      return `<td class="stat-cell ${cls}${changedSecs.has(secId) ? ' cell-changed' : ''}">${v}</td>`;
     };
     const retired = isRetiredNow(p);
     return `
       <tr data-id="${p.id}" class="${retired ? 'retired' : ''}">
         <td>${p.number || '-'}</td>
-        <td><strong>${escapeHtml(p.name)}</strong>${retired ? ' <span class="retired-badge">🎖️휴식</span>' : ''}</td>
-        <td><div class="positions-cell">${roleBadges}</div></td>
+        <td><strong>${escapeHtml(p.name)}</strong>${retired ? ' <span class="retired-badge">🎖️휴식</span>' : ''}${nameUnseen ? ' <span class="change-dot" title="능력치·역할이 변경됐어요 · 선수를 열어보면 꺼져요"></span>' : ''}</td>
+        <td><div class="positions-cell">${roleBadges}${posUnseen ? '<span class="change-dot" title="역할이 변경됐어요"></span>' : ''}</div></td>
         <td>${playerSynergyCellHtml(p)}</td>
         <td>${conditionBadgeHtml(p)}</td>
         <td>${footLabel(p.foot)}</td>
         <td><span class="ovr-badge">${best.ovr}<span class="ovr-role">${escapeHtml(best.name)}</span></span></td>
-        ${SECTIONS.map(sec => avgTd(sectionAvg(p, sec.id))).join('')}
+        ${SECTIONS.map(sec => avgTd(sectionAvg(p, sec.id), sec.id)).join('')}
         <td><button class="icon-btn" data-action="edit-player">✏️</button></td>
       </tr>`;
   }).join('');
@@ -5946,6 +6003,9 @@ function openPlayerModal(playerId) {
   editingPlayerId = playerId || null;
   const p = playerId ? getPlayer(playerId) : null;
   const u = currentUser();
+  // 변경 표시 스냅샷(열기 전 기준) — 열람하면 아래에서 '확인함' 처리
+  const unseenStats = p ? new Set(changedStatsForPlayer(p)) : new Set();
+  const posWasUnseen = p ? isPosUnseen(p) : false;
 
   // Permission check
   if (playerId && !canEditPlayer(p)) {
@@ -6018,6 +6078,8 @@ function openPlayerModal(playerId) {
     document.getElementById('stat_' + k).value = v;
     const lbl = document.getElementById('lbl_' + k);
     lbl.textContent = v; lbl.style.color = traitValColor(statQualityVal(k, v));
+    const statBox = document.getElementById('stat_' + k).closest('.stat-input');
+    if (statBox) statBox.classList.toggle('stat-changed', unseenStats.has(k));
   });
 
   // Enable/disable stat sliders based on stat edit permission
@@ -6026,11 +6088,16 @@ function openPlayerModal(playerId) {
     inp.parentElement.classList.toggle('disabled', !!statsBlocked);
   });
 
+  const roleTag = document.getElementById('roleChangeTag');
+  if (roleTag) roleTag.style.display = posWasUnseen ? '' : 'none';
+
   SECTIONS.forEach(sec => updateSectionAvg(sec.id));
   updateLiveOvr();
   updatePlayerRadar();
   renderPeerPanel(p);
   $('#playerModal').classList.add('show');
+  // 열람 → 이 선수 변경 표시 '확인함' 처리 (뒤 목록의 점은 꺼짐, 모달 안 표시는 스냅샷 유지)
+  if (playerId) { markPlayerSeen(playerId); if (currentTab === 'players') renderPlayersTable(); }
   setTimeout(() => {
     if (!identityDisabled) $('#pName').focus();
   }, 50);
@@ -6049,21 +6116,39 @@ function savePlayerFromModal() {
     const canEditStats = canEditPlayerStats(p);
     const canEditIdentity = canEditPlayerIdentity(p);
 
+    // 변경 감지 (능력치/역할) → 이름·능력치 옆 변경 표시용
+    const newPos = Array.from(selectedRoles);
+    const posChanged = canEditIdentity &&
+      JSON.stringify((p.positions || []).slice().sort()) !== JSON.stringify(newPos.slice().sort());
+    let diffKeys = [];
+    if (canEditStats) {
+      diffKeys = STAT_KEYS.filter(k => {
+        const oldV = (p.stats && p.stats[k] != null) ? +p.stats[k] : STAT_DEFAULT(k);
+        return oldV !== stats[k];
+      });
+    }
+    const anyChange = posChanged || diffKeys.length > 0;
+    const newRev = anyChange ? (playerRev(p) + 1) : playerRev(p);
+
     // Update identity fields if allowed
     if (canEditIdentity) {
       p.name = name;
       p.number = parseInt($('#pNumber').value) || 0;
       p.foot = $('#pFoot').value;
-      p.positions = Array.from(selectedRoles);
+      p.positions = newPos;
+      if (posChanged) p.posRev = newRev;
     }
 
     // Only manager/admin can edit stats (self-editing still blocked)
     if (canEditStats) {
       p.stats = stats;
+      if (diffKeys.length) { if (!p.statRev) p.statRev = {}; diffKeys.forEach(k => p.statRev[k] = newRev); }
       toast('능력치가 업데이트되었습니다');
     } else if (canEditIdentity) {
       toast('프로필이 업데이트되었습니다');
     }
+
+    if (anyChange) { p.rev = newRev; markPlayerSeen(p.id); } // 변경한 본인 기기는 확인함 처리
   } else {
     // New player
     const newPlayer = {
@@ -7977,19 +8062,31 @@ function chemMembers(l) {
 }
 function chemSetKey(members) { return members.slice().sort().join('__'); }
 function findChemSet(members) { const k = chemSetKey(members); return chemistryLinks().find(l => chemSetKey(chemMembers(l)) === k); }
-const CHEM_SYN_MIN = -10, CHEM_SYN_MAX = 15;        // 본인이 정하는 그룹 시너지 값(상/하한)
+const CHEM_SYN_MIN = -10, CHEM_SYN_MAX = 15;        // 개별 능력치 값(상/하한)
+const CHEM_LINK_MAX = 15, CHEM_LINK_MIN = -15;      // 한 케미의 값 총합 상/하한
 const CHEM_TOTAL_MAX = 20, CHEM_TOTAL_MIN = -15;    // 팀 전체 케미 보너스 상/하한
-// 그룹의 시너지 값(사용자 지정). 구버전 score(0~100)는 환산.
+// 대상 카테고리 정규화 ('all' / 1~7 / 'stat_<key>')
+function normChemCat(cat) {
+  if (typeof cat === 'string' && cat.startsWith('stat_') && STATS[cat.slice(5)]) return cat;
+  return (typeof cat === 'number' && cat >= 1 && cat <= 7) ? cat : 'all';
+}
+function clampChemVal(v) { return Math.max(CHEM_SYN_MIN, Math.min(CHEM_SYN_MAX, Math.round(+v || 0))); }
+// 케미의 능력치 대상 목록: [{cat, value}] · 여러 개 가능. 구버전 단일 {cat, synergy}도 호환.
+function chemTargets(l) {
+  if (Array.isArray(l.targets) && l.targets.length) {
+    return l.targets.map(t => ({ cat: normChemCat(t.cat), value: clampChemVal(t.value) }));
+  }
+  const value = (typeof l.synergy === 'number') ? l.synergy
+              : (typeof l.score === 'number') ? Math.round((l.score - 50) / 50 * 8) : 5;
+  return [{ cat: normChemCat(l.cat), value: clampChemVal(value) }];
+}
+// 케미의 값 총합 (표시·정렬용) — 상/하한 적용
 function chemSynergy(l) {
-  let v = (typeof l.synergy === 'number') ? l.synergy
-        : (typeof l.score === 'number') ? Math.round((l.score - 50) / 50 * 8) : 5;
-  return Math.max(CHEM_SYN_MIN, Math.min(CHEM_SYN_MAX, v));
+  const total = chemTargets(l).reduce((a, t) => a + t.value, 0);
+  return Math.max(CHEM_LINK_MIN, Math.min(CHEM_LINK_MAX, total));
 }
-// 케미가 올리는 능력치 대상 ('all'=종합 / 1~7=섹션 / 'stat_<key>'=세부 스탯)
-function chemCat(l) {
-  if (typeof l.cat === 'string' && l.cat.startsWith('stat_') && STATS[l.cat.slice(5)]) return l.cat;
-  return (typeof l.cat === 'number' && l.cat >= 1 && l.cat <= 7) ? l.cat : 'all';
-}
+// 대표 카테고리(단일 표시용) = 첫 대상
+function chemCat(l) { const t = chemTargets(l); return t.length ? t[0].cat : 'all'; }
 function chemCatIsStat(cat) { return typeof cat === 'string' && cat.startsWith('stat_'); }
 // 대상이 속한 섹션 id (레이더 반영용). 'all'→null
 function catSectionId(cat) {
@@ -8053,12 +8150,17 @@ function squadStats(squad) {
     const closeFactor = pairs ? closeSum / pairs : 1;
     const placedRatio = here.length / members.length;
     const activation = placedRatio * closeFactor;
-    const contrib = syn * activation;
-    const cat = chemCat(link);
-    chemSum += contrib;
-    const secId = catSectionId(cat);   // 세부스탯이면 그 스탯의 섹션에 반영
-    if (secId) sectionBonus[secId] = (sectionBonus[secId] || 0) + contrib;
-    activeGroups.push({ link, contrib, placedCount: here.length, total: members.length, synergy: syn, activation, cat });
+    // 대상마다 값을 그 대상의 섹션(레이더) + 팀 OVR에 반영
+    const targets = chemTargets(link);
+    let contrib = 0;
+    targets.forEach(tg => {
+      const c = tg.value * activation;
+      contrib += c;
+      chemSum += c;
+      const secId = catSectionId(tg.cat);
+      if (secId) sectionBonus[secId] = (sectionBonus[secId] || 0) + c;
+    });
+    activeGroups.push({ link, contrib, placedCount: here.length, total: members.length, synergy: syn, activation, targets });
   });
   // 카테고리별 시너지는 레이더의 해당 능력치에 반영
   const sectionVals = SECTIONS.map((s, idx) => Math.max(0, Math.min(99, Math.round(baseSectionVals[idx] + (sectionBonus[s.id] || 0)))));
@@ -8082,8 +8184,7 @@ function renderTeamPanel() {
     const c = g.contrib >= 0 ? '#22c55e' : '#f87171';
     const s = g.contrib > 0 ? '+' : '';
     const title = g.link.note ? escapeHtml(g.link.note) : names.join(' · ');
-    const cc = chemCatColor(g.cat);
-    const catBadge = `<span class="tp-link-cat" style="color:${cc}; background:${cc}1f">${escapeHtml(chemCatShort(g.cat))}</span>`;
+    const catBadge = (g.targets || []).map(tg => { const cc = chemCatColor(tg.cat); return `<span class="tp-link-cat" style="color:${cc}; background:${cc}1f">${escapeHtml(chemCatShort(tg.cat))} ${tg.value>0?'+':''}${tg.value}</span>`; }).join('');
     return `<div class="tp-link"><span class="tp-link-names">${title} <span style="color:var(--text-4)">(${g.placedCount}/${g.total})</span></span>${catBadge}<span class="tp-link-val" style="color:${c}">${s}${g.contrib.toFixed(1)}</span></div>`;
   }).join('');
   el.innerHTML = `
@@ -8271,7 +8372,7 @@ function playerSynergyCellHtml(p) {
 /* ---- 팀컬러 탭 ---- */
 function renderChemistry() {
   const el = document.getElementById('chemContent');
-  const links = chemistryLinks().slice().sort((a, b) => b.score - a.score);
+  const links = chemistryLinks().slice().sort((a, b) => chemSynergy(b) - chemSynergy(a));
   if (!store.players.length) { el.innerHTML = '<div class="podium-empty">「선수 관리」 탭에서 선수를 먼저 등록해 주세요</div>'; return; }
   if (!links.length) { el.innerHTML = '<div class="podium-empty">아직 만든 케미가 없어요. 오른쪽 위 <b>+ 케미 만들기</b>로 여러 선수의 궁합을 등록해보세요!</div>'; return; }
   const u = currentUser();
@@ -8285,9 +8386,11 @@ function renderChemistry() {
     const blended = hexMix(catCol, lab.c, 0.6); // 카테고리 색 60% + 시너지 색 40%
     const canDel = isAdmin() || (l.createdBy && u && l.createdBy === u.id);
     const chips = members.map(p => `<span class="chem-p"><span class="chem-num">${p.number||'?'}</span>${escapeHtml(p.name)}</span>`).join('');
+    const tgChips = chemTargets(l).map(t => { const cc = chemCatColor(t.cat); return `<span class="chem-catchip" style="color:${cc}; border-color:${cc}66; background:${cc}1f">${escapeHtml(chemCatLabel(t.cat))} ${t.value>0?'+':''}${t.value}</span>`; }).join(' ');
     return `<div class="chem-card" style="border-left-color:${blended}; background:linear-gradient(90deg, ${catCol}12, var(--bg-2) 60%)">
       <div class="chem-main">
-        <div class="chem-name" style="color:${blended}">${l.note ? escapeHtml(l.note) + ' ' : ''}<span class="chem-mcount">${members.length}명</span> <span class="chem-catchip" style="color:${catCol}; border-color:${catCol}66; background:${catCol}1f">${escapeHtml(chemCatLabel(cat))}</span></div>
+        <div class="chem-name" style="color:${blended}">${l.note ? escapeHtml(l.note) + ' ' : ''}<span class="chem-mcount">${members.length}명</span></div>
+        <div class="chem-catchips">${tgChips}</div>
         <div class="chem-pair">${chips}</div>
       </div>
       <div class="chem-right">
@@ -8305,12 +8408,47 @@ function renderChemistry() {
 }
 let editingChemId = null;
 let chemPicked = new Set();
-function updateChemScoreLbl() {
-  const v = +document.getElementById('chemScore').value;
-  document.getElementById('chemScoreLbl').textContent = (v > 0 ? '+' : '') + v;
-  const lab = chemLabel(v);
-  const tag = document.getElementById('chemScoreTag');
-  tag.textContent = lab.t; tag.style.color = lab.c;
+function chemTargetOptionsHtml() {
+  return '<option value="all">💫 종합 (전체 OVR)</option>' + SECTIONS.map(s => {
+    const stats = STAT_KEYS.filter(k => STATS[k].section === s.id);
+    return `<optgroup label="${s.label}">`
+      + `<option value="${s.id}">${s.label} · 카테고리 전체</option>`
+      + stats.map(k => `<option value="stat_${k}">└ ${STATS[k].name}</option>`).join('')
+      + `</optgroup>`;
+  }).join('');
+}
+function parseTargetCat(raw) {
+  if (raw === 'all') return 'all';
+  if (typeof raw === 'string' && raw.startsWith('stat_')) return raw;
+  const n = parseInt(raw); return (n >= 1 && n <= 7) ? n : 'all';
+}
+function addChemTargetRow(cat, value) {
+  const wrap = document.getElementById('chemTargets'); if (!wrap) return;
+  const row = document.createElement('div');
+  row.className = 'chem-target-row';
+  row.innerHTML = `<select class="chem-cat-select chem-tg-cat">${chemTargetOptionsHtml()}</select>`
+    + `<input type="number" class="chem-tg-val" min="-10" max="15" step="1" value="${value != null ? value : 5}">`
+    + `<button type="button" class="chem-tg-del" title="삭제">✕</button>`;
+  wrap.appendChild(row);
+  row.querySelector('.chem-tg-cat').value = String(normChemCat(cat));
+  row.querySelector('.chem-tg-val').addEventListener('input', updateChemTotal);
+  row.querySelector('.chem-tg-cat').addEventListener('change', updateChemTotal);
+  row.querySelector('.chem-tg-del').addEventListener('click', () => { row.remove(); updateChemTotal(); });
+  updateChemTotal();
+}
+function readChemTargets() {
+  return Array.from(document.querySelectorAll('#chemTargets .chem-target-row')).map(r => ({
+    cat: parseTargetCat(r.querySelector('.chem-tg-cat').value),
+    value: clampChemVal(r.querySelector('.chem-tg-val').value),
+  }));
+}
+function updateChemTotal() {
+  const total = readChemTargets().reduce((a, t) => a + t.value, 0);
+  const totalEl = document.getElementById('chemTotalVal');
+  const tag = document.getElementById('chemTotalTag');
+  const over = total > CHEM_LINK_MAX, under = total < CHEM_LINK_MIN;
+  if (totalEl) { totalEl.textContent = (total > 0 ? '+' : '') + total; totalEl.style.color = (over || under) ? '#f87171' : 'var(--gold)'; }
+  if (tag) { const lab = chemLabel(total); tag.textContent = over ? '⚠ +15 초과' : under ? '⚠ −15 미만' : lab.t; tag.style.color = (over || under) ? '#f87171' : lab.c; }
 }
 function renderChemPickList() {
   const q = (document.getElementById('chemPickSearch').value || '').toLowerCase().trim();
@@ -8334,17 +8472,11 @@ function openChemModal(chemId) {
   document.getElementById('chemModalTitle').textContent = l ? '🤝 케미 수정' : '🤝 케미 만들기';
   chemPicked = new Set(l ? chemMembers(l) : []);
   document.getElementById('chemPickSearch').value = '';
-  document.getElementById('chemCat').innerHTML = '<option value="all">💫 종합 (전체 OVR)</option>' + SECTIONS.map(s => {
-    const stats = STAT_KEYS.filter(k => STATS[k].section === s.id);
-    return `<optgroup label="${s.label}">`
-      + `<option value="${s.id}">${s.label} · 카테고리 전체</option>`
-      + stats.map(k => `<option value="stat_${k}">└ ${STATS[k].name}</option>`).join('')
-      + `</optgroup>`;
-  }).join('');
-  document.getElementById('chemCat').value = l ? String(chemCat(l)) : 'all';
-  document.getElementById('chemScore').value = l ? chemSynergy(l) : 5;
+  document.getElementById('chemTargets').innerHTML = '';
+  const targets = l ? chemTargets(l) : [{ cat: 'all', value: 5 }];
+  targets.forEach(t => addChemTargetRow(t.cat, t.value));
   document.getElementById('chemNote').value = l?.note || '';
-  updateChemScoreLbl();
+  updateChemTotal();
   updateChemPickCount();
   renderChemPickList();
   document.getElementById('chemModal').classList.add('show');
@@ -8353,21 +8485,20 @@ function closeChemModal() { document.getElementById('chemModal').classList.remov
 function saveChemFromModal() {
   const u = currentUser(); if (!u) { toast('로그인이 필요합니다'); return; }
   const members = Array.from(chemPicked).filter(id => getPlayer(id));
-  let synergy = +document.getElementById('chemScore').value;
-  synergy = Math.max(CHEM_SYN_MIN, Math.min(CHEM_SYN_MAX, synergy));
+  let targets = readChemTargets().filter(t => t.value !== 0);
+  if (!targets.length) targets = [{ cat: 'all', value: 5 }];
+  const total = targets.reduce((a, t) => a + t.value, 0);
+  if (total > CHEM_LINK_MAX) { alert('능력치 합계가 +' + CHEM_LINK_MAX + '을 초과했습니다 (현재 ' + total + '). 값을 낮춰주세요.'); return; }
+  if (total < CHEM_LINK_MIN) { alert('능력치 합계가 −' + Math.abs(CHEM_LINK_MIN) + ' 미만입니다 (현재 ' + total + '). 값을 올려주세요.'); return; }
   const note = document.getElementById('chemNote').value.trim();
-  const catRaw = document.getElementById('chemCat').value;
-  const cat = catRaw === 'all' ? 'all'
-    : (catRaw.startsWith('stat_') && STATS[catRaw.slice(5)]) ? catRaw
-    : (parseInt(catRaw) >= 1 && parseInt(catRaw) <= 7 ? parseInt(catRaw) : 'all');
   if (members.length < 2) { alert('2명 이상의 선수를 선택하세요'); return; }
   if (!Array.isArray(store.chemistry)) store.chemistry = [];
   if (editingChemId) {
     const l = chemistryLinks().find(x => x.id === editingChemId);
-    if (l) { l.members = members; delete l.a; delete l.b; delete l.score; l.synergy = synergy; l.cat = cat; l.note = note; l.updatedBy = u.id; }
+    if (l) { l.members = members; delete l.a; delete l.b; delete l.score; delete l.synergy; delete l.cat; l.targets = targets; l.note = note; l.updatedBy = u.id; }
   } else {
     // 같은 멤버 조합도 중복 허용 → 여러 시너지를 겹쳐서 쌓을 수 있음
-    store.chemistry.push({ id: uid(), members, synergy, cat, note, createdBy: u.id, createdAt: Date.now() });
+    store.chemistry.push({ id: uid(), members, targets, note, createdBy: u.id, createdAt: Date.now() });
   }
   saveState();
   closeChemModal();
@@ -8716,7 +8847,7 @@ function bindEvents() {
   document.getElementById('btnAddChem').addEventListener('click', () => openChemModal(null));
   document.getElementById('btnCancelChem').addEventListener('click', closeChemModal);
   document.getElementById('btnSaveChem').addEventListener('click', saveChemFromModal);
-  document.getElementById('chemScore').addEventListener('input', updateChemScoreLbl);
+  document.getElementById('chemAddTarget').addEventListener('click', () => addChemTargetRow('all', 5));
   document.getElementById('chemPickSearch').addEventListener('input', renderChemPickList);
   document.getElementById('chemModal').addEventListener('click', e => { if (e.target.id === 'chemModal') closeChemModal(); });
 
