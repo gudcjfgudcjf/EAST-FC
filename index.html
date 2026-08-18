@@ -3470,7 +3470,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 6;
+const APP_VERSION = 7;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -5506,6 +5506,24 @@ function matchEndTime(m) {
   return d;
 }
 function matchIsPast(m) { return !!m && new Date() > matchEndTime(m); }
+// 경기 시작 시각(정렬용) — 시간 없으면 그 날 자정
+function matchStartTs(m) {
+  if (!m || !m.date) return Infinity;
+  const d = parseYmd(m.date);
+  if (m.time && /^\d{1,2}:\d{2}/.test(m.time)) { const [hh, mm] = m.time.split(':').map(Number); d.setHours(hh, mm, 0, 0); }
+  return d.getTime();
+}
+// 스쿼드가 속한 경기 안에서의 쿼터 순번(0부터)
+function squadQuarterIdx(s, m) { return m ? matchQuarters(m).findIndex(q => q.squadId === s.id) : 0; }
+// 스쿼드 목록 정렬: dir=1 날짜 오름차순(예정), dir=-1 내림차순(지난) · 같은 경기면 쿼터 오름차순
+function compareSquadsByDate(a, b, dir) {
+  const ma = matchForSquad(a.id), mb = matchForSquad(b.id);
+  const ta = ma ? matchStartTs(ma) : Infinity, tb = mb ? matchStartTs(mb) : Infinity;
+  if (ta !== tb) return dir * (ta - tb);
+  const qa = squadQuarterIdx(a, ma), qb = squadQuarterIdx(b, mb);
+  if (qa !== qb) return qa - qb; // 쿼터는 항상 1→4 순
+  return (a.name || '').localeCompare(b.name || '');
+}
 // 이 스쿼드가 '끝난 경기'에 묶여 있으면 그 경기를 반환 (없으면 null → 예정/미연결 스쿼드는 항상 활성)
 function squadPastMatch(squadId) { const m = matchForSquad(squadId); return matchIsPast(m) ? m : null; }
 
@@ -5611,6 +5629,9 @@ function renderSquadList() {
   };
   const active = [], past = [];
   store.squads.forEach(s => (squadPastMatch(s.id) ? past : active).push(s));
+  // 날짜순 정렬: 예정 스쿼드는 빠른 날짜가 위(쿼터 1→4), 지난 스쿼드는 최근 경기가 위
+  active.sort((a, b) => compareSquadsByDate(a, b, 1));
+  past.sort((a, b) => compareSquadsByDate(a, b, -1));
   let html = active.length ? active.map(squadItemHtml).join('')
     : '<div class="empty" style="padding:12px;">다음 경기 스쿼드가 아직 없어요.<br>[+ 새 스쿼드] 또는 일정을 추가해보세요.</div>';
   if (past.length) {
