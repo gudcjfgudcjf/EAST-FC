@@ -71,7 +71,15 @@
   }
   .tab-strip { display: flex; align-items: stretch; gap: 2px; height: 60px; min-width: 0; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
   .tab-strip::-webkit-scrollbar { display: none; }
-  .tab-btn { flex: 0 0 auto; }
+  .tab-btn { flex: 0 0 auto; position: relative; }
+  /* 새 일정 알림 뱃지 */
+  .tab-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 16px; height: 16px; padding: 0 4px; margin-left: 4px;
+    border-radius: 8px; background: #ef4444; color: #fff;
+    font-size: 10px; font-weight: 800; line-height: 1;
+    vertical-align: middle; box-shadow: 0 0 0 2px rgba(239,68,68,0.25);
+  }
   .nav-menu-btn {
     display: none;
     background: var(--bg-3); color: var(--gold);
@@ -2566,7 +2574,7 @@
     <button class="tab-btn active" data-tab="squad">📋 스쿼드</button>
     <button class="tab-btn" data-tab="players">👥 선수</button>
     <button class="tab-btn" data-tab="profile">📸 프로필</button>
-    <button class="tab-btn" data-tab="calendar">📅 일정</button>
+    <button class="tab-btn" data-tab="calendar">📅 일정<span class="tab-badge" id="calBadge" style="display:none"></span></button>
     <button class="tab-btn" data-tab="org">🏢 조직도</button>
     <button class="tab-btn" data-tab="board">📝 게시판</button>
     <button class="tab-btn" data-tab="dor">💛 이스트도르</button>
@@ -3269,7 +3277,7 @@
   <div class="modal" style="max-width:420px">
     <h3>🔐 감독 모드 잠금 해제</h3>
     <div style="color:var(--text-2); font-size:13px; margin-bottom:14px; line-height:1.6;">
-      스쿼드 편집(포메이션·역할·선수 배치)은 감독 권한이 필요합니다.<br>
+      선수 정보·기록 편집은 감독 권한이 필요합니다. <span style="color:var(--text-3);">(스쿼드 편집·참석자 변경은 오너 전용)</span><br>
       감독 비밀번호를 입력하세요.
     </div>
     <div class="form-group">
@@ -3461,7 +3469,7 @@ function rerenderCurrent() {
   else if (t === 'players') renderPlayersTable();
   else if (t === 'profile') renderProfile();
   else if (t === 'presence' && isOwner()) renderPresence();
-  else if (t === 'calendar') renderCalendar();
+  else if (t === 'calendar') { renderCalendar(); markAllMatchesSeen(); updateCalendarBadge(); }
   else if (t === 'org') renderOrg();
   else if (t === 'board') renderBoard();
   else if (t === 'dor') renderDor();
@@ -3658,8 +3666,8 @@ function renderPresence() {
     }).join('') + '</div>';
 }
 
-function canManageSquad() { return isManagerActive(); }
-function canManageMatches() { return isLoggedIn(); } // 경기 추가/편집은 로그인한 모든 회원 가능
+function canManageSquad() { return isOwner(); } // 스쿼드 편집은 오너만
+function canManageMatches() { return isLoggedIn(); } // 경기(일정) 추가/편집은 로그인한 모든 회원 가능
 function canManageStaff() { return isLoggedIn(); } // 조직도 인원 추가/편집은 로그인한 모든 회원 가능
 function canManageUsers() { return isOwner(); }
 function canAddPlayer() { return isLoggedIn(); }
@@ -3860,6 +3868,14 @@ function refreshUserUI() {
   document.getElementById('tabAdmin').style.display = isAdmin() ? 'flex' : 'none';
   // 접속 현황 탭은 오너 전용
   document.getElementById('tabPresence').style.display = isOwner() ? 'flex' : 'none';
+  // 일정 추가 버튼은 로그인 회원 누구나 (canManageMatches)
+  const _addMatch = document.getElementById('btnAddMatch');
+  if (_addMatch) _addMatch.style.display = canManageMatches() ? '' : 'none';
+  // 스쿼드 편집 도구는 오너만 (이름·포메이션 입력 잠금 + 편집 버튼 숨김)
+  const _sqEdit = canManageSquad();
+  ['squadName','formationSelect'].forEach(id => { const el = document.getElementById(id); if (el) el.disabled = !_sqEdit; });
+  ['btnNewSquad','btnSaveSquad','btnClearField','btnResetPositions','btnRoleEdit','btnAutoFill'].forEach(id => { const el = document.getElementById(id); if (el) el.style.display = _sqEdit ? '' : 'none'; });
+  updateCalendarBadge();
   startPresence();
 }
 
@@ -4941,7 +4957,7 @@ function switchTab(name) {
   if (name === 'players') renderPlayersTable();
   if (name === 'profile') renderProfile();
   if (name === 'presence') renderPresence();
-  if (name === 'calendar') renderCalendar();
+  if (name === 'calendar') { renderCalendar(); markAllMatchesSeen(); updateCalendarBadge(); }
   if (name === 'org') renderOrg();
   if (name === 'board') renderBoard();
   if (name === 'dor') renderDor();
@@ -5161,7 +5177,7 @@ function renderField() {
 }
 
 function assignPlayerToSlot(slotIndex, playerId) {
-  if (!canManageSquad()) { toast('감독 권한이 필요합니다'); return; }
+  if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); return; }
   const squad = getCurrentSquad();
   if (!squad) return;
   const existingSlot = Object.entries(squad.assignments).find(([k,v]) => v === playerId);
@@ -5247,7 +5263,7 @@ function attachSlotDrag(slotEl, slotIndex) {
     } else {
       const squad = getCurrentSquad();
       if (!squad) return;
-      if (!canManageSquad()) { toast('감독 권한이 필요합니다 · 상단 🔒 감독 버튼으로 잠금 해제'); return; }
+      if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); return; }
       const roleName = ROLES[squad.slots[slotIndex]?.role]?.name || '?';
       if (squad.assignments[slotIndex]) {
         delete squad.assignments[slotIndex];
@@ -5309,6 +5325,28 @@ function matchEndTime(m) {
 function matchIsPast(m) { return !!m && new Date() > matchEndTime(m); }
 // 이 스쿼드가 '끝난 경기'에 묶여 있으면 그 경기를 반환 (없으면 null → 예정/미연결 스쿼드는 항상 활성)
 function squadPastMatch(squadId) { const m = matchForSquad(squadId); return matchIsPast(m) ? m : null; }
+
+// ===== 새 일정 알림 뱃지 (기기별 · 읽으면 사라짐) =====
+const SEEN_MATCHES_KEY = 'east_fc_seen_matches_v1';
+function getSeenMatchSet() {
+  try { const a = JSON.parse(localStorage.getItem(SEEN_MATCHES_KEY)); if (Array.isArray(a)) return new Set(a); } catch(e) {}
+  return null;
+}
+function markAllMatchesSeen() {
+  try { localStorage.setItem(SEEN_MATCHES_KEY, JSON.stringify((store.matches || []).map(m => m.id))); } catch(e) {}
+}
+// 아직 안 본 '예정' 경기 목록 (지난 경기는 제외). 최초 실행이면 전부 본 것으로 초기화.
+function unseenMatches() {
+  const seen = getSeenMatchSet();
+  if (!seen) { markAllMatchesSeen(); return []; }
+  return (store.matches || []).filter(m => !seen.has(m.id) && !matchIsPast(m));
+}
+function updateCalendarBadge() {
+  const el = document.getElementById('calBadge'); if (!el) return;
+  const n = unseenMatches().length;
+  if (n > 0) { el.textContent = n > 99 ? '99+' : n; el.style.display = ''; }
+  else el.style.display = 'none';
+}
 function renderSquadList() {
   const list = $('#squadList');
   if (store.squads.length === 0) {
@@ -5345,7 +5383,7 @@ function renderSquadList() {
 
 // 참석·가능쿼터·주포지션 기준으로 현재 스쿼드를 자동 배치
 function autoFillSquad() {
-  if (!canManageSquad()) { toast('감독 권한이 필요합니다 · 상단 🔒 감독 버튼'); return; }
+  if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); return; }
   const squad = getCurrentSquad();
   if (!squad) { toast('스쿼드가 없어요'); return; }
   const slots = ensureSquadSlots(squad);
@@ -6056,7 +6094,7 @@ function closeAssignModal() { $('#assignModal').classList.remove('show'); assign
 
 /* ==================== Role editor ==================== */
 function openRoleEditor() {
-  if (!canManageSquad()) { toast('감독 권한이 필요합니다'); return; }
+  if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); return; }
   const squad = getCurrentSquad();
   if (!squad) { alert('먼저 스쿼드를 선택하세요'); return; }
   ensureSquadSlots(squad);
@@ -6091,7 +6129,7 @@ function closeRoleEditor() { $('#roleEditModal').classList.remove('show'); }
 
 /* ==================== Squad management ==================== */
 function newSquad() {
-  if (!canManageSquad()) { toast('감독 권한이 필요합니다'); return; }
+  if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); return; }
   const name = prompt('새 스쿼드 이름:', '스쿼드 ' + (store.squads.length + 1));
   if (!name) return;
   const squad = { id: uid(), name: name.trim(), formation: '4-4-2', slots: [], assignments: {} };
@@ -6113,7 +6151,7 @@ function selectSquad(id) {
   renderPlayerList(); renderField(); renderSquadList();
 }
 function deleteSquad(id) {
-  if (!canManageSquad()) { toast('감독 권한이 필요합니다'); return; }
+  if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); return; }
   if (!confirm('이 스쿼드를 삭제하시겠습니까?')) return;
   store.squads = store.squads.filter(s => s.id !== id);
   if (localSquadId === id) setLocalSquad(store.squads[0]?.id || null);
@@ -6126,7 +6164,7 @@ function deleteSquad(id) {
   toast('스쿼드를 삭제했어요');
 }
 function saveCurrentSquad() {
-  if (!canManageSquad()) { toast('감독 권한이 필요합니다'); return; }
+  if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); return; }
   const squad = getCurrentSquad();
   if (!squad) { alert('먼저 스쿼드를 만들어주세요'); return; }
   squad.name = $('#squadName').value.trim() || squad.name;
@@ -6136,7 +6174,7 @@ function saveCurrentSquad() {
   toast('스쿼드를 저장했어요 💾');
 }
 function clearField() {
-  if (!canManageSquad()) { toast('감독 권한이 필요합니다'); return; }
+  if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); return; }
   const squad = getCurrentSquad();
   if (!squad || Object.keys(squad.assignments).length === 0) return;
   if (!confirm('필드의 모든 선수를 빼시겠습니까?')) return;
@@ -6297,16 +6335,25 @@ function collectQuarters() {
 }
 
 function openMatchModal(matchId, defaultDate) {
+  const canEdit = canManageMatches(); // 관리자·오너만 일정 편집
+  if (!matchId && !canEdit) { toast('일정 추가는 관리자/오너만 가능해요'); return; }
   editingMatchId = matchId || null;
-  $('#matchModalTitle').textContent = matchId ? '경기 편집' : '경기 추가';
-  $('#btnDeleteMatch').style.display = matchId ? 'inline-block' : 'none';
-  document.getElementById('mAutoQuarterWrap').style.display = matchId ? 'none' : 'block'; // 신규 경기만 자동생성
+  $('#matchModalTitle').textContent = matchId ? (canEdit ? '경기 편집' : '경기 정보 · 참석 투표') : '경기 추가';
+  $('#btnDeleteMatch').style.display = (matchId && canEdit) ? 'inline-block' : 'none';
+  $('#btnSaveMatch').style.display = canEdit ? '' : 'none';
+  document.getElementById('mAutoQuarterWrap').style.display = (matchId || !canEdit) ? 'none' : 'block'; // 신규 경기만 자동생성
+  const _addQ = document.getElementById('btnAddQuarter'); if (_addQ) _addQ.style.display = canEdit ? '' : 'none';
+  // 편집 필드: 관리자·오너만 수정 가능, 그 외에는 읽기 전용(참석 투표만)
+  ['mDate','mTime','mOpponent','mHomeAway','mAutoQuarters','mLocation','mScoreUs','mScoreThem','mNotes'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.disabled = !canEdit;
+  });
   const m = matchId ? store.matches.find(x => x.id === matchId) : null;
   $('#mDate').value = m?.date || defaultDate || ymd(new Date());
   $('#mTime').value = m?.time || '15:00';
   $('#mOpponent').value = m?.opponent || '';
   $('#mHomeAway').value = m?.homeAway || 'home';
   renderQuarterRows(matchQuarters(m));
+  if (!canEdit) document.querySelectorAll('#mQuarterList select, #mQuarterList button, #mQuarterList input').forEach(el => el.disabled = true);
   $('#mLocation').value = m?.location || '';
   $('#mScoreUs').value = m?.scoreUs ?? '';
   $('#mScoreThem').value = m?.scoreThem ?? '';
@@ -6367,14 +6414,14 @@ function saveMatchFromModal() {
     }
     store.matches.push(newMatch);
   }
-  saveState(); closeMatchModal(); closeDayModal(); renderCalendar();
+  saveState(); markAllMatchesSeen(); updateCalendarBadge(); closeMatchModal(); closeDayModal(); renderCalendar();
   if (currentTab === 'squad') renderSquadList();
 }
 function deleteCurrentMatch() {
   if (!editingMatchId) return;
   if (!confirm('이 경기를 삭제하시겠습니까?')) return;
   store.matches = store.matches.filter(m => m.id !== editingMatchId);
-  saveState(); closeMatchModal(); closeDayModal(); renderCalendar();
+  saveState(); markAllMatchesSeen(); updateCalendarBadge(); closeMatchModal(); closeDayModal(); renderCalendar();
   toast('경기를 삭제했어요');
 }
 let currentDayStr = null;
@@ -6418,7 +6465,7 @@ function attendanceSectionHtml(m) {
     <div class="attend-label">참석 투표 <span style="color:var(--text-3); font-weight:400;">· 참석자는 스쿼드 배치 우선순위로 앞에 떠요</span></div>
     ${selfArea}
     ${voterChips ? `<div class="attend-voters">${voterChips}</div>` : '<div class="attend-empty">아직 투표한 선수가 없어요</div>'}
-    ${isManagerActive() ? managerRosterHtml(m) : ''}
+    ${isOwner() ? managerRosterHtml(m) : ''}
   </div>`;
 }
 // 이 경기의 쿼터 개수 (기본 4)
@@ -6470,7 +6517,7 @@ function managerRosterHtml(m) {
     return `<div class="amr"><div class="amr-top"><span class="amr-name">${nm}</span><div class="amr-btns">${btns}</div></div>${qRow}</div>`;
   }).join('');
   return `<div class="attend-manage">
-    <div class="attend-manage-title">🛡️ 감독/운영진 · 선수단 참석 직접 관리 <span style="color:var(--text-3); font-weight:400; font-size:11px;">(미가입 선수도 대신 체크 가능)</span></div>
+    <div class="attend-manage-title">👑 오너 · 선수단 참석 직접 관리 <span style="color:var(--text-3); font-weight:400; font-size:11px;">(미가입 선수도 대신 체크 가능 · 오너 전용)</span></div>
     <div style="font-size:11px; color:var(--text-3); margin:-2px 0 6px;">참석자는 <b>가능 쿼터</b>를 켜고 끌 수 있어요. 끈 쿼터 스쿼드에선 배치 우선순위에서 뒤로 밀리고 표시가 떠요.</div>
     <div class="attend-manage-list">${rows}</div>
   </div>`;
@@ -6491,7 +6538,7 @@ function toggleAvailQuarter(matchId, playerId, q) {
   const m = store.matches.find(x => x.id === matchId);
   if (!m) return;
   const isSelf = myPlayer() && myPlayer().id === playerId;
-  if (!isManagerActive() && !isSelf) { toast('본인 또는 감독/운영진만 가능해요'); return; }
+  if (!isOwner() && !isSelf) { toast('본인 또는 오너만 가능해요'); return; }
   if (!m.availQ || typeof m.availQ !== 'object' || Array.isArray(m.availQ)) m.availQ = {};
   const nq = matchQuarterCount(m);
   let cur = Array.isArray(m.availQ[playerId]) ? m.availQ[playerId].slice() : Array.from({ length: nq }, (_, i) => i + 1);
@@ -6527,9 +6574,9 @@ function setMatchAttendance(matchId, status) {
   const meta = ATTEND_META[status];
   toast(m.attendance[p.id] ? `${meta.icon} ${meta.label}` : '투표 취소');
 }
-// 감독/운영진이 특정 "선수"의 참석 상태를 직접 지정/해제 (미가입 선수 포함)
+// 오너가 특정 "선수"의 참석 상태를 직접 지정/해제 (미가입 선수 포함)
 function setMatchAttendanceForPlayer(matchId, playerId, status) {
-  if (!isManagerActive()) { toast('감독/운영진만 가능합니다'); return; }
+  if (!isOwner()) { toast('참석자 변경은 오너만 가능해요'); return; }
   const m = store.matches.find(x => x.id === matchId);
   if (!m) return;
   if (!m.attendance) m.attendance = {};
@@ -6573,6 +6620,8 @@ function attendRankForPlayer(player, match) {
 
 function openDayModal(dateStr) {
   currentDayStr = dateStr;
+  const _addOnDay = document.getElementById('btnAddMatchOnDay');
+  if (_addOnDay) _addOnDay.style.display = canManageMatches() ? '' : 'none';
   const d = parseYmd(dateStr);
   const dowNames = ['일','월','화','수','목','금','토'];
   $('#dayModalTitle').textContent = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${dowNames[d.getDay()]})`;
@@ -8150,7 +8199,7 @@ function bindEvents() {
   $('#formationSelect').addEventListener('change', e => {
     const squad = getCurrentSquad();
     if (!squad) return;
-    if (!canManageSquad()) { toast('감독/운영진만 가능해요 · 상단 🔒 감독 모드로 잠금 해제'); e.target.value = squad.formation; return; }
+    if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); e.target.value = squad.formation; return; }
     squad.formation = e.target.value;
     resetSquadSlots(squad);
     const newLen = squad.slots.length;
@@ -8163,6 +8212,7 @@ function bindEvents() {
   $('#squadName').addEventListener('change', e => {
     const squad = getCurrentSquad();
     if (!squad) return;
+    if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); e.target.value = squad.name; return; }
     squad.name = e.target.value.trim() || squad.name;
     saveState();
     renderSquadList();
@@ -8170,7 +8220,7 @@ function bindEvents() {
   $('#btnResetPositions').addEventListener('click', () => {
     const squad = getCurrentSquad();
     if (!squad) return;
-    if (!canManageSquad()) { toast('감독/운영진만 가능해요 · 상단 🔒 감독 모드로 잠금 해제'); return; }
+    if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); return; }
     if (!confirm('슬롯 위치를 기본값으로 되돌리시겠습니까? (선수 배치는 유지)')) return;
     resetSquadSlots(squad);
     saveState();
