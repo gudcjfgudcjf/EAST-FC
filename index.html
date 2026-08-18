@@ -49,11 +49,10 @@
      body 배경은 투명으로 둬야 #appFx(z-index:-1) 애니메이션 배경이 가려지지 않고 보임 */
   html {
     background-color: var(--bg);
+    /* 정적: 상단 은은한 골드 후광 + 하단 부드러운 비네트 (심플하게) */
     background-image:
-      radial-gradient(130% 55% at 50% -12%, rgba(244, 196, 48, 0.07), transparent 55%),
-      radial-gradient(circle at 15% 20%, rgba(244, 196, 48, 0.04), transparent 40%),
-      radial-gradient(circle at 85% 80%, rgba(255, 153, 69, 0.035), transparent 42%),
-      radial-gradient(140% 120% at 50% 125%, rgba(0, 0, 0, 0.5), transparent 60%);
+      radial-gradient(120% 62% at 50% -8%, rgba(244, 196, 48, 0.045), transparent 58%),
+      radial-gradient(130% 100% at 50% 122%, rgba(0, 0, 0, 0.42), transparent 55%);
   }
   body { display: flex; flex-direction: column; background: transparent; }
   /* iOS: use dynamic viewport height so the field/tabs aren't cut off by the URL bar */
@@ -63,29 +62,33 @@
 
   /* ===== 배경 애니메이션: 파도 스윕 + 두근두근 밝기 (골드 빛줄기가 대각선으로 흐르며 심장처럼 박동) ===== */
   #appFx {
-    position: fixed; inset: 0; z-index: -1; pointer-events: none;
-    background: linear-gradient(100deg,
-      transparent 26%,
-      rgba(244, 196, 48, 0.10) 44%,
-      rgba(255, 209, 102, 0.20) 50%,
-      rgba(244, 196, 48, 0.10) 56%,
-      transparent 74%);
-    background-size: 260% 100%;
+    position: fixed; inset: -12%; z-index: -1; pointer-events: none;
+    /* 넓게 페더링한 부드러운 빛띠 — 딱딱한 줄무늬가 아니라 은은히 번지는 글로우 */
+    background: linear-gradient(105deg,
+      transparent 20%,
+      rgba(244, 196, 48, 0.020) 33%,
+      rgba(244, 196, 48, 0.045) 42%,
+      rgba(255, 209, 102, 0.075) 50%,
+      rgba(244, 196, 48, 0.045) 58%,
+      rgba(244, 196, 48, 0.020) 67%,
+      transparent 80%);
+    background-size: 300% 100%;
     background-repeat: no-repeat;
-    animation: appFxSweep 7s linear infinite, appFxBeat 1.7s ease-in-out infinite;
+    filter: blur(26px);
+    animation: appFxSweep 9s ease-in-out infinite, appFxBeat 2.1s ease-in-out infinite;
     will-change: background-position, opacity;
   }
-  @keyframes appFxSweep { 0% { background-position: 160% 0; } 100% { background-position: -60% 0; } }
+  @keyframes appFxSweep { 0% { background-position: 145% 0; } 100% { background-position: -45% 0; } }
   @keyframes appFxBeat {
-    0%, 100% { opacity: 0.42; }
-    12% { opacity: 0.90; }
-    24% { opacity: 0.50; }
-    36% { opacity: 0.75; }
-    50% { opacity: 0.42; }
+    0%, 100% { opacity: 0.30; }
+    14% { opacity: 0.56; }
+    28% { opacity: 0.36; }
+    42% { opacity: 0.48; }
+    56% { opacity: 0.30; }
   }
-  /* 접근성: 모션 최소화 설정이면 애니메이션 끄고 은은하게 고정 */
+  /* 접근성: 모션 최소화 설정이면 애니메이션 끄고 아주 은은하게 고정 */
   @media (prefers-reduced-motion: reduce) {
-    #appFx { animation: none; opacity: 0.5; background-position: 50% 0; }
+    #appFx { animation: none; opacity: 0.32; background-position: 50% 0; }
   }
 
   /* ---------- Top nav ---------- */
@@ -296,7 +299,7 @@
   .role-chip.FW { background: var(--danger-bg); color: #fecaca; }
 
   /* ---------- Field ---------- */
-  .field-wrap { background: var(--bg); display: flex; flex-direction: column; overflow: hidden; }
+  .field-wrap { background: transparent; display: flex; flex-direction: column; overflow: hidden; }
   .field-toolbar {
     padding: 10px 18px;
     background: var(--bg-2); border-bottom: 1px solid var(--bg-3);
@@ -3467,7 +3470,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 4;
+const APP_VERSION = 5;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
