@@ -41,9 +41,13 @@
     height: 100%;
     font-family: var(--font-body);
     background: var(--bg);
+    /* 정적 깊이감: 상단 골드 후광 + 코너 비네트 (순수 검정 완화, 박동하지 않음) */
     background-image:
+      radial-gradient(130% 55% at 50% -12%, rgba(244, 196, 48, 0.07), transparent 55%),
       radial-gradient(circle at 15% 20%, rgba(244, 196, 48, 0.04), transparent 40%),
-      radial-gradient(circle at 85% 80%, rgba(255, 153, 69, 0.03), transparent 40%);
+      radial-gradient(circle at 85% 80%, rgba(255, 153, 69, 0.035), transparent 42%),
+      radial-gradient(140% 120% at 50% 125%, rgba(0, 0, 0, 0.5), transparent 60%);
+    background-attachment: fixed;
     color: var(--text);
     overflow: hidden;
     font-weight: 400;
@@ -53,6 +57,33 @@
   /* iOS: use dynamic viewport height so the field/tabs aren't cut off by the URL bar */
   @supports (height: 100dvh) {
     html, body { height: 100dvh; }
+  }
+
+  /* ===== 배경 애니메이션: 파도 스윕 + 두근두근 밝기 (골드 빛줄기가 대각선으로 흐르며 심장처럼 박동) ===== */
+  #appFx {
+    position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: linear-gradient(100deg,
+      transparent 26%,
+      rgba(244, 196, 48, 0.10) 44%,
+      rgba(255, 209, 102, 0.20) 50%,
+      rgba(244, 196, 48, 0.10) 56%,
+      transparent 74%);
+    background-size: 260% 100%;
+    background-repeat: no-repeat;
+    animation: appFxSweep 7s linear infinite, appFxBeat 1.7s ease-in-out infinite;
+    will-change: background-position, opacity;
+  }
+  @keyframes appFxSweep { 0% { background-position: 160% 0; } 100% { background-position: -60% 0; } }
+  @keyframes appFxBeat {
+    0%, 100% { opacity: 0.42; }
+    12% { opacity: 0.90; }
+    24% { opacity: 0.50; }
+    36% { opacity: 0.75; }
+    50% { opacity: 0.42; }
+  }
+  /* 접근성: 모션 최소화 설정이면 애니메이션 끄고 은은하게 고정 */
+  @media (prefers-reduced-motion: reduce) {
+    #appFx { animation: none; opacity: 0.5; background-position: 50% 0; }
   }
 
   /* ---------- Top nav ---------- */
@@ -2624,6 +2655,9 @@
 </head>
 <body class="not-authed">
 
+<!-- ============ 배경 애니메이션 (파도 스윕 + 두근두근) ============ -->
+<div id="appFx" aria-hidden="true"></div>
+
 <!-- ============ AUTH GATE ============ -->
 <div class="auth-gate show" id="authGate">
   <div class="auth-card">
@@ -3431,7 +3465,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 3;
+const APP_VERSION = 4;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
