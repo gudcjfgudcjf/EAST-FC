@@ -3470,7 +3470,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 5;
+const APP_VERSION = 6;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -3824,7 +3824,7 @@ function renderPresence() {
     }).join('') + '</div>';
 }
 
-function canManageSquad() { return isOwner(); } // 스쿼드 편집은 오너만
+function canManageSquad() { return isOwner() || session.managerModeActive; } // 오너는 항상, 그 외(운영진 포함)는 감독 모드 ON일 때만
 function canManageMatches() { return isLoggedIn(); } // 경기(일정) 추가/편집은 로그인한 모든 회원 가능
 function canManageStaff() { return isLoggedIn(); } // 조직도 인원 추가/편집은 로그인한 모든 회원 가능
 function canManageUsers() { return isOwner(); }
@@ -4010,18 +4010,22 @@ function refreshUserUI() {
   badge.textContent = u.role === 'owner' ? 'OWNER' : u.role === 'admin' ? 'ADMIN' : 'MEMBER';
 
   const managerBtn = document.getElementById('btnManagerToggle');
-  if (isAdmin()) {
+  if (isOwner()) {
+    // 오너는 항상 스쿼드 편집 가능 — 감독 모드 토글 불필요
     managerBtn.textContent = '🔓 감독';
-    managerBtn.title = '관리자는 항상 감독 권한이 있습니다';
+    managerBtn.title = '오너는 항상 편집 권한이 있습니다';
     managerBtn.style.opacity = '0.6';
   } else if (session.managerModeActive) {
-    managerBtn.textContent = '🔓 감독';
+    managerBtn.textContent = '🔓 감독 ON';
+    managerBtn.title = '감독 모드 켜짐 · 눌러서 해제 (스쿼드 편집 잠금)';
     managerBtn.style.opacity = '1';
   } else {
     managerBtn.textContent = '🔒 감독';
+    managerBtn.title = isAdmin() ? '눌러서 감독 모드 켜기 (스쿼드 편집 가능)' : '감독 비밀번호로 감독 모드 켜기';
     managerBtn.style.opacity = '1';
   }
-  document.getElementById('managerBadge').classList.toggle('show', session.managerModeActive && !isAdmin());
+  // 감독 모드 활성 시 플로팅 배지 표시(오너 제외 — 오너는 상시 권한)
+  document.getElementById('managerBadge').classList.toggle('show', session.managerModeActive && !isOwner());
   // Admin tab visible only to admins (owner + 운영진)
   document.getElementById('tabAdmin').style.display = isAdmin() ? 'flex' : 'none';
   // 접속 현황 탭은 오너 전용
@@ -4029,7 +4033,7 @@ function refreshUserUI() {
   // 일정 추가 버튼은 로그인 회원 누구나 (canManageMatches)
   const _addMatch = document.getElementById('btnAddMatch');
   if (_addMatch) _addMatch.style.display = canManageMatches() ? '' : 'none';
-  // 스쿼드 편집 도구는 오너만 (이름·포메이션 입력 잠금 + 편집 버튼 숨김)
+  // 스쿼드 편집 도구는 오너·감독(감독 모드 ON)만 (이름·포메이션 입력 잠금 + 편집 버튼 숨김)
   const _sqEdit = canManageSquad();
   ['squadName','formationSelect'].forEach(id => { const el = document.getElementById(id); if (el) el.disabled = !_sqEdit; });
   ['btnNewSquad','btnSaveSquad','btnClearField','btnResetPositions','btnRoleEdit','btnAutoFill'].forEach(id => { const el = document.getElementById(id); if (el) el.style.display = _sqEdit ? '' : 'none'; });
@@ -4039,14 +4043,23 @@ function refreshUserUI() {
 
 /* ==================== Manager unlock ==================== */
 async function openManagerUnlock() {
-  if (isAdmin()) { toast('관리자는 항상 감독 권한이 있습니다'); return; }
+  if (isOwner()) { toast('오너는 항상 편집 권한이 있어요'); return; }
+  // 이미 켜져 있으면 해제
   if (session.managerModeActive) {
-    if (confirm('감독 모드를 해제하시겠습니까?')) {
+    if (confirm('감독 모드를 해제하시겠습니까? (스쿼드 편집이 잠깁니다)')) {
       session.managerModeActive = false;
       refreshUserUI();
       renderField(); renderSquadList();
       toast('감독 모드 해제됨');
     }
+    return;
+  }
+  // 운영진(관리자)은 비밀번호 없이 바로 감독 모드 ON — 단, 켜야만 스쿼드 편집 가능
+  if (isAdmin()) {
+    session.managerModeActive = true;
+    refreshUserUI();
+    renderField(); renderSquadList();
+    toast('🔓 감독 모드 ON · 스쿼드 편집 가능');
     return;
   }
   document.getElementById('mgrUnlockPass').value = '';
@@ -5347,7 +5360,7 @@ function renderField() {
 }
 
 function assignPlayerToSlot(slotIndex, playerId) {
-  if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); return; }
+  if (!canManageSquad()) { toast('스쿼드 편집은 오너·감독만 가능해요 (감독 모드를 켜세요)'); return; }
   const squad = getCurrentSquad();
   if (!squad) return;
   const existingSlot = Object.entries(squad.assignments).find(([k,v]) => v === playerId);
@@ -5433,7 +5446,7 @@ function attachSlotDrag(slotEl, slotIndex) {
     } else {
       const squad = getCurrentSquad();
       if (!squad) return;
-      if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); return; }
+      if (!canManageSquad()) { toast('스쿼드 편집은 오너·감독만 가능해요 (감독 모드를 켜세요)'); return; }
       const roleName = ROLES[squad.slots[slotIndex]?.role]?.name || '?';
       if (squad.assignments[slotIndex]) {
         delete squad.assignments[slotIndex];
@@ -5611,7 +5624,7 @@ function renderSquadList() {
 
 // 참석·가능쿼터·주포지션 기준으로 현재 스쿼드를 자동 배치
 function autoFillSquad() {
-  if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); return; }
+  if (!canManageSquad()) { toast('스쿼드 편집은 오너·감독만 가능해요 (감독 모드를 켜세요)'); return; }
   const squad = getCurrentSquad();
   if (!squad) { toast('스쿼드가 없어요'); return; }
   const slots = ensureSquadSlots(squad);
@@ -6354,7 +6367,7 @@ function closeAssignModal() { $('#assignModal').classList.remove('show'); assign
 
 /* ==================== Role editor ==================== */
 function openRoleEditor() {
-  if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); return; }
+  if (!canManageSquad()) { toast('스쿼드 편집은 오너·감독만 가능해요 (감독 모드를 켜세요)'); return; }
   const squad = getCurrentSquad();
   if (!squad) { alert('먼저 스쿼드를 선택하세요'); return; }
   ensureSquadSlots(squad);
@@ -6389,7 +6402,7 @@ function closeRoleEditor() { $('#roleEditModal').classList.remove('show'); }
 
 /* ==================== Squad management ==================== */
 function newSquad() {
-  if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); return; }
+  if (!canManageSquad()) { toast('스쿼드 편집은 오너·감독만 가능해요 (감독 모드를 켜세요)'); return; }
   const name = prompt('새 스쿼드 이름:', '스쿼드 ' + (store.squads.length + 1));
   if (!name) return;
   const squad = { id: uid(), name: name.trim(), formation: '4-4-2', slots: [], assignments: {} };
@@ -6411,7 +6424,7 @@ function selectSquad(id) {
   renderPlayerList(); renderField(); renderSquadList();
 }
 function deleteSquad(id) {
-  if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); return; }
+  if (!canManageSquad()) { toast('스쿼드 편집은 오너·감독만 가능해요 (감독 모드를 켜세요)'); return; }
   if (!confirm('이 스쿼드를 삭제하시겠습니까?')) return;
   store.squads = store.squads.filter(s => s.id !== id);
   if (localSquadId === id) setLocalSquad(store.squads[0]?.id || null);
@@ -6424,7 +6437,7 @@ function deleteSquad(id) {
   toast('스쿼드를 삭제했어요');
 }
 function saveCurrentSquad() {
-  if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); return; }
+  if (!canManageSquad()) { toast('스쿼드 편집은 오너·감독만 가능해요 (감독 모드를 켜세요)'); return; }
   const squad = getCurrentSquad();
   if (!squad) { alert('먼저 스쿼드를 만들어주세요'); return; }
   squad.name = $('#squadName').value.trim() || squad.name;
@@ -6434,7 +6447,7 @@ function saveCurrentSquad() {
   toast('스쿼드를 저장했어요 💾');
 }
 function clearField() {
-  if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); return; }
+  if (!canManageSquad()) { toast('스쿼드 편집은 오너·감독만 가능해요 (감독 모드를 켜세요)'); return; }
   const squad = getCurrentSquad();
   if (!squad || Object.keys(squad.assignments).length === 0) return;
   if (!confirm('필드의 모든 선수를 빼시겠습니까?')) return;
@@ -8701,7 +8714,7 @@ function bindEvents() {
   $('#formationSelect').addEventListener('change', e => {
     const squad = getCurrentSquad();
     if (!squad) return;
-    if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); e.target.value = squad.formation; return; }
+    if (!canManageSquad()) { toast('스쿼드 편집은 오너·감독만 가능해요 (감독 모드를 켜세요)'); e.target.value = squad.formation; return; }
     squad.formation = e.target.value;
     resetSquadSlots(squad);
     const newLen = squad.slots.length;
@@ -8714,7 +8727,7 @@ function bindEvents() {
   $('#squadName').addEventListener('change', e => {
     const squad = getCurrentSquad();
     if (!squad) return;
-    if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); e.target.value = squad.name; return; }
+    if (!canManageSquad()) { toast('스쿼드 편집은 오너·감독만 가능해요 (감독 모드를 켜세요)'); e.target.value = squad.name; return; }
     squad.name = e.target.value.trim() || squad.name;
     saveState();
     renderSquadList();
@@ -8722,7 +8735,7 @@ function bindEvents() {
   $('#btnResetPositions').addEventListener('click', () => {
     const squad = getCurrentSquad();
     if (!squad) return;
-    if (!canManageSquad()) { toast('스쿼드 편집은 오너만 가능해요'); return; }
+    if (!canManageSquad()) { toast('스쿼드 편집은 오너·감독만 가능해요 (감독 모드를 켜세요)'); return; }
     if (!confirm('슬롯 위치를 기본값으로 되돌리시겠습니까? (선수 배치는 유지)')) return;
     resetSquadSlots(squad);
     saveState();
