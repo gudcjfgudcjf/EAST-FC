@@ -72,15 +72,17 @@
   .tab-strip { display: flex; align-items: stretch; gap: 2px; height: 60px; min-width: 0; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
   .tab-strip::-webkit-scrollbar { display: none; }
   .tab-btn { flex: 0 0 auto; position: relative; }
-  /* 새 일정 알림 전구 💡 */
+  /* 새 일정 알림 전구 💡 (켜짐=밝게 깜빡 / 꺼짐=회색으로 흐리게, 사라지지 않음) */
   .tab-badge {
-    margin-left: 3px; font-size: 13px; line-height: 1; vertical-align: middle;
-    filter: drop-shadow(0 0 4px rgba(250, 204, 21, 0.9));
+    margin-left: 3px; font-size: 13px; line-height: 1; vertical-align: middle; display: inline-block;
+    filter: drop-shadow(0 0 4px rgba(250, 204, 21, 0.95));
     animation: bulbPulse 1.4s ease-in-out infinite;
   }
-  @keyframes bulbPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.45; } }
+  .tab-badge.off { filter: grayscale(1) brightness(0.7); opacity: 0.4; animation: none; }
+  @keyframes bulbPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
   /* 일정 항목 옆 전구 */
-  .match-new-bulb { font-size: 13px; margin-left: 4px; filter: drop-shadow(0 0 3px rgba(250,204,21,0.85)); vertical-align: middle; }
+  .match-new-bulb { font-size: 13px; margin-left: 4px; vertical-align: middle; filter: drop-shadow(0 0 3px rgba(250,204,21,0.9)); }
+  .match-new-bulb.off { filter: grayscale(1) brightness(0.7); opacity: 0.38; }
   .nav-menu-btn {
     display: none;
     background: var(--bg-3); color: var(--gold);
@@ -2575,7 +2577,7 @@
     <button class="tab-btn active" data-tab="squad">📋 스쿼드</button>
     <button class="tab-btn" data-tab="players">👥 선수</button>
     <button class="tab-btn" data-tab="profile">📸 프로필</button>
-    <button class="tab-btn" data-tab="calendar">📅 일정<span class="tab-badge" id="calBadge" style="display:none" title="확인 안 한 일정이 있어요">💡</span></button>
+    <button class="tab-btn" data-tab="calendar">📅 일정<span class="tab-badge off" id="calBadge" title="새 일정 알림">💡</span></button>
     <button class="tab-btn" data-tab="org">🏢 조직도</button>
     <button class="tab-btn" data-tab="board">📝 게시판</button>
     <button class="tab-btn" data-tab="dor">💛 이스트도르</button>
@@ -5358,10 +5360,12 @@ function unseenMatches() {
   if (!seen) { markAllMatchesSeen(); return []; }
   return (store.matches || []).filter(m => !seen.has(m.id));
 }
-// 일정 탭 전구: 안 본 경기가 하나라도 있으면 켬
+// 일정 탭 전구: 안 본 경기가 하나라도 있으면 켬(밝게), 다 봤으면 끔(회색). 항상 표시.
 function updateCalendarBadge() {
   const el = document.getElementById('calBadge'); if (!el) return;
-  el.style.display = unseenMatches().length > 0 ? '' : 'none';
+  const on = unseenMatches().length > 0;
+  el.classList.toggle('off', !on);
+  el.title = on ? '확인 안 한 일정이 있어요' : '새 일정 없음 (모두 확인함)';
 }
 function renderSquadList() {
   const list = $('#squadList');
@@ -6245,7 +6249,7 @@ function makeDayCell(d, otherMonth, todayStr) {
     mel.style.borderLeft = `4px solid ${matchColorFor(m)}`;
     const scoreStr = (m.scoreUs != null && m.scoreThem != null && m.scoreUs !== '' && m.scoreThem !== '') ? ` ${m.scoreUs}:${m.scoreThem}` : '';
     mel.textContent = `${m.time || ''} ${m.opponent || '상대'}${scoreStr}`;
-    if (isMatchUnseen(m)) { const b = document.createElement('span'); b.className = 'match-new-bulb'; b.textContent = '💡'; mel.appendChild(b); }
+    { const b = document.createElement('span'); b.className = 'match-new-bulb' + (isMatchUnseen(m) ? '' : ' off'); b.textContent = '💡'; mel.appendChild(b); }
     mel.title = `${m.time || ''} ${m.homeAway === 'away' ? '원정' : '홈'} vs ${m.opponent}${m.location ? ' @ ' + m.location : ''}`;
     mel.addEventListener('click', e => { e.stopPropagation(); openMatchModal(m.id); });
     cell.appendChild(mel);
@@ -6272,7 +6276,7 @@ function renderUpcoming() {
     const dowNames = ['일','월','화','수','목','금','토'];
     const dateLabel = `${d.getMonth()+1}/${d.getDate()} (${dowNames[d.getDay()]})`;
     const haLabel = m.homeAway === 'away' ? '[원정]' : '[홈]';
-    const bulb = isMatchUnseen(m) ? '<span class="match-new-bulb" title="새 일정 · 열어보면 꺼져요">💡</span>' : '';
+    const bulb = `<span class="match-new-bulb ${isMatchUnseen(m) ? '' : 'off'}" title="${isMatchUnseen(m) ? '새 일정 · 열어보면 꺼져요' : '확인함'}">💡</span>`;
     return `<div class="cal-upcoming-item" data-id="${m.id}">
       <span class="cal-upcoming-date">${dateLabel} ${m.time || ''}</span>
       <span>${haLabel} vs <strong>${escapeHtml(m.opponent || '상대팀')}</strong>${bulb}</span>
@@ -6685,7 +6689,7 @@ function openDayModal(dateStr) {
       return `<div class="day-match-item" data-id="${m.id}">
         <div class="dm-top">
           <div class="day-match-info">
-            <div class="day-match-title">${m.time || ''} ${m.homeAway === 'away' ? '[원정]' : '[홈]'} vs ${escapeHtml(m.opponent)}${scoreStr}${isMatchUnseen(m) ? '<span class="match-new-bulb" title="새 일정">💡</span>' : ''}</div>
+            <div class="day-match-title">${m.time || ''} ${m.homeAway === 'away' ? '[원정]' : '[홈]'} vs ${escapeHtml(m.opponent)}${scoreStr}<span class="match-new-bulb ${isMatchUnseen(m) ? '' : 'off'}" title="${isMatchUnseen(m) ? '새 일정' : '확인함'}">💡</span></div>
             <div class="day-match-meta">
               ${m.location ? '📍 ' + escapeHtml(m.location) : ''}
               ${m.notes ? ' · 📝 ' + escapeHtml(m.notes.slice(0, 40)) + (m.notes.length > 40 ? '…' : '') : ''}
