@@ -96,14 +96,21 @@
   .nav-utils { display: flex; align-items: center; gap: 4px; position: relative; z-index: 1; }
   /* 모바일 전용 새로고침 버튼 (데스크톱은 브라우저 새로고침 있으니 숨김) */
   .nav-refresh-btn {
-    display: none;
+    display: flex;
     background: var(--bg-3); color: var(--gold);
     border: 1px solid var(--border-2); border-radius: 8px;
     width: 40px; height: 40px; font-size: 18px; cursor: pointer;
     align-items: center; justify-content: center;
-    position: relative; z-index: 1;
+    position: relative; z-index: 1; flex-shrink: 0;
   }
-  .nav-refresh-btn:active { transform: rotate(180deg); transition: transform 0.3s; }
+  .nav-refresh-btn:active .rf-icon { transform: rotate(180deg); transition: transform 0.3s; }
+  .nav-refresh-btn .rf-update {
+    display: none; position: absolute; top: -6px; right: -6px; font-size: 12px; line-height: 1;
+    filter: drop-shadow(0 0 3px rgba(250,204,21,0.95));
+    animation: bulbPulse 1.4s ease-in-out infinite;
+  }
+  .nav-refresh-btn.has-update .rf-update { display: block; }
+  .nav-refresh-btn.has-update { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(250,204,21,0.28); }
   .backend-status {
     font-family: var(--font-brand);
     font-size: 11px; font-weight: 700;
@@ -2572,7 +2579,7 @@
 </div>
 
 <nav class="topnav">
-  <div class="brand">EAST FC</div>
+  <div class="brand" title="East Football Manager">EFM</div>
   <div class="tab-strip" id="tabStrip">
     <button class="tab-btn active" data-tab="squad">📋 스쿼드</button>
     <button class="tab-btn" data-tab="players">👥 선수</button>
@@ -2591,7 +2598,7 @@
     <button class="tab-btn" data-tab="admin" id="tabAdmin" style="display:none">🛡️ 관리자</button>
   </div>
   <div class="spacer"></div>
-  <button class="nav-refresh-btn" id="btnRefresh" title="새로고침" aria-label="새로고침">🔄</button>
+  <button class="nav-refresh-btn" id="btnRefresh" title="새로고침" aria-label="새로고침"><span class="rf-icon">🔄</span><span class="rf-update">💡</span></button>
   <div class="backend-status offline" id="backendStatus" title="데이터 저장 위치">📴 이 기기</div>
   <div class="nav-user" id="navUser">
     <div class="user-avatar" id="userAvatar">?</div>
@@ -2636,6 +2643,7 @@
             <option value="5-3-2">5-3-2</option>
             <option value="4-5-1">4-5-1</option>
             <option value="3-4-3">3-4-3</option>
+            <option value="4-4-1">4-4-1 (10명·10대10)</option>
           </select>
           <div class="spacer"></div>
           <button id="btnAutoFill" class="btn-autofill">⚡ 자동 배치</button>
@@ -3325,7 +3333,11 @@ const FIREBASE_CONFIG = {
 
 /* ==================== Backend layer (Firebase or localStorage) ==================== */
 let USE_FIREBASE = false;
-let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null;
+let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
+// 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
+// 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
+const APP_VERSION = 1;
+let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
 let _authLoaded = false, _storeLoaded = false;
@@ -3362,6 +3374,7 @@ function initBackend() {
     fbAuthRef = db.ref('east_fc/auth');
     fbStoreRef = db.ref('east_fc/store');
     fbPresenceRef = db.ref('east_fc/presence');
+    fbVersionRef = db.ref('east_fc/appVersion');
     USE_FIREBASE = true;
   } catch (e) {
     console.warn('Firebase 초기화 실패, 오프라인 모드로 전환:', e);
@@ -3535,6 +3548,13 @@ function updateBackendStatusUI() {
     el.textContent = '📴 이 기기';
     el.title = '오프라인: 데이터가 이 기기에만 저장됩니다 (Firebase 설정 필요)';
   }
+}
+// 새 버전이 배포되면 새로고침 버튼에 전구 표시 (컴퓨터·모바일 공통)
+function showUpdateIndicator(on) {
+  const btn = document.getElementById('btnRefresh');
+  if (!btn) return;
+  btn.classList.toggle('has-update', !!on);
+  btn.title = on ? '새 버전이 있어요! 눌러서 업데이트하세요' : '새로고침';
 }
 
 /* ==================== Authentication & Permissions ==================== */
@@ -4589,6 +4609,13 @@ const FORMATIONS = {
     { label: 'LM', x: 12, y: 52 }, { label: 'CM', x: 38, y: 55 }, { label: 'CM', x: 62, y: 55 }, { label: 'RM', x: 88, y: 52 },
     { label: 'LW', x: 20, y: 22 }, { label: 'ST', x: 50, y: 18 }, { label: 'RW', x: 80, y: 22 },
   ],
+  // 10대10 (10명) 기본 스쿼드 — 4-4-1
+  '4-4-1': [
+    { label: 'GK', x: 50, y: 92 },
+    { label: 'LB', x: 15, y: 75 }, { label: 'CB', x: 38, y: 78 }, { label: 'CB', x: 62, y: 78 }, { label: 'RB', x: 85, y: 75 },
+    { label: 'LM', x: 15, y: 48 }, { label: 'CM', x: 38, y: 52 }, { label: 'CM', x: 62, y: 52 }, { label: 'RM', x: 85, y: 48 },
+    { label: 'ST', x: 50, y: 20 },
+  ],
 };
 
 /* ==================== Org: departments ==================== */
@@ -5329,36 +5356,38 @@ function matchIsPast(m) { return !!m && new Date() > matchEndTime(m); }
 // 이 스쿼드가 '끝난 경기'에 묶여 있으면 그 경기를 반환 (없으면 null → 예정/미연결 스쿼드는 항상 활성)
 function squadPastMatch(squadId) { const m = matchForSquad(squadId); return matchIsPast(m) ? m : null; }
 
-// ===== 새 일정 알림 뱃지 (기기별 · 읽으면 사라짐) =====
+// ===== 일정 알림 전구 (기기별) — 새 일정 + 참석/투표 변경 시 켜짐 =====
+// 저장 형식: { matchId: 확인한 rev } · 경기의 rev보다 낮으면 '변경됨'으로 전구 켜짐
 const SEEN_MATCHES_KEY = 'east_fc_seen_matches_v1';
-function getSeenMatchSet() {
-  try { const a = JSON.parse(localStorage.getItem(SEEN_MATCHES_KEY)); if (Array.isArray(a)) return new Set(a); } catch(e) {}
+function matchRev(m) { return (m && typeof m.rev === 'number') ? m.rev : 0; }
+function bumpMatchRev(m) { if (m) m.rev = matchRev(m) + 1; } // 참석/투표/편집 등 변경 시 호출
+function getSeenMap() {
+  try {
+    const o = JSON.parse(localStorage.getItem(SEEN_MATCHES_KEY));
+    if (Array.isArray(o)) { const map = {}; o.forEach(id => map[id] = 0); return map; } // 구버전(배열) 호환
+    if (o && typeof o === 'object') return o;
+  } catch(e) {}
   return null;
 }
+function saveSeenMap(map) { try { localStorage.setItem(SEEN_MATCHES_KEY, JSON.stringify(map)); } catch(e) {} }
 function markAllMatchesSeen() {
-  try { localStorage.setItem(SEEN_MATCHES_KEY, JSON.stringify((store.matches || []).map(m => m.id))); } catch(e) {}
+  const map = {}; (store.matches || []).forEach(m => map[m.id] = matchRev(m)); saveSeenMap(map);
 }
-// 특정 경기를 '확인함'으로 표시 (열어보면 그 경기 전구가 꺼짐)
+// 특정 경기를 '확인함'으로 (현재 rev까지 봤다고 기록 → 그 경기 전구 꺼짐)
 function markMatchSeen(id) {
   if (!id) return;
-  let seen = getSeenMatchSet();
-  if (!seen) { markAllMatchesSeen(); seen = getSeenMatchSet() || new Set(); }
-  if (seen.has(id)) return;
-  seen.add(id);
-  try { localStorage.setItem(SEEN_MATCHES_KEY, JSON.stringify([...seen])); } catch(e) {}
-  updateCalendarBadge();
+  let map = getSeenMap(); if (!map) { markAllMatchesSeen(); map = getSeenMap() || {}; }
+  const m = (store.matches || []).find(x => x.id === id); if (!m) return;
+  map[id] = matchRev(m); saveSeenMap(map); updateCalendarBadge();
 }
-// 이 경기를 아직 안 봤는지 (최초 실행이면 현재 일정 전부 본 것으로 초기화)
+// 이 경기가 안 봤거나(신규) 확인 이후 변경됐는지 (최초 실행이면 현재 상태를 본 것으로 초기화)
 function isMatchUnseen(m) {
-  const seen = getSeenMatchSet();
-  if (!seen) { markAllMatchesSeen(); return false; }
-  return !seen.has(m.id);
+  const map = getSeenMap(); if (!map) { markAllMatchesSeen(); return false; }
+  return !(m.id in map) || map[m.id] < matchRev(m);
 }
-// 아직 안 본 경기 목록
 function unseenMatches() {
-  const seen = getSeenMatchSet();
-  if (!seen) { markAllMatchesSeen(); return []; }
-  return (store.matches || []).filter(m => !seen.has(m.id));
+  const map = getSeenMap(); if (!map) { markAllMatchesSeen(); return []; }
+  return (store.matches || []).filter(m => !(m.id in map) || map[m.id] < matchRev(m));
 }
 // 일정 탭 전구: 안 본 경기가 하나라도 있으면 켬(밝게), 다 봤으면 끔(회색). 항상 표시.
 function updateCalendarBadge() {
@@ -5385,7 +5414,7 @@ function renderSquadList() {
           <span>${escapeHtml(s.name)}</span>
           <button class="icon-btn" data-action="delete-squad" title="삭제">🗑️</button>
         </div>
-        <div class="squad-item-meta">${s.formation} · ${count}/11명 ${matchTag}</div>
+        <div class="squad-item-meta">${s.formation} · ${count}/${(FORMATIONS[s.formation] || s.slots || []).length || 11}명 ${matchTag}</div>
       </div>`;
   };
   const active = [], past = [];
@@ -6412,7 +6441,9 @@ function saveMatchFromModal() {
   };
   let _savedId = editingMatchId;
   if (editingMatchId) {
-    Object.assign(store.matches.find(m => m.id === editingMatchId), data);
+    const _em = store.matches.find(m => m.id === editingMatchId);
+    Object.assign(_em, data);
+    bumpMatchRev(_em);
     toast('경기 정보 업데이트');
   } else {
     const newMatch = { id: uid(), color: nextMatchColor(), ...data };
@@ -6588,7 +6619,9 @@ function toggleAvailQuarter(matchId, playerId, q) {
   // 전 쿼터 다 켜졌으면 맵에서 제거(=기본 전체)
   if (cur.length === nq) delete m.availQ[playerId];
   else m.availQ[playerId] = cur;
+  bumpMatchRev(m);
   saveState();
+  markMatchSeen(matchId);
   refreshAttendSection(matchId);
 }
 function refreshAttendSection(matchId) {
@@ -6616,7 +6649,9 @@ function setMatchAttendance(matchId, status) {
   if (!m.attendance) m.attendance = {};
   if (m.attendance[p.id] === status) delete m.attendance[p.id]; // 다시 누르면 취소
   else m.attendance[p.id] = status;
+  bumpMatchRev(m);           // 변경 → 다른 사람 전구 켜짐
   saveState();
+  markMatchSeen(matchId);    // 바꾼 본인은 확인한 것
   refreshAttendSection(matchId);
   const meta = ATTEND_META[status];
   toast(m.attendance[p.id] ? `${meta.icon} ${meta.label}` : '투표 취소');
@@ -6629,7 +6664,9 @@ function setMatchAttendanceForPlayer(matchId, playerId, status) {
   if (!m.attendance) m.attendance = {};
   if (!status) delete m.attendance[playerId];
   else m.attendance[playerId] = status;
+  bumpMatchRev(m);
   saveState();
+  markMatchSeen(matchId);
   refreshAttendSection(matchId);
 }
 function buildVoterChips(m) {
@@ -8590,6 +8627,12 @@ if (USE_FIREBASE) {
     _storeLoaded = true;
     onRemoteData(fbTimeout);
   }, err => { console.warn('store read 실패:', err); });
+  // 버전 감지: 최신을 로드한 사람이 기록 → 구버전 사용자는 업데이트 전구 켜짐
+  if (fbVersionRef) fbVersionRef.on('value', snap => {
+    const v = Number(snap.val()) || 0;
+    if (v > APP_VERSION) { _updateAvailable = true; showUpdateIndicator(true); }
+    else { _updateAvailable = false; showUpdateIndicator(false); if (APP_VERSION > v) { try { fbVersionRef.set(APP_VERSION); } catch(e) {} } }
+  }, () => {});
 } else {
   loadAuth();
   updateBackendStatusUI();
