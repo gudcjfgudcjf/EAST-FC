@@ -1492,7 +1492,7 @@
   .stats-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
   .stats-header h1 { font-family: var(--font-brand); font-size: 24px; color: var(--text); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 700; }
   .stats-header .spacer { flex: 1; }
-  #recordsContent, #attendContent, #hallContent, #guideContent, #chemContent, #presenceContent, #profileContent { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-right: 4px; padding-bottom: 30px; min-height: 0; }
+  #recordsContent, #attendContent, #hallContent, #guideContent, #chemContent, #presenceContent, #profileContent, #gohContent { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-right: 4px; padding-bottom: 30px; min-height: 0; }
 
   /* Podium (랭킹 top3) */
   .podium-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 22px; }
@@ -1505,6 +1505,59 @@
   .podium-name { flex: 1; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .podium-val { font-family: var(--font-brand); font-weight: 700; font-size: 15px; color: var(--gold-warm); }
   .podium-empty { font-size: 12px; color: var(--text-3); padding: 8px 0; }
+
+  /* ===== 은퇴 선수(회색) ===== */
+  .player-item.retired { opacity: 0.5; filter: grayscale(0.9); cursor: default; }
+  #playersTable tr.retired { opacity: 0.5; filter: grayscale(0.85); }
+  .retired-badge { font-size: 10px; color: #d6b25a; background: rgba(214,178,90,0.12); border: 1px solid rgba(214,178,90,0.4); border-radius: 6px; padding: 0 5px; margin-left: 4px; white-space: nowrap; }
+
+  /* ===== 가드 오브 아너 탭 ===== */
+  .goh-manage { background: var(--bg-2); border: 1px solid var(--bg-3); border-radius: 12px; padding: 14px; margin-bottom: 16px; }
+  .goh-manage-title { font-family: var(--font-brand); font-weight: 700; font-size: 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .goh-owner-tag { font-size: 10px; background: rgba(250,204,21,0.15); color: var(--gold-warm); border: 1px solid rgba(250,204,21,0.4); border-radius: 6px; padding: 1px 6px; }
+  .goh-owner-tag.self { background: rgba(34,197,94,0.15); color: #4ade80; border-color: rgba(34,197,94,0.4); }
+  .goh-manage-row { margin-bottom: 8px; }
+  .goh-manage-row select { width: 100%; }
+  .goh-dates { display: flex; gap: 10px; flex-wrap: wrap; }
+  .goh-dates label { flex: 1 1 130px; display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--text-2); }
+  .goh-dates input[type=date] { width: 100%; }
+  .goh-manage-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+  .goh-btn { padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; border: 1px solid var(--border-2); background: var(--bg-3); color: var(--text); }
+  .goh-btn.save { background: var(--gold); color: #1a1400; border-color: var(--gold); }
+  .goh-btn.retire { background: rgba(239,68,68,0.15); color: #fca5a5; border-color: rgba(239,68,68,0.45); }
+  .goh-btn.return { background: rgba(34,197,94,0.15); color: #4ade80; border-color: rgba(34,197,94,0.45); }
+  .goh-btn.sm { padding: 5px 12px; font-size: 12px; margin-top: 6px; }
+  .goh-manage-hint { font-size: 11px; color: var(--text-3); margin-top: 8px; line-height: 1.5; }
+  .goh-sched { font-size: 12px; color: #93c5fd; background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.25); border-radius: 8px; padding: 8px 12px; margin-bottom: 14px; }
+  .goh-section-title { font-family: var(--font-brand); font-weight: 700; font-size: 14px; margin: 6px 0 12px; }
+  .goh-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .goh-card { background: var(--bg-2); border: 1px solid var(--bg-3); border-radius: 14px; padding: 16px 12px; text-align: center; cursor: pointer; transition: transform .15s, border-color .15s; }
+  .goh-card:hover { transform: translateY(-3px); border-color: var(--gold); }
+  .goh-card-photo { width: 74px; height: 74px; border-radius: 50%; margin: 0 auto 10px; background-size: cover; background-position: center; border: 3px solid #d6b25a; box-shadow: 0 4px 14px rgba(0,0,0,0.5); }
+  .goh-card-photo.no-photo, .goh-cer-photo.no-photo { display: flex; align-items: center; justify-content: center; font-family: var(--font-brand); font-size: 30px; font-weight: 800; color: var(--text-2); background: linear-gradient(145deg,#2a2a2a,#141414); }
+  .goh-card-name { font-weight: 700; font-size: 14px; }
+  .goh-card-no { color: var(--text-3); font-size: 11px; }
+  .goh-card-dates { font-size: 11px; color: var(--text-2); margin-top: 4px; }
+  .goh-card-hint { font-size: 10px; color: var(--text-3); margin-top: 8px; }
+
+  /* 은퇴식 애니메이션 오버레이 */
+  .goh-ceremony { position: fixed; inset: 0; z-index: 3000; background: rgba(0,0,0,0.88); display: none; align-items: center; justify-content: center; padding: 20px; }
+  .goh-ceremony.show { display: flex; animation: gohFade .4s ease; }
+  @keyframes gohFade { from { opacity: 0; } to { opacity: 1; } }
+  .goh-cer-inner { position: relative; text-align: center; max-width: 90vw; }
+  .goh-cer-spotlight { position: absolute; top: -40px; left: 50%; transform: translateX(-50%); width: 300px; height: 300px; max-width: 80vw; max-height: 80vw; background: radial-gradient(circle, rgba(250,204,21,0.35), transparent 65%); animation: gohGlow 2.4s ease-in-out infinite; pointer-events: none; }
+  @keyframes gohGlow { 0%,100% { opacity: 0.6; transform: translateX(-50%) scale(1); } 50% { opacity: 1; transform: translateX(-50%) scale(1.12); } }
+  .goh-cer-medal { font-size: 40px; animation: gohMedal 2s ease-in-out infinite; }
+  @keyframes gohMedal { 0%,100% { transform: translateY(0) rotate(-6deg); } 50% { transform: translateY(-8px) rotate(6deg); } }
+  .goh-cer-photo { width: 180px; height: 180px; max-width: 60vw; max-height: 60vw; border-radius: 50%; margin: 14px auto; background-size: cover; background-position: center; border: 5px solid #f5d76e; box-shadow: 0 0 40px rgba(250,204,21,0.6), 0 10px 30px rgba(0,0,0,0.7); animation: gohPop .7s cubic-bezier(.2,.9,.3,1.3); }
+  @keyframes gohPop { 0% { transform: scale(0.4); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .goh-cer-name { font-family: var(--font-brand); font-size: 24px; font-weight: 800; color: #f5d76e; margin-top: 8px; text-shadow: 0 2px 12px rgba(250,204,21,0.5); }
+  .goh-cer-sub { color: var(--text-2); font-size: 14px; margin-top: 8px; }
+  .goh-cer-close { margin-top: 22px; padding: 10px 26px; border-radius: 10px; border: 1px solid var(--border-2); background: var(--bg-3); color: var(--text); font-weight: 700; cursor: pointer; }
+  .goh-cer-spark { position: absolute; inset: -20px; pointer-events: none; }
+  .goh-cer-spark span { position: absolute; left: 50%; top: 45%; font-size: 16px; animation: gohSpark 1.8s ease-in-out infinite; animation-delay: calc(var(--i) * 0.12s); opacity: 0; }
+  .goh-cer-spark span:nth-child(odd) { top: 20%; }
+  @keyframes gohSpark { 0% { opacity: 0; transform: translate(0,0) scale(0.5); } 30% { opacity: 1; } 100% { opacity: 0; transform: translate(calc((var(--i) - 7) * 26px), calc((var(--i) - 7) * -14px)) scale(1.1); } }
   .podium-row.top1 .podium-name { color: var(--gold); font-weight: 700; }
 
   .sv-section-title { font-family: var(--font-brand); font-size: 15px; font-weight: 700; color: var(--text); letter-spacing: .03em; margin: 4px 0 12px; display: flex; align-items: center; gap: 7px; }
@@ -2594,6 +2647,7 @@
     <button class="tab-btn" data-tab="records">🏅 기록</button>
     <button class="tab-btn" data-tab="attend">📅 출석</button>
     <button class="tab-btn" data-tab="hall">👑 전당</button>
+    <button class="tab-btn" data-tab="goh">🎖️ 가드오브아너</button>
     <button class="tab-btn" data-tab="presence" id="tabPresence" style="display:none">🟢 접속</button>
     <button class="tab-btn" data-tab="admin" id="tabAdmin" style="display:none">🛡️ 관리자</button>
   </div>
@@ -2971,6 +3025,32 @@
     </div>
   </section>
 
+  <!-- ============ 가드 오브 아너 VIEW ============ -->
+  <section class="view" id="view-goh">
+    <div class="stats-view">
+      <div class="stats-header">
+        <h1>🎖️ 가드 오브 아너</h1>
+      </div>
+      <div style="font-size:13px; color:var(--text-2); margin-bottom:12px; line-height:1.6;">
+        잠시 팀을 떠나는 동료를 위한 공간이에요. 은퇴일을 정하면 그 날부터 자동으로 휴식(은퇴) 처리되고, 복귀일이 오면 자동으로 복귀돼요. 날짜는 <b>본인(또는 오너)</b>이 언제든 바꿀 수 있어요.
+      </div>
+      <div id="gohContent"></div>
+    </div>
+  </section>
+
+  <!-- ============ 은퇴식 애니메이션 오버레이 ============ -->
+  <div class="goh-ceremony" id="gohCeremony">
+    <div class="goh-cer-inner">
+      <div class="goh-cer-spotlight"></div>
+      <div class="goh-cer-medal">🎖️</div>
+      <div class="goh-cer-photo" id="gohCerPhoto"></div>
+      <div class="goh-cer-name" id="gohCerName"></div>
+      <div class="goh-cer-sub" id="gohCerSub">그동안 감사했습니다 · 언제든 돌아오세요</div>
+      <div class="goh-cer-spark" id="gohCerSpark"></div>
+      <button class="goh-cer-close" id="gohCerClose">닫기</button>
+    </div>
+  </div>
+
   <!-- ============ 경기 기록 모달 (MOM/골/도움) ============ -->
   <div class="modal-overlay" id="recordModal">
     <div class="modal">
@@ -3336,7 +3416,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 1;
+const APP_VERSION = 2;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -3495,6 +3575,7 @@ function rerenderCurrent() {
   else if (t === 'records') renderRecords();
   else if (t === 'attend') renderAttend();
   else if (t === 'hall') renderHall();
+  else if (t === 'goh') renderGoh();
   else if (t === 'admin' && isAdmin()) renderAdmin();
 }
 
@@ -4997,6 +5078,7 @@ function switchTab(name) {
   if (name === 'records') renderRecords();
   if (name === 'attend') renderAttend();
   if (name === 'hall') renderHall();
+  if (name === 'goh') renderGoh();
   if (name === 'admin') renderAdmin();
   if (name === 'squad') { renderPlayerList(); renderField(); renderSquadList(); }
 }
@@ -5022,6 +5104,8 @@ function renderPlayerList() {
              (p.positions || []).some(r => r.toLowerCase().includes(q) || (ROLES[r]?.name || '').includes(q));
     })
     .sort((a, b) => {
+      const rea = isRetiredNow(a) ? 1 : 0, reb = isRetiredNow(b) ? 1 : 0;
+      if (rea !== reb) return rea - reb; // 은퇴(휴식) 선수는 맨 아래
       if (upMatch) {
         // 참석자면 이 쿼터 불가여도 보류·미투표보다 위. 참석 안에서만 이 쿼터 못 뛰는 사람을 뒤로.
         const ra = attendRankForPlayer(a, upMatch), rb = attendRankForPlayer(b, upMatch);
@@ -5046,13 +5130,15 @@ function renderPlayerList() {
     }).join('');
     const att = upMatch ? playerAttendStatus(p, upMatch) : null;
     const attChip = att ? `<span class="att-chip ${att}">${ATTEND_META[att].label}</span>` : '';
+    const retired = isRetiredNow(p);
     const cantPlay = upMatch && !canPlayThis(p);
-    const availChip = cantPlay ? `<span class="att-chip cantplay">⏱ ${qLabel} 불가 · ${availQSummary(upMatch, p.id)} 가능</span>` : '';
+    const availChip = retired ? `<span class="att-chip cantplay">🎖️ 휴식중${p.returnDate ? ' · 복귀 ' + p.returnDate : ''}</span>`
+      : (cantPlay ? `<span class="att-chip cantplay">⏱ ${qLabel} 불가 · ${availQSummary(upMatch, p.id)} 가능</span>` : '');
     return `
-      <div class="player-item ${onField ? 'on-field' : ''} ${att ? 'att-' + att : ''}${cantPlay ? ' cantplay' : ''}" draggable="true" data-id="${p.id}">
+      <div class="player-item ${onField ? 'on-field' : ''} ${att && !retired ? 'att-' + att : ''}${cantPlay && !retired ? ' cantplay' : ''}${retired ? ' retired' : ''}" ${retired ? '' : 'draggable="true"'} data-id="${p.id}">
         <div class="player-num">${p.number || '?'}</div>
         <div class="player-info">
-          <div class="player-name">${escapeHtml(p.name)}${attChip}${availChip}</div>
+          <div class="player-name">${escapeHtml(p.name)}${retired ? '' : attChip}${availChip}</div>
           <div class="player-meta">${roleTags}<span>OVR ${best.ovr}</span></div>
         </div>
       </div>`;
@@ -5443,14 +5529,14 @@ function autoFillSquad() {
   let pool;
   if (upMatch) {
     const att = getMatchAttendance(upMatch);
-    const attendees = store.players.filter(p => att[p.id] === 'attend' && canPlay(p));
+    const attendees = store.players.filter(p => att[p.id] === 'attend' && canPlay(p) && !isRetiredNow(p));
     if (attendees.length >= slots.length) pool = attendees;
     else {
-      const withHold = store.players.filter(p => (att[p.id] === 'attend' || att[p.id] === 'hold') && canPlay(p));
-      pool = withHold.length >= slots.length ? withHold : store.players.filter(canPlay);
+      const withHold = store.players.filter(p => (att[p.id] === 'attend' || att[p.id] === 'hold') && canPlay(p) && !isRetiredNow(p));
+      pool = withHold.length >= slots.length ? withHold : store.players.filter(p => canPlay(p) && !isRetiredNow(p));
     }
   } else {
-    pool = store.players.slice();
+    pool = activePlayers();
   }
   const qtxt = (upMatch && squadQs.length) ? squadQs.map(q => q + '쿼터').join('·') + ' ' : '';
   if (!confirm(`「${squad.name}」을(를) ${qtxt}참석·가능 인원으로 자동 배치할까요?\n현재 배치는 새로 채워집니다.`)) return;
@@ -5648,10 +5734,11 @@ function renderPlayersTable() {
       const cls = v >= 80 ? 'high' : v >= 60 ? 'mid' : 'low';
       return `<td class="stat-cell ${cls}">${v}</td>`;
     };
+    const retired = isRetiredNow(p);
     return `
-      <tr data-id="${p.id}">
+      <tr data-id="${p.id}" class="${retired ? 'retired' : ''}">
         <td>${p.number || '-'}</td>
-        <td><strong>${escapeHtml(p.name)}</strong></td>
+        <td><strong>${escapeHtml(p.name)}</strong>${retired ? ' <span class="retired-badge">🎖️휴식</span>' : ''}</td>
         <td><div class="positions-cell">${roleBadges}</div></td>
         <td>${playerSynergyCellHtml(p)}</td>
         <td>${conditionBadgeHtml(p)}</td>
@@ -6036,7 +6123,7 @@ function openAssignModal(slotIndex, roleName) {
 
   $('#assignSlotLabel').textContent = `→ ${zoneTag} 지역`;
   const assigned = new Set(Object.values(squad.assignments));
-  const available = store.players.filter(p => !assigned.has(p.id));
+  const available = store.players.filter(p => !assigned.has(p.id) && !isRetiredNow(p));
   const list = $('#assignPlayerList');
 
   // Attendance priority: nearest upcoming match that uses this squad
@@ -6506,7 +6593,7 @@ function getMatchAttendance(m) { return (m && m.attendance && typeof m.attendanc
 function attendCounts(m) {
   const a = getMatchAttendance(m);
   const c = { attend: 0, hold: 0, absent: 0 };
-  store.players.forEach(p => { const s = a[p.id]; if (c[s] != null) c[s]++; });
+  store.players.forEach(p => { if (isRetiredNow(p)) return; const s = a[p.id]; if (c[s] != null) c[s]++; });
   return c;
 }
 // 현재 로그인 유저의 "선수"의 참석 상태
@@ -6574,7 +6661,7 @@ function quarterPickerHtml(m, pid, label) {
 function managerRosterHtml(m) {
   const att = getMatchAttendance(m);
   const nq = matchQuarterCount(m);
-  const players = store.players.slice().sort((a, b) => (a.number || 999) - (b.number || 999) || (a.name || '').localeCompare(b.name || ''));
+  const players = store.players.filter(p => !isRetiredNow(p)).sort((a, b) => (a.number || 999) - (b.number || 999) || (a.name || '').localeCompare(b.name || ''));
   const rows = players.map(p => {
     const cur = att[p.id] || '';
     const linked = !!p.userId;
@@ -6673,6 +6760,7 @@ function buildVoterChips(m) {
   const a = getMatchAttendance(m);
   const rows = [];
   store.players.forEach(p => {
+    if (isRetiredNow(p)) return;
     const s = a[p.id];
     if (!s) return;
     rows.push({ status: s, name: p.name, num: p.number, rank: ATTEND_META[s]?.rank ?? 2 });
@@ -7691,6 +7779,140 @@ function renderAttend() {
   document.getElementById('attendContent').innerHTML = html;
 }
 
+/* ==================== 가드 오브 아너 (은퇴/복귀) ==================== */
+// 은퇴/복귀는 날짜로 자동 계산: 은퇴일 지남 + (복귀일 없음 or 복귀일 아직) → 현재 휴식(은퇴)
+function isRetiredNow(p) {
+  if (!p || !p.retireDate) return false;
+  const today = ymd(new Date());
+  if (today < p.retireDate) return false;                 // 은퇴일 아직 안 됨
+  if (p.returnDate && today >= p.returnDate) return false; // 복귀일 지남 → 복귀
+  return true;
+}
+function activePlayers() { return store.players.filter(p => !isRetiredNow(p)); }
+function retiredPlayers() { return store.players.filter(p => isRetiredNow(p)); }
+// 은퇴/복귀 관리 권한: 오너 또는 본인(연결된 선수)
+function canManageRetire(p) {
+  if (!p) return false;
+  if (isOwner()) return true;
+  const u = currentUser();
+  return !!(u && u.playerId && u.playerId === p.id);
+}
+function setRetireSchedule(playerId, retireDate, returnDate) {
+  const p = getPlayer(playerId);
+  if (!p) return;
+  if (!canManageRetire(p)) { toast('오너 또는 본인만 설정할 수 있어요'); return; }
+  p.retireDate = retireDate || '';
+  p.returnDate = returnDate || '';
+  if (p.retireDate && p.returnDate && p.returnDate < p.retireDate) { toast('복귀일은 은퇴일 이후여야 해요'); return; }
+  // 지금 시점에 은퇴 상태가 되면 스쿼드에서 자동 제외
+  if (isRetiredNow(p)) removePlayerFromAllSquads(playerId);
+  saveState();
+  renderGoh();
+  if (currentTab === 'squad') { renderPlayerList(); renderField(); }
+  toast('은퇴/복귀 일정을 저장했어요');
+}
+function retireNow(playerId) {
+  const p = getPlayer(playerId); if (!p) return;
+  if (!canManageRetire(p)) { toast('오너 또는 본인만 가능해요'); return; }
+  p.retireDate = ymd(new Date());
+  if (p.returnDate && p.returnDate <= p.retireDate) p.returnDate = '';
+  removePlayerFromAllSquads(playerId);
+  saveState(); renderGoh();
+  if (currentTab === 'squad') { renderPlayerList(); renderField(); }
+  openGohCeremony(playerId); // 은퇴식
+}
+function returnNow(playerId) {
+  const p = getPlayer(playerId); if (!p) return;
+  if (!canManageRetire(p)) { toast('오너 또는 본인만 가능해요'); return; }
+  p.returnDate = ymd(new Date());
+  if (!p.retireDate || p.retireDate > p.returnDate) { p.retireDate = ''; p.returnDate = ''; }
+  saveState(); renderGoh();
+  if (currentTab === 'squad') { renderPlayerList(); renderField(); }
+  toast(`🎉 ${p.name} 복귀를 환영합니다!`);
+}
+function removePlayerFromAllSquads(playerId) {
+  store.squads.forEach(s => {
+    for (const [k, v] of Object.entries(s.assignments || {})) if (v === playerId) delete s.assignments[k];
+  });
+}
+function playerPhotoHtml(p, cls) {
+  if (p.photo) return `<div class="${cls}" style="background-image:url('${p.photo}');"></div>`;
+  return `<div class="${cls} no-photo">${escapeHtml((p.name || '?').slice(0,1))}</div>`;
+}
+function renderGoh() {
+  const el = document.getElementById('gohContent'); if (!el) return;
+  const me = myPlayer();
+  const retired = retiredPlayers().sort((a,b) => (a.retireDate||'').localeCompare(b.retireDate||''));
+  const active = activePlayers().sort((a,b) => (a.number||999)-(b.number||999));
+  // 관리 대상 선택: 오너=전체, 회원=본인만
+  const canPickAll = isOwner();
+  const manageOptions = (canPickAll ? store.players : (me ? [me] : []))
+    .slice().sort((a,b)=>(a.number||999)-(b.number||999))
+    .map(p => `<option value="${p.id}">#${p.number||'?'} ${escapeHtml(p.name)}${isRetiredNow(p)?' (휴식중)':''}</option>`).join('');
+  const manageBox = (canPickAll || me) ? `
+    <div class="goh-manage">
+      <div class="goh-manage-title">🗓️ 은퇴 / 복귀 일정 설정 ${canPickAll ? '<span class="goh-owner-tag">오너</span>' : '<span class="goh-owner-tag self">본인</span>'}</div>
+      <div class="goh-manage-row">
+        <select id="gohPlayerSel">${manageOptions}</select>
+      </div>
+      <div class="goh-manage-row goh-dates">
+        <label>은퇴일<input type="date" id="gohRetireDate"></label>
+        <label>복귀일<input type="date" id="gohReturnDate"></label>
+      </div>
+      <div class="goh-manage-btns">
+        <button class="goh-btn save" id="gohSaveDates">저장</button>
+        <button class="goh-btn retire" id="gohRetireNow">지금 은퇴</button>
+        <button class="goh-btn return" id="gohReturnNow">지금 복귀</button>
+      </div>
+      <div class="goh-manage-hint">은퇴일이 지나면 자동 휴식 처리, 복귀일이 되면 자동 복귀돼요. 언제든 수정 가능.</div>
+    </div>` : `<div class="podium-empty">본인 선수 프로필이 연결돼 있어야 설정할 수 있어요. (관리자 탭에서 연결)</div>`;
+
+  const retiredHtml = retired.length ? `
+    <div class="goh-section-title">🎖️ 현재 휴식 중 (${retired.length})</div>
+    <div class="goh-grid">${retired.map(p => `
+      <div class="goh-card" data-id="${p.id}">
+        ${playerPhotoHtml(p, 'goh-card-photo')}
+        <div class="goh-card-name">${escapeHtml(p.name)}${p.number?` <span class="goh-card-no">#${p.number}</span>`:''}</div>
+        <div class="goh-card-dates">🗓️ ${p.retireDate||'-'}${p.returnDate?` → 복귀 ${p.returnDate}`:''}</div>
+        ${canManageRetire(p) ? `<button class="goh-btn return sm" data-return="${p.id}">복귀</button>` : ''}
+        <div class="goh-card-hint">눌러서 은퇴식 보기</div>
+      </div>`).join('')}</div>` : '<div class="podium-empty">지금 휴식 중인 선수가 없어요</div>';
+
+  // 복귀 예정(미래 복귀일) 안내
+  const scheduled = store.players.filter(p => p.returnDate && ymd(new Date()) < p.returnDate && isRetiredNow(p));
+  const schedHtml = scheduled.length ? `<div class="goh-sched">복귀 예정: ${scheduled.map(p=>`${escapeHtml(p.name)}(${p.returnDate})`).join(' · ')}</div>` : '';
+
+  el.innerHTML = manageBox + schedHtml + retiredHtml;
+
+  // 선택 시 날짜 채우기
+  const sel = document.getElementById('gohPlayerSel');
+  const fill = () => { const p = getPlayer(sel?.value); if (!p) return; document.getElementById('gohRetireDate').value = p.retireDate || ''; document.getElementById('gohReturnDate').value = p.returnDate || ''; };
+  if (sel) { sel.addEventListener('change', fill); fill(); }
+  const saveBtn = document.getElementById('gohSaveDates');
+  if (saveBtn) saveBtn.addEventListener('click', () => setRetireSchedule(sel.value, document.getElementById('gohRetireDate').value, document.getElementById('gohReturnDate').value));
+  const rNow = document.getElementById('gohRetireNow');
+  if (rNow) rNow.addEventListener('click', () => { if (confirm('지금 바로 은퇴(휴식) 처리할까요?')) retireNow(sel.value); });
+  const bNow = document.getElementById('gohReturnNow');
+  if (bNow) bNow.addEventListener('click', () => returnNow(sel.value));
+  el.querySelectorAll('[data-return]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); returnNow(b.dataset.return); }));
+  el.querySelectorAll('.goh-card').forEach(c => c.addEventListener('click', () => openGohCeremony(c.dataset.id)));
+}
+// 은퇴식 애니메이션
+function openGohCeremony(playerId) {
+  const p = getPlayer(playerId); if (!p) return;
+  const ov = document.getElementById('gohCeremony');
+  const photo = document.getElementById('gohCerPhoto');
+  if (p.photo) { photo.style.backgroundImage = `url('${p.photo}')`; photo.classList.remove('no-photo'); photo.textContent = ''; }
+  else { photo.style.backgroundImage = 'none'; photo.classList.add('no-photo'); photo.textContent = (p.name||'?').slice(0,1); }
+  document.getElementById('gohCerName').textContent = `${p.number?'NO.'+p.number+' ':''}${p.name}`;
+  document.getElementById('gohCerSub').textContent = isRetiredNow(p) ? '그동안 감사했습니다 · 언제든 돌아오세요' : '함께해서 영광이었습니다';
+  // 반짝이 생성
+  const spark = document.getElementById('gohCerSpark');
+  spark.innerHTML = Array.from({length:14}, (_,i)=>`<span style="--i:${i}">✨</span>`).join('');
+  ov.classList.add('show');
+}
+function closeGohCeremony() { document.getElementById('gohCeremony').classList.remove('show'); }
+
 /* ---- 명예의 전당 탭 ---- */
 const TITLE_SUFFIX = ['왕 👑','장인','마스터','최고위원','끝판왕','그 자체','요정','대장','천재','고수'];
 function hashStr(s) { let h = 0; for (let i = 0; i < s.length; i++) h = (h*31 + s.charCodeAt(i)) >>> 0; return h; }
@@ -7763,16 +7985,33 @@ function chemSynergy(l) {
         : (typeof l.score === 'number') ? Math.round((l.score - 50) / 50 * 8) : 5;
   return Math.max(CHEM_SYN_MIN, Math.min(CHEM_SYN_MAX, v));
 }
-// 케미가 올리는 능력치 카테고리 ('all'=종합 / 1~7=섹션)
-function chemCat(l) { return (typeof l.cat === 'number' && l.cat >= 1 && l.cat <= 7) ? l.cat : 'all'; }
-function chemCatLabel(cat) { return cat === 'all' ? '💫 종합' : (SECTIONS.find(s => s.id === cat)?.label || '💫 종합'); }
+// 케미가 올리는 능력치 대상 ('all'=종합 / 1~7=섹션 / 'stat_<key>'=세부 스탯)
+function chemCat(l) {
+  if (typeof l.cat === 'string' && l.cat.startsWith('stat_') && STATS[l.cat.slice(5)]) return l.cat;
+  return (typeof l.cat === 'number' && l.cat >= 1 && l.cat <= 7) ? l.cat : 'all';
+}
+function chemCatIsStat(cat) { return typeof cat === 'string' && cat.startsWith('stat_'); }
+// 대상이 속한 섹션 id (레이더 반영용). 'all'→null
+function catSectionId(cat) {
+  if (chemCatIsStat(cat)) return STATS[cat.slice(5)]?.section || null;
+  return (typeof cat === 'number' && cat >= 1 && cat <= 7) ? cat : null;
+}
+function chemCatLabel(cat) {
+  if (cat === 'all') return '💫 종합';
+  if (chemCatIsStat(cat)) { const k = cat.slice(5); const sec = SECTIONS.find(s => s.id === STATS[k]?.section); return `${sec ? sec.emoji : '🎯'} ${STATS[k]?.name || k}`; }
+  return SECTIONS.find(s => s.id === cat)?.label || '💫 종합';
+}
 // 능력치 카테고리별 색 (수비=하늘색 등) + 시너지 색과 혼합
 const SECTION_COLOR = { 1:'#fb923c', 2:'#f43f5e', 3:'#a78bfa', 4:'#38bdf8', 5:'#22c55e', 6:'#facc15', 7:'#2dd4bf', all:'#f4c430' };
-function chemCatColor(cat) { return SECTION_COLOR[cat] || SECTION_COLOR.all; }
-function chemCatEmoji(cat) { return cat === 'all' ? '💫' : (SECTIONS.find(s => s.id === cat)?.emoji || '💫'); }
+function chemCatColor(cat) { return SECTION_COLOR[catSectionId(cat)] || SECTION_COLOR.all; }
+function chemCatEmoji(cat) { if (cat === 'all') return '💫'; const sid = catSectionId(cat); return SECTIONS.find(s => s.id === sid)?.emoji || '💫'; }
 function _hx(h) { h = h.replace('#',''); if (h.length===3) h = h.split('').map(c=>c+c).join(''); return [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)]; }
 function hexMix(a, b, t) { const pa=_hx(a), pb=_hx(b); const m=(i)=>Math.round(pa[i]*t + pb[i]*(1-t)); return `rgb(${m(0)},${m(1)},${m(2)})`; }
-function chemCatShort(cat) { return cat === 'all' ? '💫종합' : (SECTIONS.find(s => s.id === cat)?.emoji || '💫') + (SECTIONS.find(s => s.id === cat)?.label.replace(/^\S+\s/, '') || ''); }
+function chemCatShort(cat) {
+  if (cat === 'all') return '💫종합';
+  if (chemCatIsStat(cat)) { const k = cat.slice(5); const sec = SECTIONS.find(s => s.id === STATS[k]?.section); return (sec ? sec.emoji : '🎯') + (STATS[k]?.name || k); }
+  const s = SECTIONS.find(x => x.id === cat); return (s?.emoji || '💫') + (s?.label.replace(/^\S+\s/, '') || '');
+}
 // 시너지 값 → 라벨
 function chemLabel(syn) {
   if (syn >= 8)  return { t: '💛 환상의 케미', c: '#f4c430' };
@@ -7817,7 +8056,8 @@ function squadStats(squad) {
     const contrib = syn * activation;
     const cat = chemCat(link);
     chemSum += contrib;
-    if (cat !== 'all') sectionBonus[cat] = (sectionBonus[cat] || 0) + contrib;
+    const secId = catSectionId(cat);   // 세부스탯이면 그 스탯의 섹션에 반영
+    if (secId) sectionBonus[secId] = (sectionBonus[secId] || 0) + contrib;
     activeGroups.push({ link, contrib, placedCount: here.length, total: members.length, synergy: syn, activation, cat });
   });
   // 카테고리별 시너지는 레이더의 해당 능력치에 반영
@@ -8094,7 +8334,13 @@ function openChemModal(chemId) {
   document.getElementById('chemModalTitle').textContent = l ? '🤝 케미 수정' : '🤝 케미 만들기';
   chemPicked = new Set(l ? chemMembers(l) : []);
   document.getElementById('chemPickSearch').value = '';
-  document.getElementById('chemCat').innerHTML = '<option value="all">💫 종합 (전체 OVR)</option>' + SECTIONS.map(s => `<option value="${s.id}">${s.label}</option>`).join('');
+  document.getElementById('chemCat').innerHTML = '<option value="all">💫 종합 (전체 OVR)</option>' + SECTIONS.map(s => {
+    const stats = STAT_KEYS.filter(k => STATS[k].section === s.id);
+    return `<optgroup label="${s.label}">`
+      + `<option value="${s.id}">${s.label} · 카테고리 전체</option>`
+      + stats.map(k => `<option value="stat_${k}">└ ${STATS[k].name}</option>`).join('')
+      + `</optgroup>`;
+  }).join('');
   document.getElementById('chemCat').value = l ? String(chemCat(l)) : 'all';
   document.getElementById('chemScore').value = l ? chemSynergy(l) : 5;
   document.getElementById('chemNote').value = l?.note || '';
@@ -8111,7 +8357,9 @@ function saveChemFromModal() {
   synergy = Math.max(CHEM_SYN_MIN, Math.min(CHEM_SYN_MAX, synergy));
   const note = document.getElementById('chemNote').value.trim();
   const catRaw = document.getElementById('chemCat').value;
-  const cat = catRaw === 'all' ? 'all' : (parseInt(catRaw) >= 1 && parseInt(catRaw) <= 7 ? parseInt(catRaw) : 'all');
+  const cat = catRaw === 'all' ? 'all'
+    : (catRaw.startsWith('stat_') && STATS[catRaw.slice(5)]) ? catRaw
+    : (parseInt(catRaw) >= 1 && parseInt(catRaw) <= 7 ? parseInt(catRaw) : 'all');
   if (members.length < 2) { alert('2명 이상의 선수를 선택하세요'); return; }
   if (!Array.isArray(store.chemistry)) store.chemistry = [];
   if (editingChemId) {
@@ -8368,6 +8616,10 @@ function bindEvents() {
   $('#matchModal').addEventListener('click', e => { if (e.target.id === 'matchModal') closeMatchModal(); });
 
   $('#btnCloseDay').addEventListener('click', closeDayModal);
+  const _gohClose = document.getElementById('gohCerClose');
+  if (_gohClose) _gohClose.addEventListener('click', closeGohCeremony);
+  const _gohOv = document.getElementById('gohCeremony');
+  if (_gohOv) _gohOv.addEventListener('click', e => { if (e.target === _gohOv) closeGohCeremony(); });
   $('#btnAddMatchOnDay').addEventListener('click', () => { const d = currentDayStr; closeDayModal(); openMatchModal(null, d); });
   $('#dayModal').addEventListener('click', e => { if (e.target.id === 'dayModal') closeDayModal(); });
 
