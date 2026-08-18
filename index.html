@@ -72,14 +72,15 @@
   .tab-strip { display: flex; align-items: stretch; gap: 2px; height: 60px; min-width: 0; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
   .tab-strip::-webkit-scrollbar { display: none; }
   .tab-btn { flex: 0 0 auto; position: relative; }
-  /* 새 일정 알림 뱃지 */
+  /* 새 일정 알림 전구 💡 */
   .tab-badge {
-    display: inline-flex; align-items: center; justify-content: center;
-    min-width: 16px; height: 16px; padding: 0 4px; margin-left: 4px;
-    border-radius: 8px; background: #ef4444; color: #fff;
-    font-size: 10px; font-weight: 800; line-height: 1;
-    vertical-align: middle; box-shadow: 0 0 0 2px rgba(239,68,68,0.25);
+    margin-left: 3px; font-size: 13px; line-height: 1; vertical-align: middle;
+    filter: drop-shadow(0 0 4px rgba(250, 204, 21, 0.9));
+    animation: bulbPulse 1.4s ease-in-out infinite;
   }
+  @keyframes bulbPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.45; } }
+  /* 일정 항목 옆 전구 */
+  .match-new-bulb { font-size: 13px; margin-left: 4px; filter: drop-shadow(0 0 3px rgba(250,204,21,0.85)); vertical-align: middle; }
   .nav-menu-btn {
     display: none;
     background: var(--bg-3); color: var(--gold);
@@ -2574,7 +2575,7 @@
     <button class="tab-btn active" data-tab="squad">📋 스쿼드</button>
     <button class="tab-btn" data-tab="players">👥 선수</button>
     <button class="tab-btn" data-tab="profile">📸 프로필</button>
-    <button class="tab-btn" data-tab="calendar">📅 일정<span class="tab-badge" id="calBadge" style="display:none"></span></button>
+    <button class="tab-btn" data-tab="calendar">📅 일정<span class="tab-badge" id="calBadge" style="display:none" title="확인 안 한 일정이 있어요">💡</span></button>
     <button class="tab-btn" data-tab="org">🏢 조직도</button>
     <button class="tab-btn" data-tab="board">📝 게시판</button>
     <button class="tab-btn" data-tab="dor">💛 이스트도르</button>
@@ -3469,7 +3470,7 @@ function rerenderCurrent() {
   else if (t === 'players') renderPlayersTable();
   else if (t === 'profile') renderProfile();
   else if (t === 'presence' && isOwner()) renderPresence();
-  else if (t === 'calendar') { renderCalendar(); markAllMatchesSeen(); updateCalendarBadge(); }
+  else if (t === 'calendar') { renderCalendar(); updateCalendarBadge(); }
   else if (t === 'org') renderOrg();
   else if (t === 'board') renderBoard();
   else if (t === 'dor') renderDor();
@@ -4957,7 +4958,7 @@ function switchTab(name) {
   if (name === 'players') renderPlayersTable();
   if (name === 'profile') renderProfile();
   if (name === 'presence') renderPresence();
-  if (name === 'calendar') { renderCalendar(); markAllMatchesSeen(); updateCalendarBadge(); }
+  if (name === 'calendar') { renderCalendar(); updateCalendarBadge(); }
   if (name === 'org') renderOrg();
   if (name === 'board') renderBoard();
   if (name === 'dor') renderDor();
@@ -5335,17 +5336,32 @@ function getSeenMatchSet() {
 function markAllMatchesSeen() {
   try { localStorage.setItem(SEEN_MATCHES_KEY, JSON.stringify((store.matches || []).map(m => m.id))); } catch(e) {}
 }
-// 아직 안 본 '예정' 경기 목록 (지난 경기는 제외). 최초 실행이면 전부 본 것으로 초기화.
+// 특정 경기를 '확인함'으로 표시 (열어보면 그 경기 전구가 꺼짐)
+function markMatchSeen(id) {
+  if (!id) return;
+  let seen = getSeenMatchSet();
+  if (!seen) { markAllMatchesSeen(); seen = getSeenMatchSet() || new Set(); }
+  if (seen.has(id)) return;
+  seen.add(id);
+  try { localStorage.setItem(SEEN_MATCHES_KEY, JSON.stringify([...seen])); } catch(e) {}
+  updateCalendarBadge();
+}
+// 이 경기를 아직 안 봤는지 (최초 실행이면 현재 일정 전부 본 것으로 초기화)
+function isMatchUnseen(m) {
+  const seen = getSeenMatchSet();
+  if (!seen) { markAllMatchesSeen(); return false; }
+  return !seen.has(m.id);
+}
+// 아직 안 본 경기 목록
 function unseenMatches() {
   const seen = getSeenMatchSet();
   if (!seen) { markAllMatchesSeen(); return []; }
-  return (store.matches || []).filter(m => !seen.has(m.id) && !matchIsPast(m));
+  return (store.matches || []).filter(m => !seen.has(m.id));
 }
+// 일정 탭 전구: 안 본 경기가 하나라도 있으면 켬
 function updateCalendarBadge() {
   const el = document.getElementById('calBadge'); if (!el) return;
-  const n = unseenMatches().length;
-  if (n > 0) { el.textContent = n > 99 ? '99+' : n; el.style.display = ''; }
-  else el.style.display = 'none';
+  el.style.display = unseenMatches().length > 0 ? '' : 'none';
 }
 function renderSquadList() {
   const list = $('#squadList');
@@ -6229,6 +6245,7 @@ function makeDayCell(d, otherMonth, todayStr) {
     mel.style.borderLeft = `4px solid ${matchColorFor(m)}`;
     const scoreStr = (m.scoreUs != null && m.scoreThem != null && m.scoreUs !== '' && m.scoreThem !== '') ? ` ${m.scoreUs}:${m.scoreThem}` : '';
     mel.textContent = `${m.time || ''} ${m.opponent || '상대'}${scoreStr}`;
+    if (isMatchUnseen(m)) { const b = document.createElement('span'); b.className = 'match-new-bulb'; b.textContent = '💡'; mel.appendChild(b); }
     mel.title = `${m.time || ''} ${m.homeAway === 'away' ? '원정' : '홈'} vs ${m.opponent}${m.location ? ' @ ' + m.location : ''}`;
     mel.addEventListener('click', e => { e.stopPropagation(); openMatchModal(m.id); });
     cell.appendChild(mel);
@@ -6255,9 +6272,10 @@ function renderUpcoming() {
     const dowNames = ['일','월','화','수','목','금','토'];
     const dateLabel = `${d.getMonth()+1}/${d.getDate()} (${dowNames[d.getDay()]})`;
     const haLabel = m.homeAway === 'away' ? '[원정]' : '[홈]';
+    const bulb = isMatchUnseen(m) ? '<span class="match-new-bulb" title="새 일정 · 열어보면 꺼져요">💡</span>' : '';
     return `<div class="cal-upcoming-item" data-id="${m.id}">
       <span class="cal-upcoming-date">${dateLabel} ${m.time || ''}</span>
-      <span>${haLabel} vs <strong>${escapeHtml(m.opponent || '상대팀')}</strong></span>
+      <span>${haLabel} vs <strong>${escapeHtml(m.opponent || '상대팀')}</strong>${bulb}</span>
       <span style="color:var(--text-2); margin-left:auto">${escapeHtml(m.location || '')}</span>
     </div>`;
   }).join('');
@@ -6367,7 +6385,8 @@ function openMatchModal(matchId, defaultDate) {
     attSec.innerHTML = '<div class="attend-empty" style="border-top:1px solid var(--border); margin-top:12px; padding-top:12px;">경기를 먼저 저장하면 참석 투표가 열려요</div>';
   }
   $('#matchModal').classList.add('show');
-  setTimeout(() => $('#mOpponent').focus(), 50);
+  if (matchId) { markMatchSeen(matchId); if (currentTab === 'calendar') renderCalendar(); } // 열어보면 이 경기 전구 꺼짐
+  if (canEdit) setTimeout(() => $('#mOpponent').focus(), 50);
 }
 function closeMatchModal() { $('#matchModal').classList.remove('show'); editingMatchId = null; }
 function saveMatchFromModal() {
@@ -6387,11 +6406,13 @@ function saveMatchFromModal() {
     scoreThem: $('#mScoreThem').value === '' ? null : Number($('#mScoreThem').value),
     notes: $('#mNotes').value.trim(),
   };
+  let _savedId = editingMatchId;
   if (editingMatchId) {
     Object.assign(store.matches.find(m => m.id === editingMatchId), data);
     toast('경기 정보 업데이트');
   } else {
     const newMatch = { id: uid(), color: nextMatchColor(), ...data };
+    _savedId = newMatch.id;
     // 쿼터를 직접 지정하지 않았으면 "MMDD 상대팀 N쿼터" 스쿼드를 쿼터 수만큼 자동 생성
     if (!newMatch.quarters || newMatch.quarters.length === 0) {
       const dt = parseYmd(newMatch.date);
@@ -6414,15 +6435,29 @@ function saveMatchFromModal() {
     }
     store.matches.push(newMatch);
   }
-  saveState(); markAllMatchesSeen(); updateCalendarBadge(); closeMatchModal(); closeDayModal(); renderCalendar();
+  saveState(); markMatchSeen(_savedId); updateCalendarBadge(); closeMatchModal(); closeDayModal(); renderCalendar();
   if (currentTab === 'squad') renderSquadList();
 }
 function deleteCurrentMatch() {
   if (!editingMatchId) return;
-  if (!confirm('이 경기를 삭제하시겠습니까?')) return;
+  const delMatch = store.matches.find(m => m.id === editingMatchId);
+  const linked = delMatch ? matchQuarters(delMatch).map(q => q.squadId).filter(Boolean) : [];
+  // 다른 경기에서도 쓰는 스쿼드는 남겨둠
+  const otherRefs = new Set();
+  store.matches.forEach(m => { if (m.id !== editingMatchId) matchQuarters(m).forEach(q => otherRefs.add(q.squadId)); });
+  const toDelete = new Set([...new Set(linked)].filter(id => !otherRefs.has(id)));
+  const msg = toDelete.size
+    ? `이 경기를 삭제하면 연결된 스쿼드 ${toDelete.size}개도 함께 삭제됩니다.\n진행할까요?`
+    : '이 경기를 삭제하시겠습니까?';
+  if (!confirm(msg)) return;
   store.matches = store.matches.filter(m => m.id !== editingMatchId);
-  saveState(); markAllMatchesSeen(); updateCalendarBadge(); closeMatchModal(); closeDayModal(); renderCalendar();
-  toast('경기를 삭제했어요');
+  if (toDelete.size) {
+    store.squads = store.squads.filter(s => !toDelete.has(s.id));
+    if (toDelete.has(localSquadId)) setLocalSquad(store.squads[0]?.id || null);
+  }
+  saveState(); updateCalendarBadge(); closeMatchModal(); closeDayModal(); renderCalendar();
+  if (currentTab === 'squad') { renderPlayerList(); renderField(); renderSquadList(); }
+  toast('경기를 삭제했어요' + (toDelete.size ? ` · 스쿼드 ${toDelete.size}개 삭제` : ''));
 }
 let currentDayStr = null;
 /* ==================== Attendance (참석 투표) ==================== */
@@ -6556,8 +6591,16 @@ function refreshAttendSection(matchId) {
   const m = store.matches.find(x => x.id === matchId);
   const sec = document.getElementById('matchAttendSection');
   if (m && sec && editingMatchId === matchId) {
+    // 투표를 눌러도 스크롤이 위로 안 튀게 현재 위치 보존 (모달 전체 + 명단 내부 목록 둘 다)
+    const modal = sec.closest('.modal');
+    const modalTop = modal ? modal.scrollTop : 0;
+    const oldList = sec.querySelector('.attend-manage-list');
+    const listTop = oldList ? oldList.scrollTop : 0;
     sec.innerHTML = attendanceSectionHtml(m);
     bindAttendanceButtons(sec);
+    const newList = sec.querySelector('.attend-manage-list');
+    if (newList) newList.scrollTop = listTop;
+    if (modal) modal.scrollTop = modalTop;
   }
 }
 // 본인 선수의 참석 투표
@@ -6642,7 +6685,7 @@ function openDayModal(dateStr) {
       return `<div class="day-match-item" data-id="${m.id}">
         <div class="dm-top">
           <div class="day-match-info">
-            <div class="day-match-title">${m.time || ''} ${m.homeAway === 'away' ? '[원정]' : '[홈]'} vs ${escapeHtml(m.opponent)}${scoreStr}</div>
+            <div class="day-match-title">${m.time || ''} ${m.homeAway === 'away' ? '[원정]' : '[홈]'} vs ${escapeHtml(m.opponent)}${scoreStr}${isMatchUnseen(m) ? '<span class="match-new-bulb" title="새 일정">💡</span>' : ''}</div>
             <div class="day-match-meta">
               ${m.location ? '📍 ' + escapeHtml(m.location) : ''}
               ${m.notes ? ' · 📝 ' + escapeHtml(m.notes.slice(0, 40)) + (m.notes.length > 40 ? '…' : '') : ''}
@@ -6654,7 +6697,7 @@ function openDayModal(dateStr) {
       </div>`;
     }).join('');
     list.querySelectorAll('.dm-top').forEach(top => {
-      top.addEventListener('click', () => openMatchModal(top.closest('.day-match-item').dataset.id));
+      top.addEventListener('click', () => { const id = top.closest('.day-match-item').dataset.id; closeDayModal(); openMatchModal(id); });
     });
   }
   $('#dayModal').classList.add('show');
