@@ -2278,10 +2278,12 @@
     .dor-content { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
 
     /* Manager attendance roster: stack name over full-width buttons */
-    .amr { flex-wrap: wrap; gap: 5px; padding: 6px 4px; border-bottom: 1px solid var(--border); }
-    .amr-name { flex-basis: 100%; font-size: 13px; font-weight: 600; }
+    .amr { gap: 6px; padding: 8px 4px; border-bottom: 1px solid var(--border); }
+    .amr-top { flex-wrap: wrap; gap: 6px; }               /* ← 이름 줄이 버튼에 눌려 사라지던 문제 수정 */
+    .amr-name { flex: 1 1 100%; width: 100%; min-width: 0; font-size: 14px; font-weight: 700; color: var(--text); white-space: normal; overflow: visible; text-overflow: clip; }
     .amr-btns { width: 100%; }
-    .amr-btn { flex: 1; text-align: center; padding: 7px 4px; }
+    .amr-btn { flex: 1; text-align: center; padding: 9px 4px; font-size: 12px; min-height: 40px; }
+    .amr-unlinked { font-size: 11px; }
 
     /* Traits: card grid + modal rows stack on phones */
     .traits-view { padding: 12px; }
@@ -3484,7 +3486,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 8;
+const APP_VERSION = 9;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
