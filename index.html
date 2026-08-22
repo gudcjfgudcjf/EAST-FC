@@ -1743,6 +1743,33 @@
   .stat-input.stat-changed > label::after { content: '변경'; margin-left: 6px; font-size: 9px; font-weight: 700; color: #000; background: var(--gold); padding: 1px 5px; border-radius: 8px; vertical-align: middle; letter-spacing: 0; }
   .change-inline-tag { font-size: 11px; font-weight: 700; color: var(--gold-warm); text-transform: none; letter-spacing: 0; margin-left: 4px; }
 
+  /* ==================== 블랙리스트 ==================== */
+  .bl-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-right: 4px; padding-bottom: 30px; }
+  .bl-section { background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; padding: 14px; }
+  .bl-head { font-family: var(--font-brand); font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .bl-count { font-size: 12px; font-weight: 700; color: #fca5a5; background: rgba(239,68,68,0.14); border: 1px solid rgba(239,68,68,0.4); border-radius: 20px; padding: 1px 9px; }
+  .bl-add { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 12px; }
+  .bl-input { flex: 1 1 100%; min-width: 0; background: var(--bg-3); color: var(--text); border: 1px solid var(--border-2); border-radius: 9px; padding: 10px 11px; font-size: 14px; outline: none; }
+  .bl-input:focus { border-color: var(--gold); }
+  .bl-input::placeholder { color: var(--text-3); }
+  .bl-add-btn { flex: 0 0 auto; background: linear-gradient(180deg, var(--gold-warm), var(--gold)); color: #0a0a0a; border: none; border-radius: 9px; padding: 10px 16px; font-weight: 800; font-size: 14px; cursor: pointer; box-shadow: 0 2px 10px var(--gold-glow); }
+  .bl-add-btn:active { transform: scale(0.97); }
+  .bl-list { display: flex; flex-direction: column; gap: 8px; }
+  .bl-item { display: flex; align-items: flex-start; gap: 10px; background: var(--bg-3); border: 1px solid var(--border-2); border-left: 4px solid #ef4444; border-radius: 10px; padding: 11px 12px; }
+  .bl-item-body { flex: 1; min-width: 0; }
+  .bl-item-name { font-size: 15px; font-weight: 700; color: #fecaca; word-break: break-word; }
+  .bl-item-reason { font-size: 12.5px; color: var(--text-2); margin-top: 3px; word-break: break-word; line-height: 1.45; }
+  .bl-item-meta { font-size: 11px; color: var(--text-3); margin-top: 4px; }
+  .bl-del { flex: 0 0 auto; background: var(--bg-2); border: 1px solid var(--border-2); border-radius: 8px; color: var(--text-3); font-size: 14px; padding: 6px 9px; cursor: pointer; }
+  .bl-del:hover { border-color: var(--danger); color: var(--danger); }
+  .bl-empty { font-size: 13px; color: var(--text-3); text-align: center; padding: 18px 8px; background: var(--bg-3); border: 1px dashed var(--border-2); border-radius: 10px; }
+  @media (max-width: 820px) {
+    .bl-wrap { grid-template-columns: 1fr; gap: 14px; }
+    .bl-add-btn { flex: 1 1 100%; padding: 12px; min-height: 46px; }
+    .bl-input { font-size: 15px; padding: 12px; }
+    .bl-item-name { font-size: 15px; }
+  }
+
   /* ==================== 실시간 접속 ==================== */
   .presence-summary { font-size: 14px; color: var(--text); font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .presence-summary b { color: #22c55e; font-family: var(--font-brand); font-size: 18px; }
@@ -2722,6 +2749,7 @@
     <button class="tab-btn" data-tab="attend">📅 출석</button>
     <button class="tab-btn" data-tab="hall">👑 전당</button>
     <button class="tab-btn" data-tab="goh">🎖️ 가드오브아너</button>
+    <button class="tab-btn" data-tab="blacklist">🚫 블랙리스트</button>
     <button class="tab-btn" data-tab="presence" id="tabPresence" style="display:none">🟢 접속</button>
     <button class="tab-btn" data-tab="admin" id="tabAdmin" style="display:none">🛡️ 관리자</button>
   </div>
@@ -3026,6 +3054,38 @@
         두 선수의 궁합(케미)을 만들어보세요. 점수가 높으면 <b style="color:#f4c430">브로맨스</b>, 낮으면 <b style="color:#f87171">앙숙</b>이에요. 스쿼드에 두 선수를 함께 배치하면 팀 종합 OVR에 반영돼요(가까이 둘수록 시너지 ↑).
       </div>
       <div id="chemContent"></div>
+    </div>
+  </section>
+
+  <!-- ============ BLACKLIST VIEW ============ -->
+  <section class="view" id="view-blacklist">
+    <div class="stats-view">
+      <div class="stats-header">
+        <h1>🚫 블랙리스트</h1>
+      </div>
+      <div style="font-size:12px; color:var(--text-2); margin-bottom:14px;">
+        다시는 가고 싶지 않은 <b style="color:#fca5a5">구장</b>, 붙기 싫은 <b style="color:#fca5a5">상대팀</b>을 기록해두는 곳이에요. 이유도 같이 적어두면 다음 일정 잡을 때 참고돼요.
+      </div>
+      <div class="bl-wrap">
+        <div class="bl-section">
+          <div class="bl-head">🏟️ 블랙 구장 <span class="bl-count" id="blVenueCount">0</span></div>
+          <div class="bl-add">
+            <input id="blVenueName" class="bl-input" maxlength="40" placeholder="구장 이름" />
+            <input id="blVenueReason" class="bl-input bl-reason" maxlength="80" placeholder="이유 (선택) — 예: 바닥 최악, 주차 불가" />
+            <button id="blVenueAdd" class="bl-add-btn">+ 추가</button>
+          </div>
+          <div id="blVenueList" class="bl-list"></div>
+        </div>
+        <div class="bl-section">
+          <div class="bl-head">⚔️ 블랙 상대팀 <span class="bl-count" id="blTeamCount">0</span></div>
+          <div class="bl-add">
+            <input id="blTeamName" class="bl-input" maxlength="40" placeholder="상대팀 이름" />
+            <input id="blTeamReason" class="bl-input bl-reason" maxlength="80" placeholder="이유 (선택) — 예: 매너 X, 과격 플레이" />
+            <button id="blTeamAdd" class="bl-add-btn">+ 추가</button>
+          </div>
+          <div id="blTeamList" class="bl-list"></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -3486,7 +3546,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 9;
+const APP_VERSION = 10;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -3646,6 +3706,7 @@ function rerenderCurrent() {
   else if (t === 'attend') renderAttend();
   else if (t === 'hall') renderHall();
   else if (t === 'goh') renderGoh();
+  else if (t === 'blacklist') renderBlacklist();
   else if (t === 'admin' && isAdmin()) renderAdmin();
 }
 
@@ -5162,6 +5223,7 @@ function switchTab(name) {
   if (name === 'attend') renderAttend();
   if (name === 'hall') renderHall();
   if (name === 'goh') renderGoh();
+  if (name === 'blacklist') renderBlacklist();
   if (name === 'admin') renderAdmin();
   if (name === 'squad') { renderPlayerList(); renderField(); renderSquadList(); }
 }
@@ -8458,6 +8520,82 @@ function playerSynergyCellHtml(p) {
   return `<div class="syn-cell">${chips}</div>`;
 }
 
+/* ==================== 블랙리스트 탭 ==================== */
+function ensureBlacklist() {
+  if (!store.blacklist || typeof store.blacklist !== 'object' || Array.isArray(store.blacklist)) store.blacklist = {};
+  if (!Array.isArray(store.blacklist.venues)) store.blacklist.venues = [];
+  if (!Array.isArray(store.blacklist.teams)) store.blacklist.teams = [];
+  return store.blacklist;
+}
+function canDeleteBlItem(item) {
+  const u = currentUser();
+  return isAdmin() || !!(item && item.createdBy && u && item.createdBy === u.id);
+}
+function blItemHtml(kind, item) {
+  const u = currentUser();
+  const who = item.createdByName ? escapeHtml(item.createdByName) : '';
+  const meta = who ? `등록: ${who}` : '';
+  const delBtn = canDeleteBlItem(item)
+    ? `<button class="bl-del" data-bl-del="${kind}" data-bl-id="${item.id}" title="삭제">🗑️</button>` : '';
+  return `<div class="bl-item">
+    <div class="bl-item-body">
+      <div class="bl-item-name">${escapeHtml(item.name)}</div>
+      ${item.reason ? `<div class="bl-item-reason">${escapeHtml(item.reason)}</div>` : ''}
+      ${meta ? `<div class="bl-item-meta">${meta}</div>` : ''}
+    </div>
+    ${delBtn}
+  </div>`;
+}
+function renderBlacklistKind(kind) {
+  const bl = ensureBlacklist();
+  const arr = bl[kind] || [];
+  const listEl = document.getElementById(kind === 'venues' ? 'blVenueList' : 'blTeamList');
+  const cntEl = document.getElementById(kind === 'venues' ? 'blVenueCount' : 'blTeamCount');
+  if (cntEl) cntEl.textContent = arr.length;
+  if (!listEl) return;
+  if (!arr.length) {
+    listEl.innerHTML = `<div class="bl-empty">아직 등록된 ${kind === 'venues' ? '구장' : '상대팀'}이 없어요.</div>`;
+    return;
+  }
+  // 최근 등록이 위로
+  const sorted = arr.slice().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+  listEl.innerHTML = sorted.map(it => blItemHtml(kind, it)).join('');
+  listEl.querySelectorAll('[data-bl-del]').forEach(btn =>
+    btn.addEventListener('click', () => deleteBlacklistItem(btn.dataset.blDel, btn.dataset.blId)));
+}
+function renderBlacklist() {
+  ensureBlacklist();
+  renderBlacklistKind('venues');
+  renderBlacklistKind('teams');
+}
+function addBlacklistItem(kind) {
+  if (!isLoggedIn()) { toast('로그인이 필요합니다'); return; }
+  const u = currentUser();
+  const nameEl = document.getElementById(kind === 'venues' ? 'blVenueName' : 'blTeamName');
+  const reasonEl = document.getElementById(kind === 'venues' ? 'blVenueReason' : 'blTeamReason');
+  const name = (nameEl.value || '').trim();
+  const reason = (reasonEl.value || '').trim();
+  if (!name) { toast(kind === 'venues' ? '구장 이름을 입력하세요' : '상대팀 이름을 입력하세요'); nameEl.focus(); return; }
+  const bl = ensureBlacklist();
+  bl[kind].push({ id: uid(), name, reason, createdBy: u ? u.id : null, createdByName: u ? (u.displayName || u.username || '') : '', createdAt: Date.now() });
+  saveState();
+  nameEl.value = ''; reasonEl.value = '';
+  renderBlacklistKind(kind);
+  nameEl.focus();
+  toast(kind === 'venues' ? '블랙 구장 추가 ✓' : '블랙 상대팀 추가 ✓');
+}
+function deleteBlacklistItem(kind, id) {
+  const bl = ensureBlacklist();
+  const item = (bl[kind] || []).find(x => x.id === id);
+  if (!item) return;
+  if (!canDeleteBlItem(item)) { toast('본인이 등록했거나 운영진만 삭제할 수 있어요'); return; }
+  if (!confirm('이 항목을 삭제할까요?')) return;
+  bl[kind] = bl[kind].filter(x => x.id !== id);
+  saveState();
+  renderBlacklistKind(kind);
+  toast('삭제됨');
+}
+
 /* ---- 팀컬러 탭 ---- */
 function renderChemistry() {
   const el = document.getElementById('chemContent');
@@ -8939,6 +9077,12 @@ function bindEvents() {
   document.getElementById('chemAddTarget').addEventListener('click', () => addChemTargetRow('all', 5));
   document.getElementById('chemPickSearch').addEventListener('input', renderChemPickList);
   document.getElementById('chemModal').addEventListener('click', e => { if (e.target.id === 'chemModal') closeChemModal(); });
+
+  // 블랙리스트
+  document.getElementById('blVenueAdd').addEventListener('click', () => addBlacklistItem('venues'));
+  document.getElementById('blTeamAdd').addEventListener('click', () => addBlacklistItem('teams'));
+  ['blVenueName','blVenueReason'].forEach(id => document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addBlacklistItem('venues'); } }));
+  ['blTeamName','blTeamReason'].forEach(id => document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addBlacklistItem('teams'); } }));
 
   // 기록 / 출석 / 명예의 전당
   document.getElementById('recordsSeason').addEventListener('change', e => { recordsSeasonSel = e.target.value; renderRecords(); });
