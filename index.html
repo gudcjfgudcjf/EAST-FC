@@ -3498,7 +3498,7 @@
   <div class="modal" style="max-width:420px">
     <h3>🔐 감독 모드 잠금 해제</h3>
     <div style="color:var(--text-2); font-size:13px; margin-bottom:14px; line-height:1.6;">
-      선수 정보·기록 편집은 감독 권한이 필요합니다. <span style="color:var(--text-3);">(스쿼드 편집·참석자 변경은 오너 전용)</span><br>
+      감독 모드를 켜면 <b style="color:var(--gold-warm)">선수 정보·기록 편집, 스쿼드 편집, 참석 투표 조절</b>이 가능해집니다.<br>
       감독 비밀번호를 입력하세요.
     </div>
     <div class="form-group">
@@ -3546,7 +3546,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 10;
+const APP_VERSION = 11;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -3902,6 +3902,7 @@ function renderPresence() {
 }
 
 function canManageSquad() { return isOwner() || session.managerModeActive; } // 오너는 항상, 그 외(운영진 포함)는 감독 모드 ON일 때만
+function canManageAttendance() { return isOwner() || session.managerModeActive; } // 참석자(투표) 조절: 오너 + 감독 모드 ON
 function canManageMatches() { return isLoggedIn(); } // 경기(일정) 추가/편집은 로그인한 모든 회원 가능
 function canManageStaff() { return isLoggedIn(); } // 조직도 인원 추가/편집은 로그인한 모든 회원 가능
 function canManageUsers() { return isOwner(); }
@@ -4136,7 +4137,7 @@ async function openManagerUnlock() {
     session.managerModeActive = true;
     refreshUserUI();
     renderField(); renderSquadList();
-    toast('🔓 감독 모드 ON · 스쿼드 편집 가능');
+    toast('🔓 감독 모드 ON · 스쿼드 편집 + 참석 투표 조절 가능');
     return;
   }
   document.getElementById('mgrUnlockPass').value = '';
@@ -6858,7 +6859,7 @@ function attendanceSectionHtml(m) {
     <div class="attend-label">참석 투표 <span style="color:var(--text-3); font-weight:400;">· 참석자는 스쿼드 배치 우선순위로 앞에 떠요</span></div>
     ${selfArea}
     ${voterChips ? `<div class="attend-voters">${voterChips}</div>` : '<div class="attend-empty">아직 투표한 선수가 없어요</div>'}
-    ${isOwner() ? managerRosterHtml(m) : ''}
+    ${canManageAttendance() ? managerRosterHtml(m) : ''}
   </div>`;
 }
 // 이 경기의 쿼터 개수 (기본 4)
@@ -6910,7 +6911,7 @@ function managerRosterHtml(m) {
     return `<div class="amr"><div class="amr-top"><span class="amr-name">${nm}</span><div class="amr-btns">${btns}</div></div>${qRow}</div>`;
   }).join('');
   return `<div class="attend-manage">
-    <div class="attend-manage-title">👑 오너 · 선수단 참석 직접 관리 <span style="color:var(--text-3); font-weight:400; font-size:11px;">(미가입 선수도 대신 체크 가능 · 오너 전용)</span></div>
+    <div class="attend-manage-title">👑 오너·감독 · 선수단 참석 직접 관리 <span style="color:var(--text-3); font-weight:400; font-size:11px;">(미가입 선수도 대신 체크 가능 · 오너 + 감독 모드 전용)</span></div>
     <div style="font-size:11px; color:var(--text-3); margin:-2px 0 6px;">참석자는 <b>가능 쿼터</b>를 켜고 끌 수 있어요. 끈 쿼터 스쿼드에선 배치 우선순위에서 뒤로 밀리고 표시가 떠요.</div>
     <div class="attend-manage-list">${rows}</div>
   </div>`;
@@ -6931,7 +6932,7 @@ function toggleAvailQuarter(matchId, playerId, q) {
   const m = store.matches.find(x => x.id === matchId);
   if (!m) return;
   const isSelf = myPlayer() && myPlayer().id === playerId;
-  if (!isOwner() && !isSelf) { toast('본인 또는 오너만 가능해요'); return; }
+  if (!canManageAttendance() && !isSelf) { toast('본인 또는 오너·감독(감독 모드)만 가능해요'); return; }
   if (!m.availQ || typeof m.availQ !== 'object' || Array.isArray(m.availQ)) m.availQ = {};
   const nq = matchQuarterCount(m);
   let cur = Array.isArray(m.availQ[playerId]) ? m.availQ[playerId].slice() : Array.from({ length: nq }, (_, i) => i + 1);
@@ -6979,9 +6980,9 @@ function setMatchAttendance(matchId, status) {
   const meta = ATTEND_META[status];
   toast(m.attendance[p.id] ? `${meta.icon} ${meta.label}` : '투표 취소');
 }
-// 오너가 특정 "선수"의 참석 상태를 직접 지정/해제 (미가입 선수 포함)
+// 오너·감독(감독 모드)이 특정 "선수"의 참석 상태를 직접 지정/해제 (미가입 선수 포함)
 function setMatchAttendanceForPlayer(matchId, playerId, status) {
-  if (!isOwner()) { toast('참석자 변경은 오너만 가능해요'); return; }
+  if (!canManageAttendance()) { toast('참석자 변경은 오너·감독만 가능해요 (감독 모드를 켜세요)'); return; }
   const m = store.matches.find(x => x.id === matchId);
   if (!m) return;
   if (!m.attendance) m.attendance = {};
