@@ -1535,7 +1535,211 @@
   .stats-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
   .stats-header h1 { font-family: var(--font-brand); font-size: 24px; color: var(--text); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 700; }
   .stats-header .spacer { flex: 1; }
-  #recordsContent, #attendContent, #hallContent, #guideContent, #chemContent, #presenceContent, #profileContent, #gohContent { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-right: 4px; padding-bottom: 30px; min-height: 0; }
+  #recordsContent, #attendContent, #hallContent, #guideContent, #chemContent, #presenceContent, #profileContent, #gohContent, #scoutContent { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-right: 4px; padding-bottom: 30px; min-height: 0; }
+
+  /* ---------- 👑🎯 전용 페이지 오버레이 (오너/감독) ---------- */
+  .priv-overlay {
+    position: fixed; inset: 0; z-index: 120;
+    background: rgba(4,4,6,0.92);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    display: none; align-items: stretch; justify-content: center;
+    animation: fadeIn 0.15s ease-out;
+  }
+  .priv-overlay.show { display: flex; }
+  /* 전용 페이지(z-index 120) 위에서 열리는 편집 모달은 그보다 위에 */
+  #mgrNoteModal { z-index: 140; }
+  #mgrNoteModal .modal { width: 94%; max-width: 560px; }
+  .priv-page {
+    position: relative; display: flex; flex-direction: column;
+    width: 100%; max-width: 980px; height: 100%;
+    background: linear-gradient(170deg, #16171b 0%, #0b0c0e 55%);
+    border-left: 1px solid var(--border-2); border-right: 1px solid var(--border-2);
+    box-shadow: 0 0 80px rgba(0,0,0,.9);
+    animation: slideUp 0.2s ease-out;
+  }
+  .priv-head { display: flex; align-items: center; gap: 12px; padding: 16px 18px 14px; padding-top: calc(16px + env(safe-area-inset-top, 0px)); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .priv-crest { width: 42px; height: 42px; flex-shrink: 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 21px; }
+  .priv-crest.owner { background: linear-gradient(180deg, var(--gold-warm), var(--gold-2)); box-shadow: 0 4px 18px var(--gold-glow); }
+  .priv-crest.mgr { background: linear-gradient(180deg, #4f8df9, #2f5fc0); box-shadow: 0 4px 18px rgba(79,141,249,.35); }
+  .priv-headtext { min-width: 0; flex: 1; }
+  .priv-headtext h2 { font-family: var(--font-brand); font-size: 20px; font-weight: 700; letter-spacing: .04em; color: var(--text); text-transform: uppercase; }
+  .priv-sub { font-size: 11.5px; color: var(--text-3); margin-top: 1px; }
+  .priv-close { width: 38px; height: 38px; flex-shrink: 0; border-radius: 10px; background: var(--bg-3); border: 1px solid var(--border-2); color: var(--text-2); font-size: 16px; cursor: pointer; }
+  .priv-close:hover { background: var(--bg-hover); color: var(--text); }
+  .priv-subtabs { display: flex; gap: 6px; padding: 12px 18px 0; flex-shrink: 0; overflow-x: auto; scrollbar-width: none; }
+  .priv-subtabs::-webkit-scrollbar { display: none; }
+  .priv-subtab {
+    padding: 9px 14px; border-radius: 9px 9px 0 0; white-space: nowrap;
+    background: var(--bg-2); border: 1px solid var(--border); border-bottom: none;
+    color: var(--text-3); font-size: 13px; font-weight: 700; cursor: pointer;
+  }
+  .priv-subtab:hover { color: var(--gold-warm); }
+  .priv-subtab.active { color: #0a0a0a; background: linear-gradient(180deg, var(--gold-warm), var(--gold)); border-color: transparent; }
+  .priv-body { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 16px 18px 40px; border-top: 1px solid var(--border); }
+  .priv-panel { display: none; }
+  .priv-panel.active { display: block; }
+  .priv-hint { font-size: 12px; color: var(--text-2); line-height: 1.6; background: var(--bg-2); border: 1px solid var(--border); border-left: 3px solid var(--gold); border-radius: 9px; padding: 10px 12px; margin-bottom: 14px; }
+  .priv-search { width: 100%; padding: 10px 12px; margin-bottom: 12px; background: var(--bg-2); border: 1px solid var(--border-2); border-radius: 9px; color: var(--text); font-size: 13px; }
+
+  /* 감독 보드: 포메이션 선택 + 피치 */
+  .mgb-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .mgb-top label { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: .05em; }
+  .mgb-top select { padding: 8px 10px; background: var(--bg-2); border: 1px solid var(--border-2); border-radius: 8px; color: var(--text); font-size: 13px; font-weight: 700; }
+  .mgb-grid { display: grid; grid-template-columns: minmax(0,1fr); gap: 16px; }
+  @media (min-width: 900px) { .mgb-grid { grid-template-columns: minmax(0,420px) minmax(0,1fr); align-items: start; } }
+  .mgb-pitch {
+    position: relative; width: 100%; max-width: 420px; margin: 0 auto; aspect-ratio: 2 / 3;
+    background: linear-gradient(180deg,
+      #147a3e 0%, #147a3e 10%, #0f5c2e 10%, #0f5c2e 20%, #147a3e 20%, #147a3e 30%,
+      #0f5c2e 30%, #0f5c2e 40%, #147a3e 40%, #147a3e 50%, #0f5c2e 50%, #0f5c2e 60%,
+      #147a3e 60%, #147a3e 70%, #0f5c2e 70%, #0f5c2e 80%, #147a3e 80%, #147a3e 90%, #0f5c2e 90%, #0f5c2e 100%);
+    border: 2px solid rgba(244,196,48,.4); border-radius: 6px; box-shadow: 0 12px 40px rgba(0,0,0,.7);
+  }
+  .mgb-pitch::before { content:""; position:absolute; top:50%; left:0; right:0; height:2px; background:rgba(255,255,255,.45); transform:translateY(-50%); }
+  .mgb-pitch::after { content:""; position:absolute; top:50%; left:50%; width:64px; height:64px; border:2px solid rgba(255,255,255,.45); border-radius:50%; transform:translate(-50%,-50%); }
+  .mgb-slot {
+    position: absolute; transform: translate(-50%,-50%); z-index: 2;
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    cursor: pointer; width: 62px;
+  }
+  .mgb-badge {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(10,10,10,.86); border: 2px solid var(--gold);
+    color: var(--gold); font-family: var(--font-brand); font-weight: 700; font-size: 12px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 3px 12px rgba(0,0,0,.6);
+  }
+  .mgb-slot.filled .mgb-badge { background: linear-gradient(180deg, var(--gold-warm), var(--gold)); color: #0a0a0a; border-color: #fff3; }
+  .mgb-slot:hover .mgb-badge { transform: scale(1.08); }
+  .mgb-cap { font-size: 9.5px; font-weight: 700; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.9); text-align: center; line-height: 1.15; max-width: 62px; }
+  .mgb-mark { position: absolute; top: -3px; right: 6px; font-size: 10px; }
+  .mgb-side { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  .mgb-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; padding: 13px 14px; }
+  .mgb-card h4 { font-size: 12px; color: var(--gold); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 8px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+  .mgb-card h4 .mgb-edit { margin-left: auto; font-size: 11px; background: var(--bg-3); border: 1px solid var(--border-2); color: var(--text-2); border-radius: 6px; padding: 3px 8px; cursor: pointer; text-transform: none; letter-spacing: 0; }
+  .mgb-card h4 .mgb-edit:hover { color: var(--gold-warm); border-color: var(--gold); }
+  .mgb-text { font-size: 12.8px; color: var(--text-2); line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+  .mgb-text.empty { color: var(--text-4); font-style: italic; }
+  .mgb-pc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 560px) { .mgb-pc { grid-template-columns: 1fr; } }
+  .mgb-pc .mgb-card.pro { border-left: 3px solid #2fc06a; }
+  .mgb-pc .mgb-card.con { border-left: 3px solid #f0564f; }
+  .mgb-poslist { display: flex; flex-direction: column; gap: 8px; }
+  .mgb-pos { background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; padding: 11px 12px; cursor: pointer; }
+  .mgb-pos:hover { border-color: var(--gold); }
+  .mgb-pos.sel { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold-glow); }
+  .mgb-pos-head { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+  .mgb-pos-label { font-family: var(--font-brand); font-weight: 700; font-size: 14px; color: var(--gold); }
+  .mgb-pos-name { font-size: 11.5px; color: var(--text-3); }
+  .mgb-pos-edit { margin-left: auto; font-size: 11px; color: var(--text-3); }
+  .mgb-pos-body { margin-top: 7px; display: flex; flex-direction: column; gap: 6px; }
+  .mgb-line { font-size: 12.3px; color: var(--text-2); line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
+  .mgb-line b { color: var(--gold-warm); font-weight: 700; }
+  .mgb-line.empty { color: var(--text-4); font-style: italic; }
+  .mgb-block { background: rgba(255,255,255,.025); border: 1px solid var(--border); border-radius: 9px; padding: 10px 11px; margin-top: 8px; display: flex; flex-direction: column; gap: 5px; }
+  .mgb-block.own { border-color: rgba(244,196,48,.35); background: rgba(244,196,48,.06); }
+  .mgb-blabel { font-size: 10.5px; font-weight: 700; color: var(--text-3); letter-spacing: .03em; }
+  .mgb-blabel.own { color: var(--gold); }
+  .mgb-line.own { color: var(--text); }
+  .mgb-addhint { font-size: 11px; color: var(--text-4); margin-top: 8px; font-style: italic; }
+  .mgb-pos .mgb-line.own { color: var(--gold-warm); }
+
+  /* 감독 선수 노트 */
+  .mgn-list { display: flex; flex-direction: column; gap: 9px; }
+  .mgn-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 11px; padding: 12px 13px; }
+  .mgn-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .mgn-num { width: 26px; height: 26px; flex-shrink: 0; border-radius: 50%; background: #000; border: 1px solid var(--gold); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; font-family: var(--font-brand); }
+  .mgn-name { font-size: 14.5px; font-weight: 700; color: var(--text); }
+  .mgn-roles { display: flex; gap: 3px; flex-wrap: wrap; }
+  .mgn-edit { margin-left: auto; font-size: 11.5px; background: var(--bg-3); border: 1px solid var(--border-2); color: var(--text-2); border-radius: 7px; padding: 4px 9px; cursor: pointer; }
+  .mgn-edit:hover { color: var(--gold-warm); border-color: var(--gold); }
+  .mgn-body { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+  .mgn-row { font-size: 12.4px; color: var(--text-2); line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
+  .mgn-row .k { color: var(--gold); font-weight: 700; font-size: 11px; letter-spacing: .04em; margin-right: 5px; }
+  .mgn-empty { font-size: 12px; color: var(--text-4); font-style: italic; margin-top: 7px; }
+  .mgn-stars { display: flex; align-items: center; gap: 6px; margin-top: 7px; }
+  .mgn-stars .sv { font-family: var(--font-brand); font-weight: 700; font-size: 15px; color: var(--gold-warm); font-variant-numeric: tabular-nums; }
+  .mgn-bar { flex: 1; height: 6px; border-radius: 5px; background: var(--bg-3); overflow: hidden; max-width: 160px; }
+  .mgn-bar i { display: block; height: 100%; border-radius: 5px; background: linear-gradient(90deg, #caa22a, var(--gold)); }
+  .mgn-meta { font-size: 10.5px; color: var(--text-4); margin-top: 6px; }
+
+  @media (max-width: 820px) {
+    .priv-head { padding: 12px 14px 11px; }
+    .priv-headtext h2 { font-size: 17px; }
+    .priv-crest { width: 36px; height: 36px; font-size: 18px; }
+    .priv-subtabs { padding: 10px 14px 0; }
+    .priv-subtab { font-size: 12px; padding: 8px 11px; }
+    .priv-body { padding: 13px 14px calc(48px + env(safe-area-inset-bottom, 0px)); }
+    /* 피치가 화면을 다 먹지 않게 — 아래 설명 카드가 바로 이어서 보이도록 */
+    .mgb-pitch { max-height: 56vh; width: auto; max-width: 100%; }
+    .mgb-slot { width: 54px; }
+    .mgb-badge { width: 34px; height: 34px; font-size: 11px; }
+    .mgb-cap { font-size: 9px; max-width: 54px; }
+  }
+
+  /* ---------- 스카우팅 리포트 (오너 전용) ---------- */
+  .scout-note { background: var(--bg-2); border: 1px solid var(--border); border-left: 3px solid var(--gold); border-radius: 10px; padding: 12px 14px; font-size: 12px; color: var(--text-2); margin-bottom: 18px; line-height: 1.6; }
+  .scout-sec { margin: 28px 0 0; }
+  .scout-sec:first-child { margin-top: 0; }
+  .scout-eyebrow { font-family: var(--font-brand); font-weight: 700; font-size: 11px; letter-spacing: .16em; color: var(--gold); text-transform: uppercase; }
+  .scout-title { font-family: var(--font-brand); font-weight: 700; font-size: 19px; margin: 2px 0 4px; color: var(--text); }
+  .scout-desc { font-size: 12.5px; color: var(--text-2); margin-bottom: 14px; max-width: 64ch; }
+  .scout-cards { display: flex; flex-direction: column; gap: 12px; }
+  .scout-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 14px 13px; }
+  .scout-card.hero { border-color: rgba(244,196,48,.35); background: linear-gradient(180deg, rgba(244,196,48,.06), var(--bg-2) 45%); }
+  .scout-phead { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .scout-pnum { font-family: var(--font-brand); font-weight: 700; font-size: 13px; color: var(--gold); }
+  .scout-pname { font-weight: 800; font-size: 16px; letter-spacing: -.01em; color: var(--text); }
+  .scout-pfoot { font-size: 10.5px; color: var(--text-3); }
+  .scout-pbest { margin-left: auto; font-family: var(--font-brand); font-weight: 700; font-size: 11.5px; color: #0a0a0a; background: linear-gradient(180deg, var(--gold-warm), var(--gold)); border-radius: 7px; padding: 3px 9px; white-space: nowrap; }
+  .scout-roles { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0 0; }
+  .scout-bars { display: grid; grid-template-columns: 82px 1fr 30px; gap: 5px 8px; align-items: center; margin: 11px 0 2px; }
+  .scout-bars .k { font-size: 10.5px; color: var(--text-3); white-space: nowrap; }
+  .scout-bars .track { height: 6px; border-radius: 5px; background: var(--bg-3); overflow: hidden; }
+  .scout-bars .fill { height: 100%; border-radius: 5px; background: linear-gradient(90deg, #caa22a, var(--gold)); }
+  .scout-bars .fill.low { background: linear-gradient(90deg, #8a4740, #d96a62); }
+  .scout-bars .v { font-family: var(--font-brand); font-weight: 700; font-size: 12px; text-align: right; color: var(--gold-warm); font-variant-numeric: tabular-nums; }
+  .scout-bars .v.low { color: #ef8d86; }
+  .scout-ptext { font-size: 12.8px; color: var(--text-2); margin-top: 10px; line-height: 1.6; }
+  .scout-ptext b { color: var(--text); }
+  .scout-ptext .lead { color: var(--gold-warm); font-weight: 700; }
+  .scout-pwarn { font-size: 11.5px; color: var(--text-3); margin-top: 7px; padding-top: 7px; border-top: 1px dashed var(--border); line-height: 1.55; }
+  .scout-pwarn b { color: #f0b357; font-weight: 700; }
+  .scout-mini { display: grid; grid-template-columns: 1fr; gap: 9px; }
+  .scout-mini .scout-card { padding: 12px 13px; }
+  .scout-mini .scout-ptext { margin-top: 6px; font-size: 12.5px; }
+  @media (min-width: 640px) { .scout-mini { grid-template-columns: 1fr 1fr; } }
+  .scout-xi { background: var(--bg-2); border: 1px solid rgba(244,196,48,.3); border-radius: 12px; padding: 15px 14px; margin-top: 14px; }
+  .scout-xi h3 { font-family: var(--font-brand); font-weight: 700; font-size: 15px; color: var(--gold); margin-bottom: 8px; }
+  .scout-xi-rows { display: flex; flex-direction: column; gap: 7px; }
+  .scout-xi-row { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+  .scout-xi-line { font-family: var(--font-brand); font-weight: 700; font-size: 10px; letter-spacing: .07em; color: var(--text-3); width: 28px; flex-shrink: 0; }
+  .scout-xi-names { display: flex; flex-wrap: wrap; gap: 5px; }
+  .scout-xi-p { font-size: 12px; font-weight: 700; background: var(--bg-3); border: 1px solid var(--border); border-radius: 7px; padding: 3px 9px; color: var(--text); }
+  .scout-xi-p small { font-family: var(--font-brand); color: var(--gold); font-weight: 700; margin-right: 3px; }
+  .scout-xi-note { font-size: 11.5px; color: var(--text-3); margin-top: 10px; line-height: 1.55; }
+  .scout-team-notes { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+  .scout-tn { background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 13px; font-size: 12.3px; color: var(--text-2); line-height: 1.55; }
+  .scout-tn b { color: var(--gold-warm); }
+  .scout-tn .tn-t { font-weight: 800; color: var(--text); display: block; margin-bottom: 3px; }
+  .scout-foot { margin-top: 34px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-3); }
+  .scout-by { font-size: 10.5px; color: var(--text-4); margin-top: 7px; }
+  .scout-blank { background: var(--bg-2); border: 1px dashed var(--border-2); border-radius: 12px; padding: 18px 16px; text-align: center; font-size: 13px; color: var(--text-3); line-height: 1.7; }
+  .scout-blank span { font-size: 11.5px; color: var(--text-4); }
+  .scout-rate { margin: 9px 0 2px; }
+  .scout-rate-bar { display: block; height: 6px; border-radius: 5px; background: var(--bg-3); overflow: hidden; }
+  .scout-rate-bar i { display: block; height: 100%; border-radius: 5px; background: linear-gradient(90deg, #caa22a, var(--gold)); }
+  /* 감독 팀 제언 */
+  .priv-addbtn { padding: 9px 14px; margin-bottom: 12px; border-radius: 9px; background: linear-gradient(180deg, var(--gold-warm), var(--gold)); color: #0a0a0a; border: none; font-size: 13px; font-weight: 700; cursor: pointer; }
+  .priv-addbtn:hover { filter: brightness(1.06); }
+  .mgt-foot { display: flex; align-items: center; gap: 6px; margin-top: 9px; padding-top: 8px; border-top: 1px dashed var(--border); }
+  .mgt-by { font-size: 10.5px; color: var(--text-4); margin-right: auto; }
+  .mgn-edit.danger:hover { color: #fca5a5; border-color: var(--danger); }
+  @media (max-width: 820px) {
+    .scout-bars { grid-template-columns: 68px 1fr 28px; }
+    .scout-pname { font-size: 15px; }
+    .scout-pbest { font-size: 10.5px; padding: 3px 7px; }
+  }
 
   /* Podium (랭킹 top3) */
   .podium-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 22px; }
@@ -2750,7 +2954,6 @@
     <button class="tab-btn" data-tab="hall">👑 전당</button>
     <button class="tab-btn" data-tab="goh">🎖️ 가드오브아너</button>
     <button class="tab-btn" data-tab="blacklist">🚫 블랙리스트</button>
-    <button class="tab-btn" data-tab="presence" id="tabPresence" style="display:none">🟢 접속</button>
     <button class="tab-btn" data-tab="admin" id="tabAdmin" style="display:none">🛡️ 관리자</button>
   </div>
   <div class="spacer"></div>
@@ -2765,6 +2968,8 @@
   </div>
   <button class="nav-menu-btn" id="navMenuBtn" title="메뉴" aria-label="메뉴">☰</button>
   <div class="nav-utils" id="navUtils">
+    <button class="nav-btn priv owner" id="btnOwnerPage" title="오너 전용 페이지" style="display:none">👑 오너 전용</button>
+    <button class="nav-btn priv mgr" id="btnManagerPage" title="감독 전용 페이지" style="display:none">🎯 감독 전용</button>
     <button class="nav-btn" id="btnManagerToggle" title="감독 모드">🔒 감독 모드</button>
     <button class="nav-btn" id="btnExport">📤 내보내기</button>
     <button class="nav-btn" id="btnImport">📥 불러오기</button>
@@ -2992,18 +3197,6 @@
       </div>
     </div>
   </div>
-
-  <!-- ============ 실시간 접속 (오너 전용) VIEW ============ -->
-  <section class="view" id="view-presence">
-    <div class="stats-view">
-      <div class="stats-header">
-        <h1>🟢 실시간 접속</h1>
-        <div class="spacer"></div>
-      </div>
-      <div style="font-size:12px; color:var(--text-2); margin-bottom:10px;">지금 EAST FC에 접속해 있는 계정을 보여줘요. <b>오너만</b> 볼 수 있어요. (앱을 열어두면 자동으로 온라인 표시, 닫으면 오프라인)</div>
-      <div id="presenceContent"></div>
-    </div>
-  </section>
 
   <!-- ============ 프로필 (사진 등록) VIEW ============ -->
   <section class="view" id="view-profile">
@@ -3513,6 +3706,79 @@
   </div>
 </div>
 
+<!-- ============ 👑 오너 전용 페이지 (전체화면 오버레이) ============ -->
+<div class="priv-overlay" id="ownerPageOverlay">
+  <div class="priv-page">
+    <div class="priv-head">
+      <div class="priv-crest owner">👑</div>
+      <div class="priv-headtext">
+        <h2>오너 전용 페이지</h2>
+        <div class="priv-sub">오너 계정에서만 열 수 있어요</div>
+      </div>
+      <button class="priv-close" id="btnCloseOwnerPage" title="닫기" aria-label="닫기">✕</button>
+    </div>
+    <div class="priv-subtabs" id="ownerSubtabs">
+      <button class="priv-subtab active" data-osub="presence">🟢 실시간 접속</button>
+    </div>
+    <div class="priv-body">
+      <div class="priv-panel active" id="ownerPanel-presence">
+        <div class="priv-hint">지금 EAST FC에 접속해 있는 계정을 보여줘요. (앱을 열어두면 온라인, 닫으면 오프라인 · 45초마다 갱신)</div>
+        <div id="presenceContent"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 🎯 감독 전용 페이지 (전체화면 오버레이) ============ -->
+<div class="priv-overlay" id="managerPageOverlay">
+  <div class="priv-page">
+    <div class="priv-head">
+      <div class="priv-crest mgr">🎯</div>
+      <div class="priv-headtext">
+        <h2>감독 전용 페이지</h2>
+        <div class="priv-sub">감독 · 오너만 열 수 있어요</div>
+      </div>
+      <button class="priv-close" id="btnCloseManagerPage" title="닫기" aria-label="닫기">✕</button>
+    </div>
+    <div class="priv-subtabs" id="mgrSubtabs">
+      <button class="priv-subtab active" data-msub="board">📋 포메이션 보드</button>
+      <button class="priv-subtab" data-msub="players">👤 선수 매니징</button>
+      <button class="priv-subtab" data-msub="team">📣 팀 제언</button>
+      <button class="priv-subtab" data-msub="scout">🔍 스카우팅 리포트</button>
+    </div>
+    <div class="priv-body">
+      <div class="priv-panel active" id="mgrPanel-board">
+        <div id="mgrBoardContent"></div>
+      </div>
+      <div class="priv-panel" id="mgrPanel-players">
+        <div class="priv-hint">감독이 보는 선수별 특성·평가·활용법을 적어두세요. 여기 적은 내용이 <b>🔍 스카우팅 리포트 → 선수단 분석</b>에 그대로 올라갑니다.</div>
+        <input type="search" id="mgrPlayerSearch" class="priv-search" placeholder="선수 이름/등번호 검색..." />
+        <div id="mgrPlayersContent"></div>
+      </div>
+      <div class="priv-panel" id="mgrPanel-team">
+        <div class="priv-hint">팀 전체에 대한 감독 의견 — 전술 방향, 보강이 필요한 자리, 운영 원칙 등. 여기 적은 내용이 <b>🔍 스카우팅 리포트 → 팀 차원 제언</b>에 올라갑니다.</div>
+        <button class="priv-addbtn" id="btnAddTeamNote">+ 제언 추가</button>
+        <div id="mgrTeamContent"></div>
+      </div>
+      <div class="priv-panel" id="mgrPanel-scout">
+        <div id="scoutContent"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 감독 메모 편집 모달 (포지션/선수 공용) -->
+<div class="modal-overlay" id="mgrNoteModal">
+  <div class="modal">
+    <h3 id="mgrNoteTitle">메모</h3>
+    <div id="mgrNoteFields"></div>
+    <div class="modal-footer">
+      <button class="btn-cancel" id="btnCancelMgrNote">취소</button>
+      <button class="btn-primary" id="btnSaveMgrNote">저장</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -3546,7 +3812,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 11;
+const APP_VERSION = 18;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -3687,6 +3953,9 @@ function rerenderCurrent() {
   _pendingRerender = false;
   if (!isLoggedIn()) return;
   refreshUserUI();
+  // 열려 있는 전용 페이지도 최신 데이터로 갱신
+  if (document.getElementById('ownerPageOverlay')?.classList.contains('show')) renderOwnerPageSub();
+  if (document.getElementById('managerPageOverlay')?.classList.contains('show')) renderManagerPageSub();
   const t = currentTab;
   if (t === 'squad') { renderPlayerList(); renderField(); renderSquadList();
     const sq = getCurrentSquad();
@@ -3694,7 +3963,6 @@ function rerenderCurrent() {
   }
   else if (t === 'players') renderPlayersTable();
   else if (t === 'profile') renderProfile();
-  else if (t === 'presence' && isOwner()) renderPresence();
   else if (t === 'calendar') { renderCalendar(); updateCalendarBadge(); }
   else if (t === 'org') renderOrg();
   else if (t === 'board') renderBoard();
@@ -3707,7 +3975,7 @@ function rerenderCurrent() {
   else if (t === 'hall') renderHall();
   else if (t === 'goh') renderGoh();
   else if (t === 'blacklist') renderBlacklist();
-  else if (t === 'admin' && isAdmin()) renderAdmin();
+  else if (t === 'admin' && isOwner()) renderAdmin();
 }
 
 // True while the user is doing something a re-render would disrupt.
@@ -3824,7 +4092,7 @@ function currentUser() { return authStore.users.find(u => u.id === session.curre
 function isLoggedIn() { return !!currentUser(); }
 function isOwner() { return currentUser()?.role === 'owner'; }
 function isAdmin() { const u = currentUser(); return u && (u.role === 'owner' || u.role === 'admin'); }
-function isManagerActive() { return isAdmin() || session.managerModeActive; }
+function isManagerActive() { return isOwner() || session.managerModeActive; } // 오너는 항상, 운영진도 감독 모드 ON일 때만 (오너 > 감독 > 운영진)
 
 /* ==================== 실시간 접속(프레즌스) — 오너 전용 ==================== */
 function heartbeatPresence() {
@@ -3852,7 +4120,7 @@ function startPresence() {
   // 오너만 전체 접속 현황을 구독 (데이터 절약)
   if (u.role === 'owner' && !_presenceListening) {
     _presenceListening = true;
-    fbPresenceRef.on('value', snap => { _presenceData = snap.val() || {}; if (currentTab === 'presence') renderPresence(); }, () => {});
+    fbPresenceRef.on('value', snap => { _presenceData = snap.val() || {}; if (_ownerPageSub === 'presence' && document.getElementById('ownerPageOverlay')?.classList.contains('show')) renderPresence(); }, () => {});
   }
 }
 function stopPresence(uid) {
@@ -3901,6 +4169,563 @@ function renderPresence() {
     }).join('') + '</div>';
 }
 
+/* ==================== 스카우팅 리포트 (오너 전용 · 감독 입력 기반) ==================== */
+// 여기 내용은 AI가 쓰지 않는다. 감독이 「감독 전용 페이지」에 직접 적은 것만 모아서 보여준다.
+//   · 팀 차원 제언  → store.mgrBoard.teamNotes
+//   · 선수단 분석    → store.mgrBoard.players (선수별 특성·활용법·감독 평가)
+function scoutRoleChips(codes) {
+  return (codes || []).slice(0, 5).map(c => `<span class="role-chip ${(ROLES[c] || {}).cat || 'MF'}">${c}</span>`).join('');
+}
+function renderScout() {
+  const el = document.getElementById('scoutContent'); if (!el) return;
+  if (!canOpenManagerPage()) { el.innerHTML = '<div class="podium-empty">감독 전용 화면이에요</div>'; return; }
+
+  const notes = mgrTeamNotesView();
+  const rated = store.players
+    .map(p => ({ p, d: mgrPlayerView(p.id) }))
+    .filter(x => x.d.traits || x.d.usage || x.d.rating)
+    .sort((a, b) => (b.d.rating || 0) - (a.d.rating || 0) || (a.p.number || 999) - (b.p.number || 999));
+  const totalPlayers = store.players.length;
+
+  const notesHtml = notes.length
+    ? `<div class="scout-team-notes">${notes.map(n => `
+        <div class="scout-tn">
+          <span class="tn-t">${escapeHtml(n.title || '제언')}</span>${escapeHtml(n.body || '')}
+          ${n.createdByName ? `<div class="scout-by">— ${escapeHtml(n.createdByName)}</div>` : ''}
+        </div>`).join('')}</div>`
+    : `<div class="scout-blank">아직 감독이 적은 팀 제언이 없어요.<br><span>위의 📣 팀 제언 탭에서 작성하면 여기에 올라와요.</span></div>`;
+
+  const playersHtml = rated.length
+    ? `<div class="scout-cards">${rated.map(({ p, d }) => `
+        <div class="scout-card${d.rating >= 80 ? ' hero' : ''}">
+          <div class="scout-phead">
+            <span class="scout-pnum">#${p.number || '-'}</span>
+            <span class="scout-pname">${escapeHtml(p.name)}</span>
+            ${d.rating ? `<span class="scout-pbest">감독 평가 ${d.rating}</span>` : ''}
+          </div>
+          <div class="scout-roles">${scoutRoleChips(p.positions)}</div>
+          ${d.rating ? `<div class="scout-rate"><span class="scout-rate-bar"><i style="width:${d.rating}%"></i></span></div>` : ''}
+          ${d.traits ? `<p class="scout-ptext"><span class="lead">특성</span> ${escapeHtml(d.traits)}</p>` : ''}
+          ${d.usage ? `<p class="scout-ptext"><span class="lead">활용법</span> ${escapeHtml(d.usage)}</p>` : ''}
+          ${d.updatedByName ? `<div class="scout-by">— ${escapeHtml(d.updatedByName)}</div>` : ''}
+        </div>`).join('')}</div>`
+    : `<div class="scout-blank">아직 감독이 적은 선수 메모가 없어요.<br><span>위의 👤 선수 매니징 탭에서 선수별로 적으면 여기에 모여요.</span></div>`;
+
+  el.innerHTML = `
+    <div class="scout-note">📣 팀 제언과 👤 선수 매니징에 <b>감독이 직접 적은 내용</b>을 한 장으로 모아 보는 화면이에요. AI가 임의로 분석한 내용은 넣지 않습니다.</div>
+
+    <section class="scout-sec">
+      <div class="scout-eyebrow">Part 1</div>
+      <h2 class="scout-title">팀 차원 제언</h2>
+      <p class="scout-desc">감독이 팀 전체에 대해 남긴 의견 — 전술 방향, 보강이 필요한 자리, 운영 원칙 등. <b>${notes.length}건</b></p>
+      ${notesHtml}
+    </section>
+
+    <section class="scout-sec">
+      <div class="scout-eyebrow">Part 2</div>
+      <h2 class="scout-title">선수단 분석</h2>
+      <p class="scout-desc">감독이 메모를 남긴 선수 <b>${rated.length}명</b> / 전체 ${totalPlayers}명. 감독 평가 점수가 높은 순.</p>
+      ${playersHtml}
+    </section>
+
+    <div class="scout-foot">EAST FC · 감독 입력 기반 리포트 · 감독/오너만 보는 화면입니다.</div>
+  `;
+}
+
+/* ==================== 👑🎯 전용 페이지 (오버레이) ==================== */
+// 오너가 상위 개념 — 오너는 모든 페이지/탭을 다 본다.
+//  👑 오너 전용 : 오너 계정만. 감독은 절대 못 봄(강제로 열어도 차단).
+//  🎯 감독 전용 : 오너는 항상 + 그 외는 감독 모드 ON 일 때만.
+function canOpenOwnerPage() { return isOwner(); }
+function canOpenManagerPage() { return isOwner() || session.managerModeActive; }
+
+let _ownerPageSub = 'presence';
+let _mgrPageSub = 'board';
+
+function openOwnerPage() {
+  if (!canOpenOwnerPage()) { toast('오너 전용 페이지예요'); return; }
+  closeManagerPage();
+  document.getElementById('ownerPageOverlay').classList.add('show');
+  renderOwnerPageSub();
+}
+function closeOwnerPage() { document.getElementById('ownerPageOverlay')?.classList.remove('show'); }
+function switchOwnerSub(name) {
+  _ownerPageSub = name;
+  document.querySelectorAll('#ownerSubtabs .priv-subtab').forEach(b => b.classList.toggle('active', b.dataset.osub === name));
+  document.querySelectorAll('#ownerPageOverlay .priv-panel').forEach(p => p.classList.toggle('active', p.id === 'ownerPanel-' + name));
+  document.querySelector('#ownerPageOverlay .priv-body').scrollTop = 0;
+  renderOwnerPageSub();
+}
+function renderOwnerPageSub() {
+  if (!canOpenOwnerPage()) return;
+  renderPresence(); // 오너 페이지는 현재 실시간 접속 하나 (스카우팅 리포트는 감독 페이지로 이동)
+}
+
+function openManagerPage() {
+  if (!canOpenManagerPage()) { toast('감독 모드를 켜야 열 수 있어요'); return; }
+  closeOwnerPage();
+  document.getElementById('managerPageOverlay').classList.add('show');
+  renderManagerPageSub();
+}
+function closeManagerPage() { document.getElementById('managerPageOverlay')?.classList.remove('show'); }
+function switchMgrSub(name) {
+  _mgrPageSub = name;
+  document.querySelectorAll('#mgrSubtabs .priv-subtab').forEach(b => b.classList.toggle('active', b.dataset.msub === name));
+  document.querySelectorAll('#managerPageOverlay .priv-panel').forEach(p => p.classList.toggle('active', p.id === 'mgrPanel-' + name));
+  document.querySelector('#managerPageOverlay .priv-body').scrollTop = 0;
+  renderManagerPageSub();
+}
+function renderManagerPageSub() {
+  if (!canOpenManagerPage()) return;
+  if (_mgrPageSub === 'board') renderMgrBoard();
+  else if (_mgrPageSub === 'team') renderMgrTeamNotes();
+  else if (_mgrPageSub === 'scout') renderScout();
+  else renderMgrPlayers();
+}
+
+/* ---------- 감독 보드 데이터 ---------- */
+function ensureMgrBoard() {
+  if (!store.mgrBoard || typeof store.mgrBoard !== 'object' || Array.isArray(store.mgrBoard)) store.mgrBoard = {};
+  if (!store.mgrBoard.formations || typeof store.mgrBoard.formations !== 'object') store.mgrBoard.formations = {};
+  if (!store.mgrBoard.players || typeof store.mgrBoard.players !== 'object') store.mgrBoard.players = {};
+  if (!Array.isArray(store.mgrBoard.teamNotes)) {
+    // Firebase가 배열을 객체로 돌려주는 경우까지 흡수
+    store.mgrBoard.teamNotes = store.mgrBoard.teamNotes && typeof store.mgrBoard.teamNotes === 'object'
+      ? Object.values(store.mgrBoard.teamNotes) : [];
+  }
+  return store.mgrBoard;
+}
+// 팀 제언 (감독이 팀 전체에 대해 남기는 의견) — 최신순
+function mgrTeamNotesView() {
+  return ensureMgrBoard().teamNotes.slice().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+}
+function mgrFormationData(key) {
+  const mb = ensureMgrBoard();
+  if (!mb.formations[key] || typeof mb.formations[key] !== 'object') mb.formations[key] = {};
+  const f = mb.formations[key];
+  if (typeof f.pros !== 'string') f.pros = '';
+  if (typeof f.cons !== 'string') f.cons = '';
+  if (!f.slots || typeof f.slots !== 'object') f.slots = {};
+  return f;
+}
+function mgrSlotData(key, idx) {
+  const f = mgrFormationData(key);
+  if (!f.slots[idx] || typeof f.slots[idx] !== 'object') f.slots[idx] = {};
+  const s = f.slots[idx];
+  if (typeof s.duty !== 'string') s.duty = '';
+  if (typeof s.ideal !== 'string') s.ideal = '';
+  return s;
+}
+function mgrPlayerData(pid) {
+  const mb = ensureMgrBoard();
+  if (!mb.players[pid] || typeof mb.players[pid] !== 'object') mb.players[pid] = {};
+  const p = mb.players[pid];
+  if (typeof p.traits !== 'string') p.traits = '';
+  if (typeof p.usage !== 'string') p.usage = '';
+  if (typeof p.rating !== 'number') p.rating = 0; // 0 = 미평가
+  return p;
+}
+// 읽기 전용 뷰 — 화면을 그릴 때는 store에 빈 레코드를 만들지 않는다(동기화 데이터 오염 방지)
+function mgrSlotView(key, idx) {
+  const f = ensureMgrBoard().formations[key];
+  const s = f && f.slots && f.slots[idx];
+  return { duty: (s && s.duty) || '', ideal: (s && s.ideal) || '' };
+}
+function mgrFormationView(key) {
+  const f = ensureMgrBoard().formations[key];
+  return { pros: (f && f.pros) || '', cons: (f && f.cons) || '' };
+}
+function mgrPlayerView(pid) {
+  const p = ensureMgrBoard().players[pid];
+  return {
+    traits: (p && p.traits) || '', usage: (p && p.usage) || '',
+    rating: (p && typeof p.rating === 'number') ? p.rating : 0,
+    updatedByName: (p && p.updatedByName) || '',
+  };
+}
+
+// 기본 가이드 — 감독이 직접 안 적었을 때 보여줄 기본 설명(참고용)
+const FORMATION_GUIDE = {
+  '4-4-2': { pros:'좌우 대칭이라 위치를 외우기 쉽고, 두 명의 ST가 항상 전방에 남아 역습이 빠릅니다. 측면 미드가 풀백을 도와 수비 라인이 안정적이에요.', cons:'중앙 미드가 2명뿐이라 3미들 상대에게 중원 숫자에서 밀립니다. 두 CM의 활동량이 떨어지면 중앙이 통째로 비어요.' },
+  '4-3-3': { pros:'중원 3명으로 볼 소유와 압박이 모두 강하고, 윙 2명이 폭을 넓게 써서 상대 수비를 늘려놓습니다. 우리 팀 윙어 자원(유해민·임민기)에 가장 잘 맞는 틀.', cons:'풀백이 올라간 뒤 뒷공간이 크게 열립니다. CDM 한 명이 무너지면 수비 3선이 그대로 노출돼요.' },
+  '4-2-3-1': { pros:'더블 볼란치가 중앙을 잠가 수비가 가장 안정적입니다. CAM 한 명에게 창의성을 몰아줄 수 있어 유지성 같은 프리롤 자원을 살리기 좋아요.', cons:'ST가 혼자라 고립되기 쉽습니다. 2선 3명이 수비 가담을 안 하면 볼란치 둘이 과부하 걸려요.' },
+  '3-5-2': { pros:'중원 숫자 우위로 볼을 오래 소유하고, 윙백이 공격 시 5명까지 전진해 측면 폭을 극단적으로 넓힙니다. ST 2명이라 전방 압박도 강해요.', cons:'윙백이 내려오지 못하면 측면 뒷공간이 완전히 비고, CB 3명의 커버 범위가 넓어 발 느린 수비수에겐 치명적입니다.' },
+  '5-3-2': { pros:'수비 5명으로 라인을 두껍게 세워 강팀 상대 버티기에 최적. 뺏은 뒤 ST 2명에게 바로 연결하는 역습이 잘 나옵니다.', cons:'라인이 내려앉아 공격 전환 거리가 멀고, 우리가 주도권을 잡아야 하는 경기에선 답답해집니다.' },
+  '4-5-1': { pros:'미드 5명으로 중원을 완전히 장악하고, 상대 공격을 중앙에서 미리 끊습니다. 체력 관리와 무실점 경기에 유리해요.', cons:'ST가 혼자 고립돼 득점 루트가 마르기 쉽습니다. 공격 숫자가 부족해 이기고 있을 때만 편한 포메이션.' },
+  '3-4-3': { pros:'전방 3명 + 측면 미드로 가장 공격적인 형태. 상대 진영에서 압박해 높은 위치에서 공을 뺏어 바로 마무리할 수 있어요.', cons:'CB 3명 앞을 미드 2명이 지켜야 해 역습에 매우 취약합니다. 체력이 떨어지는 후반에 위험해요.' },
+  '4-4-1': { pros:'10명 경기용 기본 틀. 4-4로 두 줄을 지켜 수비 균형이 좋고 배치가 단순합니다.', cons:'ST가 혼자라 전방 압박·마무리 부담이 크고, 공격 숫자가 부족합니다.' },
+};
+const POS_GUIDE = {
+  GK:  { duty:'최후방 보호 + 빌드업 시작점. 뒷공간 커버를 위해 라인을 따라 올라서고, 잡은 뒤엔 빠른 스로·킥으로 역습 스위치를 넣는다.', ideal:'반사신경·1대1이 좋고 발밑이 되는 키퍼. 소리 질러 수비 라인을 정리해 주는 성격이면 최고.' },
+  LB:  { duty:'왼쪽 측면 수비 + 상황에 따라 오버래핑. 윙어가 안쪽으로 들어오면 바깥 폭을 대신 채운다.', ideal:'왼발잡이, 스태미나와 대인 수비가 되는 선수. 무리한 전진보다 위치 지키는 성실함이 중요.' },
+  RB:  { duty:'오른쪽 측면 수비 + 오버래핑. 크로스와 컷백으로 공격 마무리에 관여한다.', ideal:'주력·크로스가 좋고 90분 왕복 가능한 체력형. 수비 전환 1착을 책임질 수 있는 선수.' },
+  CB:  { duty:'중앙 수비의 축. 대인 마킹·커버·세컨볼 경합을 담당하고, 끊은 뒤 안전한 전개로 연결한다.', ideal:'제공권·피지컬·수비 위치선정이 좋은 선수. 발밑이 되면 빌드업까지 맡길 수 있다.' },
+  LWB: { duty:'왼쪽 윙백. 수비 시엔 5백의 일원, 공격 시엔 측면 최전방까지 전진해 폭을 만든다.', ideal:'스태미나 최상급 + 왼발 크로스. 오르내림을 지치지 않고 반복할 수 있어야 한다.' },
+  RWB: { duty:'오른쪽 윙백. 수비 시 5백, 공격 시 측면 전진으로 상대 풀백을 묶는다.', ideal:'스태미나·주력·크로스 3박자. 수비 복귀 속도가 특히 중요.' },
+  CDM: { duty:'백라인 앞 차단막. 상대 공격의 첫 패스를 끊고, 회수한 공을 가장 가까운 동료에게 간결하게 준다.', ideal:'인터셉트·태클·수비 위치선정이 좋은 선수. 화려함보다 자리 지키는 판단력.' },
+  CM:  { duty:'공수 연결. 낮은 위치에서 공을 받아 템포를 정하고, 기회가 나면 박스까지 침투한다.', ideal:'패스 정확도·시야·활동량. 90분 내내 볼을 요구할 수 있는 자신감.' },
+  LM:  { duty:'왼쪽 측면 미드. 공격 시 폭을 만들고, 수비 시엔 풀백 옆으로 내려와 두 줄 수비를 완성한다.', ideal:'크로스와 수비 가담을 모두 하는 성실형. 팀워크가 좋은 선수.' },
+  RM:  { duty:'오른쪽 측면 미드. 공격 시 크로스·컷백, 수비 시 측면 커버.', ideal:'주력과 체력, 그리고 수비 복귀를 귀찮아하지 않는 태도.' },
+  CAM: { duty:'상대 수비와 미드 사이(하프스페이스)에서 공을 받아 마지막 패스를 만든다. 전방 압박의 스위치도 담당.', ideal:'시야·탈압박·창의성. 좁은 공간에서 등지고 돌아설 수 있는 선수.' },
+  LAM: { duty:'왼쪽 2선. 안쪽으로 좁혀 CAM처럼 공을 받거나, 컷인해서 슈팅으로 마무리한다.', ideal:'드리블·중거리 슛. 오른발잡이면 컷인 각이 좋다.' },
+  RAM: { duty:'오른쪽 2선. 안쪽으로 좁혀 연계하고 박스 안으로 침투한다.', ideal:'드리블·결정력. 왼발잡이면 컷인 슈팅이 위협적.' },
+  LW:  { duty:'왼쪽 윙. 넓게 서서 1대1을 강제하고, 뒷공간이 열리면 라인 브레이킹으로 끝낸다.', ideal:'가속·드리블·결정력. 공을 오래 끌지 않고 받는 즉시 전진하는 유형.' },
+  RW:  { duty:'오른쪽 윙. 폭을 벌려 상대 수비를 늘리고, 컷인 또는 크로스로 마무리에 관여.', ideal:'스피드와 1대1 돌파. 마무리까지 되는 선수면 최고.' },
+  ST:  { duty:'최전방 마무리 + 전방 압박의 첫 번째 트리거. 뒷공간 침투와 등지는 플레이를 상황에 따라 나눈다.', ideal:'골결정력·공격 위치선정. 피지컬형이면 타깃, 스피드형이면 침투로 색깔을 정해준다.' },
+};
+// 포메이션별 포지션 가이드 — 같은 CB라도 백3와 백4가 다르니 포메이션마다 따로 적는다.
+// 없는 항목은 위의 POS_GUIDE(일반 가이드)로 자동 대체.
+const FORMATION_POS_GUIDE = {
+  '4-4-2': {
+    GK: { duty:'앞에 두 줄(4-4)이 촘촘해서 뒷공간보다 크로스·세컨볼 처리가 주 업무. 잡으면 측면 미드에게 빠르게 던져 역습을 연다.', ideal:'제공권과 캐칭이 안정적인 키퍼.' },
+    LB: { duty:'앞의 LM과 짝을 이뤄 왼쪽을 둘이 막는다. LM이 내려와 있을 때만 오버래핑.', ideal:'왼발 크로스 + 대인 수비가 되는 선수.' },
+    CB: { duty:'둘이 나란히 서서 상대 ST 둘을 각각 전담. 한 명이 앞으로 나가면 다른 한 명은 반드시 커버로 남는다.', ideal:'제공권·몸싸움. 둘 중 하나는 발이 빨라야 뒷공간을 덮는다.' },
+    RB: { duty:'RM과 짝을 이뤄 오른쪽 담당. RM이 안으로 좁힐 때 바깥 폭을 대신 채운다.', ideal:'왕복 체력과 크로스.' },
+    LM: { duty:'공격 시 폭을 만들고, 수비 시 반드시 LB 옆까지 내려와 4-4 두 줄을 완성한다. 이 복귀가 4-4-2의 생명.', ideal:'복귀를 성실히 하는 측면 자원.' },
+    CM: { duty:'중원이 둘뿐 — 한 명이 전진하면 한 명은 무조건 남는다. 상대가 3미들이면 숫자에서 밀리니 간격 유지가 최우선.', ideal:'둘을 수비형+공격형으로 짝지어 배치. 활동량 필수.' },
+    RM: { duty:'오른쪽에서 폭을 만들고 수비 시 RB 옆으로 복귀. 크로스로 두 ST의 머리를 노린다.', ideal:'크로스 정확도와 체력.' },
+    ST: { duty:'둘이 짝으로 움직인다. 한 명이 내려와 받아주면 다른 한 명은 뒷공간 침투 — 역할을 매 상황 나눈다.', ideal:'한 명은 타깃형(등지고 버팀), 한 명은 침투형(빠름)으로 조합.' },
+  },
+  '4-3-3': {
+    GK: { duty:'풀백이 높이 올라가 뒷공간이 자주 비므로 라인을 높게 잡고 스위퍼처럼 커버. 빌드업 첫 패스도 담당.', ideal:'발밑이 되고 뛰어나오는 판단이 빠른 키퍼.' },
+    LB: { duty:'LW가 안으로 좁히면 바깥 폭을 혼자 책임진다. 올라간 만큼 역습 복귀가 최우선 임무.', ideal:'왼발 + 스태미나. 복귀 속도가 생명.' },
+    CB: { duty:'CDM 한 명만 앞에 있어 커버 범위가 넓다. 둘 중 하나는 전진 수비, 하나는 뒤를 덮는 역할로 미리 정해둔다.', ideal:'한 명은 빌드업형(발밑), 한 명은 스피드형.' },
+    RB: { duty:'RW와 겹치지 않게 — RW가 넓게 서면 안쪽으로 좁혀 3백처럼 서고, RW가 좁히면 바깥으로 오버래핑.', ideal:'판단 빠르고 왕복 가능한 풀백.' },
+    CDM: { duty:'이 포메이션의 핵심. 백4 앞을 혼자 지키며 상대 역습의 첫 패스를 끊는다. 절대 함부로 전진하지 않는다.', ideal:'인터셉트·수비 위치선정이 최상급인 선수. 여기가 무너지면 전체가 무너진다.' },
+    CAM: { duty:'둘이 하프스페이스(중앙과 측면 사이)를 하나씩 점유. 공격 시 박스 침투, 수비 시 상대 미드를 압박한다.', ideal:'탈압박과 활동량. 한 명은 창의형, 한 명은 박스투박스형.' },
+    LW: { duty:'터치라인에 붙어 폭을 최대한 넓힌다. 상대 RB를 1대1로 고정시키는 것 자체가 임무.', ideal:'돌파력과 스피드. 반대발이면 컷인 슈팅까지.' },
+    ST: { duty:'혼자 최전방 — 수비 라인과 싸우며 뒷공간을 계속 노리고, 필요하면 내려와 윙의 침투 공간을 만든다.', ideal:'결정력 + 등지는 힘. 혼자 버틸 수 있어야 한다.' },
+    RW: { duty:'폭을 벌려 상대 수비를 늘리고, 반대편 크로스 때는 반대 포스트로 파고든다.', ideal:'스피드와 1대1 돌파. 마무리까지 되면 최고.' },
+  },
+  '4-2-3-1': {
+    GK: { duty:'앞에 볼란치 둘이 있어 중앙은 안전한 편. 측면 크로스와 세컨볼 관리에 집중.', ideal:'안정적인 캐칭과 커맨딩.' },
+    LB: { duty:'볼란치가 뒤를 받쳐주니 왼쪽 2선과 겹치지 않게 과감히 오버래핑해도 된다.', ideal:'왼발 크로스, 공격 가담이 좋은 풀백.' },
+    CB: { duty:'볼란치 둘의 보호를 받아 가장 편한 구조. 라인 유지와 세트피스 수비에 집중.', ideal:'제공권과 라인 컨트롤.' },
+    RB: { duty:'오른쪽 2선이 안으로 좁히면 바깥 폭을 담당. 수비 시엔 4백 라인 유지.', ideal:'체력과 크로스.' },
+    CDM: { duty:'둘이 짝. 한 명이 볼을 회수하면 다른 한 명은 전개를 맡는다 — 동시에 올라가지 않는 게 철칙.', ideal:'한 명은 파괴형(태클·인터셉트), 한 명은 배급형(패스·시야).' },
+    LAM: { duty:'왼쪽 2선. 안으로 좁혀 CAM과 삼각형을 만들고, 수비 시엔 상대 풀백까지 따라 내려온다.', ideal:'드리블과 컷인 슈팅. 오른발잡이면 각이 좋다.' },
+    CAM: { duty:'이 포메이션의 창. 볼란치가 뒤를 다 막아주니 수비 부담 없이 공격에만 집중해 마지막 패스를 만든다.', ideal:'시야·창의성 최고인 선수. 프리롤로 풀어준다.' },
+    RAM: { duty:'오른쪽 2선. 안으로 좁혀 연계하고 박스로 침투. 수비 복귀도 분담.', ideal:'결정력 있는 2선 자원. 왼발잡이면 컷인이 위협적.' },
+    ST: { duty:'혼자 최전방이라 고립되기 쉽다. CAM과의 거리를 항상 가깝게 유지하고, 등져서 받아준 뒤 2선을 올린다.', ideal:'연계형 스트라이커. 혼자 버티는 힘이 필요.' },
+  },
+  '3-5-2': {
+    GK: { duty:'CB 3명이 넓게 서므로 그 사이 뒷공간을 키퍼가 덮어야 한다. 스위퍼 키퍼 성향이 필요.', ideal:'뛰어나오는 판단이 빠른 키퍼.' },
+    CB: { duty:'3명이 한 몸처럼 움직인다. 가운데는 커버, 양쪽은 상대 윙어까지 따라 나가는 스토퍼 역할.', ideal:'가운데는 커버형(느려도 됨), 양쪽은 발 빠르고 대인이 강한 선수.' },
+    LWB: { duty:'왼쪽 측면을 혼자 다 쓴다. 공격 시 최전방까지, 수비 시 5백 라인까지 — 이 왕복이 3-5-2의 엔진.', ideal:'스태미나 최상급 + 왼발 크로스. 체력 안 되면 이 포메이션 자체가 무너진다.' },
+    CM: { duty:'3명이 중원을 완전히 장악. 한 명은 수비(앵커), 한 명은 연결, 한 명은 침투로 역할을 명확히 나눈다.', ideal:'수비형 1 + 배급형 1 + 침투형 1의 조합.' },
+    RWB: { duty:'오른쪽 측면 전담. 공격 시 폭을 만들고, 상대 역습 시 가장 먼저 복귀해 5백을 완성한다.', ideal:'스태미나와 복귀 속도.' },
+    ST: { duty:'중원 숫자가 많아 지원이 두텁다. 둘이 좁게 붙어 원투 패스로 상대 CB 사이를 공략.', ideal:'서로 호흡이 맞는 조합. 한 명은 내려받고 한 명은 침투.' },
+  },
+  '5-3-2': {
+    GK: { duty:'5백이 두껍게 서 있으니 크로스·세컨볼 처리가 핵심. 라인은 낮게 유지.', ideal:'제공권과 반사신경.' },
+    LWB: { duty:'기본은 수비 5명의 일원. 확실히 이길 수 있는 상황에서만 올라간다 — 3-5-2보다 수비 비중이 훨씬 높다.', ideal:'수비가 되는 왼발 측면 자원.' },
+    CB: { duty:'3명이 좁게 서서 중앙을 봉쇄. 라인을 낮게 유지하고 뒷공간을 아예 안 주는 게 목표.', ideal:'제공권과 집중력. 발 느려도 라인이 낮아 괜찮다.' },
+    RWB: { duty:'수비 우선. 뺏은 뒤 역습 상황에서만 폭발적으로 전진한다.', ideal:'수비 안정감 + 한 방 스프린트.' },
+    CM: { duty:'3명이 촘촘히 서서 중앙 통로를 막고, 뺏으면 즉시 두 ST에게 연결. 볼 소유보다 전환 속도가 중요.', ideal:'수비 가담 좋고 전방 패스가 빠른 선수.' },
+    ST: { duty:'수비 시간이 길어 둘이 고립된다. 뺏는 순간 둘이 동시에 달려나가 역습을 끝내는 게 임무.', ideal:'주력과 지구력. 혼자서도 볼을 지킬 수 있어야 한다.' },
+  },
+  '4-5-1': {
+    GK: { duty:'앞에 5명이 서 있어 실점 위험이 낮다. 안정적으로 처리하고 롱킥보다 짧게 전개.', ideal:'안정적인 키퍼.' },
+    LB: { duty:'앞의 LM과 겹쳐서 왼쪽이 두껍다. 무리한 전진 없이 자리를 지키는 게 이득.', ideal:'수비 중심 풀백.' },
+    CB: { duty:'중원 5명의 보호를 받아 가장 안전한 자리. 라인 유지와 세트피스만 신경 쓰면 된다.', ideal:'제공권과 집중력.' },
+    RB: { duty:'RM과 겹치므로 수비 위치 유지 우선. 공격은 상황 봐서 한 번씩만.', ideal:'수비 중심 풀백.' },
+    LM: { duty:'왼쪽에서 상대 풀백을 묶고, 수비 시 5명 라인의 왼쪽 끝을 담당.', ideal:'체력과 수비 가담.' },
+    CM: { duty:'3명이 중앙을 완전히 덮는다. 한 명은 홀딩, 둘은 좌우 하프스페이스를 커버해 상대 패스 길을 막는다.', ideal:'활동량 많고 위치선정 좋은 선수.' },
+    RM: { duty:'오른쪽 폭 담당 + 수비 시 5명 라인 오른쪽 끝.', ideal:'체력과 수비 가담.' },
+    ST: { duty:'완전히 고립된다. 볼을 지켜 미드가 올라올 시간을 벌어주는 게 첫 번째 임무, 득점은 두 번째.', ideal:'등지는 힘이 강한 타깃형.' },
+  },
+  '3-4-3': {
+    GK: { duty:'가장 공격적인 포메이션이라 뒷공간이 자주 열린다. 라인을 높이고 적극적으로 뛰어나와야 한다.', ideal:'스위퍼 키퍼 성향 필수.' },
+    CB: { duty:'3명이 넓은 지역을 커버. 앞의 미드가 2명뿐이라 역습에 그대로 노출되니 지연 수비가 핵심.', ideal:'발 빠르고 1대1이 강한 수비수. 느리면 이 포메이션은 위험.' },
+    LM: { duty:'사실상 윙백. 공격 시 LW를 도와 왼쪽에 2명을 만들고, 수비 시 내려와 5백을 만든다.', ideal:'스태미나 최상급.' },
+    CM: { duty:'둘이 중원 전체를 감당한다. 절대 동시에 전진하지 않고, 한 명은 항상 CB 3명 앞에 남는다.', ideal:'수비력 있는 박스투박스. 체력이 관건.' },
+    RM: { duty:'오른쪽 윙백 역할. 공격 가담과 복귀를 반복한다.', ideal:'스태미나와 크로스.' },
+    LW: { duty:'높고 넓게 서서 상대 수비를 벌린다. 수비 가담은 최소로 하고 역습 한 방에 에너지를 모은다.', ideal:'스피드와 돌파.' },
+    ST: { duty:'전방 3명 중 가운데. 상대 CB 사이에서 등지거나 침투해 좌우 윙의 공간을 만들어준다.', ideal:'결정력과 연계 능력.' },
+    RW: { duty:'넓게 서서 폭을 만들고, 반대쪽 크로스 때 반대 포스트로 들어간다.', ideal:'스피드와 마무리.' },
+  },
+  '4-4-1': {
+    GK: { duty:'10명 경기용. 인원이 적어 공간이 넓으니 라인을 조금 높게 잡고 커버 범위를 넓힌다.', ideal:'활동 범위 넓은 키퍼.' },
+    LB: { duty:'LM과 왼쪽을 나눠 맡되, 인원이 적으니 무리한 오버래핑은 금물.', ideal:'수비 안정감.' },
+    CB: { duty:'둘이 상대 공격을 감당. 한 명 나가면 한 명 커버 원칙을 철저히.', ideal:'제공권과 커버 스피드.' },
+    RB: { duty:'RM과 오른쪽 분담. 자리 지키기 우선.', ideal:'수비 안정감.' },
+    LM: { duty:'공수 모두 관여. 10명 경기라 측면이 비면 바로 실점으로 이어지니 복귀 필수.', ideal:'체력형 측면 자원.' },
+    CM: { duty:'둘이 중원을 지키며 유일한 ST를 지원한다. 간격 유지가 특히 중요.', ideal:'활동량과 패스.' },
+    RM: { duty:'오른쪽 공수 담당. 복귀 성실히.', ideal:'체력형 측면 자원.' },
+    ST: { duty:'혼자라 고립되기 쉽다. 측면 미드의 전진을 기다리며 볼을 지켜주는 역할이 크다.', ideal:'볼 키핑이 되는 스트라이커.' },
+  },
+};
+function posGuide(label, formationKey) {
+  const f = formationKey && FORMATION_POS_GUIDE[formationKey];
+  const specific = f && f[label];
+  const generic = POS_GUIDE[label] || { duty:'', ideal:'' };
+  return {
+    duty: (specific && specific.duty) || generic.duty || '',
+    ideal: (specific && specific.ideal) || generic.ideal || '',
+    specific: !!specific,
+  };
+}
+
+/* ---------- 감독 보드: 포메이션 ---------- */
+let _mgrBoardFormation = '4-3-3';
+let _mgrBoardSel = 0;
+function renderMgrBoard() {
+  const el = document.getElementById('mgrBoardContent'); if (!el) return;
+  if (!canOpenManagerPage()) { el.innerHTML = '<div class="podium-empty">감독 전용 화면이에요</div>'; return; }
+  const key = FORMATIONS[_mgrBoardFormation] ? _mgrBoardFormation : '4-3-3';
+  _mgrBoardFormation = key;
+  const tpl = FORMATIONS[key];
+  const fd = mgrFormationView(key);
+  const guide = FORMATION_GUIDE[key] || { pros:'', cons:'' };
+  if (_mgrBoardSel >= tpl.length) _mgrBoardSel = 0;
+
+  const opts = Object.keys(FORMATIONS).map(k => `<option value="${k}"${k === key ? ' selected' : ''}>${k}</option>`).join('');
+  const slots = tpl.map((t, i) => {
+    const sd = mgrSlotView(key, i);
+    const written = !!(sd.duty || sd.ideal);
+    return `<div class="mgb-slot${written ? ' filled' : ''}${i === _mgrBoardSel ? ' sel' : ''}" data-mgb-slot="${i}" style="left:${t.x}%; top:${t.y}%">
+      <div class="mgb-badge">${t.label}${written ? '<span class="mgb-mark">✍️</span>' : ''}</div>
+      <div class="mgb-cap">${escapeHtml((ROLES[LABEL_TO_ROLE[t.label]] || {}).name || t.label)}</div>
+    </div>`;
+  }).join('');
+
+  const sel = tpl[_mgrBoardSel];
+  const selData = mgrSlotView(key, _mgrBoardSel);
+  const selGuide = posGuide(sel.label, key);
+  const roleCode = LABEL_TO_ROLE[sel.label] || 'CM';
+
+  el.innerHTML = `
+    <div class="mgb-top">
+      <label for="mgbFormation">포메이션</label>
+      <select id="mgbFormation">${opts}</select>
+      <span style="font-size:11.5px; color:var(--text-3)">피치의 포지션을 누르면 그 자리의 역할·원하는 선수를 적을 수 있어요</span>
+    </div>
+    <div class="mgb-grid">
+      <div>
+        <div class="mgb-pitch" id="mgbPitch">${slots}</div>
+      </div>
+      <div class="mgb-side">
+        <div class="mgb-card">
+          <h4>${escapeHtml(sel.label)} · ${escapeHtml((ROLES[roleCode] || {}).name || '')}
+            <button class="mgb-edit" data-mgb-editslot="${_mgrBoardSel}">✏️ 감독 메모</button></h4>
+          <div class="mgb-block">
+            <div class="mgb-blabel">📘 ${escapeHtml(key)} 기본 가이드</div>
+            <div class="mgb-line"><b>해야 할 역할</b> ${escapeHtml(selGuide.duty)}</div>
+            <div class="mgb-line"><b>어떤 선수가 오면 좋은가</b> ${escapeHtml(selGuide.ideal)}</div>
+          </div>
+          ${(selData.duty || selData.ideal) ? `<div class="mgb-block own">
+            <div class="mgb-blabel own">✍️ 감독 메모</div>
+            ${selData.duty ? `<div class="mgb-line"><b>역할</b> ${escapeHtml(selData.duty)}</div>` : ''}
+            ${selData.ideal ? `<div class="mgb-line"><b>원하는 선수</b> ${escapeHtml(selData.ideal)}</div>` : ''}
+          </div>` : `<div class="mgb-addhint">감독 생각을 덧붙이려면 ✏️ 감독 메모</div>`}
+        </div>
+        <div class="mgb-pc">
+          <div class="mgb-card pro">
+            <h4>👍 장점 <button class="mgb-edit" data-mgb-editform="pros">✏️</button></h4>
+            ${fd.pros ? `<div class="mgb-text">${escapeHtml(fd.pros)}</div>` : `<div class="mgb-text empty">${escapeHtml(guide.pros)}</div>`}
+          </div>
+          <div class="mgb-card con">
+            <h4>👎 단점 <button class="mgb-edit" data-mgb-editform="cons">✏️</button></h4>
+            ${fd.cons ? `<div class="mgb-text">${escapeHtml(fd.cons)}</div>` : `<div class="mgb-text empty">${escapeHtml(guide.cons)}</div>`}
+          </div>
+        </div>
+        <div class="mgb-card">
+          <h4>📋 ${escapeHtml(key)} 포지션 전체</h4>
+          <div class="mgb-poslist">
+            ${tpl.map((t, i) => {
+              const sd = mgrSlotView(key, i);
+              const g = posGuide(t.label, key);
+              return `<div class="mgb-pos${i === _mgrBoardSel ? ' sel' : ''}" data-mgb-slot="${i}">
+                <div class="mgb-pos-head">
+                  <span class="mgb-pos-label">${escapeHtml(t.label)}</span>
+                  <span class="mgb-pos-name">${escapeHtml((ROLES[LABEL_TO_ROLE[t.label]] || {}).name || '')}</span>
+                  <span class="mgb-pos-edit">${sd.duty || sd.ideal ? '✍️ 감독 메모 있음' : ''}</span>
+                </div>
+                <div class="mgb-pos-body">
+                  <div class="mgb-line"><b>역할</b> ${escapeHtml(g.duty)}</div>
+                  <div class="mgb-line"><b>원하는 선수</b> ${escapeHtml(g.ideal)}</div>
+                  ${sd.duty ? `<div class="mgb-line own"><b>감독</b> ${escapeHtml(sd.duty)}</div>` : ''}
+                  ${sd.ideal ? `<div class="mgb-line own"><b>감독이 원하는 선수</b> ${escapeHtml(sd.ideal)}</div>` : ''}
+                </div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+        <div class="mgb-card" style="border-style:dashed">
+          <div class="mgb-text" style="font-size:11.5px; color:var(--text-3)">📘 <b style="color:var(--text-2)">기본 가이드</b>는 포메이션마다·포지션마다 미리 정리해둔 기준이에요. 여기에 ✍️ <b style="color:var(--gold-warm)">감독 메모</b>를 덧붙이면 둘 다 같이 보이고, 팀에 저장돼 오너도 함께 봅니다.</div>
+        </div>
+      </div>
+    </div>`;
+
+  document.getElementById('mgbFormation').addEventListener('change', e => { _mgrBoardFormation = e.target.value; _mgrBoardSel = 0; renderMgrBoard(); });
+  el.querySelectorAll('[data-mgb-slot]').forEach(n => n.addEventListener('click', () => { _mgrBoardSel = parseInt(n.dataset.mgbSlot, 10) || 0; renderMgrBoard(); }));
+  el.querySelectorAll('[data-mgb-editslot]').forEach(n => n.addEventListener('click', e => { e.stopPropagation(); openMgrSlotNote(key, parseInt(n.dataset.mgbEditslot, 10) || 0); }));
+  el.querySelectorAll('[data-mgb-editform]').forEach(n => n.addEventListener('click', e => { e.stopPropagation(); openMgrFormationNote(key, n.dataset.mgbEditform); }));
+}
+
+/* ---------- 감독 보드: 선수 매니징 ---------- */
+function renderMgrPlayers() {
+  const el = document.getElementById('mgrPlayersContent'); if (!el) return;
+  if (!canOpenManagerPage()) { el.innerHTML = '<div class="podium-empty">감독 전용 화면이에요</div>'; return; }
+  const q = (document.getElementById('mgrPlayerSearch')?.value || '').toLowerCase().trim();
+  const list = store.players.filter(p => !q || (p.name || '').toLowerCase().includes(q) || String(p.number || '').includes(q));
+  if (!store.players.length) { el.innerHTML = '<div class="podium-empty">「선수」 탭에서 선수를 먼저 등록해 주세요</div>'; return; }
+  if (!list.length) { el.innerHTML = '<div class="podium-empty">검색 결과가 없어요</div>'; return; }
+  const sorted = list.slice().sort((a, b) => {
+    const da = mgrPlayerView(a.id), db = mgrPlayerView(b.id);
+    const wa = (da.traits || da.usage || da.rating) ? 0 : 1, wb = (db.traits || db.usage || db.rating) ? 0 : 1;
+    if (wa !== wb) return wa - wb;                    // 감독이 적어둔 선수 먼저
+    return (a.number || 999) - (b.number || 999);
+  });
+  el.innerHTML = '<div class="mgn-list">' + sorted.map(p => {
+    const d = mgrPlayerView(p.id);
+    const roles = (p.positions || []).slice(0, 4).map(code => `<span class="role-chip ${(ROLES[code] || {}).cat || 'MF'}">${code}</span>`).join('');
+    const has = d.traits || d.usage || d.rating;
+    const who = d.updatedByName ? `${escapeHtml(d.updatedByName)}` : '';
+    return `<div class="mgn-card">
+      <div class="mgn-head">
+        <span class="mgn-num">${p.number || '?'}</span>
+        <span class="mgn-name">${escapeHtml(p.name)}</span>
+        <span class="mgn-roles">${roles}</span>
+        <button class="mgn-edit" data-mgn-edit="${p.id}">✏️ ${has ? '수정' : '적기'}</button>
+      </div>
+      ${d.rating ? `<div class="mgn-stars"><span class="sv">${d.rating}</span><span class="mgn-bar"><i style="width:${d.rating}%"></i></span><span style="font-size:10.5px; color:var(--text-3)">감독 평가</span></div>` : ''}
+      ${has ? `<div class="mgn-body">
+        ${d.traits ? `<div class="mgn-row"><span class="k">특성</span>${escapeHtml(d.traits)}</div>` : ''}
+        ${d.usage ? `<div class="mgn-row"><span class="k">활용법</span>${escapeHtml(d.usage)}</div>` : ''}
+      </div>` : '<div class="mgn-empty">아직 감독 메모가 없어요 — ✏️ 적기로 특성·평가·활용법을 남겨보세요</div>'}
+      ${who ? `<div class="mgn-meta">최근 작성: ${who}</div>` : ''}
+    </div>`;
+  }).join('') + '</div>';
+  el.querySelectorAll('[data-mgn-edit]').forEach(b => b.addEventListener('click', () => openMgrPlayerNote(b.dataset.mgnEdit)));
+}
+
+/* ---------- 감독 보드: 팀 제언 ---------- */
+function renderMgrTeamNotes() {
+  const el = document.getElementById('mgrTeamContent'); if (!el) return;
+  if (!canOpenManagerPage()) { el.innerHTML = '<div class="podium-empty">감독 전용 화면이에요</div>'; return; }
+  const notes = mgrTeamNotesView();
+  const addBtn = document.getElementById('btnAddTeamNote');
+  if (addBtn) addBtn.style.display = '';
+  if (!notes.length) {
+    el.innerHTML = '<div class="podium-empty">아직 적은 제언이 없어요. <b>+ 제언 추가</b>로 첫 의견을 남겨보세요.</div>';
+    return;
+  }
+  el.innerHTML = '<div class="scout-team-notes">' + notes.map(n => `
+    <div class="scout-tn">
+      <span class="tn-t">${escapeHtml(n.title || '제언')}</span>${escapeHtml(n.body || '')}
+      <div class="mgt-foot">
+        <span class="mgt-by">${n.createdByName ? escapeHtml(n.createdByName) : ''}${n.createdAt ? ' · ' + new Date(n.createdAt).toLocaleDateString('ko-KR') : ''}</span>
+        <button class="mgn-edit" data-mgt-edit="${n.id}">✏️ 수정</button>
+        <button class="mgn-edit danger" data-mgt-del="${n.id}">🗑️</button>
+      </div>
+    </div>`).join('') + '</div>';
+  el.querySelectorAll('[data-mgt-edit]').forEach(b => b.addEventListener('click', () => openMgrTeamNote(b.dataset.mgtEdit)));
+  el.querySelectorAll('[data-mgt-del]').forEach(b => b.addEventListener('click', () => deleteMgrTeamNote(b.dataset.mgtDel)));
+}
+function openMgrTeamNote(id) {
+  if (!canOpenManagerPage()) { toast('감독 모드를 켜야 편집할 수 있어요'); return; }
+  const n = id ? ensureMgrBoard().teamNotes.find(x => x.id === id) : null;
+  openMgrNoteModal(n ? '팀 제언 수정' : '팀 제언 추가',
+    `<div class="form-group"><label>제목</label>
+      <input type="text" id="mgrF1" value="${n ? escapeHtml(n.title || '') : ''}" placeholder="예: 왼발 자원이 부족하다" style="width:100%; padding:10px 12px; background:var(--bg-2); border:1px solid var(--border-2); border-radius:8px; color:var(--text); font-size:14px" /></div>` +
+    _ta('mgrF2', '내용', n ? n.body : '', '예: 왼쪽 풀백을 이주신 혼자 감당 중. 왼발 한 명 더 필요하고, 급하면 김해용을 왼쪽 전담으로 돌리자.', 6),
+    { kind: 'teamNote', id: id || null });
+}
+function deleteMgrTeamNote(id) {
+  if (!canOpenManagerPage()) { toast('감독 모드를 켜야 삭제할 수 있어요'); return; }
+  if (!confirm('이 제언을 삭제할까요?')) return;
+  const mb = ensureMgrBoard();
+  mb.teamNotes = mb.teamNotes.filter(n => n.id !== id);
+  saveState();
+  renderMgrTeamNotes();
+  toast('삭제했어요');
+}
+
+/* ---------- 감독 메모 편집 모달 ---------- */
+let _mgrNoteCtx = null;
+function openMgrNoteModal(title, fieldsHtml, ctx) {
+  _mgrNoteCtx = ctx;
+  document.getElementById('mgrNoteTitle').textContent = title;
+  document.getElementById('mgrNoteFields').innerHTML = fieldsHtml;
+  document.getElementById('mgrNoteModal').classList.add('show');
+}
+function closeMgrNote() { document.getElementById('mgrNoteModal').classList.remove('show'); _mgrNoteCtx = null; }
+function _ta(id, label, val, ph, rows) {
+  return `<div class="form-group"><label>${label}</label>
+    <textarea id="${id}" rows="${rows || 4}" placeholder="${ph}" style="width:100%; padding:10px 12px; background:var(--bg-2); border:1px solid var(--border-2); border-radius:8px; color:var(--text); font-size:13.5px; line-height:1.6; font-family:inherit; resize:vertical">${escapeHtml(val || '')}</textarea></div>`;
+}
+function openMgrSlotNote(key, idx) {
+  if (!canOpenManagerPage()) { toast('감독 모드를 켜야 편집할 수 있어요'); return; }
+  const t = FORMATIONS[key][idx];
+  const d = mgrSlotView(key, idx);
+  const g = posGuide(t.label, key);
+  openMgrNoteModal(`${key} · ${t.label} 포지션`,
+    _ta('mgrF1', '이 자리가 해야 할 역할', d.duty, g.duty || '예: 뒷공간 커버하면서 첫 패스는 짧게') +
+    _ta('mgrF2', '어떤 선수가 오면 좋은가', d.ideal, g.ideal || '예: 발 빠르고 대인 수비 강한 선수'),
+    { kind: 'slot', key, idx });
+}
+function openMgrFormationNote(key, which) {
+  if (!canOpenManagerPage()) { toast('감독 모드를 켜야 편집할 수 있어요'); return; }
+  const f = mgrFormationView(key);
+  const g = FORMATION_GUIDE[key] || {};
+  openMgrNoteModal(`${key} · ${which === 'pros' ? '장점' : '단점'}`,
+    _ta('mgrF1', which === 'pros' ? '이 포메이션의 장점' : '이 포메이션의 단점', which === 'pros' ? f.pros : f.cons, g[which] || '', 6),
+    { kind: 'formation', key, which });
+}
+function openMgrPlayerNote(pid) {
+  if (!canOpenManagerPage()) { toast('감독 모드를 켜야 편집할 수 있어요'); return; }
+  const p = getPlayer(pid); if (!p) return;
+  const d = mgrPlayerView(pid);
+  openMgrNoteModal(`${p.name} · 감독 메모`,
+    _ta('mgrF1', '선수 특성 (성격·스타일·장단점)', d.traits, '예: 몸싸움 안 지고 첫 5분 압박이 좋음. 급하면 패스가 길어짐', 4) +
+    _ta('mgrF2', '활용법 (어디에, 어떻게 쓸지)', d.usage, '예: 3쿼터 이후 조커. 왼쪽 윙백으로 밀어 올릴 때 제일 좋음', 3) +
+    `<div class="form-group"><label>감독이 생각하는 능력치 (0 = 미평가)</label>
+      <input type="number" id="mgrF3" min="0" max="100" value="${d.rating || 0}" style="width:100%; padding:10px 12px; background:var(--bg-2); border:1px solid var(--border-2); border-radius:8px; color:var(--text); font-size:14px" /></div>`,
+    { kind: 'player', pid });
+}
+function saveMgrNote() {
+  if (!_mgrNoteCtx) return;
+  if (!canOpenManagerPage()) { toast('감독 모드를 켜야 저장할 수 있어요'); return; }
+  const u = currentUser();
+  const v1 = (document.getElementById('mgrF1')?.value || '').trim();
+  const v2 = (document.getElementById('mgrF2')?.value || '').trim();
+  const ctx = _mgrNoteCtx;
+  if (ctx.kind === 'slot') {
+    const d = mgrSlotData(ctx.key, ctx.idx);
+    d.duty = v1; d.ideal = v2;
+  } else if (ctx.kind === 'formation') {
+    const f = mgrFormationData(ctx.key);
+    f[ctx.which] = v1;
+  } else if (ctx.kind === 'teamNote') {
+    if (!v1 && !v2) { toast('제목이나 내용을 적어주세요'); return; }
+    const mb = ensureMgrBoard();
+    const exist = ctx.id ? mb.teamNotes.find(n => n.id === ctx.id) : null;
+    if (exist) {
+      exist.title = v1; exist.body = v2;
+      exist.editedBy = u ? u.id : ''; exist.editedAt = Date.now();
+    } else {
+      mb.teamNotes.push({
+        id: uid(), title: v1, body: v2,
+        createdBy: u ? u.id : '', createdByName: u ? (u.displayName || u.username) : '',
+        createdAt: Date.now(),
+      });
+    }
+  } else if (ctx.kind === 'player') {
+    const d = mgrPlayerData(ctx.pid);
+    d.traits = v1; d.usage = v2;
+    let r = parseInt(document.getElementById('mgrF3')?.value, 10);
+    if (isNaN(r) || r < 0) r = 0; if (r > 100) r = 100;
+    d.rating = r;
+    d.updatedBy = u ? u.id : ''; d.updatedByName = u ? (u.displayName || u.username) : '';
+    d.updatedAt = Date.now();
+  }
+  saveState();
+  closeMgrNote();
+  renderManagerPageSub();
+  toast('저장했어요');
+}
+
 function canManageSquad() { return isOwner() || session.managerModeActive; } // 오너는 항상, 그 외(운영진 포함)는 감독 모드 ON일 때만
 function canManageAttendance() { return isOwner() || session.managerModeActive; } // 참석자(투표) 조절: 오너 + 감독 모드 ON
 function canManageMatches() { return isLoggedIn(); } // 경기(일정) 추가/편집은 로그인한 모든 회원 가능
@@ -3914,10 +4739,10 @@ function canEditPlayer(player) {
   return true; // everyone can open modal (may be read-only)
 }
 // Can this user edit STATS?
-// 감독/운영진 → 모든 선수. 일반 회원 → 본인과 연결된 선수 프로필만.
+// 오너/감독(감독 모드 ON) → 모든 선수. 그 외(운영진 포함) → 본인과 연결된 선수 프로필만.
 function canEditPlayerStats(player) {
   if (!isLoggedIn()) return false;
-  if (isManagerActive()) return true; // 감독/운영진: 모든 선수 편집 가능
+  if (isManagerActive()) return true; // 오너·감독: 모든 선수 편집 가능
   const u = currentUser();
   return !!(player && player.userId && player.userId === u.id); // 일반 회원: 본인 연결 선수만
 }
@@ -4089,9 +4914,9 @@ function refreshUserUI() {
 
   const managerBtn = document.getElementById('btnManagerToggle');
   if (isOwner()) {
-    // 오너는 항상 스쿼드 편집 가능 — 감독 모드 토글 불필요
+    // 오너는 감독 모드가 필요 없음 — 모든 권한·모든 페이지를 상시 보유
     managerBtn.textContent = '🔓 감독';
-    managerBtn.title = '오너는 항상 편집 권한이 있습니다';
+    managerBtn.title = '오너는 항상 모든 권한이 있습니다';
     managerBtn.style.opacity = '0.6';
   } else if (session.managerModeActive) {
     managerBtn.textContent = '🔓 감독 ON';
@@ -4099,15 +4924,22 @@ function refreshUserUI() {
     managerBtn.style.opacity = '1';
   } else {
     managerBtn.textContent = '🔒 감독';
-    managerBtn.title = isAdmin() ? '눌러서 감독 모드 켜기 (스쿼드 편집 가능)' : '감독 비밀번호로 감독 모드 켜기';
+    managerBtn.title = isAdmin() ? '눌러서 감독 모드 켜기 (스쿼드·선수 편집 가능)' : '감독 비밀번호로 감독 모드 켜기';
     managerBtn.style.opacity = '1';
   }
   // 감독 모드 활성 시 플로팅 배지 표시(오너 제외 — 오너는 상시 권한)
   document.getElementById('managerBadge').classList.toggle('show', session.managerModeActive && !isOwner());
   // Admin tab visible only to admins (owner + 운영진)
-  document.getElementById('tabAdmin').style.display = isAdmin() ? 'flex' : 'none';
-  // 접속 현황 탭은 오너 전용
-  document.getElementById('tabPresence').style.display = isOwner() ? 'flex' : 'none';
+  document.getElementById('tabAdmin').style.display = isOwner() ? 'flex' : 'none';
+  // 👑 오너 전용 페이지 버튼 — 오너 계정만 (감독/운영진은 절대 안 보임)
+  const _btnOwnerPage = document.getElementById('btnOwnerPage');
+  if (_btnOwnerPage) _btnOwnerPage.style.display = canOpenOwnerPage() ? '' : 'none';
+  // 🎯 감독 전용 페이지 버튼 — 오너는 항상, 그 외는 감독 모드 ON일 때만
+  const _btnMgrPage = document.getElementById('btnManagerPage');
+  if (_btnMgrPage) _btnMgrPage.style.display = canOpenManagerPage() ? '' : 'none';
+  // 권한이 사라지면(감독 모드 해제 등) 열려 있던 전용 페이지는 닫는다
+  if (!canOpenOwnerPage()) closeOwnerPage();
+  if (!canOpenManagerPage()) closeManagerPage();
   // 일정 추가 버튼은 로그인 회원 누구나 (canManageMatches)
   const _addMatch = document.getElementById('btnAddMatch');
   if (_addMatch) _addMatch.style.display = canManageMatches() ? '' : 'none';
@@ -4121,7 +4953,8 @@ function refreshUserUI() {
 
 /* ==================== Manager unlock ==================== */
 async function openManagerUnlock() {
-  if (isOwner()) { toast('오너는 항상 편집 권한이 있어요'); return; }
+  // 오너는 감독 모드가 필요 없음 — 편집 권한도, 감독 전용 페이지도 상시 접근
+  if (isOwner()) { toast('오너는 항상 모든 권한이 있어요 (감독 페이지도 바로 열려요)'); return; }
   // 이미 켜져 있으면 해제
   if (session.managerModeActive) {
     if (confirm('감독 모드를 해제하시겠습니까? (스쿼드 편집이 잠깁니다)')) {
@@ -4168,10 +5001,10 @@ async function confirmManagerUnlock() {
 
 /* ==================== Admin tab (member management) ==================== */
 function renderAdmin() {
-  if (!isAdmin()) {
-    // Non-admins should never reach here; bounce to squad
+  if (!isOwner()) {
+    // 오너 외에는 도달할 수 없음 — 스쿼드로 되돌림
     switchTab('squad');
-    toast('관리자 전용 탭입니다');
+    toast('오너 전용 탭입니다');
     return;
   }
   renderAdminStats();
@@ -4361,7 +5194,7 @@ function renderMgrPassStatus() {
 }
 
 async function adminSetManagerPassword() {
-  if (!isAdmin()) return;
+  if (!isOwner()) return;
   const pass = document.getElementById('adminMgrPass').value;
   if (!pass || pass.length < 4) { alert('4자 이상 입력하세요'); return; }
   authStore.managerPassHash = await sha256(pass);
@@ -4868,6 +5701,7 @@ let store = {
   traitCats: undefined, // [{ id, emoji, label, traits:[{id,name,createdBy?}], createdBy? }]  (undefined → seed defaults once)
   traitRatings: {},      // { playerId: { traitId: { userId: value 0-100 } } }
   chemistry: [],         // [{ id, a:playerId, b:playerId, score 0-100, note, createdBy, createdAt }]
+  mgrBoard: undefined,   // 감독 전용: { formations: { '4-3-3': { pros, cons, slots:{idx:{duty,ideal}} } }, players: { pid: {traits,usage,rating} } }
   currentSquadId: null,
 };
 
@@ -5201,9 +6035,9 @@ function switchTab(name) {
   currentTab = name;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + name));
-  if ((name === 'admin' && !isAdmin()) || (name === 'presence' && !isOwner())) {
-    // Guard: 관리자 탭은 운영진+, 접속 탭은 오너만
-    toast(name === 'presence' ? '오너 전용 탭입니다' : '관리자 전용 탭입니다');
+  if (name === 'admin' && !isOwner()) {
+    // Guard: 관리자(계정 관리) 탭은 오너 전용 — 오너 > 감독 > 운영진
+    toast('오너 전용 탭입니다');
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === 'squad'));
     document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-squad'));
     currentTab = 'squad';
@@ -5212,7 +6046,6 @@ function switchTab(name) {
   }
   if (name === 'players') renderPlayersTable();
   if (name === 'profile') renderProfile();
-  if (name === 'presence') renderPresence();
   if (name === 'calendar') { renderCalendar(); updateCalendarBadge(); }
   if (name === 'org') renderOrg();
   if (name === 'board') renderBoard();
@@ -9307,6 +10140,25 @@ function bindAuthEvents() {
   // Nav user
   document.getElementById('btnLogout').addEventListener('click', () => { closeNavMenu(); logout(); });
   document.getElementById('btnManagerToggle').addEventListener('click', () => { closeNavMenu(); openManagerUnlock(); });
+
+  // 👑 오너 전용 / 🎯 감독 전용 페이지 (탭이 아니라 전체화면 오버레이)
+  document.getElementById('btnOwnerPage').addEventListener('click', () => { closeNavMenu(); openOwnerPage(); });
+  document.getElementById('btnManagerPage').addEventListener('click', () => { closeNavMenu(); openManagerPage(); });
+  document.getElementById('btnCloseOwnerPage').addEventListener('click', closeOwnerPage);
+  document.getElementById('btnCloseManagerPage').addEventListener('click', closeManagerPage);
+  document.querySelectorAll('#ownerSubtabs .priv-subtab').forEach(b => b.addEventListener('click', () => switchOwnerSub(b.dataset.osub)));
+  document.querySelectorAll('#mgrSubtabs .priv-subtab').forEach(b => b.addEventListener('click', () => switchMgrSub(b.dataset.msub)));
+  document.getElementById('mgrPlayerSearch').addEventListener('input', renderMgrPlayers);
+  document.getElementById('btnAddTeamNote').addEventListener('click', () => openMgrTeamNote(null));
+  document.getElementById('btnCancelMgrNote').addEventListener('click', closeMgrNote);
+  document.getElementById('btnSaveMgrNote').addEventListener('click', saveMgrNote);
+  document.getElementById('mgrNoteModal').addEventListener('click', e => { if (e.target.id === 'mgrNoteModal') closeMgrNote(); });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (document.getElementById('mgrNoteModal').classList.contains('show')) { closeMgrNote(); return; }
+    if (document.getElementById('managerPageOverlay').classList.contains('show')) { closeManagerPage(); return; }
+    if (document.getElementById('ownerPageOverlay').classList.contains('show')) closeOwnerPage();
+  });
 
   // Manager unlock modal
   document.getElementById('btnCancelMgrUnlock').addEventListener('click', closeManagerUnlock);
