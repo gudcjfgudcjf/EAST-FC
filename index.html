@@ -3204,6 +3204,19 @@
 
   /* ---------- 가로모드(낮은 높이): 세로 공간을 아껴 쓴다 ---------- */
   @media (max-height: 500px) and (orientation: landscape) {
+    /* 폰 가로모드는 화면이 낮아 데스크톱 3단 배치가 서로 겹친다 → 모바일처럼 세로로 쌓고 스크롤 */
+    #view-squad { overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+    .squad-layout { display: flex; flex-direction: column; height: auto; min-height: 100%; }
+    .squad-layout > .sidebar, .squad-layout > .right-panel,
+    .field-wrap, .team-panel, .player-list-wrap {
+      width: 100%; max-width: 100%; min-width: 0; border-right: none; overflow: visible;
+    }
+    .field-wrap { order: 1; flex: 0 0 auto; }
+    .squad-layout > .sidebar { order: 2; }
+    .squad-layout > .right-panel { order: 3; }
+    .field-container { flex: 0 0 auto; display: block; padding: 8px; overflow: visible; }
+    .field { width: 100%; max-width: 520px; max-height: none; aspect-ratio: 3 / 4; margin: 0 auto; }
+    .player-list, .squad-list { max-height: 300px; }
     .topnav { min-height: 46px; height: 46px; }
     .tab-strip { height: 46px; }
     .tab-btn { padding: 0 12px; font-size: 12.5px; }
@@ -3294,10 +3307,135 @@
     .backend-status { display: none; }
   }
 
+  /* ============================================================
+     ☰ 왼쪽 서랍 메뉴 — 탭이 16개라 위에 다 늘어놓지 않고 여기서 고른다
+     화면 왼쪽 가장자리를 밀어도 열린다
+     ============================================================ */
+  /* 왼쪽 가장자리 감지 영역 — 여기서 시작한 가로 스와이프만 서랍으로 인정한다.
+     touch-action:none 이 없으면 브라우저가 제스처를 먼저 가져가 포인터가 취소된다. */
+  #drawerEdge {
+    position: fixed; left: 0; top: 0; bottom: 0; width: 22px; z-index: 900;
+    touch-action: none; background: transparent;
+  }
+  body.not-authed #drawerEdge, .nav-drawer.open ~ #drawerEdge { display: none; }
+  @media (hover: hover) and (pointer: fine) { #drawerEdge { display: none; } }
+  .drawer-backdrop {
+    position: fixed; inset: 0; z-index: 998;
+    touch-action: none;              /* 없으면 브라우저가 스와이프를 가로채 포인터를 취소한다 */
+    background: rgba(0,0,0,.55);
+    opacity: 0; pointer-events: none;
+    transition: opacity .22s ease;
+    backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
+  }
+  .drawer-backdrop.show { opacity: 1; pointer-events: auto; }
+  .nav-drawer {
+    position: fixed; top: 0; left: 0; bottom: 0; z-index: 999;
+    width: min(84vw, 320px);
+    display: flex; flex-direction: column;
+    background: linear-gradient(160deg, #16161a, #0c0c0e 60%);
+    border-right: 1px solid var(--border-2);
+    box-shadow: 18px 0 50px rgba(0,0,0,.7);
+    transform: translateX(-100%);
+    touch-action: pan-y;             /* 세로 스크롤은 허용, 가로 스와이프는 우리가 처리 */
+    transition: transform .26s cubic-bezier(.22,.9,.28,1);
+    padding-left: env(safe-area-inset-left, 0px);
+    overscroll-behavior: contain;
+  }
+  .nav-drawer.open { transform: translateX(0); }
+  .nav-drawer.dragging { transition: none; }
+  /* 본문 전체(상단바+화면)를 담는 셸 — 서랍이 열리면 통째로 오른쪽으로 밀린다 */
+  #appShell {
+    display: flex; flex-direction: column; height: 100%;
+    transition: transform .26s cubic-bezier(.22,.9,.28,1);
+  }
+  /* will-change 를 상시 켜두면 셸이 fixed 자식의 기준이 되어 모달 위치가 틀어진다 → 움직일 때만 */
+  #appShell.dragging, #appShell.pushed { will-change: transform; }
+  #appShell.dragging { transition: none; }
+  #appShell.pushed { transform: translateX(var(--drawer-w, 300px)); }
+  /* 밀려난 본문은 잠시 조작 불가 — 누르면 닫힌다 */
+  .drawer-backdrop { background: rgba(0,0,0,.35); }
+  .drawer-head {
+    display: flex; align-items: center; gap: 10px;
+    padding: calc(14px + env(safe-area-inset-top, 0px)) 14px 12px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .drawer-crest { width: 34px; height: 38px; flex-shrink: 0;
+    background: var(--crest) center/contain no-repeat;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,.6)); }
+  .drawer-title { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+  .drawer-title b { font-family: var(--font-brand); font-weight: 800; font-size: 16px;
+    letter-spacing: .06em; color: var(--gold); }
+  .drawer-title small { font-size: 11.5px; color: var(--text-3); white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis; }
+  .drawer-close {
+    width: 34px; height: 34px; flex-shrink: 0; border-radius: 10px;
+    background: var(--bg-3); border: 1px solid var(--border-2);
+    color: var(--text-2); font-size: 15px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .drawer-body {
+    flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: 10px 10px calc(20px + env(safe-area-inset-bottom, 0px));
+  }
+  .drawer-sec {
+    font-size: 10.5px; font-weight: 700; letter-spacing: .1em;
+    color: var(--text-4); padding: 12px 8px 6px;
+  }
+  .drawer-item {
+    display: flex; align-items: center; gap: 10px; width: 100%;
+    padding: 11px 12px; margin-bottom: 2px;
+    background: none; border: none; border-radius: 10px;
+    color: var(--text-2); font-size: 14px; font-weight: 600;
+    font-family: var(--font-body); text-align: left; cursor: pointer;
+    transition: background-color .13s ease, color .13s ease;
+  }
+  .drawer-item:active { background: var(--bg-hover); transform: scale(.985); }
+  .drawer-item.active {
+    background: linear-gradient(90deg, rgba(244,196,48,.16), rgba(244,196,48,.04));
+    color: var(--gold); box-shadow: inset 3px 0 0 var(--gold);
+  }
+  .drawer-item .di-ico { font-size: 16px; width: 22px; text-align: center; flex-shrink: 0; }
+  .drawer-item .di-badge { margin-left: auto; font-size: 13px; }
+  .drawer-item.owner { color: var(--gold-warm); }
+  .drawer-item.mgr   { color: #7dd3fc; }
+  .drawer-item.danger{ color: #fca5a5; }
+  .drawer-divider { height: 1px; background: var(--border); margin: 8px 6px; }
+  @media (hover: hover) { .drawer-item:hover { background: var(--bg-hover); color: var(--text); } }
+
+  /* 서랍 여는 버튼 */
+  .drawer-btn {
+    display: none; width: 40px; height: 40px; flex-shrink: 0;
+    background: var(--bg-3); color: var(--gold);
+    border: 1px solid var(--border-2); border-radius: 8px;
+    font-size: 17px; cursor: pointer; align-items: center; justify-content: center;
+    margin-right: 2px;
+  }
+  /* 모바일: 상단 탭바를 감추고 서랍으로 대체 */
+  @media (max-width: 820px) {
+    .drawer-btn { display: flex; }
+    .tab-strip { display: none !important; }
+    .nav-menu-btn { display: flex; }
+  }
+  @media (min-width: 821px) { .drawer-btn { display: flex; } }  /* 데스크톱도 원하면 쓸 수 있게 */
+
 </style>
 </head>
 <body class="not-authed">
 <div id="appCrest" aria-hidden="true"></div>
+<!-- ============ 왼쪽 서랍 메뉴 (탭 + 도구 한곳에) ============ -->
+<div id="drawerBackdrop" class="drawer-backdrop" aria-hidden="true"></div>
+<div id="drawerEdge" aria-hidden="true"></div>
+<aside id="navDrawer" class="nav-drawer" role="navigation" aria-label="메뉴" aria-hidden="true">
+  <div class="drawer-head">
+    <span class="drawer-crest" role="img" aria-label="EAST FC"></span>
+    <div class="drawer-title"><b>EAST FC</b><small id="drawerUser">-</small></div>
+    <button class="drawer-close" id="drawerClose" aria-label="닫기">✕</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</aside>
+
 
 <!-- ============ 배경 애니메이션 (파도 스윕 + 두근두근) ============ -->
 <div id="appFx" aria-hidden="true"></div>
@@ -3330,6 +3468,7 @@
 </div>
 
 <nav class="topnav">
+  <button class="drawer-btn" id="drawerBtn" title="메뉴" aria-label="메뉴 열기">☰</button>
   <div class="brand" title="EAST FC · East Football Manager"><span class="brand-crest" role="img" aria-label="EAST FC"></span><span class="brand-text">EFM</span></div>
   <div class="tab-strip" id="tabStrip">
     <button class="tab-btn active" data-tab="squad">📋 스쿼드</button>
@@ -4206,7 +4345,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 30;
+const APP_VERSION = 32;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -5485,6 +5624,7 @@ function refreshUserUI() {
   ['squadName','formationSelect'].forEach(id => { const el = document.getElementById(id); if (el) el.disabled = !_sqEdit; });
   ['btnNewSquad','btnSaveSquad','btnClearField','btnResetPositions','btnRoleEdit','btnAutoFill'].forEach(id => { const el = document.getElementById(id); if (el) el.style.display = _sqEdit ? '' : 'none'; });
   updateCalendarBadge();
+  if (_drawerOpen) buildDrawer();     // 권한이 바뀌면 서랍 목록도 갱신
   startPresence();
 }
 
@@ -6694,6 +6834,182 @@ function attachPinchZoom(container, target, opts) {
   return { reset };
 }
 
+/* ==================== ☰ 왼쪽 서랍 메뉴 ====================
+   탭 16개를 상단에 늘어놓는 대신, 왼쪽에서 밀거나 ☰ 를 눌러 열어서 고른다.
+   목록은 실제 탭바(#tabStrip)에서 만들어내므로 탭이 늘어도 자동 반영된다. */
+let _drawerOpen = false;
+
+function buildDrawer() {
+  const body = document.getElementById('drawerBody'); if (!body) return;
+  const u = currentUser();
+  const nameEl = document.getElementById('drawerUser');
+  if (nameEl) nameEl.textContent = u ? `${u.displayName || u.username} · ${u.role === 'owner' ? '오너' : u.role === 'admin' ? '운영진' : '회원'}` : '-';
+
+  // 1) 탭 목록 — 실제 탭바에서 생성 (숨겨진 탭은 제외)
+  const tabs = [...document.querySelectorAll('#tabStrip .tab-btn')].filter(b => b.style.display !== 'none');
+  const tabHtml = tabs.map(b => {
+    const raw = b.textContent.trim();
+    const m = raw.match(/^(\p{Emoji}️?|\S)\s*(.*)$/u);
+    const ico = m ? m[1] : '•';
+    const label = (m ? m[2] : raw).replace(/💡/g, '').trim();
+    const badge = b.querySelector('.tab-badge:not(.off)') ? '<span class="di-badge">💡</span>' : '';
+    return `<button class="drawer-item${b.classList.contains('active') ? ' active' : ''}" data-drawer-tab="${b.dataset.tab}">
+      <span class="di-ico">${ico}</span><span>${escapeHtml(label)}</span>${badge}</button>`;
+  }).join('');
+
+  // 2) 도구 — 상단바에 있는 버튼을 그대로 위임 호출
+  const tool = (id, cls) => {
+    const src = document.getElementById(id);
+    if (!src || getComputedStyle(src).display === 'none' || src.style.display === 'none') return '';
+    const raw = src.textContent.trim();
+    const m = raw.match(/^(\p{Emoji}️?|\S)\s*(.*)$/u);
+    return `<button class="drawer-item ${cls || ''}" data-drawer-act="${id}">
+      <span class="di-ico">${m ? m[1] : '•'}</span><span>${escapeHtml(m ? m[2] : raw)}</span></button>`;
+  };
+  const tools = [tool('btnOwnerPage','owner'), tool('btnManagerPage','mgr'), tool('btnManagerToggle'),
+                 tool('btnExport'), tool('btnImport')].filter(Boolean).join('');
+
+  body.innerHTML = `<div class="drawer-sec">화면</div>${tabHtml}`
+    + (tools ? `<div class="drawer-divider"></div><div class="drawer-sec">도구</div>${tools}` : '')
+    + `<div class="drawer-divider"></div>`
+    + `<button class="drawer-item danger" data-drawer-act="btnLogout"><span class="di-ico">↩</span><span>로그아웃</span></button>`;
+
+  body.querySelectorAll('[data-drawer-tab]').forEach(el => el.addEventListener('click', () => {
+    closeDrawer(); switchTab(el.dataset.drawerTab);
+  }));
+  body.querySelectorAll('[data-drawer-act]').forEach(el => el.addEventListener('click', () => {
+    const id = el.dataset.drawerAct;
+    closeDrawer();
+    setTimeout(() => { const b = document.getElementById(id); if (b) b.click(); }, 180);
+  }));
+}
+
+function openDrawer() {
+  if (!isLoggedIn()) return;
+  buildDrawer();
+  _drawerOpen = true;
+  const d = document.getElementById('navDrawer'), bd = document.getElementById('drawerBackdrop');
+  const sh = ensureAppShell();
+  document.documentElement.style.setProperty('--drawer-w', drawerWidth() + 'px');
+  clearDrawerShift();
+  d.classList.remove('dragging'); if (sh) sh.classList.remove('dragging');
+  d.classList.add('open'); if (sh) sh.classList.add('pushed');
+  bd.classList.add('show');
+  d.setAttribute('aria-hidden', 'false');
+  haptic(8);
+}
+function closeDrawer() {
+  _drawerOpen = false;
+  const d = document.getElementById('navDrawer'), bd = document.getElementById('drawerBackdrop');
+  const sh = document.getElementById('appShell');
+  if (!d) return;
+  clearDrawerShift();
+  d.classList.remove('dragging'); if (sh) { sh.classList.remove('dragging'); sh.classList.remove('pushed'); }
+  d.classList.remove('open'); bd.classList.remove('show');
+  d.setAttribute('aria-hidden', 'true');
+}
+
+function ensureAppShell() {
+  if (document.getElementById('appShell')) return document.getElementById('appShell');
+  const nav = document.querySelector('.topnav'), app = document.querySelector('.app');
+  if (!nav || !app) return null;
+  const shell = document.createElement('div');
+  shell.id = 'appShell';
+  nav.parentNode.insertBefore(shell, nav);
+  shell.appendChild(nav); shell.appendChild(app);
+  return shell;
+}
+function drawerWidth() {
+  const d = document.getElementById('navDrawer');
+  return d ? (d.getBoundingClientRect().width || 300) : 300;
+}
+function setDrawerShift(px) {          // 손가락을 따라 서랍과 본문이 함께 움직인다
+  const d = document.getElementById('navDrawer'), sh = document.getElementById('appShell');
+  const w = drawerWidth();
+  const clamped = Math.max(0, Math.min(w, px));
+  if (d) d.style.transform = `translateX(${clamped - w}px)`;
+  if (sh) sh.style.transform = `translateX(${clamped}px)`;
+  const bd = document.getElementById('drawerBackdrop');
+  if (bd) bd.style.opacity = String(clamped / w);
+}
+function clearDrawerShift() {
+  const d = document.getElementById('navDrawer'), sh = document.getElementById('appShell');
+  const bd = document.getElementById('drawerBackdrop');
+  if (d) d.style.transform = '';
+  if (sh) sh.style.transform = '';
+  if (bd) bd.style.opacity = '';
+}
+
+function initDrawer() {
+  ensureAppShell();
+  const d = document.getElementById('navDrawer');
+  const bd = document.getElementById('drawerBackdrop');
+  if (!d) return;
+  document.getElementById('drawerBtn')?.addEventListener('click', () => _drawerOpen ? closeDrawer() : openDrawer());
+  document.getElementById('drawerClose')?.addEventListener('click', closeDrawer);
+  bd.addEventListener('click', () => { if (Math.abs(dxLast) < 8) closeDrawer(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && _drawerOpen) closeDrawer(); });
+
+  // ---- 가장자리 스와이프로 열고, 서랍을 밀어서 닫기 ----
+  const EDGE = 26;          // 왼쪽 이 범위에서 시작해야 서랍 제스처로 인정
+  const W = () => d.getBoundingClientRect().width || 300;
+  let id = null, x0 = 0, y0 = 0, dx = 0, mode = null, t0 = 0, dxLast = 0;
+
+  function down(e) {
+    if (e.pointerType === 'mouse') return;                 // 손가락 전용
+    if (!isLoggedIn()) return;
+    if (document.querySelector('.modal-overlay.show, .priv-overlay.show')) return;
+    const fromEdge = e.currentTarget && e.currentTarget.id === 'drawerEdge';
+    if (!_drawerOpen && !fromEdge) return;                 // 닫혀 있을 땐 왼쪽 가장자리에서만
+    if (_drawerOpen && fromEdge) return;                   // 열려 있으면 서랍/밀려난 본문에서
+    id = e.pointerId; x0 = e.clientX; y0 = e.clientY; dx = 0; mode = null; t0 = Date.now();
+  }
+  function move(e) {
+    if (id === null || e.pointerId !== id) return;
+    const mx = e.clientX - x0, my = e.clientY - y0;
+    if (mode === null) {
+      if (Math.abs(mx) < 8 && Math.abs(my) < 8) return;
+      mode = Math.abs(mx) > Math.abs(my) * 1.2 ? 'drag' : 'cancel';   // 세로로 그으면 스크롤 양보
+      if (mode === 'drag') {
+        const sh = ensureAppShell();
+        document.documentElement.style.setProperty('--drawer-w', drawerWidth() + 'px');
+        d.classList.add('dragging'); if (sh) sh.classList.add('dragging');
+        if (!_drawerOpen) buildDrawer();
+      }
+    }
+    if (mode !== 'drag') return;
+    dx = mx;
+    const base = _drawerOpen ? W() : 0;
+    setDrawerShift(base + dx);                 // 서랍과 본문이 손가락을 함께 따라온다
+    d.classList.add('open');
+    bd.classList.add('show');
+    e.preventDefault();
+  }
+  function up(e) {
+    if (id === null || e.pointerId !== id) return;
+    id = null;
+    if (mode !== 'drag') { mode = null; return; }
+    mode = null;
+    const sh = document.getElementById('appShell');
+    d.classList.remove('dragging'); if (sh) sh.classList.remove('dragging');
+    clearDrawerShift();
+    dxLast = dx;
+    setTimeout(() => { dxLast = 0; }, 60);
+    const fast = (Date.now() - t0) < 300 && Math.abs(dx) > 40;
+    const opened = _drawerOpen ? (dx > -W() * 0.35 && !(fast && dx < 0))
+                               : (dx > W() * 0.35 || (fast && dx > 0));
+    opened ? openDrawer() : closeDrawer();
+  }
+  const edge = document.getElementById('drawerEdge');
+  [edge, d, bd].forEach(el => {
+    if (!el) return;
+    el.addEventListener('pointerdown', e => { down(e); try { el.setPointerCapture(e.pointerId); } catch (_) {} });
+    el.addEventListener('pointermove', move, { passive: false });
+    el.addEventListener('pointerup', up);
+    el.addEventListener('pointercancel', up);
+  });
+}
+
 /* ==================== Tab switching ==================== */
 function switchTab(name) {
   currentTab = name;
@@ -6724,6 +7040,7 @@ function switchTab(name) {
   if (name === 'blacklist') renderBlacklist();
   if (name === 'admin') renderAdmin();
   if (name === 'squad') { renderPlayerList(); renderField(); renderSquadList(); }
+  if (_drawerOpen) buildDrawer();
 }
 
 /* ==================== Squad tab: player list ==================== */
@@ -10422,6 +10739,7 @@ function bindEvents() {
   if (btnRefresh) btnRefresh.addEventListener('click', () => { try { location.reload(); } catch(e) { location.href = location.href; } });
 
   // Mobile hamburger menu
+  initDrawer();
   const navMenuBtn = document.getElementById('navMenuBtn');
   if (navMenuBtn) {
     navMenuBtn.addEventListener('click', e => {
