@@ -3319,26 +3319,40 @@
   }
   body.not-authed #drawerEdge, body.drawer-on #drawerEdge { display: none; }
   /* 손잡이 힌트 — 서랍이 있다는 걸 알아채도록 왼쪽 중앙에 얇은 금색 막대 */
+  #drawerEdge { width: 24px; }
+  /* 손잡이 — 스쿼드를 가리지 않도록 가장자리에 얇게, 대신 위아래로 길게 */
   #drawerEdge::after {
-    content: ''; position: absolute; left: 2px; top: 50%;
-    width: 6px; height: 68px; margin-top: -34px; border-radius: 0 6px 6px 0;
-    background: linear-gradient(180deg, rgba(244,196,48,.55), #ffd166, rgba(244,196,48,.55));
-    box-shadow: 0 0 16px rgba(244,196,48,.75), 0 0 3px rgba(0,0,0,.5);
-    animation: edgeHint 3.2s ease-in-out infinite;
+    content: ''; position: absolute; left: 0; top: 12%; bottom: 12%;
+    width: 2px; border-radius: 0 2px 2px 0;
+    background: linear-gradient(180deg,
+      rgba(244,196,48,0) 0%, rgba(244,196,48,.85) 14%,
+      #ffd166 50%, rgba(244,196,48,.85) 86%, rgba(244,196,48,0) 100%);
+    box-shadow: 0 0 10px rgba(244,196,48,.6);
+    animation: edgeHint 3.4s ease-in-out infinite;
+  }
+  /* 선 가운데 작은 화살표 그립 — 잡아당기는 곳이라는 표시 (필드는 거의 안 가림) */
+  #drawerEdge::before {
+    content: '›'; position: absolute; left: 0; top: 50%;
+    width: 7px; height: 34px; margin-top: -17px;
+    border-radius: 0 5px 5px 0; overflow: hidden;
+    background: linear-gradient(180deg, #f0bd2a, #ffd980 45%, #f0bd2a);
+    box-shadow: 0 0 10px rgba(244,196,48,.55), 1px 0 4px rgba(0,0,0,.45);
+    color: #171308; font-size: 9px; font-weight: 900; line-height: 34px;
+    text-align: center; z-index: 1;
+    animation: edgeHint 3.4s ease-in-out infinite;
   }
   @keyframes edgeHint {
-    0%, 86%, 100% { opacity: .9; transform: translateX(0); }
-    92%           { opacity: 1;  transform: translateX(4px); }
+    0%, 86%, 100% { transform: translateX(0); opacity: .95; }
+    92%           { transform: translateX(4px); opacity: 1; }
   }
   @media (prefers-reduced-motion: reduce) { #drawerEdge::after { animation: none; } }
   @media (hover: hover) and (pointer: fine) { #drawerEdge { display: none; } }
   .drawer-backdrop {
     position: fixed; inset: 0; z-index: 998;
     touch-action: none;              /* 없으면 브라우저가 스와이프를 가로채 포인터를 취소한다 */
-    background: rgba(0,0,0,.55);
+    background: transparent;
     opacity: 0; pointer-events: none;
     transition: opacity .22s ease;
-    backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
   }
   .drawer-backdrop.show { opacity: 1; pointer-events: auto; }
   .nav-drawer {
@@ -3366,7 +3380,7 @@
   #appShell.dragging { transition: none; }
   #appShell.pushed { transform: translateX(var(--drawer-w, 300px)); }
   /* 밀려난 본문은 잠시 조작 불가 — 누르면 닫힌다 */
-  .drawer-backdrop { background: rgba(0,0,0,.22); }
+  .drawer-backdrop { background: transparent; }   /* 손잡이로 이미 인지되므로 어둡게 덮지 않는다 */
   .drawer-head {
     display: flex; align-items: center; gap: 10px;
     padding: calc(14px + env(safe-area-inset-top, 0px)) 14px 12px;
@@ -4359,7 +4373,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 33;
+const APP_VERSION = 35;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -6987,6 +7001,7 @@ function initDrawer() {
       if (Math.abs(mx) < 8 && Math.abs(my) < 8) return;
       mode = Math.abs(mx) > Math.abs(my) * 1.2 ? 'drag' : 'cancel';   // 세로로 그으면 스크롤 양보
       if (mode === 'drag') {
+        try { e.currentTarget.setPointerCapture(e.pointerId); } catch (_) {}
         const sh = ensureAppShell();
         document.documentElement.style.setProperty('--drawer-w', drawerWidth() + 'px');
         d.classList.add('dragging'); if (sh) sh.classList.add('dragging');
@@ -7019,7 +7034,8 @@ function initDrawer() {
   const edge = document.getElementById('drawerEdge');
   [edge, d, bd].forEach(el => {
     if (!el) return;
-    el.addEventListener('pointerdown', e => { down(e); try { el.setPointerCapture(e.pointerId); } catch (_) {} });
+    el.addEventListener('pointerdown', down);   // 캡처는 드래그가 실제로 시작될 때만 (아래 move 참고)
+                                                // 여기서 캡처하면 클릭이 자식 버튼(✕ 등)에 닿지 못한다
     el.addEventListener('pointermove', move, { passive: false });
     el.addEventListener('pointerup', up);
     el.addEventListener('pointercancel', up);
