@@ -3317,7 +3317,20 @@
     position: fixed; left: 0; top: 0; bottom: 0; width: 22px; z-index: 900;
     touch-action: none; background: transparent;
   }
-  body.not-authed #drawerEdge, .nav-drawer.open ~ #drawerEdge { display: none; }
+  body.not-authed #drawerEdge, body.drawer-on #drawerEdge { display: none; }
+  /* 손잡이 힌트 — 서랍이 있다는 걸 알아채도록 왼쪽 중앙에 얇은 금색 막대 */
+  #drawerEdge::after {
+    content: ''; position: absolute; left: 2px; top: 50%;
+    width: 6px; height: 68px; margin-top: -34px; border-radius: 0 6px 6px 0;
+    background: linear-gradient(180deg, rgba(244,196,48,.55), #ffd166, rgba(244,196,48,.55));
+    box-shadow: 0 0 16px rgba(244,196,48,.75), 0 0 3px rgba(0,0,0,.5);
+    animation: edgeHint 3.2s ease-in-out infinite;
+  }
+  @keyframes edgeHint {
+    0%, 86%, 100% { opacity: .9; transform: translateX(0); }
+    92%           { opacity: 1;  transform: translateX(4px); }
+  }
+  @media (prefers-reduced-motion: reduce) { #drawerEdge::after { animation: none; } }
   @media (hover: hover) and (pointer: fine) { #drawerEdge { display: none; } }
   .drawer-backdrop {
     position: fixed; inset: 0; z-index: 998;
@@ -3332,9 +3345,9 @@
     position: fixed; top: 0; left: 0; bottom: 0; z-index: 999;
     width: min(84vw, 320px);
     display: flex; flex-direction: column;
-    background: linear-gradient(160deg, #16161a, #0c0c0e 60%);
-    border-right: 1px solid var(--border-2);
-    box-shadow: 18px 0 50px rgba(0,0,0,.7);
+    background: linear-gradient(165deg, #23242a, #1a1b20 55%, #17181c);
+    border-right: 1px solid rgba(244,196,48,.18);
+    box-shadow: 18px 0 50px rgba(0,0,0,.55);
     transform: translateX(-100%);
     touch-action: pan-y;             /* 세로 스크롤은 허용, 가로 스와이프는 우리가 처리 */
     transition: transform .26s cubic-bezier(.22,.9,.28,1);
@@ -3353,11 +3366,12 @@
   #appShell.dragging { transition: none; }
   #appShell.pushed { transform: translateX(var(--drawer-w, 300px)); }
   /* 밀려난 본문은 잠시 조작 불가 — 누르면 닫힌다 */
-  .drawer-backdrop { background: rgba(0,0,0,.35); }
+  .drawer-backdrop { background: rgba(0,0,0,.22); }
   .drawer-head {
     display: flex; align-items: center; gap: 10px;
     padding: calc(14px + env(safe-area-inset-top, 0px)) 14px 12px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid rgba(255,255,255,.09);
+    background: rgba(255,255,255,.03);
     flex-shrink: 0;
   }
   .drawer-crest { width: 34px; height: 38px; flex-shrink: 0;
@@ -3366,7 +3380,7 @@
   .drawer-title { display: flex; flex-direction: column; min-width: 0; flex: 1; }
   .drawer-title b { font-family: var(--font-brand); font-weight: 800; font-size: 16px;
     letter-spacing: .06em; color: var(--gold); }
-  .drawer-title small { font-size: 11.5px; color: var(--text-3); white-space: nowrap;
+  .drawer-title small { font-size: 11.5px; color: #9aa1ab; white-space: nowrap;
     overflow: hidden; text-overflow: ellipsis; }
   .drawer-close {
     width: 34px; height: 34px; flex-shrink: 0; border-radius: 10px;
@@ -3381,17 +3395,17 @@
   }
   .drawer-sec {
     font-size: 10.5px; font-weight: 700; letter-spacing: .1em;
-    color: var(--text-4); padding: 12px 8px 6px;
+    color: #8a9099; padding: 12px 8px 6px;
   }
   .drawer-item {
     display: flex; align-items: center; gap: 10px; width: 100%;
     padding: 11px 12px; margin-bottom: 2px;
     background: none; border: none; border-radius: 10px;
-    color: var(--text-2); font-size: 14px; font-weight: 600;
+    color: #cfd3da; font-size: 14px; font-weight: 600;
     font-family: var(--font-body); text-align: left; cursor: pointer;
     transition: background-color .13s ease, color .13s ease;
   }
-  .drawer-item:active { background: var(--bg-hover); transform: scale(.985); }
+  .drawer-item:active { background: rgba(255,255,255,.09); transform: scale(.985); }
   .drawer-item.active {
     background: linear-gradient(90deg, rgba(244,196,48,.16), rgba(244,196,48,.04));
     color: var(--gold); box-shadow: inset 3px 0 0 var(--gold);
@@ -3401,8 +3415,8 @@
   .drawer-item.owner { color: var(--gold-warm); }
   .drawer-item.mgr   { color: #7dd3fc; }
   .drawer-item.danger{ color: #fca5a5; }
-  .drawer-divider { height: 1px; background: var(--border); margin: 8px 6px; }
-  @media (hover: hover) { .drawer-item:hover { background: var(--bg-hover); color: var(--text); } }
+  .drawer-divider { height: 1px; background: rgba(255,255,255,.10); margin: 8px 6px; }
+  @media (hover: hover) { .drawer-item:hover { background: rgba(255,255,255,.08); color: #fff; } }
 
   /* 서랍 여는 버튼 */
   .drawer-btn {
@@ -4345,7 +4359,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 32;
+const APP_VERSION = 33;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -6895,6 +6909,7 @@ function openDrawer() {
   d.classList.remove('dragging'); if (sh) sh.classList.remove('dragging');
   d.classList.add('open'); if (sh) sh.classList.add('pushed');
   bd.classList.add('show');
+  document.body.classList.add('drawer-on');
   d.setAttribute('aria-hidden', 'false');
   haptic(8);
 }
@@ -6906,6 +6921,7 @@ function closeDrawer() {
   clearDrawerShift();
   d.classList.remove('dragging'); if (sh) { sh.classList.remove('dragging'); sh.classList.remove('pushed'); }
   d.classList.remove('open'); bd.classList.remove('show');
+  document.body.classList.remove('drawer-on');
   d.setAttribute('aria-hidden', 'true');
 }
 
