@@ -3448,6 +3448,71 @@
   }
   @media (min-width: 821px) { .drawer-btn { display: flex; } }  /* 데스크톱도 원하면 쓸 수 있게 */
 
+  /* ---------- 📋 스쿼드 전략 · 선수별 지시 ---------- */
+  .btn-squad-plan {
+    background: var(--bg-3); color: var(--gold);
+    border: 1px solid rgba(244,196,48,.4); border-radius: 8px;
+    padding: 8px 12px; font-size: 13px; font-weight: 700; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
+  }
+  .btn-squad-plan .sp-dot {
+    display: none; min-width: 17px; height: 17px; padding: 0 4px;
+    border-radius: 9px; background: var(--gold); color: #0a0a0a;
+    font-size: 10.5px; font-weight: 800; line-height: 17px; text-align: center;
+  }
+  .btn-squad-plan .sp-dot.on { display: inline-block; }
+  /* 지시가 적힌 선수 슬롯에 표시 */
+  .slot.has-note .slot-circle::after {
+    content: '📋'; position: absolute; top: -4px; left: -6px;
+    font-size: 11px; line-height: 1;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,.85));
+  }
+  .slot.has-note .slot-circle { position: relative; }
+  /* 전략 모달 안 선수 목록 */
+  .sp-sec {
+    font-size: 12px; font-weight: 700; color: var(--gold);
+    margin: 16px 0 8px; padding-top: 12px; border-top: 1px solid var(--border);
+  }
+  .sp-sec small { font-weight: 500; color: var(--text-4); margin-left: 6px; font-size: 11px; }
+  .sp-row {
+    display: flex; align-items: center; gap: 9px; width: 100%;
+    padding: 10px 11px; margin-bottom: 5px;
+    background: var(--bg-2); border: 1px solid var(--border); border-radius: 9px;
+    color: var(--text-2); font-size: 13px; font-family: inherit;
+    text-align: left; cursor: pointer;
+    transition: border-color .13s ease, background-color .13s ease;
+  }
+  .sp-row:active { background: var(--bg-hover); transform: scale(.99); }
+  .sp-row.has { border-color: rgba(244,196,48,.45); background: linear-gradient(90deg, rgba(244,196,48,.07), var(--bg-2) 60%); }
+  @media (hover: hover) { .sp-row:hover { border-color: var(--border-2); } }
+  .sp-num {
+    width: 26px; height: 26px; flex-shrink: 0; border-radius: 50%;
+    background: #000; border: 1px solid var(--gold); color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; font-family: var(--font-brand);
+  }
+  .sp-name { font-weight: 700; color: var(--text); white-space: nowrap; flex-shrink: 0; }
+  .sp-tag {
+    margin-left: 5px; font-size: 9.5px; font-weight: 700; padding: 1px 5px;
+    border-radius: 4px; background: var(--border-2); color: var(--text-2);
+  }
+  .sp-note {
+    flex: 1; min-width: 0; font-size: 11.5px; color: var(--text-3);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: right;
+  }
+  .sp-note i { color: var(--text-4); font-style: normal; }
+  .sp-arrow { color: var(--text-4); font-size: 15px; flex-shrink: 0; }
+  .sp-where {
+    font-size: 11.5px; color: var(--gold); font-weight: 700;
+    margin-bottom: 10px; padding: 6px 10px; border-radius: 7px;
+    background: rgba(244,196,48,.1); display: inline-block;
+  }
+  .sp-back {
+    margin-top: 4px; background: none; border: none; cursor: pointer;
+    color: var(--text-3); font-size: 12.5px; font-family: inherit; padding: 6px 0;
+  }
+  .sp-back:active { color: var(--gold); }
+
 </style>
 </head>
 <body class="not-authed">
@@ -3569,6 +3634,7 @@
           <div class="spacer"></div>
           <button id="btnAutoFill" class="btn-autofill">⚡ 자동 배치</button>
           <button id="btnRoleEdit" class="btn-role-edit">🎯 역할 편집</button>
+          <button id="btnSquadPlan" class="btn-squad-plan">📋 전략<span class="sp-dot" id="squadPlanDot"></span></button>
           <button id="btnResetPositions" class="btn-reset-positions">↺ 위치 초기화</button>
           <button id="btnClearField" class="danger">필드 비우기</button>
           <button id="btnSaveSquad" class="primary">💾 저장</button>
@@ -4373,7 +4439,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 35;
+const APP_VERSION = 36;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -5347,10 +5413,100 @@ function deleteMgrTeamNote(id) {
 
 /* ---------- 감독 메모 편집 모달 ---------- */
 let _mgrNoteCtx = null;
+/* ==================== 📋 스쿼드 전략 · 선수별 지시 ====================
+   스쿼드마다 감독의 전략 설명과, 이 스쿼드에 배치된 선수별 지시를 적어둔다.
+   (선수 매니징의 「선수 특성」과 다름 — 이건 이 스쿼드/이 경기에 한정된 지시) */
+function ensureSquadPlan(sq) {
+  if (!sq) return null;
+  if (typeof sq.strategy !== 'string') sq.strategy = '';
+  if (!sq.playerNotes || typeof sq.playerNotes !== 'object' || Array.isArray(sq.playerNotes)) sq.playerNotes = {};
+  return sq;
+}
+function squadPlanCount(sq) {
+  if (!sq) return 0;
+  ensureSquadPlan(sq);
+  return (sq.strategy.trim() ? 1 : 0) + Object.values(sq.playerNotes).filter(v => (v || '').trim()).length;
+}
+function updateSquadPlanDot() {
+  const dot = document.getElementById('squadPlanDot');
+  if (!dot) return;
+  const n = squadPlanCount(getCurrentSquad());
+  dot.textContent = n ? String(n) : '';
+  dot.classList.toggle('on', n > 0);
+}
+
+let _planPid = null;   // 선수별 지시 모달에서 편집 중인 선수
+
+function openSquadPlan() {
+  const sq = getCurrentSquad();
+  if (!sq) { toast('먼저 스쿼드를 선택해 주세요'); return; }
+  ensureSquadPlan(sq);
+  const editable = canManageSquad();
+  const ro = editable ? '' : ' readonly';
+
+  // 이 스쿼드에 배치된 선수 목록 (슬롯 순서대로)
+  const rows = Object.entries(sq.assignments)
+    .map(([idx, pid]) => ({ idx: +idx, p: getPlayer(pid) }))
+    .filter(x => x.p)
+    .sort((a, b) => a.idx - b.idx)
+    .map(({ idx, p }) => {
+      const slot = sq.slots[idx];
+      const tag = slot ? tagForSideRole(sideZone(slot.x), effRole(slot)) : '';
+      const note = (sq.playerNotes[p.id] || '').trim();
+      return `<button class="sp-row${note ? ' has' : ''}" data-plan-pid="${p.id}">
+        <span class="sp-num">${p.number || '-'}</span>
+        <span class="sp-name">${escapeHtml(p.name)}${tag ? `<span class="sp-tag">${tag}</span>` : ''}</span>
+        <span class="sp-note">${note ? escapeHtml(note.length > 28 ? note.slice(0, 28) + '…' : note) : '<i>지시 없음</i>'}</span>
+        <span class="sp-arrow">›</span>
+      </button>`;
+    }).join('');
+
+  openMgrNoteModal(`📋 ${sq.name} · 전략`,
+    `<div class="form-group"><label>감독의 전략 설명</label>
+      <textarea id="mgrF1" rows="6"${ro} placeholder="예: 초반 15분은 라인 내리고 버틴다. 뺏으면 왼쪽 뒷공간으로 한 번에. 코너는 짧게 연결." style="width:100%; padding:10px 12px; background:var(--bg-2); border:1px solid var(--border-2); border-radius:8px; color:var(--text); font-size:13.5px; line-height:1.6; font-family:inherit; resize:vertical">${escapeHtml(sq.strategy)}</textarea></div>
+     <div class="sp-sec">👤 선수별 지시 <small>${editable ? '이름을 누르면 개별 지시를 적을 수 있어요' : '보기 전용'}</small></div>
+     ${rows || '<div class="podium-empty">아직 이 스쿼드에 배치된 선수가 없어요</div>'}`,
+    { kind: 'squadPlan', squadId: sq.id });
+
+  document.querySelectorAll('[data-plan-pid]').forEach(b =>
+    b.addEventListener('click', () => openSquadPlayerNote(b.dataset.planPid)));
+}
+
+function openSquadPlayerNote(pid) {
+  const sq = getCurrentSquad(); if (!sq) return;
+  ensureSquadPlan(sq);
+  const p = getPlayer(pid); if (!p) return;
+  // 전략 본문이 열려 있었다면 먼저 저장
+  const t = document.getElementById('mgrF1');
+  if (t && _mgrNoteCtx && _mgrNoteCtx.kind === 'squadPlan' && canManageSquad()) {
+    sq.strategy = t.value.trim();
+  }
+  _planPid = pid;
+  const editable = canManageSquad();
+  const idx = Object.entries(sq.assignments).find(([, v]) => v === pid);
+  const slot = idx ? sq.slots[+idx[0]] : null;
+  const where = slot ? `${tagForSideRole(sideZone(slot.x), effRole(slot))} · ${(ROLES[effRole(slot)] || {}).name || ''}` : '';
+  openMgrNoteModal(`${p.name} · 이 스쿼드에서의 지시`,
+    (where ? `<div class="sp-where">${escapeHtml(where)}</div>` : '') +
+    `<div class="form-group"><label>이 선수에게 줄 지시</label>
+      <textarea id="mgrF1" rows="5"${editable ? '' : ' readonly'} placeholder="예: 상대 10번 따라다니지 말고 자리 지켜. 우리 공 잡으면 바로 앞으로 뛰어." style="width:100%; padding:10px 12px; background:var(--bg-2); border:1px solid var(--border-2); border-radius:8px; color:var(--text); font-size:13.5px; line-height:1.6; font-family:inherit; resize:vertical">${escapeHtml(sq.playerNotes[pid] || '')}</textarea></div>
+     <button class="sp-back" id="spBack">‹ 전략으로 돌아가기</button>`,
+    { kind: 'squadPlayer', squadId: sq.id, pid });
+  document.getElementById('spBack')?.addEventListener('click', () => {
+    const ta = document.getElementById('mgrF1');
+    if (ta && canManageSquad()) { sq.playerNotes[pid] = ta.value.trim(); saveState(); }
+    openSquadPlan();
+  });
+}
+
 function openMgrNoteModal(title, fieldsHtml, ctx) {
   _mgrNoteCtx = ctx;
   document.getElementById('mgrNoteTitle').textContent = title;
   document.getElementById('mgrNoteFields').innerHTML = fieldsHtml;
+  // 열람 전용(감독·오너가 아닌 회원)이면 저장 버튼을 숨긴다
+  const canWrite = (ctx && (ctx.kind === 'squadPlan' || ctx.kind === 'squadPlayer')) ? canManageSquad() : true;
+  const sv = document.getElementById('btnSaveMgrNote');
+  if (sv) sv.style.display = canWrite ? '' : 'none';
   document.getElementById('mgrNoteModal').classList.add('show');
 }
 function closeMgrNote() { document.getElementById('mgrNoteModal').classList.remove('show'); _mgrNoteCtx = null; }
@@ -5401,6 +5557,14 @@ function saveMgrNote() {
   } else if (ctx.kind === 'formation') {
     const f = mgrFormationData(ctx.key);
     f[ctx.which] = v1;
+  } else if (ctx.kind === 'squadPlan') {
+    if (!canManageSquad()) { closeMgrNote(); return; }
+    const sq = store.squads.find(x => x.id === ctx.squadId); if (!sq) { closeMgrNote(); return; }
+    ensureSquadPlan(sq); sq.strategy = v1;
+  } else if (ctx.kind === 'squadPlayer') {
+    if (!canManageSquad()) { closeMgrNote(); return; }
+    const sq = store.squads.find(x => x.id === ctx.squadId); if (!sq) { closeMgrNote(); return; }
+    ensureSquadPlan(sq); sq.playerNotes[ctx.pid] = v1;
   } else if (ctx.kind === 'teamNote') {
     if (!v1 && !v2) { toast('제목이나 내용을 적어주세요'); return; }
     const mb = ensureMgrBoard();
@@ -5426,6 +5590,11 @@ function saveMgrNote() {
   }
   saveState();
   closeMgrNote();
+  if (ctx.kind === 'squadPlan' || ctx.kind === 'squadPlayer') {
+    renderField(); updateSquadPlanDot();
+    toast('전략을 저장했어요');
+    return;
+  }
   renderManagerPageSub();
   toast('저장했어요');
 }
@@ -7071,7 +7240,7 @@ function switchTab(name) {
   if (name === 'goh') renderGoh();
   if (name === 'blacklist') renderBlacklist();
   if (name === 'admin') renderAdmin();
-  if (name === 'squad') { renderPlayerList(); renderField(); renderSquadList(); }
+  if (name === 'squad') { renderPlayerList(); renderField(); renderSquadList(); updateSquadPlanDot(); }
   if (_drawerOpen) buildDrawer();
 }
 
@@ -7238,9 +7407,12 @@ function renderField() {
     el.dataset.slotIndex = i;
     const assignedId = squad.assignments[i];
     const player = assignedId ? getPlayer(assignedId) : null;
+    const _sqPlan = ensureSquadPlan(squad);
+    const _hasNote = !!(player && _sqPlan && (_sqPlan.playerNotes[player.id] || '').trim());
     const roleName = ROLES[er]?.name || er;
     const tag = tagForSideRole(sideZone(slot.x), er);
     if (player) el.classList.add('filled');
+    if (_hasNote) el.classList.add('has-note');
     const hasPhoto = !!(player && player.photo);
     const circleStyle = hasPhoto ? ` style="background-image:url('${player.photo}'); background-size:cover; background-position:center;"` : '';
     let sub = '';
@@ -8403,6 +8575,8 @@ function openRoleEditor() {
   list.innerHTML = squad.slots.map((slot, i) => {
     const assignedId = squad.assignments[i];
     const player = assignedId ? getPlayer(assignedId) : null;
+    const _sqPlan = ensureSquadPlan(squad);
+    const _hasNote = !!(player && _sqPlan && (_sqPlan.playerNotes[player.id] || '').trim());
     // Filter roles applicable to this slot's zone label
     const applicable = LABEL_ROLES[slot.label] || Object.keys(ROLES);
     const options = applicable.map(code =>
@@ -10848,6 +11022,7 @@ function bindEvents() {
     toast('위치를 초기화했어요');
   });
   $('#btnRoleEdit').addEventListener('click', openRoleEditor);
+  $('#btnSquadPlan').addEventListener('click', openSquadPlan);   // 전략은 열람 전용 회원도 열 수 있다
   $('#btnCloseRoleEdit').addEventListener('click', closeRoleEditor);
   $('#roleEditModal').addEventListener('click', e => { if (e.target.id === 'roleEditModal') closeRoleEditor(); });
   $('#squadList').addEventListener('click', e => {
