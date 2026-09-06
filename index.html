@@ -3648,10 +3648,20 @@
   .order-pop-lg .order-pop-foot button { padding: 11px; font-size: 13.5px; }
 
   /* ---------- 📸 라인업 공유 ---------- */
-  .squad-actions { display: flex; gap: 9px; width: 100%; margin: 12px auto 0; align-items: stretch; }
+  .squad-actions { display: flex; gap: 7px; width: 100%; margin: 12px auto 0; align-items: stretch; flex-wrap: wrap; }
+  @media (max-width: 400px) {
+    .squad-actions .squad-plan-card { flex: 1 1 100%; }
+    .squad-share-btn { flex: 1 1 0; width: auto; flex-direction: row; gap: 7px; padding: 12px 8px; }
+    .squad-share-btn .ssb-t br { display: none; }
+  }
   .squad-actions .squad-plan-card { margin: 0; flex: 1; min-width: 0; }
+  .squad-share-btn.scen {
+    background: linear-gradient(160deg, rgba(244,114,182,.14), var(--bg-2) 60%);
+    border-color: rgba(244,114,182,.4); color: #f9a8d4;
+  }
+  @media (hover: hover) { .squad-share-btn.scen:hover { border-color: #f9a8d4; } }
   .squad-share-btn {
-    flex-shrink: 0; width: 86px; display: flex; flex-direction: column;
+    flex-shrink: 0; width: 78px; display: flex; flex-direction: column;
     align-items: center; justify-content: center; gap: 4px;
     background: linear-gradient(160deg, rgba(56,189,248,.14), var(--bg-2) 60%);
     border: 1px solid rgba(56,189,248,.4); border-radius: 13px;
@@ -3664,7 +3674,7 @@
   .ssb-ico { font-size: 21px; }
   @media (min-width: 821px) {
     .squad-actions { max-width: 620px; margin: 0 auto; }
-    .squad-share-btn { width: 100px; }
+    .squad-share-btn { width: 96px; }
   }
   /* 공유 박스 */
   .share-pop { max-width: min(94vw, 430px); width: min(94vw, 430px); max-height: 88vh; overflow-y: auto; overscroll-behavior: contain; padding: 18px; }
@@ -3689,13 +3699,83 @@
     color: #bfc4cc; white-space: pre-wrap; max-height: 150px; overflow-y: auto;
     margin-bottom: 12px; overscroll-behavior: contain;
   }
+  .share-notice-tog {
+    display: flex; align-items: center; gap: 8px; cursor: pointer;
+    font-size: 12.5px; font-weight: 700; color: var(--text-2);
+    padding: 9px 11px; margin-bottom: 6px; border-radius: 10px;
+    background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .share-notice-tog input { width: 17px; height: 17px; accent-color: var(--gold); flex: none; }
+  .share-notice-hint {
+    font-size: 11.5px; line-height: 1.5; color: var(--text-3);
+    margin: 0 2px 9px; }
+  .share-notice-hint:empty { display: none; }
+
+  /* ---------- 🎬 전술 시나리오 ---------- */
+  .scen-pop { max-width: 460px; }
+  .scen-cfg { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+  .scen-sel {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    font-size: 12.5px; font-weight: 700; color: var(--text-2);
+    background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+    border-radius: 10px; padding: 8px 11px;
+  }
+  .scen-sel select {
+    flex: 0 1 150px; font-family: inherit; font-size: 14px; font-weight: 700;
+    background: var(--bg-3); color: var(--text-1); border: 1px solid var(--border-2);
+    border-radius: 8px; padding: 7px 9px;
+  }
+  .scen-modes { display: flex; gap: 6px; }
+  .scen-modes button {
+    flex: 1; padding: 9px 4px; border-radius: 9px; font-size: 12.5px; font-weight: 700;
+    font-family: inherit; cursor: pointer; white-space: nowrap;
+    border: 1px solid var(--border-2); background: var(--bg-3); color: var(--text-3);
+  }
+  .scen-modes button.on { background: rgba(244,196,48,.16); border-color: rgba(244,196,48,.5); color: var(--gold-warm); }
+  .scen-modes button:active { transform: scale(.97); }
+  .scen-stage {
+    position: relative; border-radius: 12px; overflow: hidden;
+    background: #08090b; border: 1px solid rgba(255,255,255,.08); margin-bottom: 10px;
+  }
+  .scen-stage canvas, .scen-stage video {
+    display: block; width: 100%; height: auto; max-height: 44vh; object-fit: contain; background: #08090b;
+  }
+  .scen-play {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+    width: 58px; height: 58px; border-radius: 50%; cursor: pointer;
+    border: none; background: rgba(10,10,12,.72); color: var(--gold-warm);
+    font-size: 22px; line-height: 1; backdrop-filter: blur(4px);
+    box-shadow: 0 6px 20px rgba(0,0,0,.5), 0 0 0 1px rgba(244,196,48,.35) inset;
+  }
+  .scen-play:active { transform: translate(-50%,-50%) scale(.93); }
+  .scen-meta { margin-bottom: 12px; }
+  .scen-vs {
+    font-size: 13px; font-weight: 800; color: var(--text-1); margin-bottom: 8px;
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px;
+  }
+  .scen-vs b { color: var(--gold-warm); }
+  .scen-vs span { font-size: 11.5px; font-weight: 500; color: var(--text-3); }
+  .scen-tip {
+    display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; margin-bottom: 5px;
+    background: rgba(255,255,255,.035); border-left: 3px solid rgba(244,196,48,.55);
+    border-radius: 0 8px 8px 0;
+  }
+  .scen-tip b { font-size: 12.5px; font-weight: 800; color: var(--text-1); }
+  .scen-tip span { font-size: 11.5px; line-height: 1.5; color: var(--text-3); }
+  @media (max-height: 500px) and (orientation: landscape) {
+    .scen-stage canvas, .scen-stage video { max-height: 32vh; }
+    .scen-meta { max-height: 80px; overflow-y: auto; }
+  }
+
   /* 스크롤이 생겨도 버튼은 항상 보이게 아래에 고정 */
   .share-btns {
     display: flex; gap: 7px;
-    position: sticky; bottom: 0; z-index: 2;
+    position: sticky; bottom: 36px; z-index: 2;   /* 아래 sticky 닫기줄 위에 겹치지 않게 */
     padding-top: 10px; margin-top: -2px;
     background: linear-gradient(180deg, transparent, #1a1b20 22%);
   }
+  .share-pop .share-btns { padding-bottom: 4px; background: linear-gradient(180deg, transparent, #1a1b20 22%, #1a1b20); }
   .share-btns button {
     flex: 1; padding: 11px 6px; border-radius: 9px; font-size: 12.5px; font-weight: 700;
     font-family: inherit; cursor: pointer; border: 1px solid var(--border-2);
@@ -3922,6 +4002,9 @@
             <button type="button" id="btnShareLineup" class="squad-share-btn" data-newfeat="shareLineup" title="라인업 이미지 · 경기 공지">
               <span class="ssb-ico">📸</span><span class="ssb-t">라인업<br>공유</span>
             </button>
+            <button type="button" id="btnScenario" class="squad-share-btn scen" data-newfeat="scenario" title="상대 포메이션별 공격·수비 시나리오 영상">
+              <span class="ssb-ico">🎬</span><span class="ssb-t">시나리오<br>공유</span>
+            </button>
           </div>
         </div>
         <div class="player-tooltip" id="tooltip"></div>
@@ -4138,6 +4221,8 @@
       <div id="chemContent"></div>
     </div>
   </section>
+
+
 
   <!-- ============ BLACKLIST VIEW ============ -->
   <section class="view" id="view-blacklist">
@@ -4701,7 +4786,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 45;
+const APP_VERSION = 46;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -5734,6 +5819,787 @@ function renderSquadMatchBar() {
     <span class="smb-sub">${escapeHtml(fmtMatchDate(m))}${m.location ? ' · ' + escapeHtml(m.location) : ''} · 참석 ${yes}명</span>`;
 }
 
+/* ==================== 🎬 전술 시나리오 (공격/수비 시뮬레이션) ====================
+   우리 실제 배치 vs 상대 포메이션을 비교해 수적 우위/약점을 찾고,
+   그 논리대로 공·수 시나리오를 만들어 캔버스로 애니메이션 → 영상으로 공유. */
+const SCEN_W = 720, SCEN_H = 1000;   // 세로 영상 (카톡에서 잘 보이는 비율)
+
+function shapeOf(formationKey) {
+  const t = FORMATIONS[formationKey] || [];
+  let df = 0, mf = 0, fw = 0;
+  t.forEach(x => {
+    const cat = (ROLES[LABEL_TO_ROLE[x.label]] || {}).cat || 'MF';
+    if (cat === 'DF') df++; else if (cat === 'MF') mf++; else if (cat === 'FW') fw++;
+  });
+  return { df, mf, fw, str: [df, mf, fw].filter(n => n).join('-') };
+}
+function ourShape(sq) {
+  const slots = ensureSquadSlots(sq);
+  let df = 0, mf = 0, fw = 0;
+  slots.forEach(sl => {
+    const cat = (ROLES[effRole(sl)] || {}).cat || 'MF';
+    if (cat === 'DF') df++; else if (cat === 'MF') mf++; else if (cat === 'FW') fw++;
+  });
+  return { df, mf, fw, str: [df, mf, fw].filter(n => n).join('-') };
+}
+
+/* 매치업 분석 → 공격/수비 요지 */
+function analyzeMatchup(us, them) {
+  const A = [], D = [];
+  if (us.mf > them.mf) A.push({ k: 'mid', t: `중원 ${us.mf}대${them.mf} 우위`, d: '중앙에서 한 명이 남는다. 짧게 연결해 끌어낸 뒤 측면으로 전환.' });
+  else if (us.mf < them.mf) A.push({ k: 'wide', t: `중원 열세 (${us.mf}대${them.mf})`, d: '중앙 싸움은 피하고 측면과 뒷공간으로 빠르게.' });
+  if (them.df <= 3) A.push({ k: 'wing', t: `상대 백${them.df} — 측면이 비었다`, d: '윙이 넓게 벌려 1대1을 만들고 측면 뒷공간을 노린다.' });
+  else A.push({ k: 'half', t: `상대 백${them.df} — 하프스페이스 공략`, d: '풀백과 센터백 사이로 침투해 수비를 끌어낸다.' });
+  if (us.fw >= 3) A.push({ k: 'press', t: `전방 ${us.fw}명 압박`, d: '상대 수비가 볼을 잡는 순간 앞에서 끊어 짧은 역습.' });
+  if (us.df >= 5) A.push({ k: 'wb', t: `백${us.df} — 윙백이 공격수`, d: '윙백이 높이 올라가 측면을 만들고, 센터백 3명이 뒤를 지킨다.' });
+  A.push({ k: 'switch', t: '한 번에 반대편 전환', d: '한쪽으로 몰아 상대를 모은 뒤 크게 열어 반대 측면을 노린다.' });
+  A.push({ k: 'third', t: '세 번째 선수의 침투', d: '볼을 잡은 선수 말고, 그 다음 선수가 뒷공간으로 뛴다.' });
+
+  if (them.fw >= 3) D.push({ k: 'line', t: `상대 전방 ${them.fw}명`, d: '백라인 간격 좁게. 한 명이 나가면 나머지가 즉시 커버.' });
+  else D.push({ k: 'compact', t: `상대 전방 ${them.fw}명`, d: '수적 여유가 있다. 한 명은 항상 커버로 남긴다.' });
+  if (them.mf > us.mf) D.push({ k: 'block', t: `상대 중원 ${them.mf}명 우세`, d: '라인을 내려 중앙을 압축하고, 측면으로 몰아 가둔다.' });
+  else D.push({ k: 'press2', t: '중원 대등 이상', d: '중앙에서 먼저 압박해 상대 전개를 끊는다.' });
+  D.push({ k: 'trans', t: '뺏은 직후 3초', d: '가장 먼저 앞을 본다. 없으면 안전하게 옆으로.' });
+  D.push({ k: 'side', t: '측면으로 가둔다', d: '중앙을 막고 사이드라인 쪽으로 몰아 둘이서 협력 수비.' });
+  return { attack: A.slice(0, 3), defense: D.slice(0, 3) };
+}
+
+/* 상대 배치(미러) */
+function themPositions(formationKey) {
+  return (FORMATIONS[formationKey] || []).map(t => ({ x: 100 - t.x, y: 100 - t.y, label: t.label }));
+}
+function usPositions(sq) {
+  const slots = ensureSquadSlots(sq);
+  return slots.map((sl, i) => {
+    const pid = sq.assignments[i];
+    const pl = pid ? getPlayer(pid) : null;
+    return { x: sl.x, y: sl.y, label: tagForSideRole(sideZone(sl.x), effRole(sl)),
+             name: pl ? pl.name : '', num: pl ? pl.number : '', cat: (ROLES[effRole(sl)] || {}).cat || 'MF' };
+  });
+}
+
+/* 시나리오(장면) 만들기 — 볼 경로 + 강조 선수 + 자막 */
+function buildScenes(sq, oppKey, mode) {
+  const us = usPositions(sq), them = themPositions(oppKey);
+  const A = analyzeMatchup(ourShape(sq), shapeOf(oppKey));
+  const pick = (cat, side) => {
+    const list = us.filter(p => p.cat === cat);
+    if (!list.length) return us[Math.floor(us.length / 2)];
+    if (side === 'L') return list.reduce((a, b) => a.x < b.x ? a : b);
+    if (side === 'R') return list.reduce((a, b) => a.x > b.x ? a : b);
+    return list.reduce((a, b) => Math.abs(a.x - 50) < Math.abs(b.x - 50) ? a : b);
+  };
+  const gk = us.find(p => p.cat === 'GK') || { x: 50, y: 92 };
+  const cb = pick('DF'), lw = pick('FW', 'L'), rw = pick('FW', 'R'), cm = pick('MF'), st = pick('FW');
+
+  if (mode === 'attack') {
+    const w = A.attack.find(a => a.k === 'wing') ? lw : rw;
+    const a1 = A.attack.find(a => a.k === 'mid' || a.k === 'wide') || A.attack[0];
+    const a3 = A.attack.find(a => a.k === 'wing' || a.k === 'half' || a.k === 'switch') || A.attack[1] || A.attack[0];
+    return [
+      { cap: a1 ? `① ${a1.t}` : '① 빌드업 시작', sub: a1 ? a1.d : '',
+        ball: [{ x: gk.x, y: gk.y }, { x: cb.x, y: cb.y }], hi: [cb], arrows: [] },
+      { cap: '② 중앙으로 끌어낸다', sub: '상대 수비를 안쪽으로 모아 측면을 비운다.',
+        ball: [{ x: cb.x, y: cb.y }, { x: cm.x, y: cm.y }], hi: [cm], arrows: [[cm, { x: cm.x, y: cm.y - 8 }]] },
+      { cap: a3 ? `③ ${a3.t}` : '③ 측면 전환', sub: a3 ? a3.d : '',
+        ball: [{ x: cm.x, y: cm.y }, { x: w.x, y: w.y }], hi: [w], arrows: [[w, { x: w.x, y: Math.max(12, w.y - 18) }]] },
+      { cap: '④ 마무리', sub: '컷백은 페널티 마크, 크로스는 니어포스트.',
+        ball: [{ x: w.x, y: Math.max(12, w.y - 18) }, { x: 50, y: 5 }], hi: [st], arrows: [[st, { x: 50, y: 13 }]], shot: true },
+    ];
+  }
+  const thFw = them.filter(t => (ROLES[LABEL_TO_ROLE[t.label]] || {}).cat === 'FW');
+  const thTarget = thFw[0] || { x: 50, y: 30 };
+  return [
+    { cap: A.defense[0] ? `① ${A.defense[0].t}` : '① 대형 유지', sub: A.defense[0] ? A.defense[0].d : '',
+      ball: [{ x: 50, y: 12 }, { x: thTarget.x, y: thTarget.y }], hi: us.filter(p => p.cat === 'DF'), arrows: [] },
+    { cap: A.defense[1] ? `② ${A.defense[1].t}` : '② 중앙 압축', sub: A.defense[1] ? A.defense[1].d : '',
+      ball: [{ x: thTarget.x, y: thTarget.y }, { x: thTarget.x < 50 ? 22 : 78, y: 45 }],
+      hi: [cm, cb], arrows: [[cm, { x: thTarget.x < 50 ? 30 : 70, y: cm.y }]] },
+    { cap: '③ 측면으로 몰아 가둔다', sub: '터치라인을 한 명 더로 쓰고, 안쪽 패스 길을 막는다.',
+      ball: [{ x: thTarget.x < 50 ? 22 : 78, y: 45 }, { x: thTarget.x < 50 ? 16 : 84, y: 62 }],
+      hi: [cb], arrows: [[cb, { x: thTarget.x < 50 ? 24 : 76, y: 60 }]] },
+    { cap: '④ 끊고 즉시 전환', sub: '뺏으면 가장 먼저 앞을 본다.',
+      ball: [{ x: thTarget.x < 50 ? 16 : 84, y: 62 }, { x: cm.x, y: cm.y - 6 }], hi: [cm], arrows: [[cm, { x: cm.x, y: cm.y - 20 }]], steal: true },
+  ];
+}
+
+/* ---------- 이징: Robert Penner easing equations (오픈소스 표준 공식) ---------- */
+const SEZ = {
+  lin: t => t,
+  outCubic: t => 1 - Math.pow(1 - t, 3),
+  inOutCubic: t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
+  outQuint: t => 1 - Math.pow(1 - t, 5),
+  outBack: t => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); },
+};
+const sClamp = (v, a, b) => v < a ? a : v > b ? b : v;
+const s01 = v => sClamp(v, 0, 1);
+const sLerp = (a, b, t) => a + (b - a) * t;
+const sSub = (t, a, b) => s01((t - a) / (b - a));
+const SF = "'Pretendard Variable','Pretendard','Noto Sans KR',sans-serif";
+
+/* 피치 좌표 (0~100 → 캔버스) */
+const SCEN_L = { px: 26, py: 150, pw: SCEN_W - 52, ph: 700, capTop: 866 };
+const sX = x => SCEN_L.px + x / 100 * SCEN_L.pw;
+const sY = y => SCEN_L.py + y / 100 * SCEN_L.ph;
+function scenCatOf(label) { return (ROLES[LABEL_TO_ROLE[label]] || {}).cat || 'MF'; }
+
+let _scenCrestImg;
+function scenCrest() {
+  if (_scenCrestImg !== undefined) return Promise.resolve(_scenCrestImg);
+  const url = getComputedStyle(document.documentElement).getPropertyValue('--crest').trim()
+    .replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
+  if (!url) { _scenCrestImg = null; return Promise.resolve(null); }
+  return new Promise(res => {
+    const i = new Image();
+    i.onload = () => { _scenCrestImg = i; res(i); };
+    i.onerror = () => { _scenCrestImg = null; res(null); };
+    i.src = url;
+  });
+}
+
+/* ---------- 그리기 유틸 ---------- */
+function scenWrap(g, text, maxW) {
+  const words = String(text || '').split(/\s+/);
+  const lines = []; let cur = '';
+  words.forEach(w => {
+    const test = cur ? cur + ' ' + w : w;
+    if (g.measureText(test).width > maxW && cur) { lines.push(cur); cur = w; } else cur = test;
+  });
+  if (cur) lines.push(cur);
+  return lines;
+}
+function scenPill(g, x, y, text, bg, fg, font) {
+  g.font = font || `800 17px ${SF}`;
+  const w = g.measureText(text).width + 26, h = 32;
+  g.fillStyle = bg;
+  g.beginPath(); g.roundRect(x, y, w, h, 16); g.fill();
+  g.fillStyle = fg; g.textAlign = 'left'; g.textBaseline = 'middle';
+  g.fillText(text, x + 13, y + h / 2 + 1);
+  g.textBaseline = 'alphabetic';
+  return w;
+}
+function qPt(x1, y1, cx, cy, x2, y2, t) {
+  const u = 1 - t;
+  return { x: u * u * x1 + 2 * u * t * cx + t * t * x2, y: u * u * y1 + 2 * u * t * cy + t * t * y2 };
+}
+function scenCurve(x1, y1, x2, y2, bend) {
+  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+  const dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy) || 1;
+  return { cx: mx - dy / len * len * bend, cy: my + dx / len * len * bend };
+}
+function drawScenArrow(g, ax, ay, bx, by, p, color, dash) {
+  if (p <= 0.01) return;
+  const { cx, cy } = scenCurve(ax, ay, bx, by, .16);
+  g.save();
+  g.strokeStyle = color; g.lineWidth = 5; g.lineCap = 'round'; g.lineJoin = 'round';
+  if (dash) { g.setLineDash([14, 11]); g.lineDashOffset = -dash; }
+  g.beginPath();
+  const N = 26;
+  for (let i = 0; i <= N; i++) {
+    const t = i / N * p, q = qPt(ax, ay, cx, cy, bx, by, t);
+    i ? g.lineTo(q.x, q.y) : g.moveTo(q.x, q.y);
+  }
+  g.stroke();
+  g.setLineDash([]);
+  if (p > .55) {
+    const tip = qPt(ax, ay, cx, cy, bx, by, p), pre = qPt(ax, ay, cx, cy, bx, by, Math.max(0, p - .05));
+    const a = Math.atan2(tip.y - pre.y, tip.x - pre.x), s = 17;
+    g.fillStyle = color;
+    g.beginPath();
+    g.moveTo(tip.x, tip.y);
+    g.lineTo(tip.x - s * Math.cos(a - .42), tip.y - s * Math.sin(a - .42));
+    g.lineTo(tip.x - s * Math.cos(a + .42), tip.y - s * Math.sin(a + .42));
+    g.closePath(); g.fill();
+  }
+  g.restore();
+}
+function drawScenPitch(g) {
+  const { px, py, pw, ph } = SCEN_L;
+  g.save();
+  g.beginPath(); g.roundRect(px, py, pw, ph, 18); g.clip();
+  const gr = g.createLinearGradient(0, py, 0, py + ph);
+  gr.addColorStop(0, '#144025'); gr.addColorStop(.5, '#0f311d'); gr.addColorStop(1, '#0b2517');
+  g.fillStyle = gr; g.fillRect(px, py, pw, ph);
+  const bands = 9, bh = ph / bands;
+  for (let i = 0; i < bands; i += 2) { g.fillStyle = 'rgba(255,255,255,.03)'; g.fillRect(px, py + i * bh, pw, bh); }
+  const vg = g.createRadialGradient(px + pw / 2, py + ph / 2, pw * .2, px + pw / 2, py + ph / 2, pw * .82);
+  vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.45)');
+  g.fillStyle = vg; g.fillRect(px, py, pw, ph);
+
+  const inset = 16;
+  const L = px + inset, R = px + pw - inset, T = py + inset, B = py + ph - inset;
+  const W = R - L, H = B - T, CX = L + W / 2, CY = T + H / 2;
+  g.strokeStyle = 'rgba(255,255,255,.5)'; g.lineWidth = 2.4; g.lineCap = 'butt';
+  g.strokeRect(L, T, W, H);
+  g.beginPath(); g.moveTo(L, CY); g.lineTo(R, CY); g.stroke();
+  const cr = W * .15;
+  g.beginPath(); g.arc(CX, CY, cr, 0, Math.PI * 2); g.stroke();
+  g.fillStyle = 'rgba(255,255,255,.5)';
+  g.beginPath(); g.arc(CX, CY, 4, 0, Math.PI * 2); g.fill();
+  const bw = W * .58, sw = W * .27, bxh = H * .155, sxh = H * .062;
+  [[T, 1], [B, -1]].forEach(pair => {
+    const edge = pair[0], dir = pair[1];
+    g.strokeRect(L + (W - bw) / 2, dir > 0 ? edge : edge - bxh, bw, bxh);
+    g.strokeRect(L + (W - sw) / 2, dir > 0 ? edge : edge - sxh, sw, sxh);
+    const spotY = edge + dir * H * .105;
+    g.beginPath(); g.arc(CX, spotY, 3.5, 0, Math.PI * 2); g.fill();
+    g.beginPath();
+    if (dir > 0) g.arc(CX, spotY, cr * .66, .16 * Math.PI, .84 * Math.PI);
+    else g.arc(CX, spotY, cr * .66, 1.16 * Math.PI, 1.84 * Math.PI);
+    g.stroke();
+    g.save();
+    g.strokeStyle = 'rgba(255,255,255,.8)'; g.lineWidth = 5;
+    g.beginPath();
+    g.moveTo(CX - W * .1, edge); g.lineTo(CX - W * .1, edge - dir * 10);
+    g.lineTo(CX + W * .1, edge - dir * 10); g.lineTo(CX + W * .1, edge);
+    g.stroke(); g.restore();
+  });
+  [[L, T, 0], [R, T, .5], [R, B, 1], [L, B, 1.5]].forEach(c => {
+    g.beginPath(); g.arc(c[0], c[1], 13, c[2] * Math.PI, (c[2] + .5) * Math.PI); g.stroke();
+  });
+  g.restore();
+}
+function drawScenDisc(g, X, Y, ours, num, label, name, hi) {
+  const r = 21;
+  g.save();
+  g.fillStyle = 'rgba(0,0,0,.45)';
+  g.beginPath(); g.ellipse(X, Y + r * .82, r * .9, r * .33, 0, 0, Math.PI * 2); g.fill();
+  g.restore();
+  if (hi > 0) {
+    g.strokeStyle = `rgba(244,196,48,${.65 * hi})`; g.lineWidth = 3.5;
+    g.beginPath(); g.arc(X, Y, r + 7 + (1 - hi) * 10, 0, Math.PI * 2); g.stroke();
+  }
+  const gr = g.createRadialGradient(X - r * .35, Y - r * .45, r * .12, X, Y, r);
+  if (ours) { gr.addColorStop(0, '#ffe694'); gr.addColorStop(.55, '#f4c430'); gr.addColorStop(1, '#c08e00'); }
+  else { gr.addColorStop(0, '#5f6570'); gr.addColorStop(.55, '#3b4149'); gr.addColorStop(1, '#21252b'); }
+  g.beginPath(); g.arc(X, Y, r, 0, Math.PI * 2); g.fillStyle = gr; g.fill();
+  g.lineWidth = 2; g.strokeStyle = ours ? 'rgba(255,255,255,.4)' : 'rgba(255,255,255,.15)'; g.stroke();
+  const txt = ours ? ((num || num === 0) && String(num) ? String(num) : (label || '')) : (label || '');
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillStyle = ours ? '#241a00' : '#dee3e9';
+  g.font = `800 ${txt.length > 2 ? 14 : 19}px ${SF}`;
+  g.fillText(txt, X, Y + 1);
+  g.textBaseline = 'alphabetic';
+  if (ours && name) {
+    g.font = `700 15px ${SF}`;
+    g.lineWidth = 4; g.strokeStyle = 'rgba(0,0,0,.8)';
+    g.strokeText(name, X, Y + r + 19);
+    g.fillStyle = 'rgba(255,255,255,.95)';
+    g.fillText(name, X, Y + r + 19);
+  }
+  g.textAlign = 'left';
+}
+function drawScenBall(g, X, Y, trail) {
+  (trail || []).forEach((p, i) => {
+    const a = (1 - i / trail.length) * .3;
+    g.fillStyle = `rgba(255,255,255,${a})`;
+    g.beginPath(); g.arc(p.x, p.y, 8 - i * .55, 0, Math.PI * 2); g.fill();
+  });
+  g.save();
+  g.fillStyle = 'rgba(0,0,0,.45)';
+  g.beginPath(); g.ellipse(X, Y + 11, 9, 3.4, 0, 0, Math.PI * 2); g.fill();
+  const gr = g.createRadialGradient(X - 3.5, Y - 4.5, 1, X, Y, 11);
+  gr.addColorStop(0, '#ffffff'); gr.addColorStop(1, '#c2c8d0');
+  g.beginPath(); g.arc(X, Y, 10, 0, Math.PI * 2); g.fillStyle = gr; g.fill();
+  g.fillStyle = 'rgba(18,20,24,.88)';
+  g.beginPath(); g.arc(X, Y, 3.4, 0, Math.PI * 2); g.fill();
+  g.restore();
+}
+
+/* ---------- 시나리오 영상 구성 ---------- */
+function scenNearest(base, obj) {
+  let best = 0, bd = 1e9;
+  base.forEach((p, i) => { const d = (p.x - obj.x) ** 2 + (p.y - obj.y) ** 2; if (d < bd) { bd = d; best = i; } });
+  return best;
+}
+function scenAnchor(base, pt) {
+  const i = scenNearest(base, pt);
+  const p = base[i];
+  return (p && (p.x - pt.x) ** 2 + (p.y - pt.y) ** 2 < 12) ? i : -1;
+}
+const BALL_DX = 20, BALL_DY = 15;   // 선수 발 앞에 놓이도록 살짝 비켜서
+function scenPos(base, side, md, prog, ballX) {
+  return base.map(p => {
+    const cat = p.cat || 'MF';
+    const fwd = side === 'us' ? -1 : 1;
+    const attacking = (side === 'us') === (md === 'attack');
+    const dir = fwd * (attacking ? 1 : -1);
+    const push = cat === 'GK' ? 2 : cat === 'DF' ? 7 : cat === 'MF' ? 10.5 : 12.5;
+    const shift = (cat === 'GK' ? .05 : .17) * (.45 + .55 * prog);
+    return {
+      x: sClamp(p.x + (ballX - 50) * shift, 5, 95),
+      y: sClamp(p.y + dir * push * prog, 5, 95),
+      cat, label: p.label, name: p.name, num: p.num,
+    };
+  });
+}
+function buildScenMovie(sq, oppKey, mode) {
+  const usBase = usPositions(sq);
+  const themBase = themPositions(oppKey).map(t => ({ x: t.x, y: t.y, label: t.label, cat: scenCatOf(t.label) }));
+  const info = lineupMatchInfo(sq);
+  const usSh = ourShape(sq), thSh = shapeOf(oppKey);
+  const anal = analyzeMatchup(usSh, thSh);
+  const mds = mode === 'both' ? ['attack', 'defense'] : [mode];
+  const segs = [];
+  mds.forEach((md, mi) => {
+    const scenes = buildScenes(sq, oppKey, md);
+    scenes.forEach(sc => {
+      sc._hi = (sc.hi || []).map(h => scenNearest(usBase, h));
+      sc._arr = (sc.arrows || []).map(a => ({
+        i: scenAnchor(usBase, a[0]),
+        a: { x: a[0].x, y: a[0].y }, b: { x: a[1].x, y: a[1].y },
+        dx: a[1].x - a[0].x, dy: a[1].y - a[0].y,
+      }));
+      // 볼의 출발/도착이 우리 선수라면 그 선수(움직인 위치)의 발 앞에 붙인다
+      sc._from = scenAnchor(usBase, sc.ball[0]);
+      sc._to = scenAnchor(usBase, sc.ball[1]);
+    });
+    segs.push({ kind: 'title', dur: mi ? 1.5 : 2.0, md });
+    scenes.forEach((sc, i) => segs.push({ kind: 'scene', dur: 2.6, md, sc, i, n: scenes.length }));
+    segs.push({ kind: 'end', dur: 2.6, md, tips: md === 'attack' ? anal.attack : anal.defense });
+  });
+  let t = 0;
+  segs.forEach(s => { s.t0 = t; t += s.dur; });
+  return {
+    segs, dur: t, usBase, themBase, info, mode, oppKey, sq, anal,
+    ourStr: usSh.str || sq.formation, oppStr: thSh.str || oppKey,
+    oppName: (info && info.m && info.m.opponent) || '상대팀',
+    quarter: info ? info.quarter : '',
+  };
+}
+function scenBallEnds(sc, usA, usB) {
+  const a = sc._from >= 0 && usA[sc._from]
+    ? { x: sX(usA[sc._from].x) + BALL_DX, y: sY(usA[sc._from].y) + BALL_DY }
+    : { x: sX(sc.ball[0].x), y: sY(sc.ball[0].y) };
+  const b = sc._to >= 0 && usB[sc._to]
+    ? { x: sX(usB[sc._to].x) + BALL_DX, y: sY(usB[sc._to].y) + BALL_DY }
+    : { x: sX(sc.ball[1].x), y: sY(sc.ball[1].y) };
+  return [a, b];
+}
+function scenBallAt(sc, tt, ends) {
+  const p = SEZ.outQuint(sSub(tt, .18, .74));
+  const c = scenCurve(ends[0].x, ends[0].y, ends[1].x, ends[1].y, sc.shot ? .05 : .14);
+  return qPt(ends[0].x, ends[0].y, c.cx, c.cy, ends[1].x, ends[1].y, p);
+}
+function drawScenHeader(g, M, md) {
+  g.fillStyle = '#0b0c0f'; g.fillRect(0, 0, SCEN_W, SCEN_L.py - 8);
+  const gl = g.createLinearGradient(0, 0, SCEN_W, 0);
+  gl.addColorStop(0, 'rgba(244,196,48,.10)'); gl.addColorStop(1, 'rgba(244,196,48,0)');
+  g.fillStyle = gl; g.fillRect(0, 0, SCEN_W, SCEN_L.py - 8);
+  if (_scenCrestImg) {
+    const h = 46, w = _scenCrestImg.width / _scenCrestImg.height * h;
+    g.drawImage(_scenCrestImg, 24, 18, w, h);
+  }
+  g.textAlign = 'left'; g.fillStyle = '#f4c430'; g.font = `800 25px ${SF}`;
+  g.fillText('EAST FC', 80, 42);
+  g.fillStyle = '#ffffff'; g.font = `900 31px ${SF}`;
+  g.fillText(M.ourStr, 80, 80);
+  g.textAlign = 'right'; g.fillStyle = '#cdd2d8'; g.font = `700 23px ${SF}`;
+  g.fillText(M.oppName.length > 9 ? M.oppName.slice(0, 9) + '…' : M.oppName, SCEN_W - 24, 42);
+  g.fillStyle = '#98a0aa'; g.font = `900 31px ${SF}`;
+  g.fillText(M.oppStr, SCEN_W - 24, 80);
+  g.textAlign = 'center'; g.fillStyle = '#5f6672'; g.font = `800 18px ${SF}`;
+  g.fillText('VS', SCEN_W / 2, 66);
+  g.textAlign = 'left';
+  const w1 = scenPill(g, 24, 96, md === 'attack' ? '⚔️ 공격 시나리오' : '🛡️ 수비 시나리오',
+    md === 'attack' ? 'rgba(244,196,48,.18)' : 'rgba(96,165,250,.18)',
+    md === 'attack' ? '#ffd166' : '#93c5fd');
+  if (M.quarter) scenPill(g, 24 + w1 + 9, 96, M.quarter, 'rgba(255,255,255,.09)', '#dfe3e8');
+}
+function drawScenCaption(g, cap, sub, a) {
+  const x = 26, y = SCEN_L.capTop, w = SCEN_W - 52, h = 108;
+  g.save(); g.globalAlpha = a;
+  g.fillStyle = 'rgba(18,19,23,.94)';
+  g.beginPath(); g.roundRect(x, y, w, h, 16); g.fill();
+  g.strokeStyle = 'rgba(244,196,48,.28)'; g.lineWidth = 1.5; g.stroke();
+  g.fillStyle = '#f4c430';
+  g.beginPath(); g.roundRect(x, y + 14, 5, h - 28, 3); g.fill();
+  g.font = `800 29px ${SF}`; g.fillStyle = '#ffd166'; g.textAlign = 'left';
+  g.fillText(cap || '', x + 22, y + 44);
+  g.font = `500 19px ${SF}`; g.fillStyle = '#c2c8d0';
+  scenWrap(g, sub || '', w - 46).slice(0, 2).forEach((ln, i) => g.fillText(ln, x + 22, y + 74 + i * 26));
+  g.restore();
+}
+function drawScenProgress(g, p) {
+  g.fillStyle = 'rgba(255,255,255,.10)';
+  g.fillRect(26, SCEN_H - 12, SCEN_W - 52, 4);
+  g.fillStyle = '#f4c430';
+  g.fillRect(26, SCEN_H - 12, (SCEN_W - 52) * s01(p), 4);
+}
+function drawScenTitle(g, M, seg, tt) {
+  const bg = g.createLinearGradient(0, 0, SCEN_W, SCEN_H);
+  bg.addColorStop(0, '#14151a'); bg.addColorStop(.55, '#0a0b0d'); bg.addColorStop(1, '#000');
+  g.fillStyle = bg; g.fillRect(0, 0, SCEN_W, SCEN_H);
+  const rg = g.createRadialGradient(SCEN_W / 2, 400, 40, SCEN_W / 2, 400, 460);
+  rg.addColorStop(0, 'rgba(244,196,48,.14)'); rg.addColorStop(1, 'rgba(244,196,48,0)');
+  g.fillStyle = rg; g.fillRect(0, 0, SCEN_W, SCEN_H);
+  const inA = SEZ.outCubic(sSub(tt, 0, .35)), outA = 1 - sSub(tt, .86, 1);
+  g.save(); g.globalAlpha = inA * outA;
+  const rise = (1 - SEZ.outBack(sSub(tt, 0, .5))) * 26;
+  if (_scenCrestImg) {
+    const h = 150, w = _scenCrestImg.width / _scenCrestImg.height * h;
+    g.drawImage(_scenCrestImg, SCEN_W / 2 - w / 2, 232 - rise, w, h);
+  }
+  g.textAlign = 'center';
+  g.fillStyle = '#f4c430'; g.font = `900 42px ${SF}`;
+  g.fillText('EAST FC', SCEN_W / 2, 452 - rise);
+  g.fillStyle = '#9aa1ab'; g.font = `600 24px ${SF}`;
+  const line = `vs ${M.oppName}${M.quarter ? ' · ' + M.quarter : ''}`;
+  g.fillText(line, SCEN_W / 2, 492 - rise);
+  const a2 = SEZ.outCubic(sSub(tt, .22, .6));
+  g.save(); g.globalAlpha = inA * outA * a2;
+  g.fillStyle = '#ffffff'; g.font = `900 56px ${SF}`;
+  g.fillText(`${M.ourStr}   vs   ${M.oppStr}`, SCEN_W / 2, 606);
+  g.restore();
+  const a3 = SEZ.outCubic(sSub(tt, .38, .75));
+  g.save(); g.globalAlpha = inA * outA * a3;
+  g.font = `800 30px ${SF}`;
+  const label = seg.md === 'attack' ? '⚔️  공격 시나리오' : '🛡️  수비 시나리오';
+  const tw = g.measureText(label).width;
+  g.fillStyle = seg.md === 'attack' ? 'rgba(244,196,48,.16)' : 'rgba(96,165,250,.16)';
+  g.beginPath(); g.roundRect(SCEN_W / 2 - tw / 2 - 26, 672, tw + 52, 58, 29); g.fill();
+  g.fillStyle = seg.md === 'attack' ? '#ffd166' : '#93c5fd';
+  g.textBaseline = 'middle'; g.fillText(label, SCEN_W / 2, 702); g.textBaseline = 'alphabetic';
+  g.restore();
+  g.restore();
+  g.textAlign = 'left';
+}
+function drawScenEnd(g, M, seg, tt) {
+  const scenes = M.segs.filter(s => s.kind === 'scene' && s.md === seg.md);
+  const last = scenes[scenes.length - 1];
+  drawScenHeader(g, M, seg.md);
+  drawScenPitch(g);
+  const us = scenPos(M.usBase, 'us', seg.md, 1, last ? last.sc.ball[1].x : 50);
+  const th = scenPos(M.themBase, 'them', seg.md, 1, last ? last.sc.ball[1].x : 50);
+  th.forEach(p => drawScenDisc(g, sX(p.x), sY(p.y), false, '', p.label, '', 0));
+  us.forEach(p => drawScenDisc(g, sX(p.x), sY(p.y), true, p.num, p.label, p.name, 0));
+  g.fillStyle = `rgba(6,7,9,${.93 * SEZ.outCubic(sSub(tt, 0, .25))})`;
+  g.fillRect(0, 0, SCEN_W, SCEN_H);
+  const x = 44, w = SCEN_W - 88;
+  g.textAlign = 'left';
+  g.globalAlpha = SEZ.outCubic(sSub(tt, .08, .32));
+  g.fillStyle = seg.md === 'attack' ? '#ffd166' : '#93c5fd';
+  g.font = `900 38px ${SF}`;
+  const tips = (seg.tips || []).slice(0, 3);
+  const blockH = tips.length * 132 - 20;
+  const top = Math.max(300, (SCEN_H - blockH) / 2 + 24);
+  g.fillText(seg.md === 'attack' ? '⚔️ 공격 포인트' : '🛡️ 수비 포인트', x, top - 52);
+  g.globalAlpha = 1;
+  tips.forEach((tp, i) => {
+    const a = SEZ.outCubic(sSub(tt, .18 + i * .13, .46 + i * .13));
+    g.save(); g.globalAlpha = a;
+    const y = top + i * 132;
+    g.fillStyle = 'rgba(255,255,255,.05)';
+    g.beginPath(); g.roundRect(x, y, w, 112, 14); g.fill();
+    g.fillStyle = seg.md === 'attack' ? '#f4c430' : '#60a5fa';
+    g.beginPath(); g.roundRect(x, y + 14, 5, 84, 3); g.fill();
+    g.fillStyle = '#ffffff'; g.font = `800 26px ${SF}`;
+    g.fillText(tp.t, x + 22, y + 44);
+    g.fillStyle = '#b9bfc7'; g.font = `500 19px ${SF}`;
+    scenWrap(g, tp.d, w - 46).slice(0, 2).forEach((ln, k) => g.fillText(ln, x + 22, y + 74 + k * 25));
+    g.restore();
+  });
+  const aE = SEZ.outCubic(sSub(tt, .6, .85));
+  g.save(); g.globalAlpha = aE; g.textAlign = 'center';
+  g.fillStyle = '#6b7280'; g.font = `700 20px ${SF}`;
+  g.fillText('EAST FOOTBALL MANAGER', SCEN_W / 2, SCEN_H - 62);
+  g.restore(); g.textAlign = 'left';
+}
+function drawScenFrame(g, M, t) {
+  t = sClamp(t, 0, M.dur - .001);
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  g.fillStyle = '#08090b'; g.fillRect(0, 0, SCEN_W, SCEN_H);
+  let seg = M.segs[0];
+  for (const s of M.segs) if (t >= s.t0) seg = s;
+  const tt = s01((t - seg.t0) / seg.dur);
+  if (seg.kind === 'title') { drawScenTitle(g, M, seg, tt); drawScenProgress(g, t / M.dur); return; }
+  if (seg.kind === 'end') { drawScenEnd(g, M, seg, tt); drawScenProgress(g, t / M.dur); return; }
+
+  const sc = seg.sc, n = seg.n, i = seg.i;
+  const pA = i / n, pB = (i + 1) / n;
+  const mv = SEZ.inOutCubic(sSub(tt, .05, .82));
+  const usA = scenPos(M.usBase, 'us', seg.md, pA, sc.ball[0].x);
+  const usB = scenPos(M.usBase, 'us', seg.md, pB, sc.ball[1].x);
+  const thA = scenPos(M.themBase, 'them', seg.md, pA, sc.ball[0].x);
+  const thB = scenPos(M.themBase, 'them', seg.md, pB, sc.ball[1].x);
+  const mix = (a, b) => a.map((p, k) => ({ ...p, x: sLerp(p.x, b[k].x, mv), y: sLerp(p.y, b[k].y, mv) }));
+  const us = mix(usA, usB), th = mix(thA, thB);
+
+  drawScenHeader(g, M, seg.md);
+  drawScenPitch(g);
+
+  g.save();
+  g.beginPath(); g.roundRect(SCEN_L.px, SCEN_L.py, SCEN_L.pw, SCEN_L.ph, 18); g.clip();
+
+  // 패스 경로 (볼이 지나온 길)
+  const ends = scenBallEnds(sc, usA, usB);
+  const bp = SEZ.outQuint(sSub(tt, .18, .74));
+  if (bp > 0) {
+    const x1 = ends[0].x, y1 = ends[0].y, x2 = ends[1].x, y2 = ends[1].y;
+    const c = scenCurve(x1, y1, x2, y2, sc.shot ? .05 : .14);
+    g.save();
+    g.strokeStyle = sc.shot ? 'rgba(255,255,255,.75)' : 'rgba(244,196,48,.6)';
+    g.lineWidth = sc.shot ? 5 : 3.5; g.setLineDash([11, 9]); g.lineDashOffset = -t * 34; g.lineCap = 'round';
+    g.beginPath();
+    for (let k = 0; k <= 24; k++) {
+      const q = qPt(x1, y1, c.cx, c.cy, x2, y2, k / 24 * bp);
+      k ? g.lineTo(q.x, q.y) : g.moveTo(q.x, q.y);
+    }
+    g.stroke(); g.restore();
+  }
+  // 움직임 화살표
+  const ap = SEZ.outCubic(sSub(tt, .34, .88));
+  (sc._arr || []).forEach(a => {
+    const src = a.i >= 0 && usB[a.i] ? usB[a.i] : a.a;
+    const dst = a.i >= 0 && usB[a.i] ? { x: sClamp(src.x + a.dx, 4, 96), y: sClamp(src.y + a.dy, 4, 96) } : a.b;
+    drawScenArrow(g, sX(src.x), sY(src.y), sX(dst.x), sY(dst.y), ap,
+      seg.md === 'attack' ? 'rgba(255,209,102,.9)' : 'rgba(147,197,253,.9)', t * 26);
+  });
+
+  // 가로채기 / 슛 이펙트
+  if (sc.steal) {
+    const s = sSub(tt, .1, .38);
+    if (s > 0 && s < 1) {
+      g.strokeStyle = `rgba(239,68,68,${(1 - s) * .9})`; g.lineWidth = 5;
+      g.beginPath(); g.arc(ends[0].x, ends[0].y, 14 + s * 40, 0, Math.PI * 2); g.stroke();
+    }
+  }
+  if (sc.shot) {
+    const s = sSub(tt, .68, 1);
+    if (s > 0) {
+      g.strokeStyle = `rgba(255,255,255,${(1 - s) * .95})`; g.lineWidth = 6;
+      g.beginPath(); g.arc(ends[1].x, ends[1].y, 12 + s * 62, 0, Math.PI * 2); g.stroke();
+    }
+  }
+
+  th.forEach(p => drawScenDisc(g, sX(p.x), sY(p.y), false, '', p.label, '', 0));
+  us.forEach((p, k) => {
+    const isHi = (sc._hi || []).indexOf(k) >= 0;
+    drawScenDisc(g, sX(p.x), sY(p.y), true, p.num, p.label, p.name, isHi ? SEZ.outCubic(sSub(tt, .05, .45)) : 0);
+  });
+
+  const b = scenBallAt(sc, tt, ends);
+  const trail = [];
+  for (let k = 1; k <= 7; k++) trail.push(scenBallAt(sc, Math.max(0, tt - k * .022), ends));
+  drawScenBall(g, b.x, b.y, trail);
+  g.restore();
+
+  if (sc.shot) {
+    const s = sSub(tt, .68, 1);
+    if (s > 0) {
+      g.save(); g.globalAlpha = (1 - s) * .95;
+      g.textAlign = 'center'; g.font = `900 ${44 + s * 18}px ${SF}`;
+      g.lineWidth = 8; g.strokeStyle = 'rgba(0,0,0,.6)';
+      const ty = sClamp(ends[1].y + 96 + s * 18, SCEN_L.py + 60, SCEN_L.capTop - 30);
+      g.strokeText('SHOOT!', ends[1].x, ty);
+      g.fillStyle = '#ffffff'; g.fillText('SHOOT!', ends[1].x, ty);
+      g.restore(); g.textAlign = 'left';
+    }
+  }
+
+  drawScenCaption(g, sc.cap, sc.sub, SEZ.outCubic(sSub(tt, 0, .16)) * (1 - sSub(tt, .93, 1)));
+  drawScenProgress(g, t / M.dur);
+}
+
+/* ---------- 재생 / 녹화 ---------- */
+let _scenRAF = 0;
+function scenStopPlay() { if (_scenRAF) cancelAnimationFrame(_scenRAF); _scenRAF = 0; }
+function scenPlay(cv, M, onTick) {
+  scenStopPlay();
+  const g = cv.getContext('2d');
+  const t0 = performance.now();
+  return new Promise(res => {
+    const step = () => {
+      const t = (performance.now() - t0) / 1000;
+      drawScenFrame(g, M, t);
+      if (onTick) onTick(t / M.dur);
+      if (t >= M.dur) { _scenRAF = 0; res(); return; }
+      _scenRAF = requestAnimationFrame(step);
+    };
+    _scenRAF = requestAnimationFrame(step);
+  });
+}
+function scenMime() {
+  if (!window.MediaRecorder) return null;
+  const list = [
+    'video/mp4;codecs=avc1.42E01E', 'video/mp4;codecs=h264', 'video/mp4',
+    'video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm',
+  ];
+  return list.find(t => { try { return MediaRecorder.isTypeSupported(t); } catch (e) { return false; } }) || null;
+}
+async function scenRecord(cv, M, onProg) {
+  const mime = scenMime();
+  if (!mime || !cv.captureStream) return null;
+  const stream = cv.captureStream(30);
+  const chunks = [];
+  let rec;
+  const bps = M.dur > 20 ? 3200000 : 4800000;   // 카톡 업로드에 부담 없는 용량
+  try { rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: bps }); }
+  catch (e) { try { rec = new MediaRecorder(stream); } catch (e2) { return null; } }
+  rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+  const stopped = new Promise(res => { rec.onstop = res; });
+  rec.start();
+  await scenPlay(cv, M, onProg);
+  await new Promise(r => setTimeout(r, 300));
+  try { rec.stop(); } catch (e) {}
+  await stopped;
+  try { stream.getTracks().forEach(tr => tr.stop()); } catch (e) {}
+  if (!chunks.length) return null;
+  const type = (rec.mimeType || mime).split(';')[0];
+  return { blob: new Blob(chunks, { type }), ext: type.indexOf('mp4') >= 0 ? 'mp4' : 'webm', type };
+}
+
+/* ---------- 시나리오 팝업 ---------- */
+async function openScenarioPop() {
+  const sq = getCurrentSquad();
+  if (!sq) { toast('먼저 스쿼드를 선택해 주세요'); return; }
+  closeOrderPop();
+  await scenCrest();
+
+  const info = lineupMatchInfo(sq);
+  const m = info ? info.m : null;
+  const keys = Object.keys(FORMATIONS);
+  let oppKey = (m && FORMATIONS[m.oppFormation] && m.oppFormation) || (FORMATIONS[sq.oppFormation] && sq.oppFormation) || '4-4-2';
+  if (!FORMATIONS[oppKey]) oppKey = keys[0];
+  let mode = 'attack', movie = null, made = null, busy = false;
+
+  const bd = document.createElement('div');
+  bd.id = 'orderPopBd'; bd.className = 'order-pop-backdrop';
+  bd.addEventListener('click', closeOrderPop);
+  document.body.appendChild(bd);
+
+  const pop = document.createElement('div');
+  pop.id = 'orderPop'; pop.className = 'order-pop share-pop scen-pop';
+  pop.innerHTML = `<div class="op-label">🎬 전술 시나리오</div>
+    <div class="scen-cfg">
+      <label class="scen-sel">상대 포메이션
+        <select id="scenOpp">${keys.map(k => `<option value="${escapeHtml(k)}"${k === oppKey ? ' selected' : ''}>${escapeHtml(k)}</option>`).join('')}</select>
+      </label>
+      <div class="scen-modes" id="scenModes">
+        <button type="button" data-m="attack" class="on">⚔️ 공격</button>
+        <button type="button" data-m="defense">🛡️ 수비</button>
+        <button type="button" data-m="both">🎞️ 둘 다</button>
+      </div>
+    </div>
+    <div class="scen-stage" id="scenStage">
+      <canvas id="scenCv" width="${SCEN_W}" height="${SCEN_H}"></canvas>
+      <button type="button" class="scen-play" id="scenPlayBtn">▶</button>
+    </div>
+    <div class="scen-meta" id="scenMeta"></div>
+    <div class="share-btns">
+      <button class="edit" id="scenMake">🎬 영상 만들기</button>
+      <button id="scenPreview">▶ 미리보기</button>
+    </div>
+    <div class="order-pop-foot"><button data-op-close>닫기</button></div>`;
+  document.body.appendChild(pop);
+  pop.style.left = '50%'; pop.style.top = '50%'; pop.style.transform = 'translate(-50%, -50%)';
+  pop.querySelector('[data-op-close]').addEventListener('click', closeOrderPop);
+
+  const cv = pop.querySelector('#scenCv');
+  const ctx = cv.getContext('2d');
+  const stage = pop.querySelector('#scenStage');
+  const meta = pop.querySelector('#scenMeta');
+  const playBtn = pop.querySelector('#scenPlayBtn');
+  const makeBtn = pop.querySelector('#scenMake');
+  const prevBtn = pop.querySelector('#scenPreview');
+
+  function rebuild() {
+    scenStopPlay();
+    movie = buildScenMovie(sq, oppKey, mode);
+    const first = movie.segs.find(s => s.kind === 'scene');
+    drawScenFrame(ctx, movie, first ? first.t0 + first.dur * .55 : 0);
+    const tips = mode === 'defense' ? movie.anal.defense : movie.anal.attack;
+    meta.innerHTML = `<div class="scen-vs"><b>${escapeHtml(movie.ourStr)}</b> vs <b>${escapeHtml(movie.oppStr)}</b>
+        <span>${escapeHtml(movie.oppName)}${movie.quarter ? ' · ' + escapeHtml(movie.quarter) : ''} · 약 ${Math.round(movie.dur)}초</span></div>
+      ${tips.map(t => `<div class="scen-tip"><b>${escapeHtml(t.t)}</b><span>${escapeHtml(t.d)}</span></div>`).join('')}`;
+    made = null;
+    resetOut();
+  }
+  function resetOut() {
+    stage.querySelectorAll('video').forEach(v => v.remove());
+    cv.style.display = '';
+    playBtn.style.display = '';
+    makeBtn.textContent = '🎬 영상 만들기';
+    makeBtn.disabled = false;
+    prevBtn.textContent = '▶ 미리보기';
+    prevBtn.onclick = doPreview;
+  }
+  async function doPreview() {
+    if (busy) return;
+    busy = true; playBtn.style.display = 'none';
+    prevBtn.textContent = '재생 중…';
+    await scenPlay(cv, movie);
+    prevBtn.textContent = '▶ 미리보기';
+    playBtn.style.display = '';
+    busy = false;
+  }
+  playBtn.addEventListener('click', doPreview);
+  prevBtn.onclick = doPreview;
+
+  pop.querySelector('#scenOpp').addEventListener('change', e => {
+    oppKey = e.target.value;
+    if (canManageSquad && canManageSquad()) {
+      if (m) { m.oppFormation = oppKey; } else { sq.oppFormation = oppKey; }
+      try { saveState(); } catch (err) {}
+    } else { sq.oppFormation = oppKey; }
+    rebuild();
+  });
+  pop.querySelector('#scenModes').addEventListener('click', e => {
+    const b = e.target.closest('button[data-m]'); if (!b || busy) return;
+    mode = b.dataset.m;
+    pop.querySelectorAll('#scenModes button').forEach(x => x.classList.toggle('on', x === b));
+    rebuild();
+  });
+
+  makeBtn.addEventListener('click', async () => {
+    if (busy) return;
+    if (made) { shareMade(); return; }
+    busy = true; playBtn.style.display = 'none';
+    makeBtn.disabled = true;
+    const out = await scenRecord(cv, movie, p => { makeBtn.textContent = `만드는 중 ${Math.round(p * 100)}%`; });
+    busy = false; makeBtn.disabled = false;
+    if (!out) {
+      makeBtn.textContent = '🎬 영상 만들기';
+      playBtn.style.display = '';
+      toast('이 브라우저는 영상 저장을 지원하지 않아요 · 미리보기로 봐주세요');
+      return;
+    }
+    made = out;
+    const url = URL.createObjectURL(out.blob);
+    cv.style.display = 'none';
+    const v = document.createElement('video');
+    v.src = url; v.controls = true; v.autoplay = true; v.loop = true; v.playsInline = true;
+    v.setAttribute('playsinline', ''); v.muted = true;
+    stage.appendChild(v);
+    makeBtn.textContent = '📤 영상 공유';
+    prevBtn.textContent = '💾 저장';
+    prevBtn.onclick = () => {
+      const a = document.createElement('a');
+      a.href = url; a.download = fileName();
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      toast('영상을 저장했어요');
+    };
+    if (out.ext !== 'mp4') toast('mp4를 지원하지 않아 webm으로 만들었어요');
+  });
+
+  function fileName() {
+    const q = movie.quarter ? '_' + movie.quarter : '';
+    const md = mode === 'attack' ? '공격' : mode === 'defense' ? '수비' : '공수';
+    return `EASTFC_시나리오${q}_${md}.${made ? made.ext : 'mp4'}`;
+  }
+  async function shareMade() {
+    const file = new File([made.blob], fileName(), { type: made.type });
+    const txt = `🎬 ${movie.quarter ? movie.quarter + ' ' : ''}전술 시나리오 · ${movie.ourStr} vs ${movie.oppStr} (${movie.oppName})`;
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], text: txt }); return; }
+      catch (e) { if (e.name === 'AbortError') return; }
+    }
+    toast('바로 공유가 안 돼요 · 💾 저장 후 올려주세요');
+  }
+
+  rebuild();
+}
+
 /* ==================== 📸 라인업 이미지 · 경기 공지 ====================
    피치를 캔버스로 직접 그려 공유용 이미지를 만든다 (화면 스크린샷보다 깔끔하고 일정하다).
    모바일은 공유 시트로 카톡 전송, 안 되면 저장으로 대체. */
@@ -5951,6 +6817,8 @@ async function openShareLineup() {
   pop.id = 'orderPop'; pop.className = 'order-pop share-pop';
   pop.innerHTML = `<div class="op-label">📸 라인업 공유</div>
     <div class="share-preview" id="sharePreview"><div class="share-loading">라인업 그리는 중…</div></div>
+    <label class="share-notice-tog"><input type="checkbox" id="shareNoticeChk" /><span>경기 공지 함께 공유</span></label>
+    <div class="share-notice-hint" id="shareNoticeHint"></div>
     <div class="share-notice" id="shareNotice"></div>
     <div class="share-btns">
       <button class="edit" id="shareImg">📤 이미지 공유</button>
@@ -5962,8 +6830,27 @@ async function openShareLineup() {
   pop.style.left = '50%'; pop.style.top = '50%'; pop.style.transform = 'translate(-50%, -50%)';
   pop.querySelector('[data-op-close]').addEventListener('click', closeOrderPop);
 
-  const notice = buildMatchNotice(sq);
-  document.getElementById('shareNotice').textContent = notice;
+  // 공지는 쿼터마다 반복되면 단톡방이 지저분해진다 → 마지막 쿼터에서만 기본 포함
+  const linfo = lineupMatchInfo(sq);
+  const isLastQ = !linfo || linfo.qTotal <= 1 || linfo.qIndex === linfo.qTotal - 1;
+  const fullNotice = buildMatchNotice(sq);
+  let noticeOn = isLastQ;
+  const noticeBox = document.getElementById('shareNotice');
+  const noticeHint = document.getElementById('shareNoticeHint');
+  const noticeChk = document.getElementById('shareNoticeChk');
+  const noticeText = () => (noticeOn ? fullNotice : '');
+  function syncNotice() {
+    noticeChk.checked = noticeOn;
+    noticeBox.textContent = noticeOn ? fullNotice : '';
+    noticeBox.style.display = noticeOn ? '' : 'none';
+    noticeHint.textContent = noticeOn
+      ? (isLastQ && linfo && linfo.qTotal > 1 ? '마지막 쿼터라 공지를 함께 올립니다.' : '')
+      : `공지는 마지막 쿼터(${linfo ? (linfo.qTotal + '쿼터') : ''})에서 한 번만 올라갑니다 · 이미지만 공유돼요`;
+    const cp = document.getElementById('shareCopy');
+    if (cp) { cp.disabled = !noticeOn; cp.style.opacity = noticeOn ? '' : '.4'; }
+  }
+  noticeChk.addEventListener('change', () => { noticeOn = noticeChk.checked; syncNotice(); });
+  syncNotice();
 
   const blob = await buildLineupImage(sq);
   const url = URL.createObjectURL(blob);
@@ -5973,7 +6860,9 @@ async function openShareLineup() {
   document.getElementById('shareImg').addEventListener('click', async () => {
     const file = new File([blob], fname, { type: 'image/png' });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try { await navigator.share({ files: [file], text: notice }); return; } catch (e) { if (e.name === 'AbortError') return; }
+      const shareData = { files: [file] };
+      const nt = noticeText(); if (nt) shareData.text = nt;
+      try { await navigator.share(shareData); return; } catch (e) { if (e.name === 'AbortError') return; }
     }
     toast('이 기기는 바로 공유가 안 돼요 · 저장 후 올려주세요');
   });
@@ -5983,9 +6872,11 @@ async function openShareLineup() {
     toast('이미지를 저장했어요');
   });
   document.getElementById('shareCopy').addEventListener('click', async () => {
-    try { await navigator.clipboard.writeText(notice); toast('공지 문구를 복사했어요'); }
+    const nt = noticeText();
+    if (!nt) { toast('공지는 마지막 쿼터에서 올려주세요'); return; }
+    try { await navigator.clipboard.writeText(nt); toast('공지 문구를 복사했어요'); }
     catch (e) {
-      const ta = document.createElement('textarea'); ta.value = notice; document.body.appendChild(ta);
+      const ta = document.createElement('textarea'); ta.value = nt; document.body.appendChild(ta);
       ta.select(); try { document.execCommand('copy'); toast('공지 문구를 복사했어요'); } catch (_) { toast('복사에 실패했어요'); }
       document.body.removeChild(ta);
     }
@@ -5998,6 +6889,7 @@ async function openShareLineup() {
 const NEW_FEATURES = {
   squadPlan: 36,   // 📋 스쿼드 전략 · 선수별 지시
   shareLineup: 41, // 📸 라인업 이미지 · 경기 공지
+  scenario: 46,    // 🎬 전술 시나리오 영상
   drawerMenu: 31,  // ☰ 왼쪽 서랍 메뉴
 };
 const ACK_KEY = 'efm_ack_feats';
@@ -6075,6 +6967,7 @@ function openStrategyPop() {
 
 /* ---------- 선수 지시 열람 박스 (필드에서 「📋 지시」 칩을 누르면) ---------- */
 function closeOrderPop() {
+  try { scenStopPlay(); } catch (e) {}
   document.getElementById('orderPop')?.remove();
   document.getElementById('orderPopBd')?.remove();
 }
@@ -11748,6 +12641,7 @@ function bindEvents() {
   $('#btnRoleEdit').addEventListener('click', openRoleEditor);
   $('#btnSquadPlan').addEventListener('click', openStrategyPop); // 먼저 열람 박스 → 편집은 그 안에서
   $('#btnShareLineup').addEventListener('click', openShareLineup);
+  $('#btnScenario')?.addEventListener('click', openScenarioPop);
   $('#btnCloseRoleEdit').addEventListener('click', closeRoleEditor);
   $('#roleEditModal').addEventListener('click', e => { if (e.target.id === 'roleEditModal') closeRoleEditor(); });
   $('#squadList').addEventListener('click', e => {
