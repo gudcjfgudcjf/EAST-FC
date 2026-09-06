@@ -3636,11 +3636,34 @@
   }
   @keyframes featBadge { 0%,100% { transform: scale(1); } 50% { transform: scale(1.12); } }
   .drawer-btn.feat-new::before { top: -5px; right: -4px; font-size: 8px; padding: 1px 4px; }
+  /* 탭바·서랍은 스크롤 컨테이너라 배지가 밖으로 나가면 잘린다 → 안쪽에 붙인다 */
+  .tab-btn.feat-new::before { top: 1px; right: 1px; font-size: 7.5px; padding: 0 4px; border-radius: 7px; }
+  .tab-btn.feat-new { overflow: visible; }
+  .drawer-item.feat-new::before { top: 3px; right: 6px; font-size: 8px; padding: 1px 5px; }
   @media (prefers-reduced-motion: reduce) {
     .feat-new, .feat-new::before { animation: none; }
     .feat-new { box-shadow: 0 0 0 2px rgba(244,196,48,.5); }
   }
 
+  /* 변경사항이 있는 탭 — 파란 숨쉬기 (새 기능 금색과 구분) */
+  .tab-btn.has-update, .drawer-item.has-update {
+    position: relative; animation: updGlow 2.4s ease-in-out infinite;
+  }
+  @keyframes updGlow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(96,165,250,.45), 0 0 10px rgba(96,165,250,.22); }
+    50%      { box-shadow: 0 0 0 4px rgba(96,165,250,.14), 0 0 20px rgba(96,165,250,.45); }
+  }
+  .tab-btn.has-update.feat-new, .drawer-item.has-update.feat-new { animation: featGlow 2.2s ease-in-out infinite; }
+  .drawer-item.has-update .di-badge { animation: featBadge 2.2s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    .tab-btn.has-update, .drawer-item.has-update { animation: none; box-shadow: 0 0 0 2px rgba(96,165,250,.5); }
+  }
+  .dm-acts { display: flex; gap: 4px; flex: none; }
+  .add-btn.ghost {
+    background: rgba(255,255,255,.05); color: var(--text-2);
+    border: 1px solid var(--border-2);
+  }
+  .add-btn.ghost:active { transform: scale(.97); }
   /* 지시 열람 박스 — 가운데 크게 */
   .order-pop-lg {
     max-width: min(92vw, 440px); width: min(92vw, 440px);
@@ -3735,6 +3758,61 @@
     margin: 0 2px 9px; }
   .share-notice-hint:empty { display: none; }
 
+  /* 가로모드 + 넓은 화면(태블릿·폰 가로)에서 상단바가 두 줄로 접히는데
+     세로 여유가 없어 높이를 46px로 묶어 두는 바람에 탭줄이 본문 위를 덮었다.
+     이 조합에서는 한 줄로 유지하고 탭은 가로 스크롤로 넘긴다. */
+  @media (min-width: 821px) and (max-height: 500px) and (orientation: landscape) {
+    .topnav { flex-wrap: nowrap; min-height: 46px; height: 46px; padding-top: 0; padding-bottom: 0; }
+    .tab-strip { order: 2; flex: 1 1 auto; width: auto; min-width: 0; margin-top: 0; height: 46px; }
+    .brand { order: 1; } .spacer { order: 3; } .nav-refresh-btn { order: 4; }
+    .backend-status { order: 5; } .nav-user { order: 6; } .nav-utils { order: 7; }
+  }
+
+  /* ---------- 👤 선수 상세 정보 ---------- */
+  .pf-bits { font-size: 11px; color: var(--text-3); margin-top: 2px; font-weight: 600; }
+  .bio-head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+  .bio-head .pf-avatar, .bio-head .pf-ava { flex: none; }
+  .bio-h-txt { min-width: 0; }
+  .bio-name { font-size: 24px; font-weight: 900; color: var(--text-1); display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; }
+  .bio-name .pf-no { font-size: 13px; font-weight: 800; color: var(--gold); }
+  .bio-motto { font-size: 12.5px; color: var(--gold-warm); margin-top: 3px; font-weight: 600; }
+  .bio-pos { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 7px; }
+  .bio-pos span {
+    font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 6px;
+    background: rgba(244,196,48,.14); color: var(--gold-warm);
+  }
+  .bio-sec {
+    font-size: 13px; font-weight: 800; color: var(--gold-warm);
+    margin: 18px 0 10px; padding-bottom: 7px; border-bottom: 1px solid rgba(255,255,255,.09);
+  }
+  .bio-rows { display: flex; flex-direction: column; gap: 1px; border-radius: 10px; overflow: hidden; }
+  .bio-row {
+    display: flex; align-items: baseline; gap: 12px;
+    padding: 11px 13px; background: rgba(255,255,255,.04);
+  }
+  .bio-k { flex: none; width: 92px; font-size: 12px; font-weight: 700; color: var(--text-4); }
+  .bio-v { flex: 1; font-size: 15px; font-weight: 800; color: var(--text-1); word-break: break-word; }
+  .bio-empty { font-size: 12.5px; color: var(--text-4); padding: 16px 4px; line-height: 1.6; }
+  .bio-sw { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+  .bio-col { padding: 11px 12px; border-radius: 11px; }
+  .bio-col.good { background: rgba(34,197,94,.08); border: 1px solid rgba(34,197,94,.22); }
+  .bio-col.bad { background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.22); }
+  .bio-col-t { font-size: 12px; font-weight: 800; margin-bottom: 8px; }
+  .bio-col.good .bio-col-t { color: #4ade80; }
+  .bio-col.bad .bio-col-t { color: #fca5a5; }
+  .bio-item {
+    font-size: 13px; font-weight: 700; color: var(--text-1);
+    padding: 5px 0 5px 12px; position: relative; line-height: 1.4;
+  }
+  .bio-item::before { content: '•'; position: absolute; left: 0; opacity: .55; }
+  .bio-none { font-size: 12px; color: var(--text-4); }
+  @media (max-width: 420px) {
+    .bio-sw { grid-template-columns: 1fr; }
+    .bio-name { font-size: 21px; }
+    .bio-k { width: 78px; font-size: 11.5px; }
+    .bio-v { font-size: 14px; }
+  }
+
   /* ---------- 🌱 예비 이스트 ---------- */
   .pros-intro {
     font-size: 12.5px; line-height: 1.65; color: var(--text-2); margin-bottom: 12px;
@@ -3774,6 +3852,22 @@
     font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 5px;
     background: rgba(255,255,255,.08); color: var(--text-2);
   }
+  .pros-pos-pick { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pros-pos-pick .ppk {
+    display: flex; flex-direction: column; align-items: center; gap: 1px;
+    padding: 7px 11px; border-radius: 9px; cursor: pointer; font-family: inherit;
+    font-size: 12.5px; font-weight: 800; line-height: 1.2;
+    border: 1px solid var(--border-2); background: var(--bg-3); color: var(--text-3);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .pros-pos-pick .ppk em { font-style: normal; font-size: 9.5px; font-weight: 600; color: var(--text-4); }
+  .pros-pos-pick .ppk.on {
+    background: rgba(244,196,48,.16); border-color: rgba(244,196,48,.55); color: var(--gold-warm);
+  }
+  .pros-pos-pick .ppk.on em { color: rgba(244,196,48,.7); }
+  .pros-pos-pick .ppk:active { transform: scale(.95); }
+  .form-group label em { font-style: normal; font-weight: 600; font-size: 10.5px; color: var(--text-4); margin-left: 6px; text-transform: none; letter-spacing: 0; }
+  .pros-top .pros-pos + .pros-pos { margin-left: -3px; }
   .pros-st {
     margin-left: auto; font-size: 10.5px; font-weight: 800;
     padding: 3px 9px; border-radius: 20px; border: 1px solid;
@@ -4354,6 +4448,7 @@
         <button class="cal-nav-btn" id="calNext">›</button>
         <button class="today-btn" id="calToday">오늘</button>
         <div class="spacer"></div>
+        <button class="add-btn ghost" id="btnShareNextMatch" title="다음 경기 공지를 톡방에 올리기">📢 다음 경기 공지</button>
         <button class="add-btn" id="btnAddMatch">+ 경기 추가</button>
       </div>
       <div class="cal-grid" id="calGrid"></div>
@@ -4456,7 +4551,7 @@
         <div class="spacer"></div>
         <input type="search" class="search" id="profileSearch" placeholder="선수 검색..." style="max-width:200px;" />
       </div>
-      <div style="font-size:12px; color:var(--text-2); margin-bottom:10px;">선수를 눌러 프로필 사진을 등록하세요. 등록한 사진은 <b>스쿼드 슬롯</b>에 원형으로 표시돼요. (사진이 없으면 등번호가 기본으로 표시)</div>
+      <div style="font-size:12px; color:var(--text-2); margin-bottom:10px;">선수를 누르면 <b>선수 정보 카드</b>가 열려요. 국적·생년월일·키·주발·포지션과 장단점은 <b>본인이 직접</b> 입력합니다. 프로필 사진도 여기서 등록하고, 등록한 사진은 <b>스쿼드 슬롯</b>에 원형으로 표시돼요.</div>
       <div id="profileContent"></div>
     </div>
   </section>
@@ -4535,6 +4630,42 @@
   </section>
 
 
+
+  <!-- ============ 선수 상세 정보 (프로필) ============ -->
+  <div class="modal-overlay" id="bioModal">
+    <div class="modal" id="bioModalBody"></div>
+  </div>
+  <div class="modal-overlay" id="bioEditModal">
+    <div class="modal">
+      <h3 id="bioEditTitle">선수 정보 입력</h3>
+      <div class="form-row">
+        <div class="form-group"><label>국적</label><input type="text" id="bioNation" maxlength="20" placeholder="대한민국" /></div>
+        <div class="form-group"><label>생년월일</label><input type="date" id="bioBirth" /></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>키 (cm)</label><input type="number" id="bioHeight" min="100" max="230" placeholder="175" /></div>
+        <div class="form-group"><label>몸무게 (kg)</label><input type="number" id="bioWeight" min="30" max="200" placeholder="70" /></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>주발</label>
+          <select id="bioFoot"><option value="R">오른발</option><option value="L">왼발</option><option value="B">양발</option></select></div>
+        <div class="form-group"><label>등번호</label><input type="number" id="bioNumber" min="0" max="99" placeholder="0" /></div>
+      </div>
+      <div class="form-group"><label>포지션 <em>여러 개 고를 수 있어요</em></label>
+        <div class="pros-pos-pick" id="bioPos"></div></div>
+      <div class="form-group"><label>👍 장점 <em>줄바꿈 또는 쉼표로 구분</em></label>
+        <textarea id="bioStrong" maxlength="200" placeholder="공간커버&#10;피지컬&#10;공중볼" style="min-height:76px"></textarea></div>
+      <div class="form-group"><label>👎 단점 <em>줄바꿈 또는 쉼표로 구분</em></label>
+        <textarea id="bioWeak" maxlength="200" placeholder="집중력 기복" style="min-height:60px"></textarea></div>
+      <div class="form-group"><label>한 줄 소개 (선택)</label>
+        <input type="text" id="bioMotto" maxlength="40" placeholder="예: 뒤는 내가 지킨다" /></div>
+      <div class="modal-actions">
+        <button class="btn" id="bioEditCancel">취소</button>
+        <button class="btn primary" id="bioEditSave">저장</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ============ 🌱 예비 이스트 ============ -->
   <section class="view" id="view-prospect">
     <div class="stats-view">
@@ -4561,12 +4692,10 @@
       <h3 id="prosAddTitle">🌱 예비 선수 추천</h3>
       <div class="form-group"><label>이름 <span style="color:#f87171">*</span></label>
         <input type="text" id="prosName" maxlength="20" placeholder="추천하는 선수 이름" /></div>
-      <div class="form-row">
-        <div class="form-group"><label>주 포지션</label>
-          <select id="prosPos"></select></div>
-        <div class="form-group"><label>나이 / 소속 (선택)</label>
-          <input type="text" id="prosFrom" maxlength="30" placeholder="예: 27세 · 성남동중 12기" /></div>
-      </div>
+      <div class="form-group"><label>주 포지션 <em>여러 개 고를 수 있어요</em></label>
+        <div class="pros-pos-pick" id="prosPos"></div></div>
+      <div class="form-group"><label>나이 / 소속 (선택)</label>
+        <input type="text" id="prosFrom" maxlength="30" placeholder="예: 27세 · 성남동중 12기" /></div>
       <div class="form-group"><label>추천 이유 · 어떤 선수인지</label>
         <textarea id="prosIntro" maxlength="300" placeholder="예: 성남동중 후배. 수비형 미드 보고 몸싸움 좋음. 주말마다 시간 됨." style="min-height:80px"></textarea></div>
       <div class="pd-sec">📊 영입 점수 <small>추천한 사람이 먼저 매기고, 나머지 회원들이 뒤에 더해요</small></div>
@@ -5113,7 +5242,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 53;
+const APP_VERSION = 58;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -8163,6 +8292,18 @@ function ackFeature(key) {
   } catch (e) {}
   document.querySelectorAll(`[data-newfeat="${key}"]`).forEach(el => el.classList.remove('feat-new'));
 }
+/* 변경사항(💡 전구)이 있는 탭은 탭바에서도 서랍에서도 빛나게 한다 */
+function applyUpdateGlow() {
+  const on = {};
+  document.querySelectorAll('#tabStrip .tab-btn').forEach(b => {
+    const has = !!b.querySelector('.tab-badge:not(.off)');
+    b.classList.toggle('has-update', has);
+    if (has) on[b.dataset.tab] = 1;
+  });
+  document.querySelectorAll('#drawerBody [data-drawer-tab]').forEach(el => {
+    el.classList.toggle('has-update', !!on[el.dataset.drawerTab]);
+  });
+}
 function applyNewFeatureGlow() {
   const acked = ackedFeatures();
   document.querySelectorAll('[data-newfeat]').forEach(el => {
@@ -8671,6 +8812,8 @@ function hideAuthGate() {
   updateBackendStatusUI();
   bindEvents();
   switchTab('squad');
+  applyNewFeatureGlow();
+  applyUpdateGlow();
   const sq = getCurrentSquad();
   if (sq) { $('#squadName').value = sq.name; $('#formationSelect').value = sq.formation; }
 }
@@ -9959,7 +10102,8 @@ function buildDrawer() {
     const ico = m ? m[1] : '•';
     const label = (m ? m[2] : raw).replace(/💡/g, '').trim();
     const badge = b.querySelector('.tab-badge:not(.off)') ? '<span class="di-badge">💡</span>' : '';
-    return `<button class="drawer-item${b.classList.contains('active') ? ' active' : ''}" data-drawer-tab="${b.dataset.tab}">
+    const nf = b.dataset.newfeat ? ` data-newfeat="${b.dataset.newfeat}"` : '';
+    return `<button class="drawer-item${b.classList.contains('active') ? ' active' : ''}" data-drawer-tab="${b.dataset.tab}"${nf}>
       <span class="di-ico">${ico}</span><span>${escapeHtml(label)}</span>${badge}</button>`;
   }).join('');
 
@@ -9983,6 +10127,8 @@ function buildDrawer() {
   body.querySelectorAll('[data-drawer-tab]').forEach(el => el.addEventListener('click', () => {
     closeDrawer(); switchTab(el.dataset.drawerTab);
   }));
+  applyNewFeatureGlow();   // 서랍은 매번 새로 그리므로 반짝임도 다시 입힌다
+  applyUpdateGlow();
   body.querySelectorAll('[data-drawer-act]').forEach(el => el.addEventListener('click', () => {
     const id = el.dataset.drawerAct;
     closeDrawer();
@@ -10150,7 +10296,9 @@ function switchTab(name) {
   if (name === 'blacklist') renderBlacklist();
   if (name === 'prospect') renderProspects();
   if (name === 'admin') renderAdmin();
-  if (name === 'squad') { renderPlayerList(); renderField(); renderSquadList(); updateSquadPlanDot(); renderSquadMatchBar(); applyNewFeatureGlow(); }
+  if (name === 'squad') { renderPlayerList(); renderField(); renderSquadList(); updateSquadPlanDot(); renderSquadMatchBar(); }
+  applyNewFeatureGlow();
+  applyUpdateGlow();
   if (_drawerOpen) buildDrawer();
 }
 
@@ -10660,6 +10808,7 @@ function updateCalendarBadge() {
   const on = unseenMatches().length > 0;
   el.classList.toggle('off', !on);
   el.title = on ? '확인 안 한 일정이 있어요' : '새 일정 없음 (모두 확인함)';
+  applyUpdateGlow();
 }
 
 // ===== 선수 변경 표시 (기기별) — 능력치/역할 변경 시 이름·능력치 옆에 표시, 열람하면 꺼짐 =====
@@ -12075,17 +12224,247 @@ function openDayModal(dateStr) {
             </div>
             ${quarterChips ? `<div style="margin-top:6px;">⚽ ${quarterChips}</div>` : ''}
           </div>
-          <button class="icon-btn" data-action="edit-match" title="경기 편집">✏️</button>
+          <span class="dm-acts">
+            <button class="icon-btn" data-action="share-match" title="톡방에 공지 올리기">📢</button>
+            <button class="icon-btn" data-action="edit-match" title="경기 편집">✏️</button>
+          </span>
         </div>
       </div>`;
     }).join('');
+    list.querySelectorAll('[data-action="share-match"]').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        openShareMatch(btn.closest('.day-match-item').dataset.id);
+      });
+    });
     list.querySelectorAll('.dm-top').forEach(top => {
-      top.addEventListener('click', () => { const id = top.closest('.day-match-item').dataset.id; closeDayModal(); openMatchModal(id); });
+      top.addEventListener('click', e => {
+        if (e.target.closest('[data-action="share-match"]')) return;
+        const id = top.closest('.day-match-item').dataset.id; closeDayModal(); openMatchModal(id);
+      });
     });
   }
   $('#dayModal').classList.add('show');
 }
 function closeDayModal() { $('#dayModal').classList.remove('show'); }
+
+/* ==================== 📅 일정 공지 공유 (카톡용 카드 + 문구) ====================
+   경기 정보 + 참석 현황 + 아직 투표 안 한 사람까지 한 장으로. */
+function matchDdayText(m) {
+  if (!m || !m.date) return '';
+  const t = parseYmd(ymd(new Date())), d = parseYmd(m.date);
+  const diff = Math.round((d - t) / 86400000);
+  if (diff === 0) return 'D-DAY';
+  return diff > 0 ? `D-${diff}` : `종료`;
+}
+function matchAttendGroups(m) {
+  const a = getMatchAttendance(m);
+  const live = store.players.filter(p => !isRetiredNow(p));
+  return {
+    attend: live.filter(p => a[p.id] === 'attend'),
+    hold:   live.filter(p => a[p.id] === 'hold'),
+    absent: live.filter(p => a[p.id] === 'absent'),
+    none:   live.filter(p => !a[p.id]),
+  };
+}
+function buildScheduleNotice(m) {
+  if (!m) return '';
+  const g = matchAttendGroups(m);
+  const nm = arr => arr.map(p => p.name).join(', ');
+  const L = [];
+  L.push(`⚽ EAST FC vs ${m.opponent || '상대팀'}  ${matchDdayText(m)}`);
+  L.push(`📅 ${fmtMatchDate(m)}`);
+  if (m.location) L.push(`📍 ${m.location}${m.homeAway === 'home' ? ' (홈)' : m.homeAway === 'away' ? ' (원정)' : ''}`);
+  L.push('');
+  L.push(`✅ 참석 ${g.attend.length}명${g.attend.length ? ' · ' + nm(g.attend) : ''}`);
+  if (g.hold.length) L.push(`⏸️ 보류 ${g.hold.length}명 · ${nm(g.hold)}`);
+  if (g.absent.length) L.push(`❌ 불참 ${g.absent.length}명 · ${nm(g.absent)}`);
+  if (g.none.length) { L.push(''); L.push(`❓ 아직 투표 안 한 ${g.none.length}명 · ${nm(g.none)}`); }
+  ensureMatchPlan(m);
+  const st = (m.strategy || '').trim();
+  if (st) { L.push(''); L.push(`📢 경기 전략 · ${st}`); }
+  if ((m.notes || '').trim()) { L.push(''); L.push(`📝 ${m.notes.trim()}`); }
+  L.push('');
+  L.push('앱 「📅 일정」 탭에서 참석 투표 부탁드려요!');
+  return L.join('\n');
+}
+async function buildScheduleImage(m) {
+  const W = 1080, H = 1500;
+  const cv = document.createElement('canvas');
+  cv.width = W; cv.height = H;
+  const g = cv.getContext('2d');
+  const F = "'Pretendard Variable','Noto Sans KR',sans-serif";
+  const GOLD = '#f4c430', GOLDW = '#ffd166';
+  const gr = matchAttendGroups(m);
+
+  g.fillStyle = '#0a0a0a'; g.fillRect(0, 0, W, H);
+  const bg = g.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, 'rgba(244,196,48,.09)'); bg.addColorStop(.55, 'rgba(0,0,0,0)');
+  g.fillStyle = bg; g.fillRect(0, 0, W, H);
+
+  await scenCrest();
+  if (_scenCrestImg) {
+    const ch = 110, cw = _scenCrestImg.width / _scenCrestImg.height * ch;
+    g.drawImage(_scenCrestImg, 54, 44, cw, ch);
+  }
+  g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+  g.fillStyle = GOLD; g.font = `800 40px ${F}`;
+  g.fillText('EAST FC', 186, 92);
+  g.fillStyle = '#8b9099'; g.font = `600 25px ${F}`;
+  g.fillText('📅 경기 일정 공지', 186, 130);
+
+  // D-day 배지
+  const dd = matchDdayText(m);
+  if (dd) {
+    g.font = `900 34px ${F}`;
+    const dw = g.measureText(dd).width + 44;
+    const dcol = dd === 'D-DAY' ? '#ef4444' : dd === '종료' ? '#6b7280' : GOLD;
+    g.fillStyle = dcol + '26';
+    g.beginPath(); g.roundRect(W - 54 - dw, 52, dw, 58, 29); g.fill();
+    g.strokeStyle = dcol + '80'; g.lineWidth = 2; g.stroke();
+    g.fillStyle = dcol; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText(dd, W - 54 - dw / 2, 82);
+    g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+  }
+  g.strokeStyle = 'rgba(244,196,48,.35)'; g.lineWidth = 2;
+  g.beginPath(); g.moveTo(54, 188); g.lineTo(W - 54, 188); g.stroke();
+
+  // 상대 · 일시 · 장소
+  g.fillStyle = '#ffffff'; g.font = `900 58px ${F}`;
+  g.fillText(`vs ${m.opponent || '상대팀'}`, 54, 268);
+  g.fillStyle = GOLDW; g.font = `700 30px ${F}`;
+  g.fillText(fmtMatchDate(m), 54, 320);
+  if (m.location) {
+    g.fillStyle = '#8b9099'; g.font = `500 27px ${F}`;
+    g.fillText(`📍 ${m.location}${m.homeAway === 'home' ? ' (홈)' : m.homeAway === 'away' ? ' (원정)' : ''}`, 54, 362);
+  }
+
+  // 참석 현황
+  let y = 440;
+  g.fillStyle = GOLDW; g.font = `800 27px ${F}`;
+  g.fillText('🙋 참석 현황', 54, y); y += 20;
+  const tot = gr.attend.length + gr.hold.length + gr.absent.length + gr.none.length;
+  const seg = [[gr.attend.length, '#22c55e'], [gr.hold.length, '#f59e0b'], [gr.absent.length, '#ef4444'], [gr.none.length, '#3f4650']];
+  g.fillStyle = 'rgba(255,255,255,.08)';
+  g.beginPath(); g.roundRect(54, y, W - 108, 18, 9); g.fill();
+  if (tot) {
+    let px = 54;
+    g.save(); g.beginPath(); g.roundRect(54, y, W - 108, 18, 9); g.clip();
+    seg.forEach(([n, c]) => { const w = (W - 108) * (n / tot); if (w > 0) { g.fillStyle = c; g.fillRect(px, y, w, 18); } px += w; });
+    g.restore();
+  }
+  y += 56;
+  const wrap = (txt, max, lines) => {
+    const out = []; let line = '';
+    String(txt).split(/\s+/).forEach(w => {
+      const t = line ? line + ' ' + w : w;
+      if (g.measureText(t).width > max && line) { out.push(line); line = w; } else line = t;
+    });
+    if (line) out.push(line);
+    return out.slice(0, lines);
+  };
+  const block = (emoji, label, arr, col, maxLines) => {
+    if (!arr.length) return;
+    g.fillStyle = col; g.font = `800 28px ${F}`;
+    g.fillText(`${emoji} ${label} ${arr.length}명`, 54, y);
+    y += 38;
+    g.fillStyle = '#c2c8d0'; g.font = `500 25px ${F}`;
+    wrap(arr.map(p => p.name).join(', '), W - 108, maxLines).forEach((ln, i) => g.fillText(ln, 54, y + i * 34));
+    y += Math.min(maxLines, Math.ceil(g.measureText(arr.map(p => p.name).join(', ')).width / (W - 108)) || 1) * 34 + 16;
+  };
+  block('✅', '참석', gr.attend, '#4ade80', 3);
+  block('⏸️', '보류', gr.hold, '#fcd34d', 2);
+  block('❌', '불참', gr.absent, '#fca5a5', 2);
+  if (gr.none.length) {
+    y += 6;
+    g.fillStyle = 'rgba(239,68,68,.1)';
+    const bh = 44 + Math.min(2, Math.ceil(g.measureText(gr.none.map(p => p.name).join(', ')).width / (W - 140))) * 34;
+    g.beginPath(); g.roundRect(54, y - 32, W - 108, bh, 12); g.fill();
+    g.strokeStyle = 'rgba(239,68,68,.3)'; g.lineWidth = 2; g.stroke();
+    g.fillStyle = '#fca5a5'; g.font = `800 28px ${F}`;
+    g.fillText(`❓ 아직 투표 안 한 ${gr.none.length}명`, 74, y);
+    y += 38;
+    g.fillStyle = '#c2c8d0'; g.font = `500 25px ${F}`;
+    wrap(gr.none.map(p => p.name).join(', '), W - 140, 2).forEach((ln, i) => g.fillText(ln, 74, y + i * 34));
+    y += 60;
+  }
+  ensureMatchPlan(m);
+  const st = (m.strategy || '').trim();
+  if (st && y < H - 200) {
+    y += 12;
+    g.fillStyle = GOLDW; g.font = `800 27px ${F}`;
+    g.fillText('📢 경기 전략', 54, y); y += 38;
+    g.fillStyle = '#c2c8d0'; g.font = `500 25px ${F}`;
+    const l = wrap(st, W - 108, 2);
+    l.forEach((ln, i) => g.fillText(ln, 54, y + i * 34));
+    y += l.length * 34;
+  }
+
+  const H2 = Math.max(760, Math.min(H, Math.round(y + 110)));
+  const out = document.createElement('canvas');
+  out.width = W; out.height = H2;
+  const g2 = out.getContext('2d');
+  g2.drawImage(cv, 0, 0);
+  g2.fillStyle = '#5a5f66'; g2.font = `500 21px ${F}`;
+  g2.textAlign = 'left';
+  g2.fillText('EFM · East Football Manager', 54, H2 - 40);
+  g2.textAlign = 'right';
+  g2.fillText('앱에서 참석 투표 부탁드려요', W - 54, H2 - 40);
+  g2.textAlign = 'left';
+  return new Promise(res => out.toBlob(res, 'image/png'));
+}
+async function openShareMatch(matchId) {
+  const m = store.matches.find(x => x.id === matchId);
+  if (!m) { toast('경기를 찾을 수 없어요'); return; }
+  closeOrderPop();
+  const bd = document.createElement('div');
+  bd.id = 'orderPopBd'; bd.className = 'order-pop-backdrop';
+  bd.addEventListener('click', closeOrderPop);
+  document.body.appendChild(bd);
+
+  const pop = document.createElement('div');
+  pop.id = 'orderPop'; pop.className = 'order-pop share-pop';
+  pop.innerHTML = `<div class="op-label">📢 일정 공지</div>
+    <div class="share-preview" id="sharePreview"><div class="share-loading">공지 만드는 중…</div></div>
+    <div class="share-notice" id="shareNotice"></div>
+    <div class="share-btns">
+      <button class="edit" id="shareImg">📤 이미지 공유</button>
+      <button id="shareSave">💾 저장</button>
+      <button id="shareCopy">📋 공지 복사</button>
+    </div>
+    <div class="order-pop-foot"><button data-op-close>닫기</button></div>`;
+  document.body.appendChild(pop);
+  pop.style.left = '50%'; pop.style.top = '50%'; pop.style.transform = 'translate(-50%, -50%)';
+  pop.querySelector('[data-op-close]').addEventListener('click', closeOrderPop);
+
+  const notice = buildScheduleNotice(m);
+  document.getElementById('shareNotice').textContent = notice;
+  const blob = await buildScheduleImage(m);
+  const url = URL.createObjectURL(blob);
+  document.getElementById('sharePreview').innerHTML = `<img src="${url}" alt="일정 공지" />`;
+  const fname = `EASTFC_일정_${(m.date || '').replace(/-/g, '')}_${(m.opponent || '').replace(/\s+/g, '_')}.png`;
+
+  document.getElementById('shareImg').addEventListener('click', async () => {
+    const file = new File([blob], fname, { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], text: notice }); return; } catch (e) { if (e.name === 'AbortError') return; }
+    }
+    toast('이 기기는 바로 공유가 안 돼요 · 저장 후 올려주세요');
+  });
+  document.getElementById('shareSave').addEventListener('click', () => {
+    const a = document.createElement('a'); a.href = url; a.download = fname;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    toast('이미지를 저장했어요');
+  });
+  document.getElementById('shareCopy').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(notice); toast('공지 문구를 복사했어요'); }
+    catch (e) {
+      const ta = document.createElement('textarea'); ta.value = notice; document.body.appendChild(ta);
+      ta.select(); try { document.execCommand('copy'); toast('공지 문구를 복사했어요'); } catch (_) { toast('복사에 실패했어요'); }
+      document.body.removeChild(ta);
+    }
+  });
+}
 
 /* ==================== Org chart ==================== */
 function renderOrg() {
@@ -13668,6 +14047,15 @@ function ensureProspects() {
   return store.prospects;
 }
 function getProspect(id) { return ensureProspects().find(p => p.id === id) || null; }
+/* 주 포지션은 여러 개 — 예전엔 문자열 하나였다 */
+function prosPosList(pr) {
+  if (!pr) return [];
+  if (Array.isArray(pr.pos)) return pr.pos.filter(k => ROLES[k]);
+  return (typeof pr.pos === 'string' && ROLES[pr.pos]) ? [pr.pos] : [];
+}
+function prosPosBadges(pr) {
+  return prosPosList(pr).map(k => `<span class="pros-pos">${escapeHtml(k)}</span>`).join('');
+}
 
 /* 점수: 항목별 평균 → 4항목 평균이 총점(100점 만점)
    세부 종목이 있는 항목(이스트 정신)은 세부 종목 평균이 그 항목의 점수가 된다. */
@@ -13778,7 +14166,7 @@ function renderProspects() {
     return `<button class="pros-card st-${pr.status}" data-pros-id="${pr.id}">
       <div class="pros-top">
         <span class="pros-name">${escapeHtml(pr.name)}</span>
-        ${pr.pos ? `<span class="pros-pos">${escapeHtml(pr.pos)}</span>` : ''}
+        ${prosPosBadges(pr)}
         <span class="pros-st" style="color:${st.c}; border-color:${st.c}55; background:${st.c}1a">${st.t}</span>
       </div>
       <div class="pros-mid">
@@ -13849,8 +14237,9 @@ function collectProsScore(root, prefix) {
 function openProsAdd() {
   if (!isLoggedIn()) { toast('로그인이 필요합니다'); return; }
   const sel = document.getElementById('prosPos');
-  sel.innerHTML = '<option value="">-</option>' + PROS_POS.map(k =>
-    `<option value="${k}">${k} · ${escapeHtml((ROLES[k] || {}).name || k)}</option>`).join('');
+  sel.innerHTML = PROS_POS.map(k =>
+    `<button type="button" class="ppk" data-pos="${k}">${k}<em>${escapeHtml((ROLES[k] || {}).name || k)}</em></button>`).join('');
+  sel.querySelectorAll('.ppk').forEach(b => b.addEventListener('click', () => b.classList.toggle('on')));
   document.getElementById('prosName').value = '';
   document.getElementById('prosFrom').value = '';
   document.getElementById('prosIntro').value = '';
@@ -13868,7 +14257,7 @@ function saveProsAdd() {
   const pr = {
     id: uid(),
     name,
-    pos: document.getElementById('prosPos').value || '',
+    pos: [...document.querySelectorAll('#prosPos .ppk.on')].map(b => b.dataset.pos),
     from: (document.getElementById('prosFrom').value || '').trim(),
     intro: (document.getElementById('prosIntro').value || '').trim(),
     status: 'open',
@@ -13953,7 +14342,7 @@ function renderProspectDetail() {
     <div class="pd-head">
       <div>
         <h3 class="pd-name">${escapeHtml(pr.name)}
-          ${pr.pos ? `<span class="pros-pos">${escapeHtml(pr.pos)}</span>` : ''}
+          ${prosPosBadges(pr)}
           <span class="pros-st" style="color:${st.c}; border-color:${st.c}55; background:${st.c}1a">${st.t}</span>
         </h3>
         <div class="pd-sub">${pr.from ? escapeHtml(pr.from) + ' · ' : ''}추천 ${escapeHtml(pr.createdByName || '?')}</div>
@@ -14015,6 +14404,7 @@ function renderProspectDetail() {
 
     <div class="modal-actions">
       ${manage ? '<button class="btn danger" id="prosDelete">삭제</button>' : ''}
+      <button class="btn" id="prosShare">📢 공지로 올리기</button>
       <button class="btn" id="prosClose">닫기</button>
     </div>`;
 
@@ -14035,6 +14425,7 @@ function renderProspectDetail() {
     b.addEventListener('click', () => setProsStatus(b.dataset.prosStatus)));
   box.querySelector('#prosApprove')?.addEventListener('click', approveProspect);
   box.querySelector('#prosDelete')?.addEventListener('click', deleteProspect);
+  box.querySelector('#prosShare')?.addEventListener('click', openShareProspect);
   box.querySelector('#prosClose')?.addEventListener('click', closeProspect);
 }
 
@@ -14122,7 +14513,7 @@ function approveProspect() {
     name: pr.name,
     number: 0,
     foot: 'R',
-    positions: pr.pos && ROLES[pr.pos] ? [pr.pos] : ['CM'],
+    positions: prosPosList(pr).length ? prosPosList(pr) : ['CM'],
     stats,
     ratings: {},
     peerStats: defaultPeerStats(),
@@ -14148,6 +14539,238 @@ function deleteProspect() {
   saveState();
   closeProspect();
   toast('삭제했어요');
+}
+
+/* ---------- 🌱 예비 이스트 영입 제의 공유 (카톡용 카드 + 공지 문구) ---------- */
+async function buildProspectImage(pr) {
+  const W = 1080, H = 1350;
+  const cv = document.createElement('canvas');
+  cv.width = W; cv.height = H;
+  const g = cv.getContext('2d');
+  const F = "'Pretendard Variable','Noto Sans KR',sans-serif";
+  const GOLD = '#f4c430', GOLDW = '#ffd166';
+  const tot = prosTotal(pr);
+  const vc = prosVoteCount(pr);
+
+  g.fillStyle = '#0a0a0a'; g.fillRect(0, 0, W, H);
+  const bg = g.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, 'rgba(34,197,94,.09)'); bg.addColorStop(.5, 'rgba(0,0,0,0)');
+  g.fillStyle = bg; g.fillRect(0, 0, W, H);
+
+  await scenCrest();
+  if (_scenCrestImg) {
+    const ch = 110, cw = _scenCrestImg.width / _scenCrestImg.height * ch;
+    g.drawImage(_scenCrestImg, 54, 44, cw, ch);
+  }
+  g.textBaseline = 'alphabetic'; g.textAlign = 'left';
+  g.fillStyle = GOLD; g.font = `800 40px ${F}`;
+  g.fillText('EAST FC', 186, 92);
+  g.fillStyle = '#8b9099'; g.font = `600 25px ${F}`;
+  g.fillText('🌱 예비 이스트 · 영입 제의', 186, 130);
+  g.strokeStyle = 'rgba(244,196,48,.35)'; g.lineWidth = 2;
+  g.beginPath(); g.moveTo(54, 188); g.lineTo(W - 54, 188); g.stroke();
+
+  // 이름 · 포지션 · 소속
+  g.fillStyle = '#ffffff'; g.font = `900 62px ${F}`;
+  const nameW = g.measureText(pr.name).width;
+  g.fillText(pr.name, 54, 272);
+  let bx = 54 + nameW + 18;
+  g.font = `800 24px ${F}`;
+  prosPosList(pr).forEach(k => {
+    const w = g.measureText(k).width + 26;
+    g.fillStyle = 'rgba(255,255,255,.1)';
+    g.beginPath(); g.roundRect(bx, 240, w, 40, 20); g.fill();
+    g.fillStyle = '#cfd3da'; g.textBaseline = 'middle';
+    g.fillText(k, bx + 13, 261); g.textBaseline = 'alphabetic';
+    bx += w + 8;
+  });
+  if (pr.from) { g.fillStyle = '#8b9099'; g.font = `500 26px ${F}`; g.fillText(pr.from, 54, 318); }
+
+  // 총점
+  const col = tot == null ? '#6b7280' : tot >= 80 ? '#22c55e' : tot >= 65 ? '#84cc16' : tot >= 50 ? '#f59e0b' : '#ef4444';
+  g.textAlign = 'right';
+  g.fillStyle = col; g.font = `900 104px ${F}`;
+  g.fillText(tot == null ? '–' : String(tot), W - 130, 292);
+  g.fillStyle = '#6b7280'; g.font = `800 32px ${F}`;
+  g.fillText('/100', W - 54, 292);
+  g.fillStyle = '#8b9099'; g.font = `600 22px ${F}`;
+  g.fillText(`${prosRaterCount(pr)}명 평가`, W - 54, 328);
+  g.textAlign = 'left';
+
+  // 항목별 막대
+  let y = 400;
+  g.fillStyle = GOLDW; g.font = `800 26px ${F}`;
+  g.fillText('📊 영입 점수', 54, y); y += 44;
+  PROS_CRIT.forEach(c => {
+    const v = prosCritAvg(pr, c);
+    const vcol = v == null ? '#4b5563' : v >= 80 ? '#22c55e' : v >= 65 ? '#84cc16' : v >= 50 ? '#f59e0b' : '#ef4444';
+    g.fillStyle = '#cfd3da'; g.font = `700 26px ${F}`;
+    g.fillText(`${c.emoji} ${c.label}`, 54, y);
+    g.textAlign = 'right'; g.fillStyle = vcol; g.font = `800 26px ${F}`;
+    g.fillText(v == null ? '–' : String(v), W - 54, y); g.textAlign = 'left';
+    y += 16;
+    g.fillStyle = 'rgba(255,255,255,.08)';
+    g.beginPath(); g.roundRect(54, y, W - 108, 12, 6); g.fill();
+    if (v != null) { g.fillStyle = vcol; g.beginPath(); g.roundRect(54, y, (W - 108) * v / 100, 12, 6); g.fill(); }
+    y += 46;
+  });
+
+  // 투표
+  y += 14;
+  g.fillStyle = GOLDW; g.font = `800 26px ${F}`;
+  g.fillText('🗳️ 선수단 의견', 54, y); y += 42;
+  const VC = [['yes', '#22c55e'], ['hold', '#f59e0b'], ['no', '#ef4444']];
+  let vx = 54;
+  VC.forEach(([k, c]) => {
+    const label = `${PROS_VOTE[k].emoji} ${PROS_VOTE[k].t} ${vc[k]}`;
+    g.font = `800 27px ${F}`;
+    const w = g.measureText(label).width + 36;
+    g.fillStyle = c + '22';
+    g.beginPath(); g.roundRect(vx, y - 30, w, 48, 24); g.fill();
+    g.strokeStyle = c + '66'; g.lineWidth = 2; g.stroke();
+    g.fillStyle = c; g.textBaseline = 'middle';
+    g.fillText(label, vx + 18, y - 5); g.textBaseline = 'alphabetic';
+    vx += w + 10;
+  });
+  y += 44;
+  if (vc.total) {
+    g.fillStyle = 'rgba(255,255,255,.08)';
+    g.beginPath(); g.roundRect(54, y, W - 108, 12, 6); g.fill();
+    let px = 54;
+    VC.forEach(([k, c]) => {
+      const w = (W - 108) * (vc[k] / vc.total);
+      if (w > 0) { g.fillStyle = c; g.fillRect(px, y, w, 12); }
+      px += w;
+    });
+    y += 34;
+  }
+
+  // 의견 / 추천 이유
+  const wrap = (txt, max, lines) => {
+    const out = []; let line = '';
+    txt.split(/\s+/).forEach(w => {
+      const t = line ? line + ' ' + w : w;
+      if (g.measureText(t).width > max && line) { out.push(line); line = w; } else line = t;
+    });
+    if (line) out.push(line);
+    return out.slice(0, lines);
+  };
+  const ops = prosOpinions(pr).slice(0, 2);
+  if (ops.length) {
+    y += 22;
+    g.fillStyle = GOLDW; g.font = `800 26px ${F}`;
+    g.fillText('💬 남겨진 의견', 54, y); y += 38;
+    ops.forEach(o => {
+      const c = PROS_VOTE[o.v].c;
+      g.fillStyle = c; g.beginPath(); g.roundRect(54, y - 20, 5, 44, 3); g.fill();
+      g.fillStyle = '#c2c8d0'; g.font = `500 25px ${F}`;
+      wrap(`${PROS_VOTE[o.v].emoji} ${o.reason}`, W - 130, 2).forEach((ln, i) => g.fillText(ln, 74, y + i * 34));
+      y += 74;
+    });
+  }
+  if (pr.intro && y < H - 190) {
+    y += 12;
+    g.fillStyle = GOLDW; g.font = `800 26px ${F}`;
+    g.fillText('📝 추천 이유', 54, y); y += 38;
+    g.fillStyle = '#c2c8d0'; g.font = `500 25px ${F}`;
+    const ln2 = wrap(pr.intro, W - 108, 2);
+    ln2.forEach((ln, i) => g.fillText(ln, 54, y + i * 34));
+    y += ln2.length * 34;
+  }
+
+  // 내용에 맞춰 아래 빈 공간을 잘라낸다
+  const H2 = Math.max(760, Math.min(H, Math.round(y + 110)));
+  const out = document.createElement('canvas');
+  out.width = W; out.height = H2;
+  const g2 = out.getContext('2d');
+  g2.drawImage(cv, 0, 0);
+  g2.fillStyle = '#5a5f66'; g2.font = `500 21px ${F}`;
+  g2.textAlign = 'left';
+  g2.fillText('EFM · East Football Manager', 54, H2 - 40);
+  g2.textAlign = 'right';
+  g2.fillText(`추천 ${pr.createdByName || '?'}`, W - 54, H2 - 40);
+  g2.textAlign = 'left';
+  return new Promise(res => out.toBlob(res, 'image/png'));
+}
+
+function buildProspectNotice(pr) {
+  const tot = prosTotal(pr);
+  const vc = prosVoteCount(pr);
+  const L = [];
+  L.push('🌱 예비 이스트 · 영입 제의');
+  const pos = prosPosList(pr);
+  L.push(`👤 ${pr.name}${pos.length ? ` (${pos.join('/')})` : ''}${pr.from ? ' · ' + pr.from : ''}`);
+  L.push('');
+  L.push(`📊 영입 점수 ${tot == null ? '–' : tot}/100 · ${prosRaterCount(pr)}명 평가`);
+  PROS_CRIT.forEach(c => {
+    const v = prosCritAvg(pr, c);
+    L.push(`  ${c.emoji} ${c.label} ${v == null ? '–' : v}`);
+  });
+  L.push('');
+  L.push(`🗳️ 👍 추천 ${vc.yes} · ⏸️ 보류 ${vc.hold} · 👎 비추천 ${vc.no}`);
+  const ops = prosOpinions(pr).slice(0, 3);
+  if (ops.length) {
+    L.push('');
+    ops.forEach(o => L.push(`💬 ${PROS_VOTE[o.v].emoji} ${o.reason}`));
+  }
+  if (pr.intro) { L.push(''); L.push(`📝 ${pr.intro}`); }
+  L.push('');
+  L.push('앱 「🌱 예비 이스트」 탭에서 점수와 의견 남겨주세요!');
+  return L.join('\n');
+}
+
+async function openShareProspect() {
+  const pr = getProspect(_prosOpenId);
+  if (!pr) return;
+  closeOrderPop();
+  const bd = document.createElement('div');
+  bd.id = 'orderPopBd'; bd.className = 'order-pop-backdrop';
+  bd.addEventListener('click', closeOrderPop);
+  document.body.appendChild(bd);
+
+  const pop = document.createElement('div');
+  pop.id = 'orderPop'; pop.className = 'order-pop share-pop';
+  pop.innerHTML = `<div class="op-label">📢 영입 제의 공지</div>
+    <div class="share-preview" id="sharePreview"><div class="share-loading">카드 만드는 중…</div></div>
+    <div class="share-notice" id="shareNotice"></div>
+    <div class="share-btns">
+      <button class="edit" id="shareImg">📤 이미지 공유</button>
+      <button id="shareSave">💾 저장</button>
+      <button id="shareCopy">📋 공지 복사</button>
+    </div>
+    <div class="order-pop-foot"><button data-op-close>닫기</button></div>`;
+  document.body.appendChild(pop);
+  pop.style.left = '50%'; pop.style.top = '50%'; pop.style.transform = 'translate(-50%, -50%)';
+  pop.querySelector('[data-op-close]').addEventListener('click', closeOrderPop);
+
+  const notice = buildProspectNotice(pr);
+  document.getElementById('shareNotice').textContent = notice;
+
+  const blob = await buildProspectImage(pr);
+  const url = URL.createObjectURL(blob);
+  document.getElementById('sharePreview').innerHTML = `<img src="${url}" alt="영입 제의" />`;
+  const fname = `EASTFC_예비이스트_${(pr.name || '').replace(/\s+/g, '_')}.png`;
+
+  document.getElementById('shareImg').addEventListener('click', async () => {
+    const file = new File([blob], fname, { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], text: notice }); return; } catch (e) { if (e.name === 'AbortError') return; }
+    }
+    toast('이 기기는 바로 공유가 안 돼요 · 저장 후 올려주세요');
+  });
+  document.getElementById('shareSave').addEventListener('click', () => {
+    const a = document.createElement('a'); a.href = url; a.download = fname;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    toast('이미지를 저장했어요');
+  });
+  document.getElementById('shareCopy').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(notice); toast('공지 문구를 복사했어요'); }
+    catch (e) {
+      const ta = document.createElement('textarea'); ta.value = notice; document.body.appendChild(ta);
+      ta.select(); try { document.execCommand('copy'); toast('공지 문구를 복사했어요'); } catch (_) { toast('복사에 실패했어요'); }
+      document.body.removeChild(ta);
+    }
+  });
 }
 
 /* ---- 팀컬러 탭 ---- */
@@ -14311,13 +14934,150 @@ function renderProfile() {
   let list = store.players.slice().sort((a,b) => (a.number||999) - (b.number||999));
   if (q) list = list.filter(p => p.name.toLowerCase().includes(q) || String(p.number).includes(q));
   if (!list.length) { el.innerHTML = '<div class="podium-empty">「선수 관리」 탭에서 선수를 먼저 등록해 주세요</div>'; return; }
-  el.innerHTML = '<div class="profile-grid">' + list.map(p => `<div class="profile-card" data-pf="${p.id}">
+  el.innerHTML = '<div class="profile-grid">' + list.map(p => {
+    const b = ensureBio(p);
+    const age = bioAge(b.birth);
+    const bits = [age != null ? age + '세' : '', b.height ? b.height + 'cm' : '', (p.positions || [])[0] || ''].filter(Boolean);
+    return `<div class="profile-card" data-pf="${p.id}">
     ${pfAvatar(p)}
     <div class="pf-name">${p.number ? `<span class="pf-no">NO.${p.number}</span> ` : ''}${escapeHtml(p.name)}</div>
-    <div class="pf-badge ${p.photo?'on':''}">${p.photo ? '📸 사진 등록됨' : '＋ 사진 등록'}</div>
-  </div>`).join('') + '</div>';
-  el.querySelectorAll('[data-pf]').forEach(c => c.addEventListener('click', () => openPhotoModal(c.dataset.pf)));
+    ${bits.length ? `<div class="pf-bits">${bits.map(x => escapeHtml(x)).join(' · ')}</div>` : ''}
+    <div class="pf-badge ${bioFilled(p) ? 'on' : ''}">${bioFilled(p) ? '📋 정보 등록됨' : '＋ 정보 입력'}</div>
+  </div>`; }).join('') + '</div>';
+  el.querySelectorAll('[data-pf]').forEach(c => c.addEventListener('click', () => openPlayerBio(c.dataset.pf)));
 }
+/* ==================== 👤 선수 상세 정보 (프로필 탭) ====================
+   인스타 카드처럼 국적·생년월일·키·주발·포지션·장단점을 한 장에.
+   본인(또는 감독·운영진)이 직접 기입한다. */
+function ensureBio(p) {
+  if (!p) return null;
+  if (!p.bio || typeof p.bio !== 'object' || Array.isArray(p.bio)) p.bio = {};
+  if (!Array.isArray(p.bio.strengths)) p.bio.strengths = [];
+  if (!Array.isArray(p.bio.weaknesses)) p.bio.weaknesses = [];
+  return p.bio;
+}
+function bioAge(birth) {
+  if (!birth) return null;
+  const b = new Date(birth); if (isNaN(b)) return null;
+  const t = new Date();
+  let a = t.getFullYear() - b.getFullYear();
+  const m = t.getMonth() - b.getMonth();
+  if (m < 0 || (m === 0 && t.getDate() < b.getDate())) a--;
+  return a >= 0 && a < 120 ? a : null;
+}
+function bioBirthText(birth) {
+  if (!birth) return '';
+  const b = new Date(birth); if (isNaN(b)) return '';
+  return `${b.getFullYear()}년 ${b.getMonth() + 1}월 ${b.getDate()}일`;
+}
+const BIO_FOOT = { R: '오른발', L: '왼발', B: '양발' };
+function bioFilled(p) {
+  const b = ensureBio(p);
+  return !!(b.nation || b.birth || b.height || b.weight || b.motto || b.strengths.length || b.weaknesses.length);
+}
+function bioSplit(v) {
+  return String(v || '').split(/[\n,·]/).map(x => x.trim()).filter(Boolean).slice(0, 10);
+}
+
+function openPlayerBio(playerId) {
+  const p = getPlayer(playerId); if (!p) return;
+  const b = ensureBio(p);
+  const canEdit = canEditPlayerIdentity(p);
+  const age = bioAge(b.birth);
+  const rows = [
+    ['국적', b.nation ? escapeHtml(b.nation) + (b.nation === '대한민국' ? ' 🇰🇷' : '') : null],
+    ['생년월일', bioBirthText(b.birth)],
+    ['나이', age != null ? `${age}세` : ''],
+    ['키 / 몸무게', (b.height || b.weight) ? `${b.height ? b.height + 'cm' : '–'} / ${b.weight ? b.weight + 'kg' : '–'}` : ''],
+    ['주발', BIO_FOOT[p.foot] || ''],
+    ['등번호', p.number ? `${p.number}번` : ''],
+    ['포지션', (p.positions || []).join(' · ')],
+  ].filter(r => r[1]);
+
+  const box = document.getElementById('bioModalBody');
+  box.innerHTML = `
+    <div class="bio-head">
+      ${pfAvatar(p)}
+      <div class="bio-h-txt">
+        <div class="bio-name">${p.number ? `<span class="pf-no">NO.${p.number}</span> ` : ''}${escapeHtml(p.name)}</div>
+        ${b.motto ? `<div class="bio-motto">“${escapeHtml(b.motto)}”</div>` : ''}
+        <div class="bio-pos">${(p.positions || []).map(k => `<span>${escapeHtml(k)}</span>`).join('')}</div>
+      </div>
+    </div>
+    <div class="bio-sec">📋 선수 정보</div>
+    ${rows.length ? `<div class="bio-rows">${rows.map(r => `<div class="bio-row">
+        <span class="bio-k">${r[0]}</span><span class="bio-v">${r[1]}</span></div>`).join('')}</div>`
+      : `<div class="bio-empty">아직 입력된 정보가 없어요.${canEdit ? ' 아래 「정보 입력」으로 채워보세요.' : ''}</div>`}
+    ${(b.strengths.length || b.weaknesses.length) ? `<div class="bio-sec">⚖️ 장점 · 단점</div>
+      <div class="bio-sw">
+        <div class="bio-col good"><div class="bio-col-t">👍 장점</div>
+          ${b.strengths.length ? b.strengths.map(x => `<div class="bio-item">${escapeHtml(x)}</div>`).join('') : '<div class="bio-none">–</div>'}</div>
+        <div class="bio-col bad"><div class="bio-col-t">👎 단점</div>
+          ${b.weaknesses.length ? b.weaknesses.map(x => `<div class="bio-item">${escapeHtml(x)}</div>`).join('') : '<div class="bio-none">–</div>'}</div>
+      </div>` : ''}
+    <div class="modal-actions">
+      ${canEdit ? '<button class="btn" id="bioPhoto">📸 사진</button>' : ''}
+      ${canEdit ? '<button class="btn primary" id="bioEdit">✏️ 정보 입력</button>' : ''}
+      <button class="btn" id="bioClose">닫기</button>
+    </div>`;
+  document.getElementById('bioModal').classList.add('show');
+  box.querySelector('#bioPhoto')?.addEventListener('click', () => { closePlayerBio(); openPhotoModal(playerId); });
+  box.querySelector('#bioEdit')?.addEventListener('click', () => openBioEdit(playerId));
+  box.querySelector('#bioClose')?.addEventListener('click', closePlayerBio);
+}
+function closePlayerBio() { document.getElementById('bioModal').classList.remove('show'); }
+
+let _bioEditId = null;
+function openBioEdit(playerId) {
+  const p = getPlayer(playerId); if (!p) return;
+  if (!canEditPlayerIdentity(p)) { toast('본인 또는 감독·운영진만 입력할 수 있어요'); return; }
+  const b = ensureBio(p);
+  _bioEditId = playerId;
+  document.getElementById('bioEditTitle').textContent = `${p.name} · 선수 정보`;
+  document.getElementById('bioNation').value = b.nation || '';
+  document.getElementById('bioBirth').value = b.birth || '';
+  document.getElementById('bioHeight').value = b.height || '';
+  document.getElementById('bioWeight').value = b.weight || '';
+  document.getElementById('bioFoot').value = p.foot || 'R';
+  document.getElementById('bioNumber').value = p.number || '';
+  document.getElementById('bioMotto').value = b.motto || '';
+  document.getElementById('bioStrong').value = (b.strengths || []).join('\n');
+  document.getElementById('bioWeak').value = (b.weaknesses || []).join('\n');
+  const keys = [...new Set([...PROS_POS, ...(p.positions || [])])].filter(k => ROLES[k]);
+  const pos = document.getElementById('bioPos');
+  pos.innerHTML = keys.map(k =>
+    `<button type="button" class="ppk${(p.positions || []).indexOf(k) >= 0 ? ' on' : ''}" data-pos="${k}">${k}<em>${escapeHtml((ROLES[k] || {}).name || k)}</em></button>`).join('');
+  pos.querySelectorAll('.ppk').forEach(x => x.addEventListener('click', () => x.classList.toggle('on')));
+  document.getElementById('bioEditModal').classList.add('show');
+}
+function closeBioEdit() { document.getElementById('bioEditModal').classList.remove('show'); _bioEditId = null; }
+function saveBioEdit() {
+  const p = getPlayer(_bioEditId); if (!p) { closeBioEdit(); return; }
+  if (!canEditPlayerIdentity(p)) { toast('권한이 없어요'); closeBioEdit(); return; }
+  const b = ensureBio(p);
+  b.nation = (document.getElementById('bioNation').value || '').trim();
+  b.birth = document.getElementById('bioBirth').value || '';
+  const hh = parseInt(document.getElementById('bioHeight').value, 10);
+  const ww = parseInt(document.getElementById('bioWeight').value, 10);
+  b.height = isNaN(hh) ? '' : hh;
+  b.weight = isNaN(ww) ? '' : ww;
+  b.motto = (document.getElementById('bioMotto').value || '').trim();
+  b.strengths = bioSplit(document.getElementById('bioStrong').value);
+  b.weaknesses = bioSplit(document.getElementById('bioWeak').value);
+  p.foot = document.getElementById('bioFoot').value || 'R';
+  const nn = parseInt(document.getElementById('bioNumber').value, 10);
+  p.number = isNaN(nn) ? 0 : nn;
+  const picked = [...document.querySelectorAll('#bioPos .ppk.on')].map(x => x.dataset.pos);
+  if (picked.length) p.positions = picked;
+  saveState();
+  const id = _bioEditId;
+  closeBioEdit();
+  openPlayerBio(id);
+  if (currentTab === 'profile') renderProfile();
+  if (currentTab === 'players') renderPlayersTable();
+  toast('선수 정보를 저장했어요');
+}
+
 const _crop = { playerId: null, img: null, baseMin: 1, zoom: 1, ox: 0, oy: 0, D: 220 };
 function openPhotoModal(playerId) {
   const p = getPlayer(playerId); if (!p) return;
@@ -14638,6 +15398,17 @@ function bindEvents() {
 
   // 블랙리스트
   // 🌱 예비 이스트
+  document.getElementById('bioEditCancel')?.addEventListener('click', closeBioEdit);
+  document.getElementById('bioEditSave')?.addEventListener('click', saveBioEdit);
+  document.getElementById('bioModal')?.addEventListener('click', e => { if (e.target.id === 'bioModal') closePlayerBio(); });
+  document.getElementById('bioEditModal')?.addEventListener('click', e => { if (e.target.id === 'bioEditModal') closeBioEdit(); });
+  document.getElementById('btnShareNextMatch')?.addEventListener('click', () => {
+    const today = ymd(new Date());
+    const next = store.matches.filter(m => m.date >= today)
+      .sort((a, b) => a.date.localeCompare(b.date) || (a.time || '').localeCompare(b.time || ''))[0];
+    if (!next) { toast('예정된 경기가 없어요'); return; }
+    openShareMatch(next.id);
+  });
   document.getElementById('btnProsAdd')?.addEventListener('click', openProsAdd);
   document.getElementById('prosAddSave')?.addEventListener('click', saveProsAdd);
   document.getElementById('prosAddCancel')?.addEventListener('click', () => document.getElementById('prosAddModal').classList.remove('show'));
