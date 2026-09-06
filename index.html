@@ -3485,6 +3485,10 @@
     padding: 2px 7px; border-radius: 5px; margin-left: auto; font-weight: 700; }
   .order-pop-body { font-size: 13px; color: #cfd3da; line-height: 1.65; white-space: pre-wrap; }
   .order-pop-foot { display: flex; gap: 8px; margin-top: 11px; }
+  .share-pop .order-pop-foot {
+    position: sticky; bottom: 0; z-index: 2;
+    background: #1a1b20; padding-bottom: 2px; margin-top: 8px;
+  }
   .order-pop-foot button {
     flex: 1; padding: 8px; border-radius: 8px; font-size: 12px; font-weight: 700;
     font-family: inherit; cursor: pointer; border: 1px solid var(--border-2);
@@ -3614,6 +3618,130 @@
     .feat-new { box-shadow: 0 0 0 2px rgba(244,196,48,.5); }
   }
 
+  /* 지시 열람 박스 — 가운데 크게 */
+  .order-pop-lg {
+    max-width: min(92vw, 440px); width: min(92vw, 440px);
+    padding: 20px 20px 18px; max-height: 82vh; overflow-y: auto; overscroll-behavior: contain;
+  }
+  .op-hero { display: flex; align-items: center; gap: 13px; margin-bottom: 16px; }
+  .op-face {
+    width: 56px; height: 56px; flex-shrink: 0; border-radius: 50%;
+    background: #0c0c0e; border: 2px solid var(--gold); color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-brand); font-weight: 800; font-size: 20px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.5);
+  }
+  .op-id { min-width: 0; }
+  .op-name { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -.01em; }
+  .op-meta { font-size: 12px; color: var(--text-3); margin-top: 3px; }
+  .op-meta b { color: var(--gold); font-weight: 700; }
+  .op-label {
+    font-size: 11px; font-weight: 700; letter-spacing: .06em; color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .order-pop-body.op-big {
+    font-size: 15px; line-height: 1.75; color: #dfe3e9;
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+    border-radius: 11px; padding: 14px 15px;
+  }
+  .order-pop-lg .order-pop-foot { margin-top: 16px; }
+  .order-pop-lg .order-pop-foot button { padding: 11px; font-size: 13.5px; }
+
+  /* ---------- 📸 라인업 공유 ---------- */
+  .squad-actions { display: flex; gap: 9px; width: 100%; margin: 12px auto 0; align-items: stretch; }
+  .squad-actions .squad-plan-card { margin: 0; flex: 1; min-width: 0; }
+  .squad-share-btn {
+    flex-shrink: 0; width: 86px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 4px;
+    background: linear-gradient(160deg, rgba(56,189,248,.14), var(--bg-2) 60%);
+    border: 1px solid rgba(56,189,248,.4); border-radius: 13px;
+    color: #7dd3fc; font-family: inherit; font-size: 11.5px; font-weight: 700;
+    line-height: 1.3; cursor: pointer; text-align: center; padding: 10px 6px;
+    transition: border-color .14s ease, transform .11s ease;
+  }
+  .squad-share-btn:active { transform: scale(.97); }
+  @media (hover: hover) { .squad-share-btn:hover { border-color: #7dd3fc; } }
+  .ssb-ico { font-size: 21px; }
+  @media (min-width: 821px) {
+    .squad-actions { max-width: 620px; margin: 0 auto; }
+    .squad-share-btn { width: 100px; }
+  }
+  /* 공유 박스 */
+  .share-pop { max-width: min(94vw, 430px); width: min(94vw, 430px); max-height: 88vh; overflow-y: auto; overscroll-behavior: contain; padding: 18px; }
+  .share-preview {
+    border-radius: 12px; overflow: hidden; background: #0c0c0e;
+    border: 1px solid var(--border); margin: 8px 0 12px;
+    min-height: 180px; display: flex; align-items: center; justify-content: center;
+  }
+  .share-preview { max-height: 42vh; }
+  @media (max-height: 500px) {
+    .share-pop { padding: 12px; }
+    .share-preview, .share-preview img { max-height: 30vh; }
+    .share-notice { max-height: 70px; font-size: 11px; }
+    .share-pop .order-pop-foot { margin-top: 8px; }
+  }
+  .share-preview img { width: 100%; height: 100%; max-height: 42vh; object-fit: contain; display: block; }
+  .share-preview:has(img) { min-height: 0; }
+  .share-loading { color: var(--text-3); font-size: 13px; padding: 40px 0; }
+  .share-notice {
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+    border-radius: 10px; padding: 11px 12px; font-size: 12px; line-height: 1.6;
+    color: #bfc4cc; white-space: pre-wrap; max-height: 150px; overflow-y: auto;
+    margin-bottom: 12px; overscroll-behavior: contain;
+  }
+  /* 스크롤이 생겨도 버튼은 항상 보이게 아래에 고정 */
+  .share-btns {
+    display: flex; gap: 7px;
+    position: sticky; bottom: 0; z-index: 2;
+    padding-top: 10px; margin-top: -2px;
+    background: linear-gradient(180deg, transparent, #1a1b20 22%);
+  }
+  .share-btns button {
+    flex: 1; padding: 11px 6px; border-radius: 9px; font-size: 12.5px; font-weight: 700;
+    font-family: inherit; cursor: pointer; border: 1px solid var(--border-2);
+    background: var(--bg-3); color: var(--text-2); white-space: nowrap;
+  }
+  .share-btns button.edit { background: linear-gradient(180deg, var(--gold-warm), var(--gold)); color: #0a0a0a; border: none; }
+  .share-btns button:active { transform: scale(.97); }
+
+  /* ---------- 스쿼드 ↔ 경기 표시 바 ---------- */
+  .squad-match-bar {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    margin: 0 12px 8px; padding: 10px 13px;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--mc, #38bdf8) 20%, transparent), var(--bg-2) 55%);
+    border: 1px solid color-mix(in srgb, var(--mc, #38bdf8) 45%, transparent);
+    border-left: 4px solid var(--mc, #38bdf8);
+    border-radius: 10px;
+  }
+  .squad-match-bar:empty { display: none; }
+  .squad-match-bar.none {
+    background: var(--bg-2); border-color: var(--border); border-left-color: var(--border-2);
+  }
+  .smb-vs {
+    font-family: var(--font-brand); font-weight: 800; font-size: 11px;
+    color: var(--mc, #38bdf8); letter-spacing: .08em;
+  }
+  .smb-ico { font-size: 14px; }
+  .smb-main { font-size: 16px; font-weight: 800; color: var(--text); letter-spacing: -.01em; }
+  .smb-q {
+    font-size: 15px; font-weight: 900; padding: 5px 13px; border-radius: 9px;
+    background: linear-gradient(180deg, var(--gold-warm), var(--gold)); color: #0a0a0a;
+    font-family: var(--font-brand); letter-spacing: -.01em; line-height: 1.25;
+    box-shadow: 0 2px 10px rgba(244,196,48,.35);
+  }
+  .smb-q small { font-size: 10.5px; font-weight: 700; opacity: .65; }
+  .smb-ha {
+    font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 20px;
+    border: 1px solid var(--border-2); color: var(--text-2);
+  }
+  .smb-ha.home { color: #4ade80; border-color: rgba(74,222,128,.45); }
+  .smb-ha.away { color: #fdba74; border-color: rgba(253,186,116,.45); }
+  .smb-sub { flex: 1 1 100%; font-size: 11.5px; color: var(--text-3); }
+  @media (min-width: 821px) {
+    .squad-match-bar { margin: 0 20px 10px; }
+    .smb-sub { flex: 0 1 auto; margin-left: auto; text-align: right; }
+  }
+
 </style>
 </head>
 <body class="not-authed">
@@ -3739,6 +3867,7 @@
           <button id="btnClearField" class="danger">필드 비우기</button>
           <button id="btnSaveSquad" class="primary">💾 저장</button>
         </div>
+        <div class="squad-match-bar" id="squadMatchBar"></div>
         <div class="field-container">
           <div class="field" id="field">
             <div class="field-hint">💡 슬롯을 드래그해서 자유롭게 이동 · 클릭해서 선수 배치</div>
@@ -3761,14 +3890,19 @@
               <span class="lg"><i style="background:#f43f5e"></i>공격</span>
             </div>
           </div>
-          <button type="button" id="btnSquadPlan" class="squad-plan-card" data-newfeat="squadPlan">
-            <span class="spc-ico">📋</span>
-            <span class="spc-body">
-              <span class="spc-t">감독 전략<span class="sp-dot" id="squadPlanDot"></span></span>
-              <span class="spc-sub" id="squadPlanSub">이 스쿼드의 전략과 선수별 지시</span>
-            </span>
-            <span class="spc-arrow">›</span>
-          </button>
+          <div class="squad-actions">
+            <button type="button" id="btnSquadPlan" class="squad-plan-card" data-newfeat="squadPlan">
+              <span class="spc-ico">📋</span>
+              <span class="spc-body">
+                <span class="spc-t">감독 전략<span class="sp-dot" id="squadPlanDot"></span></span>
+                <span class="spc-sub" id="squadPlanSub">이 스쿼드의 전략과 선수별 지시</span>
+              </span>
+              <span class="spc-arrow">›</span>
+            </button>
+            <button type="button" id="btnShareLineup" class="squad-share-btn" data-newfeat="shareLineup" title="라인업 이미지 · 경기 공지">
+              <span class="ssb-ico">📸</span><span class="ssb-t">라인업<br>공유</span>
+            </button>
+          </div>
         </div>
         <div class="player-tooltip" id="tooltip"></div>
       </main>
@@ -4547,7 +4681,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 39;
+const APP_VERSION = 43;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -5521,11 +5655,296 @@ function deleteMgrTeamNote(id) {
 
 /* ---------- 감독 메모 편집 모달 ---------- */
 let _mgrNoteCtx = null;
+/* 스쿼드가 어느 경기·몇 쿼터용인지 항상 눈에 보이게 (라인업 뽑을 때 헷갈리지 않도록) */
+function renderSquadMatchBar() {
+  const el = document.getElementById('squadMatchBar'); if (!el) return;
+  const sq = getCurrentSquad();
+  if (!sq) { el.className = 'squad-match-bar'; el.innerHTML = ''; return; }
+  const info = lineupMatchInfo(sq);
+  if (!info) {
+    el.className = 'squad-match-bar none';
+    el.innerHTML = `<span class="smb-ico">📋</span><span class="smb-main">${escapeHtml(sq.name)}</span>
+      <span class="smb-sub">연결된 경기 없음 · 일정 탭에서 이 스쿼드를 경기에 연결하면 여기 표시돼요</span>`;
+    return;
+  }
+  const m = info.m;
+  const ha = m.homeAway === 'home' ? '홈' : m.homeAway === 'away' ? '원정' : '';
+  const att = getMatchAttendance(m);
+  const yes = store.players.filter(p => att[p.id] === 'attend').length;
+  el.className = 'squad-match-bar';
+  el.style.setProperty('--mc', matchColorFor(m));
+  el.innerHTML = `
+    ${info.quarter ? `<span class="smb-q">${escapeHtml(info.quarter)}${info.qTotal > 1 ? `<small>/${info.qTotal}</small>` : ''}</span>` : ''}
+    <span class="smb-vs">VS</span>
+    <span class="smb-main">${escapeHtml(m.opponent || '상대팀')}</span>
+    ${ha ? `<span class="smb-ha ${m.homeAway}">${ha}</span>` : ''}
+    <span class="smb-sub">${escapeHtml(fmtMatchDate(m))}${m.location ? ' · ' + escapeHtml(m.location) : ''} · 참석 ${yes}명</span>`;
+}
+
+/* ==================== 📸 라인업 이미지 · 경기 공지 ====================
+   피치를 캔버스로 직접 그려 공유용 이미지를 만든다 (화면 스크린샷보다 깔끔하고 일정하다).
+   모바일은 공유 시트로 카톡 전송, 안 되면 저장으로 대체. */
+function lineupMatchInfo(sq) {
+  const m = sq ? getUpcomingMatchForSquad(sq.id) : null;
+  if (!m) return null;
+  const qs = matchQuarters(m);
+  const qi = qs.findIndex(q => q.squadId === sq.id);
+  // 쿼터가 하나뿐이어도 반드시 보여준다 — 라인업 뽑을 때 제일 헷갈리는 정보
+  const quarter = qi >= 0 ? (qs[qi].label || `${qi + 1}쿼터`) : '';
+  return { m, quarter, qIndex: qi, qTotal: qs.length };
+}
+function fmtMatchDate(m) {
+  if (!m || !m.date) return '';
+  const d = parseYmd(m.date);
+  const wk = ['일','월','화','수','목','금','토'][d.getDay()];
+  return `${d.getMonth() + 1}월 ${d.getDate()}일 (${wk})${m.time ? ' ' + m.time : ''}`;
+}
+
+async function buildLineupImage(sq) {
+  const W = 1080, H = 1620;
+  const cv = document.createElement('canvas');
+  cv.width = W; cv.height = H;
+  const g = cv.getContext('2d');
+  const F = "'Pretendard Variable','Noto Sans KR',sans-serif";
+  const GOLD = '#f4c430', GOLDW = '#ffd166';
+  const info = lineupMatchInfo(sq);
+  const m = info ? info.m : null;
+
+  // 배경
+  g.fillStyle = '#0a0a0a'; g.fillRect(0, 0, W, H);
+  const bg = g.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, 'rgba(244,196,48,.07)'); bg.addColorStop(.5, 'rgba(0,0,0,0)');
+  g.fillStyle = bg; g.fillRect(0, 0, W, H);
+
+  // 엠블럼
+  const crestUrl = getComputedStyle(document.documentElement).getPropertyValue('--crest').trim().replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
+  if (crestUrl) {
+    try {
+      const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = crestUrl; });
+      const ch = 132, cw = img.width / img.height * ch;
+      g.drawImage(img, 54, 46, cw, ch);
+    } catch (e) {}
+  }
+  // 헤더 텍스트
+  g.textBaseline = 'alphabetic';
+  g.fillStyle = GOLD; g.font = `800 46px ${F}`;
+  g.fillText('EAST FC', 210, 96);
+  g.fillStyle = '#8b9099'; g.font = `500 26px ${F}`;
+  g.fillText(sq.name || '라인업', 210, 136);
+  if (m) {
+    g.fillStyle = '#e8eaed'; g.font = `800 40px ${F}`;
+    const vs = `vs ${m.opponent || '상대팀'}`;
+    g.fillText(vs, 210, 186);
+    g.fillStyle = '#a3a3a3'; g.font = `500 25px ${F}`;
+    const meta = [fmtMatchDate(m), m.location || '', m.homeAway === 'home' ? '홈' : m.homeAway === 'away' ? '원정' : ''].filter(Boolean).join(' · ');
+    g.fillText(meta, 210, 224);
+    // 쿼터 — 오른쪽 위에 크게 (제일 헷갈리는 정보)
+    if (info.quarter) {
+      const qt = info.quarter + (info.qTotal > 1 ? ` / ${info.qTotal}` : '');
+      g.font = `900 34px ${F}`;
+      const qw = g.measureText(qt).width + 40;
+      const qx = W - 54 - qw, qy = 52;
+      const qg = g.createLinearGradient(qx, qy, qx, qy + 58);
+      qg.addColorStop(0, GOLDW); qg.addColorStop(1, GOLD);
+      g.fillStyle = qg;
+      g.beginPath(); g.roundRect(qx, qy, qw, 58, 12); g.fill();
+      g.fillStyle = '#17130a'; g.textAlign = 'center';
+      g.fillText(qt, qx + qw / 2, qy + 41);
+      g.textAlign = 'left';
+    }
+  }
+  g.strokeStyle = 'rgba(244,196,48,.4)'; g.lineWidth = 3;
+  g.beginPath(); g.moveTo(54, 258); g.lineTo(W - 54, 258); g.stroke();
+
+  // ---- 피치 ----
+  const px = 54, py = 292, pw = W - 108, ph = 1120;
+  const grad = g.createLinearGradient(0, py, 0, py + ph);
+  grad.addColorStop(0, '#0f6b36'); grad.addColorStop(1, '#0a4d27');
+  g.fillStyle = grad;
+  g.beginPath(); g.roundRect(px, py, pw, ph, 16); g.fill();
+  // 잔디 줄무늬
+  g.save(); g.beginPath(); g.roundRect(px, py, pw, ph, 16); g.clip();
+  for (let i = 0; i < 10; i++) {
+    if (i % 2) { g.fillStyle = 'rgba(255,255,255,.035)'; g.fillRect(px, py + (ph / 10) * i, pw, ph / 10); }
+  }
+  g.restore();
+  // 라인
+  g.strokeStyle = 'rgba(255,255,255,.42)'; g.lineWidth = 3;
+  g.strokeRect(px + 14, py + 14, pw - 28, ph - 28);
+  g.beginPath(); g.moveTo(px + 14, py + ph / 2); g.lineTo(px + pw - 14, py + ph / 2); g.stroke();
+  g.beginPath(); g.arc(px + pw / 2, py + ph / 2, 96, 0, Math.PI * 2); g.stroke();
+  [[py + 14, 1], [py + ph - 14 - 180, 1]].forEach(([by]) => {
+    g.strokeRect(px + pw / 2 - 210, by, 420, 180);
+    g.strokeRect(px + pw / 2 - 105, by === py + 14 ? by : by + 110, 210, 70);
+  });
+
+  // ---- 선수 ----
+  const slots = ensureSquadSlots(sq);
+  ensureSquadPlan(sq);
+  slots.forEach((slot, i) => {
+    const pid = sq.assignments[i];
+    const pl = pid ? getPlayer(pid) : null;
+    const cx = px + (slot.x / 100) * pw;
+    const cy = py + (slot.y / 100) * ph;
+    const er = effRole(slot);
+    const cat = (ROLES[er] || {}).cat || 'MF';
+    const col = cat === 'GK' ? '#e7b710' : cat === 'DF' ? '#3b82f6' : cat === 'MF' ? '#22c55e' : '#ef4444';
+    const R = 40;
+    // 원
+    g.beginPath(); g.arc(cx, cy, R, 0, Math.PI * 2);
+    g.fillStyle = pl ? 'rgba(8,10,14,.92)' : 'rgba(8,10,14,.55)';
+    g.fill();
+    g.lineWidth = 5; g.strokeStyle = col; g.stroke();
+    // 등번호
+    g.textAlign = 'center';
+    g.fillStyle = pl ? '#fff' : 'rgba(255,255,255,.55)';
+    g.font = `800 32px ${F}`;
+    g.fillText(pl ? String(pl.number || '?') : tagForSideRole(sideZone(slot.x), er), cx, cy + 11);
+    // 포지션 뱃지
+    const tag = tagForSideRole(sideZone(slot.x), er);
+    if (pl) {
+      g.font = `800 17px ${F}`;
+      const tw = g.measureText(tag).width + 18;
+      g.fillStyle = col;
+      g.beginPath(); g.roundRect(cx - tw / 2, cy - R - 17, tw, 26, 13); g.fill();
+      g.fillStyle = '#fff'; g.fillText(tag, cx, cy - R + 2);
+    }
+    // 이름
+    if (pl) {
+      g.font = `700 25px ${F}`;
+      const nw = g.measureText(pl.name).width + 20;
+      g.fillStyle = 'rgba(0,0,0,.55)';
+      g.beginPath(); g.roundRect(cx - nw / 2, cy + R + 8, nw, 34, 8); g.fill();
+      g.fillStyle = '#fff';
+      g.fillText(pl.name, cx, cy + R + 33);
+      // 지시 표시
+      if ((sq.playerNotes[pl.id] || '').trim()) {
+        g.fillStyle = GOLD; g.font = `800 18px ${F}`;
+        g.fillText('📋', cx + nw / 2 + 14, cy + R + 32);
+      }
+    }
+  });
+  g.textAlign = 'left';
+
+  // ---- 전략 ----
+  let fy = py + ph + 44;
+  const st = (sq.strategy || '').trim();
+  if (st) {
+    g.fillStyle = GOLD; g.font = `800 24px ${F}`;
+    g.fillText('📋 감독 전략', 54, fy);
+    fy += 36;
+    g.fillStyle = '#cfd3da'; g.font = `500 25px ${F}`;
+    // 줄바꿈
+    const words = st.split(/\s+/); let line = ''; let lines = 0;
+    for (const w of words) {
+      const t = line ? line + ' ' + w : w;
+      if (g.measureText(t).width > W - 108) { g.fillText(line, 54, fy); fy += 36; line = w; if (++lines >= 3) break; }
+      else line = t;
+    }
+    if (lines < 3 && line) { g.fillText(line, 54, fy); fy += 36; }
+  }
+  // 푸터
+  g.fillStyle = '#5a5f66'; g.font = `500 21px ${F}`;
+  g.fillText('EFM · East Football Manager', 54, H - 34);
+  const cnt = Object.keys(sq.assignments).length;
+  g.textAlign = 'right';
+  g.fillText(`출전 ${cnt}명 · ${sq.formation}`, W - 54, H - 34);
+  g.textAlign = 'left';
+
+  return new Promise(res => cv.toBlob(res, 'image/png'));
+}
+
+function buildMatchNotice(sq) {
+  const info = lineupMatchInfo(sq);
+  const m = info ? info.m : null;
+  const L = [];
+  if (m) {
+    L.push(`⚽ EAST FC vs ${m.opponent || '상대팀'}`);
+    L.push(`📅 ${fmtMatchDate(m)}`);
+    if (m.location) L.push(`📍 ${m.location}${m.homeAway === 'home' ? ' (홈)' : m.homeAway === 'away' ? ' (원정)' : ''}`);
+    const att = getMatchAttendance(m);
+    const yes = store.players.filter(p => att[p.id] === 'attend');
+    const hold = store.players.filter(p => att[p.id] === 'hold');
+    L.push('');
+    L.push(`✅ 참석 ${yes.length}명${yes.length ? ' · ' + yes.map(p => p.name).join(', ') : ''}`);
+    if (hold.length) L.push(`⏸️ 보류 ${hold.length}명 · ${hold.map(p => p.name).join(', ')}`);
+  } else {
+    L.push(`⚽ EAST FC · ${sq.name}`);
+  }
+  L.push('');
+  L.push(`📋 ${sq.name} (${sq.formation})`);
+  const slots = ensureSquadSlots(sq);
+  const rows = slots.map((slot, i) => {
+    const pl = sq.assignments[i] ? getPlayer(sq.assignments[i]) : null;
+    if (!pl) return null;
+    return `${tagForSideRole(sideZone(slot.x), effRole(slot))} ${pl.name}`;
+  }).filter(Boolean);
+  if (rows.length) L.push(rows.join(' / '));
+  const st = (sq.strategy || '').trim();
+  if (st) { L.push(''); L.push(`📢 ${st}`); }
+  return L.join('\n');
+}
+
+async function openShareLineup() {
+  const sq = getCurrentSquad();
+  if (!sq) { toast('먼저 스쿼드를 선택해 주세요'); return; }
+  closeOrderPop();
+  const bd = document.createElement('div');
+  bd.id = 'orderPopBd'; bd.className = 'order-pop-backdrop';
+  bd.addEventListener('click', closeOrderPop);
+  document.body.appendChild(bd);
+
+  const pop = document.createElement('div');
+  pop.id = 'orderPop'; pop.className = 'order-pop share-pop';
+  pop.innerHTML = `<div class="op-label">📸 라인업 공유</div>
+    <div class="share-preview" id="sharePreview"><div class="share-loading">라인업 그리는 중…</div></div>
+    <div class="share-notice" id="shareNotice"></div>
+    <div class="share-btns">
+      <button class="edit" id="shareImg">📤 이미지 공유</button>
+      <button id="shareSave">💾 저장</button>
+      <button id="shareCopy">📋 공지 복사</button>
+    </div>
+    <div class="order-pop-foot"><button data-op-close>닫기</button></div>`;
+  document.body.appendChild(pop);
+  pop.style.left = '50%'; pop.style.top = '50%'; pop.style.transform = 'translate(-50%, -50%)';
+  pop.querySelector('[data-op-close]').addEventListener('click', closeOrderPop);
+
+  const notice = buildMatchNotice(sq);
+  document.getElementById('shareNotice').textContent = notice;
+
+  const blob = await buildLineupImage(sq);
+  const url = URL.createObjectURL(blob);
+  document.getElementById('sharePreview').innerHTML = `<img src="${url}" alt="라인업" />`;
+  const fname = `EASTFC_${(sq.name || 'lineup').replace(/\s+/g, '_')}.png`;
+
+  document.getElementById('shareImg').addEventListener('click', async () => {
+    const file = new File([blob], fname, { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], text: notice }); return; } catch (e) { if (e.name === 'AbortError') return; }
+    }
+    toast('이 기기는 바로 공유가 안 돼요 · 저장 후 올려주세요');
+  });
+  document.getElementById('shareSave').addEventListener('click', () => {
+    const a = document.createElement('a'); a.href = url; a.download = fname;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    toast('이미지를 저장했어요');
+  });
+  document.getElementById('shareCopy').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(notice); toast('공지 문구를 복사했어요'); }
+    catch (e) {
+      const ta = document.createElement('textarea'); ta.value = notice; document.body.appendChild(ta);
+      ta.select(); try { document.execCommand('copy'); toast('공지 문구를 복사했어요'); } catch (_) { toast('복사에 실패했어요'); }
+      document.body.removeChild(ta);
+    }
+  });
+}
+
 /* ==================== ✨ 새 기능 반짝임 ====================
    새로 생긴 기능은 처음 한 번 열어보기 전까지 은은하게 빛난다.
    한 번 누르면 이 기기에서는 다시 빛나지 않는다. (기기별 저장) */
 const NEW_FEATURES = {
   squadPlan: 36,   // 📋 스쿼드 전략 · 선수별 지시
+  shareLineup: 41, // 📸 라인업 이미지 · 경기 공지
   drawerMenu: 31,  // ☰ 왼쪽 서랍 메뉴
 };
 const ACK_KEY = 'efm_ack_feats';
@@ -5623,14 +6042,18 @@ function openOrderPop(pid, anchorEl) {
   document.body.appendChild(bd);
 
   const pop = document.createElement('div');
-  pop.id = 'orderPop'; pop.className = 'order-pop';
+  pop.id = 'orderPop'; pop.className = 'order-pop order-pop-lg';
+  const photo = p.photo ? ` style="background-image:url('${p.photo}'); background-size:cover; background-position:center"` : '';
   pop.innerHTML = `
-    <div class="order-pop-head">
-      <span class="order-pop-num">${p.number || '-'}</span>
-      <span class="order-pop-name">${escapeHtml(p.name)}</span>
-      ${pos ? `<span class="order-pop-pos">${pos}</span>` : ''}
+    <div class="op-hero">
+      <div class="op-face"${photo}>${p.photo ? '' : (p.number || '?')}</div>
+      <div class="op-id">
+        <div class="op-name">${escapeHtml(p.name)}</div>
+        <div class="op-meta">${p.number ? `NO.${p.number}` : ''}${pos ? ` · <b>${pos}</b>` : ''}</div>
+      </div>
     </div>
-    <div class="order-pop-body">${escapeHtml(note)}</div>
+    <div class="op-label">📋 감독 지시</div>
+    <div class="order-pop-body op-big">${escapeHtml(note)}</div>
     <div class="order-pop-foot">
       ${canManageSquad() ? '<button class="edit" data-op-edit>✏️ 수정</button>' : ''}
       <button data-op-close>닫기</button>
@@ -5639,19 +6062,9 @@ function openOrderPop(pid, anchorEl) {
   pop.querySelector('[data-op-close]')?.addEventListener('click', closeOrderPop);
   pop.querySelector('[data-op-edit]')?.addEventListener('click', () => { closeOrderPop(); openSquadPlayerNote(pid); });
 
-  // 칩 근처에 띄우되 화면 밖으로 나가지 않게 (기준이 없으면 화면 가운데)
-  if (!anchorEl || anchorEl === document.body) {
-    pop.style.left = '50%'; pop.style.top = '50%'; pop.style.transform = 'translate(-50%, -50%)';
-    return;
-  }
-  const r = anchorEl.getBoundingClientRect();
-  const pr = pop.getBoundingClientRect();
-  let left = r.left + r.width / 2 - pr.width / 2;
-  left = Math.max(10, Math.min(window.innerWidth - pr.width - 10, left));
-  let top = r.bottom + 8;
-  if (top + pr.height > window.innerHeight - 10) top = Math.max(10, r.top - pr.height - 8);
-  pop.style.left = left + 'px';
-  pop.style.top = top + 'px';
+  // 화면 가운데 크게 (작은 칩 옆에 붙이면 잘 안 보임)
+  pop.style.left = '50%'; pop.style.top = '50%';
+  pop.style.transform = 'translate(-50%, -50%)';
 }
 
 /* ==================== 📋 스쿼드 전략 · 선수별 지시 ====================
@@ -5669,6 +6082,7 @@ function squadPlanCount(sq) {
   return (sq.strategy.trim() ? 1 : 0) + Object.values(sq.playerNotes).filter(v => (v || '').trim()).length;
 }
 function updateSquadPlanDot() {
+  renderSquadMatchBar();
   const dot = document.getElementById('squadPlanDot');
   const sub = document.getElementById('squadPlanSub');
   const sq = getCurrentSquad();
@@ -7492,7 +7906,7 @@ function switchTab(name) {
   if (name === 'goh') renderGoh();
   if (name === 'blacklist') renderBlacklist();
   if (name === 'admin') renderAdmin();
-  if (name === 'squad') { renderPlayerList(); renderField(); renderSquadList(); updateSquadPlanDot(); applyNewFeatureGlow(); }
+  if (name === 'squad') { renderPlayerList(); renderField(); renderSquadList(); updateSquadPlanDot(); renderSquadMatchBar(); applyNewFeatureGlow(); }
   if (_drawerOpen) buildDrawer();
 }
 
@@ -11279,6 +11693,7 @@ function bindEvents() {
   });
   $('#btnRoleEdit').addEventListener('click', openRoleEditor);
   $('#btnSquadPlan').addEventListener('click', openStrategyPop); // 먼저 열람 박스 → 편집은 그 안에서
+  $('#btnShareLineup').addEventListener('click', openShareLineup);
   $('#btnCloseRoleEdit').addEventListener('click', closeRoleEditor);
   $('#roleEditModal').addEventListener('click', e => { if (e.target.id === 'roleEditModal') closeRoleEditor(); });
   $('#squadList').addEventListener('click', e => {
