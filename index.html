@@ -3742,6 +3742,25 @@
     .smb-sub { flex: 0 1 auto; margin-left: auto; text-align: right; }
   }
 
+  /* 실제 배치 포메이션 표시 (템플릿과 다르면 금색 강조) */
+  .formation-shape {
+    font-family: var(--font-brand); font-weight: 900; font-size: 15px;
+    color: var(--text); padding: 5px 12px; border-radius: 8px;
+    background: var(--bg-3); border: 1px solid var(--border-2);
+    white-space: nowrap; letter-spacing: .01em;
+  }
+  .formation-shape:empty { display: none; }
+  .formation-shape.diff {
+    color: #0a0a0a; border-color: transparent;
+    background: linear-gradient(180deg, var(--gold-warm), var(--gold));
+    box-shadow: 0 2px 8px rgba(244,196,48,.3);
+  }
+  .smb-form {
+    font-family: var(--font-brand); font-weight: 800; font-size: 12px;
+    color: var(--text-2); padding: 3px 8px; border-radius: 6px;
+    background: rgba(255,255,255,.07); letter-spacing: .02em;
+  }
+
 </style>
 </head>
 <body class="not-authed">
@@ -3860,6 +3879,7 @@
             <option value="3-4-3">3-4-3</option>
             <option value="4-4-1">4-4-1 (10명·10대10)</option>
           </select>
+          <span class="formation-shape" id="formationShape"></span>
           <div class="spacer"></div>
           <button id="btnAutoFill" class="btn-autofill">⚡ 자동 배치</button>
           <button id="btnRoleEdit" class="btn-role-edit">🎯 역할 편집</button>
@@ -4681,7 +4701,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 43;
+const APP_VERSION = 45;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -5655,8 +5675,39 @@ function deleteMgrTeamNote(id) {
 
 /* ---------- 감독 메모 편집 모달 ---------- */
 let _mgrNoteCtx = null;
+/* 선수를 옮기면 템플릿 이름(4-4-1)과 실제 모양(5-3-1)이 달라진다.
+   슬롯의 '유효 역할' 계열로 실제 포메이션을 계산해 표시한다. */
+function actualFormation(sq) {
+  if (!sq) return '';
+  const slots = ensureSquadSlots(sq);
+  let df = 0, mf = 0, fw = 0, gk = 0;
+  slots.forEach(slot => {
+    const cat = (ROLES[effRole(slot)] || {}).cat || 'MF';
+    if (cat === 'GK') gk++;
+    else if (cat === 'DF') df++;
+    else if (cat === 'MF') mf++;
+    else fw++;
+  });
+  const parts = [df, mf, fw].filter(n => n > 0);
+  if (!parts.length) return '';
+  return parts.join('-');
+}
+function updateFormationShape() {
+  const el = document.getElementById('formationShape');
+  if (!el) return;
+  const sq = getCurrentSquad();
+  if (!sq) { el.textContent = ''; el.classList.remove('diff'); return; }
+  const act = actualFormation(sq);
+  el.textContent = act || '';
+  // 템플릿과 다르면 강조
+  const tmpl = (sq.formation || '').replace(/\s*\(.*\)$/, '');
+  el.classList.toggle('diff', !!act && act !== tmpl);
+  el.title = act && act !== tmpl ? `선택한 틀은 ${tmpl} · 지금 배치는 ${act}` : '지금 배치';
+}
+
 /* 스쿼드가 어느 경기·몇 쿼터용인지 항상 눈에 보이게 (라인업 뽑을 때 헷갈리지 않도록) */
 function renderSquadMatchBar() {
+  updateFormationShape();
   const el = document.getElementById('squadMatchBar'); if (!el) return;
   const sq = getCurrentSquad();
   if (!sq) { el.className = 'squad-match-bar'; el.innerHTML = ''; return; }
@@ -5664,6 +5715,7 @@ function renderSquadMatchBar() {
   if (!info) {
     el.className = 'squad-match-bar none';
     el.innerHTML = `<span class="smb-ico">📋</span><span class="smb-main">${escapeHtml(sq.name)}</span>
+      <span class="smb-form">${escapeHtml(actualFormation(sq) || sq.formation)}</span>
       <span class="smb-sub">연결된 경기 없음 · 일정 탭에서 이 스쿼드를 경기에 연결하면 여기 표시돼요</span>`;
     return;
   }
@@ -5678,6 +5730,7 @@ function renderSquadMatchBar() {
     <span class="smb-vs">VS</span>
     <span class="smb-main">${escapeHtml(m.opponent || '상대팀')}</span>
     ${ha ? `<span class="smb-ha ${m.homeAway}">${ha}</span>` : ''}
+    <span class="smb-form">${escapeHtml(actualFormation(sq) || sq.formation)}</span>
     <span class="smb-sub">${escapeHtml(fmtMatchDate(m))}${m.location ? ' · ' + escapeHtml(m.location) : ''} · 참석 ${yes}명</span>`;
 }
 
@@ -5848,7 +5901,7 @@ async function buildLineupImage(sq) {
   g.fillText('EFM · East Football Manager', 54, H - 34);
   const cnt = Object.keys(sq.assignments).length;
   g.textAlign = 'right';
-  g.fillText(`출전 ${cnt}명 · ${sq.formation}`, W - 54, H - 34);
+  g.fillText(`출전 ${cnt}명 · ${actualFormation(sq) || sq.formation}`, W - 54, H - 34);
   g.textAlign = 'left';
 
   return new Promise(res => cv.toBlob(res, 'image/png'));
@@ -5872,7 +5925,7 @@ function buildMatchNotice(sq) {
     L.push(`⚽ EAST FC · ${sq.name}`);
   }
   L.push('');
-  L.push(`📋 ${sq.name} (${sq.formation})`);
+  L.push(`📋 ${sq.name} (${actualFormation(sq) || sq.formation})`);
   const slots = ensureSquadSlots(sq);
   const rows = slots.map((slot, i) => {
     const pl = sq.assignments[i] ? getPlayer(sq.assignments[i]) : null;
@@ -8124,6 +8177,7 @@ function renderField() {
     field.appendChild(el);
   });
   renderTeamPanel();
+  updateFormationShape();   // 선수를 옮기면 실제 포메이션(5-3-1 등)도 바로 갱신
 }
 
 function assignPlayerToSlot(slotIndex, playerId) {
