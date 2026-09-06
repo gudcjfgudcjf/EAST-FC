@@ -4557,7 +4557,7 @@
         <div class="spacer"></div>
         <input type="search" class="search" id="profileSearch" placeholder="선수 검색..." style="max-width:200px;" />
       </div>
-      <div style="font-size:12px; color:var(--text-2); margin-bottom:10px;">선수를 누르면 <b>선수 정보 카드</b>가 열려요. 국적·생년월일·키·주발·포지션과 장단점은 <b>본인이 직접</b> 입력합니다. 프로필 사진도 여기서 등록하고, 등록한 사진은 <b>스쿼드 슬롯</b>에 원형으로 표시돼요.</div>
+      <div style="font-size:12px; color:var(--text-2); margin-bottom:10px;">선수를 누르면 <b>선수 정보 카드</b>가 열려요. 출신·생년월일·키·주발·포지션과 장단점은 <b>본인이 직접</b> 입력합니다. 프로필 사진도 여기서 등록하고, 등록한 사진은 <b>스쿼드 슬롯</b>에 원형으로 표시돼요.</div>
       <div id="profileContent"></div>
     </div>
   </section>
@@ -4645,7 +4645,7 @@
     <div class="modal">
       <h3 id="bioEditTitle">선수 정보 입력</h3>
       <div class="form-row">
-        <div class="form-group"><label>국적</label><input type="text" id="bioNation" maxlength="20" placeholder="대한민국" /></div>
+        <div class="form-group"><label>출신</label><input type="text" id="bioNation" maxlength="30" placeholder="예: 성남동중 12기" /></div>
         <div class="form-group"><label>생년월일</label><input type="date" id="bioBirth" /></div>
       </div>
       <div class="form-row">
@@ -5248,7 +5248,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 59;
+const APP_VERSION = 60;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -14953,7 +14953,7 @@ function renderProfile() {
   el.querySelectorAll('[data-pf]').forEach(c => c.addEventListener('click', () => openPlayerBio(c.dataset.pf)));
 }
 /* ==================== 👤 선수 상세 정보 (프로필 탭) ====================
-   인스타 카드처럼 국적·생년월일·키·주발·포지션·장단점을 한 장에.
+   인스타 카드처럼 출신·생년월일·키·주발·포지션·장단점을 한 장에.
    본인(또는 감독·운영진)이 직접 기입한다. */
 function ensureBio(p) {
   if (!p) return null;
@@ -14991,7 +14991,7 @@ function openPlayerBio(playerId) {
   const canEdit = canEditPlayerIdentity(p);
   const age = bioAge(b.birth);
   const rows = [
-    ['국적', b.nation ? escapeHtml(b.nation) + (b.nation === '대한민국' ? ' 🇰🇷' : '') : null],
+    ['출신', b.nation ? escapeHtml(b.nation) : null],
     ['생년월일', bioBirthText(b.birth)],
     ['나이', age != null ? `${age}세` : ''],
     ['키 / 몸무게', (b.height || b.weight) ? `${b.height ? b.height + 'cm' : '–'} / ${b.weight ? b.weight + 'kg' : '–'}` : ''],
@@ -15114,7 +15114,7 @@ function buildPlayerNotice(p) {
   L.push(`${p.number ? 'NO.' + p.number + ' ' : ''}${p.name}${(p.positions || []).length ? ` (${(p.positions || []).join('/')})` : ''}`);
   if (b.motto) L.push(`“${b.motto}”`);
   L.push('');
-  if (b.nation) L.push(`🌏 국적 : ${b.nation}`);
+  if (b.nation) L.push(`🏫 출신 : ${b.nation}`);
   if (b.birth) L.push(`🎂 생년월일 : ${bioBirthText(b.birth)}${age != null ? ` (${age}세)` : ''}`);
   if (b.height || b.weight) L.push(`📏 키 / 몸무게 : ${b.height ? b.height + 'cm' : '–'} / ${b.weight ? b.weight + 'kg' : '–'}`);
   if (p.foot) L.push(`🦶 주발 : ${BIO_FOOT[p.foot] || p.foot}`);
@@ -15200,7 +15200,7 @@ async function buildPlayerCard(p) {
   g.fillText('📋 선수 정보', 54, y);
   y += 20;
   const rows = [
-    ['국적', b.nation || ''],
+    ['출신', b.nation || ''],
     ['생년월일', bioBirthText(b.birth)],
     ['나이', age != null ? `${age}세` : ''],
     ['키 / 몸무게', (b.height || b.weight) ? `${b.height ? b.height + 'cm' : '–'} / ${b.weight ? b.weight + 'kg' : '–'}` : ''],
