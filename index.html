@@ -3582,6 +3582,29 @@
 
   .strategy-pop { max-width: min(92vw, 420px); max-height: 80vh; overflow-y: auto; overscroll-behavior: contain; }
   .strategy-pop .sp-crest { font-size: 18px; }
+  /* 전략 두 단: 경기 전체 / 이 쿼터 */
+  .sp-block {
+    margin-bottom: 10px; padding: 11px 13px; border-radius: 10px;
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+    border-left: 3px solid rgba(255,255,255,.14);
+  }
+  .sp-block.match { border-left-color: var(--gold); background: rgba(244,196,48,.07); }
+  .sp-block-t {
+    display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
+    font-size: 11.5px; font-weight: 800; color: var(--text-3); margin-bottom: 6px;
+  }
+  .sp-block.match .sp-block-t { color: var(--gold-warm); }
+  .sp-block-t em { font-style: normal; font-weight: 600; font-size: 10.5px; color: var(--text-4); }
+  .sp-block-b { font-size: 13.5px; line-height: 1.65; color: var(--text-1); white-space: pre-wrap; word-break: break-word; }
+  .sp-match-fg label em {
+    font-style: normal; font-weight: 600; font-size: 10.5px; color: var(--text-4); margin-left: 6px;
+  }
+  .form-group label em { font-style: normal; font-weight: 600; font-size: 10.5px; color: var(--text-4); margin-left: 6px; }
+  .sp-hint {
+    font-size: 11.5px; line-height: 1.55; color: var(--text-4);
+    padding: 9px 11px; margin-bottom: 12px; border-radius: 9px;
+    background: rgba(255,255,255,.03); border: 1px dashed rgba(255,255,255,.12);
+  }
   .sp-orders { margin-top: 13px; padding-top: 11px; border-top: 1px solid rgba(255,255,255,.1); }
   .sp-orders-t { font-size: 11.5px; font-weight: 700; color: var(--gold); margin-bottom: 7px; }
   .sp-order-row {
@@ -3711,6 +3734,196 @@
     font-size: 11.5px; line-height: 1.5; color: var(--text-3);
     margin: 0 2px 9px; }
   .share-notice-hint:empty { display: none; }
+
+  /* ---------- 🌱 예비 이스트 ---------- */
+  .pros-intro {
+    font-size: 12.5px; line-height: 1.65; color: var(--text-2); margin-bottom: 12px;
+    padding: 11px 13px; border-radius: 10px;
+    background: rgba(34,197,94,.07); border: 1px solid rgba(34,197,94,.2);
+  }
+  .pros-intro b { color: #86efac; }
+  .pros-sort { display: flex; gap: 6px; margin-bottom: 12px; }
+  .pros-sort button {
+    padding: 7px 13px; border-radius: 20px; font-family: inherit;
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    border: 1px solid var(--border-2); background: var(--bg-3); color: var(--text-3);
+  }
+  .pros-sort button.on { background: rgba(244,196,48,.16); border-color: rgba(244,196,48,.5); color: var(--gold-warm); }
+  .pros-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+  .pros-empty {
+    grid-column: 1 / -1; text-align: center; padding: 40px 20px;
+    font-size: 13px; line-height: 1.8; color: var(--text-3);
+    border: 1px dashed var(--border-2); border-radius: 12px;
+  }
+  .pros-card {
+    display: block; width: 100%; text-align: left; cursor: pointer;
+    padding: 13px 15px; border-radius: 12px; font-family: inherit;
+    background: var(--bg-2); border: 1px solid var(--border-2);
+    border-left: 3px solid var(--border-2);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .pros-card.st-in { border-left-color: #22c55e; }
+  .pros-card.st-hold { border-left-color: #f59e0b; }
+  .pros-card.st-out { border-left-color: #ef4444; opacity: .62; }
+  .pros-card.st-open { border-left-color: #60a5fa; }
+  .pros-card:active { transform: scale(.99); }
+  @media (hover: hover) { .pros-card:hover { border-color: var(--gold); } }
+  .pros-top { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin-bottom: 9px; }
+  .pros-name { font-size: 15px; font-weight: 800; color: var(--text-1); }
+  .pros-pos {
+    font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 5px;
+    background: rgba(255,255,255,.08); color: var(--text-2);
+  }
+  .pros-st {
+    margin-left: auto; font-size: 10.5px; font-weight: 800;
+    padding: 3px 9px; border-radius: 20px; border: 1px solid;
+  }
+  .pros-mid { display: flex; align-items: center; gap: 13px; margin-bottom: 10px; }
+  .pros-score { font-size: 30px; font-weight: 900; line-height: 1; flex: none; font-variant-numeric: tabular-nums; }
+  .pros-score span { font-size: 12px; font-weight: 700; color: var(--text-4); margin-left: 2px; }
+  .pros-bars { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+  .pc-mini { display: flex; align-items: center; gap: 6px; }
+  .pcm-l { font-size: 11px; width: 15px; flex: none; }
+  .pcm-bar { flex: 1; height: 5px; border-radius: 3px; background: rgba(255,255,255,.08); overflow: hidden; }
+  .pcm-bar i { display: block; height: 100%; border-radius: 3px; }
+  .pcm-v { font-size: 10.5px; font-weight: 700; color: var(--text-3); width: 20px; text-align: right; flex: none; font-variant-numeric: tabular-nums; }
+  .pros-bot { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .pros-votes { display: flex; gap: 8px; font-size: 12px; font-weight: 800; }
+  .pros-meta { margin-left: auto; font-size: 10.5px; color: var(--text-4); }
+
+  /* 상세 */
+  .pd-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+  .pd-name { margin: 0 0 4px; font-size: 20px; font-weight: 900; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+  .pd-sub { font-size: 11.5px; color: var(--text-4); }
+  .pd-total { margin-left: auto; text-align: right; font-size: 40px; font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; }
+  .pd-total span { font-size: 14px; color: var(--text-4); }
+  .pd-total em { display: block; font-style: normal; font-size: 11px; font-weight: 600; color: var(--text-4); margin-top: 4px; }
+  .pd-intro {
+    font-size: 13px; line-height: 1.65; color: var(--text-2); white-space: pre-wrap;
+    padding: 11px 13px; border-radius: 10px; margin-bottom: 4px;
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07);
+  }
+  .pd-sec {
+    display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+    font-size: 13px; font-weight: 800; color: var(--gold-warm);
+    margin: 20px 0 10px; padding-bottom: 7px; border-bottom: 1px solid rgba(255,255,255,.09);
+  }
+  .pd-sec small { font-size: 10.5px; font-weight: 500; color: var(--text-4); }
+  .pd-crit { margin-bottom: 13px; }
+  .pd-crit-h { display: flex; align-items: baseline; gap: 8px; }
+  .pd-crit-n { font-size: 13px; font-weight: 800; color: var(--text-1); }
+  .pd-crit-avg { margin-left: auto; font-size: 12px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .pd-crit-d { font-size: 11px; color: var(--text-4); margin: 2px 0 6px; line-height: 1.45; }
+  .pd-crit-bar { height: 6px; border-radius: 3px; background: rgba(255,255,255,.08); overflow: hidden; margin-bottom: 6px; }
+  .pd-crit-bar i { display: block; height: 100%; border-radius: 3px; transition: width .25s ease; }
+  .pd-crit-mine { display: flex; align-items: center; gap: 10px; }
+  .pd-range { flex: 1; accent-color: var(--gold); height: 22px; }
+  .pd-mine-v {
+    width: 38px; text-align: center; flex: none; font-size: 12.5px; font-weight: 800;
+    color: var(--gold-warm); background: rgba(244,196,48,.12); border-radius: 6px; padding: 3px 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .pd-crit.spirit {
+    padding: 12px 13px; border-radius: 11px; margin-bottom: 16px;
+    background: rgba(244,196,48,.05); border: 1px solid rgba(244,196,48,.18);
+  }
+  .pd-scs {
+    margin-top: 12px; padding-left: 11px;
+    border-left: 2px solid rgba(244,196,48,.28);
+    display: flex; flex-direction: column; gap: 11px;
+  }
+  .pd-sc-h { display: flex; align-items: baseline; gap: 8px; }
+  .pd-sc-n { font-size: 12.5px; font-weight: 800; color: var(--text-1); }
+  .pd-sc-avg { margin-left: auto; font-size: 12px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .pd-sc-d { font-size: 10.5px; line-height: 1.45; color: var(--text-4); margin: 2px 0 3px; }
+  .pd-sc .pd-crit-mine { gap: 9px; }
+  .pd-sc .pd-mine-v { width: 34px; font-size: 12px; }
+  .pd-sc.signed { padding: 9px 10px; margin: 2px 0; border-radius: 9px;
+    background: rgba(168,85,247,.07); border: 1px solid rgba(168,85,247,.22); }
+  .pd-sc-range {
+    font-size: 9.5px; font-weight: 800; letter-spacing: .2px;
+    padding: 2px 6px; border-radius: 20px;
+    background: rgba(168,85,247,.18); color: #d8b4fe;
+  }
+  .pd-range.signed { accent-color: #a855f7; }
+  .pd-mine-v.signed { color: #d8b4fe; background: rgba(168,85,247,.14); width: 42px; }
+  .pd-save-row { display: flex; gap: 8px; margin-top: 4px; }
+  .pd-save-row .btn { flex: 1; }
+  .pd-vote { display: flex; gap: 7px; }
+  .pd-vbtn {
+    flex: 1; padding: 12px 6px; border-radius: 10px; cursor: pointer; font-family: inherit;
+    font-size: 13px; font-weight: 800; white-space: nowrap;
+    border: 1px solid var(--border-2); background: var(--bg-3); color: var(--text-2);
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+  }
+  .pd-vbtn b { font-size: 15px; font-variant-numeric: tabular-nums; }
+  .pd-vbtn:active { transform: scale(.97); }
+  .pd-vbar { display: flex; height: 7px; border-radius: 4px; overflow: hidden; background: rgba(255,255,255,.08); margin-top: 9px; }
+  .pd-vbar i { display: block; height: 100%; transition: width .25s ease; }
+  .pd-vmeta { font-size: 11px; color: var(--text-4); margin-top: 6px; }
+  .pros-votes .pv {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11.5px; font-weight: 800; padding: 3px 9px; border-radius: 20px; border: 1px solid;
+  }
+  .pros-votes .pv.up { color: #4ade80; border-color: rgba(34,197,94,.4); background: rgba(34,197,94,.12); }
+  .pros-votes .pv.down { color: #fca5a5; border-color: rgba(239,68,68,.4); background: rgba(239,68,68,.12); }
+  .pros-votes .pv.hold { color: #fcd34d; border-color: rgba(245,158,11,.35); background: rgba(245,158,11,.1); }
+  .pd-reason { display: flex; flex-direction: column; gap: 7px; margin-top: 11px; }
+  .pd-reason textarea {
+    width: 100%; min-height: 58px; padding: 10px 12px; resize: vertical;
+    background: var(--bg-2); border: 1px solid var(--border-2); border-radius: 8px;
+    color: var(--text); font-size: 13px; line-height: 1.55; font-family: inherit;
+  }
+  .pd-reason textarea:disabled { opacity: .45; }
+  .pd-reason .btn:disabled { opacity: .4; cursor: default; }
+  .pd-ops { margin-top: 13px; display: flex; flex-direction: column; gap: 6px; }
+  .pd-ops-t { font-size: 11.5px; font-weight: 800; color: var(--text-3); margin-bottom: 2px; }
+  .pd-ops-t small { font-weight: 500; color: var(--text-4); margin-left: 4px; }
+  .pd-op {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 9px 11px; border-radius: 9px;
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07);
+  }
+  .pd-op-b {
+    flex: none; font-size: 10.5px; font-weight: 800;
+    padding: 3px 8px; border-radius: 20px; border: 1px solid; white-space: nowrap;
+  }
+  .pd-op-t { flex: 1; font-size: 12.5px; line-height: 1.55; color: var(--text-2); white-space: pre-wrap; word-break: break-word; }
+  #prosAddScore .pd-crit-h { margin-bottom: 0; }
+  #prosAddScore .pd-crit { margin-bottom: 11px; }
+  .pd-concern-add { display: flex; flex-direction: column; gap: 7px; }
+  .pd-concern-add textarea {
+    width: 100%; min-height: 62px; padding: 10px 12px; resize: vertical;
+    background: var(--bg-2); border: 1px solid var(--border-2); border-radius: 8px;
+    color: var(--text); font-size: 13px; line-height: 1.55; font-family: inherit;
+  }
+  .pd-concerns { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+  .pd-concern {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 12.5px; line-height: 1.55; color: var(--text-2);
+    padding: 9px 11px; border-radius: 9px;
+    background: rgba(239,68,68,.06); border: 1px solid rgba(239,68,68,.18);
+  }
+  .pd-concern span { flex: 1; white-space: pre-wrap; word-break: break-word; }
+  .pd-cdel { background: none; border: none; cursor: pointer; font-size: 13px; opacity: .6; padding: 0; }
+  .pd-none { font-size: 12px; color: var(--text-4); margin-top: 8px; }
+  .pd-status { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .pd-sbtn {
+    padding: 8px 14px; border-radius: 20px; cursor: pointer; font-family: inherit;
+    font-size: 12px; font-weight: 800;
+    border: 1px solid var(--border-2); background: var(--bg-3); color: var(--text-3);
+  }
+  .pd-approve { width: 100%; padding: 13px; font-size: 14px; }
+  .pd-joined {
+    font-size: 12.5px; font-weight: 700; color: #86efac;
+    padding: 11px 13px; border-radius: 10px;
+    background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.28);
+  }
+  @media (max-width: 520px) {
+    .pros-list { grid-template-columns: 1fr; }
+    .pd-total { font-size: 32px; }
+    .pd-name { font-size: 17px; }
+  }
 
   /* ---------- 🎬 전술 시나리오 ---------- */
   .scen-pop { max-width: 460px; }
@@ -3971,6 +4184,7 @@
     <button class="tab-btn" data-tab="hall">👑 전당</button>
     <button class="tab-btn" data-tab="goh">🎖️ 가드오브아너</button>
     <button class="tab-btn" data-tab="blacklist">🚫 블랙리스트</button>
+    <button class="tab-btn" data-tab="prospect" data-newfeat="prospect">🌱 예비 이스트</button>
     <button class="tab-btn" data-tab="admin" id="tabAdmin" style="display:none">🛡️ 관리자</button>
   </div>
   <div class="spacer"></div>
@@ -4319,6 +4533,55 @@
       </div>
     </div>
   </section>
+
+
+  <!-- ============ 🌱 예비 이스트 ============ -->
+  <section class="view" id="view-prospect">
+    <div class="stats-view">
+      <div class="stats-header">
+        <h1>🌱 예비 이스트</h1>
+        <button class="btn primary" id="btnProsAdd">+ 예비 선수 추천</button>
+      </div>
+      <div class="pros-intro">
+        영입을 고민 중인 선수를 등록하고, <b>회원 누구나</b> 점수·투표·제보에 참여해 함께 결정하는 곳이에요.
+        점수는 4개 항목 평균으로 <b>100점 만점</b>(이스트 정신은 7개 세부 종목), 투표와 제보는 <b>익명</b>입니다.
+      </div>
+      <div class="pros-sort" id="prosSort">
+        <button type="button" data-psort="score" class="on">점수순</button>
+        <button type="button" data-psort="vote">추천순</button>
+        <button type="button" data-psort="new">최신순</button>
+      </div>
+      <div id="prosList" class="pros-list"></div>
+    </div>
+  </section>
+
+  <!-- ============ 예비 선수 추천 등록 ============ -->
+  <div class="modal-overlay" id="prosAddModal">
+    <div class="modal">
+      <h3 id="prosAddTitle">🌱 예비 선수 추천</h3>
+      <div class="form-group"><label>이름 <span style="color:#f87171">*</span></label>
+        <input type="text" id="prosName" maxlength="20" placeholder="추천하는 선수 이름" /></div>
+      <div class="form-row">
+        <div class="form-group"><label>주 포지션</label>
+          <select id="prosPos"></select></div>
+        <div class="form-group"><label>나이 / 소속 (선택)</label>
+          <input type="text" id="prosFrom" maxlength="30" placeholder="예: 27세 · 성남동중 12기" /></div>
+      </div>
+      <div class="form-group"><label>추천 이유 · 어떤 선수인지</label>
+        <textarea id="prosIntro" maxlength="300" placeholder="예: 성남동중 후배. 수비형 미드 보고 몸싸움 좋음. 주말마다 시간 됨." style="min-height:80px"></textarea></div>
+      <div class="pd-sec">📊 영입 점수 <small>추천한 사람이 먼저 매기고, 나머지 회원들이 뒤에 더해요</small></div>
+      <div id="prosAddScore"></div>
+      <div class="modal-actions">
+        <button class="btn" id="prosAddCancel">취소</button>
+        <button class="btn primary" id="prosAddSave">등록</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 예비 선수 상세 · 평가 ============ -->
+  <div class="modal-overlay" id="prosModal">
+    <div class="modal wide" id="prosModalBody"></div>
+  </div>
 
   <!-- ============ 케미 만들기 모달 ============ -->
   <div class="modal-overlay" id="chemModal">
@@ -4850,7 +5113,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 48;
+const APP_VERSION = 53;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -5013,6 +5276,7 @@ function rerenderCurrent() {
   else if (t === 'hall') renderHall();
   else if (t === 'goh') renderGoh();
   else if (t === 'blacklist') renderBlacklist();
+  else if (t === 'prospect') renderProspects();
   else if (t === 'admin' && isOwner()) renderAdmin();
 }
 
@@ -7657,7 +7921,17 @@ async function buildLineupImage(sq) {
   g.beginPath(); g.moveTo(54, 258); g.lineTo(W - 54, 258); g.stroke();
 
   // ---- 피치 ----
-  const px = 54, py = 292, pw = W - 108, ph = 1120;
+  // 전략 블록을 먼저 정해서, 필요한 만큼 피치 높이를 줄인다 (안 그러면 아래가 잘린다)
+  const _ms = matchStrategyOf(sq);
+  const _qs = (sq.strategy || '').trim();
+  const blocks = [];
+  if (_ms) blocks.push({ t: '⚽ 경기 전략', v: _ms });
+  if (_qs) blocks.push({ t: `📋 ${(info && info.quarter) ? info.quarter : sq.name} 전략`, v: _qs });
+  const BLK_H = 106, FOOT_Y = H - 34;
+  const px = 54, py = 292, pw = W - 108;
+  const _need = blocks.length * BLK_H;
+  const _room = FOOT_Y - (py + 1120 + 40) - 10;
+  const ph = Math.max(880, 1120 - Math.max(0, _need - _room));
   const grad = g.createLinearGradient(0, py, 0, py + ph);
   grad.addColorStop(0, '#0f6b36'); grad.addColorStop(1, '#0a4d27');
   g.fillStyle = grad;
@@ -7726,23 +8000,25 @@ async function buildLineupImage(sq) {
   });
   g.textAlign = 'left';
 
-  // ---- 전략 ----
-  let fy = py + ph + 44;
-  const st = (sq.strategy || '').trim();
-  if (st) {
-    g.fillStyle = GOLD; g.font = `800 24px ${F}`;
-    g.fillText('📋 감독 전략', 54, fy);
-    fy += 36;
-    g.fillStyle = '#cfd3da'; g.font = `500 25px ${F}`;
-    // 줄바꿈
-    const words = st.split(/\s+/); let line = ''; let lines = 0;
+  // ---- 전략 (경기 전체 + 이 쿼터) ----
+  let fy = py + ph + 42;
+  blocks.forEach((bk, bi) => {
+    g.fillStyle = bi === 0 && _ms ? GOLD : GOLDW;
+    g.font = `800 23px ${F}`;
+    g.fillText(bk.t, 54, fy);
+    fy += 32;
+    g.fillStyle = '#cfd3da'; g.font = `500 24px ${F}`;
+    const words = bk.v.split(/\s+/); let line = ''; let lines = 0;
     for (const w of words) {
       const t = line ? line + ' ' + w : w;
-      if (g.measureText(t).width > W - 108) { g.fillText(line, 54, fy); fy += 36; line = w; if (++lines >= 3) break; }
-      else line = t;
+      if (g.measureText(t).width > W - 108) {
+        g.fillText(line, 54, fy); fy += 32; line = w;
+        if (++lines >= 2) { line = ''; break; }
+      } else line = t;
     }
-    if (lines < 3 && line) { g.fillText(line, 54, fy); fy += 36; }
-  }
+    if (lines < 2 && line) { g.fillText(line, 54, fy); fy += 32; }
+    fy += 12;
+  });
   // 푸터
   g.fillStyle = '#5a5f66'; g.font = `500 21px ${F}`;
   g.fillText('EFM · East Football Manager', 54, H - 34);
@@ -7780,8 +8056,10 @@ function buildMatchNotice(sq) {
     return `${tagForSideRole(sideZone(slot.x), effRole(slot))} ${pl.name}`;
   }).filter(Boolean);
   if (rows.length) L.push(rows.join(' / '));
-  const st = (sq.strategy || '').trim();
-  if (st) { L.push(''); L.push(`📢 ${st}`); }
+  // 공지는 경기 전체에 한 번 올라가는 글이다.
+  // 쿼터 전용 전략은 그 쿼터에만 해당하므로 여기 넣지 않는다 (각 쿼터 라인업 이미지에 들어간다).
+  const ms = matchStrategyOf(sq);
+  if (ms) { L.push(''); L.push(`📢 경기 전략 · ${ms}`); }
   return L.join('\n');
 }
 
@@ -7871,6 +8149,7 @@ const NEW_FEATURES = {
   squadPlan: 36,   // 📋 스쿼드 전략 · 선수별 지시
   shareLineup: 41, // 📸 라인업 이미지 · 경기 공지
   scenario: 46,    // 🎬 전술 시나리오 영상
+  prospect: 50,    // 🌱 예비 이스트 (영입 평가)
   drawerMenu: 31,  // ☰ 왼쪽 서랍 메뉴
 };
 const ACK_KEY = 'efm_ack_feats';
@@ -7906,6 +8185,9 @@ function openStrategyPop() {
   if (!sq) { toast('먼저 스쿼드를 선택해 주세요'); return; }
   ensureSquadPlan(sq);
   const st = (sq.strategy || '').trim();
+  const mt = matchOfSquad(sq);
+  const ms = mt ? (mt.strategy || '').trim() : '';
+  const qLabel = (lineupMatchInfo(sq) || {}).quarter || sq.name;
   const notes = Object.entries(sq.playerNotes).filter(([, v]) => (v || '').trim());
   const canEdit = canManageSquad();
 
@@ -7921,8 +8203,11 @@ function openStrategyPop() {
       <span class="sp-crest">📋</span>
       <span class="order-pop-name">${escapeHtml(sq.name)} · 전략</span>
     </div>
-    <div class="order-pop-body">${st ? escapeHtml(st)
-      : '<span style="color:var(--text-4)">아직 적힌 전략이 없어요.' + (canEdit ? ' 아래 「편집」으로 작성해 보세요.' : ' 감독이 작성하면 여기에 보여요.') + '</span>'}</div>
+    ${ms ? `<div class="sp-block match"><div class="sp-block-t">⚽ 경기 전체 전략 <em>vs ${escapeHtml(mt.opponent || '상대팀')}</em></div>
+      <div class="sp-block-b">${escapeHtml(ms)}</div></div>` : ''}
+    <div class="sp-block"><div class="sp-block-t">📋 ${escapeHtml(qLabel)} 전략</div>
+      <div class="sp-block-b">${st ? escapeHtml(st)
+        : `<span style="color:var(--text-4)">${ms ? '이 쿼터만의 전략은 아직 없어요.' : '아직 적힌 전략이 없어요.'}` + (canEdit ? ' 아래 「편집」으로 작성해 보세요.' : ' 감독이 작성하면 여기에 보여요.') + '</span>'}</div></div>
     ${notes.length ? `<div class="sp-orders">
       <div class="sp-orders-t">👤 선수별 지시 ${notes.length}건</div>
       ${notes.map(([pid, v]) => { const p = getPlayer(pid); if (!p) return '';
@@ -8003,10 +8288,27 @@ function ensureSquadPlan(sq) {
   if (!sq.playerNotes || typeof sq.playerNotes !== 'object' || Array.isArray(sq.playerNotes)) sq.playerNotes = {};
   return sq;
 }
+/* 경기 전체 전략 — 모든 쿼터에 공통으로 걸리는 큰 방향.
+   쿼터별 전략(sq.strategy)과 따로 관리한다. */
+function ensureMatchPlan(m) {
+  if (!m) return null;
+  if (typeof m.strategy !== 'string') m.strategy = '';
+  return m;
+}
+function matchOfSquad(sq) {
+  if (!sq) return null;
+  const info = lineupMatchInfo(sq);
+  return info ? ensureMatchPlan(info.m) : null;
+}
+function matchStrategyOf(sq) {
+  const m = matchOfSquad(sq);
+  return m ? (m.strategy || '').trim() : '';
+}
 function squadPlanCount(sq) {
   if (!sq) return 0;
   ensureSquadPlan(sq);
-  return (sq.strategy.trim() ? 1 : 0) + Object.values(sq.playerNotes).filter(v => (v || '').trim()).length;
+  return (sq.strategy.trim() ? 1 : 0) + (matchStrategyOf(sq) ? 1 : 0)
+    + Object.values(sq.playerNotes).filter(v => (v || '').trim()).length;
 }
 function updateSquadPlanDot() {
   renderSquadMatchBar();
@@ -8021,9 +8323,10 @@ function updateSquadPlanDot() {
   if (sub) {
     ensureSquadPlan(sq);
     const st = sq ? (sq.strategy || '').trim() : '';
+    const ms = matchStrategyOf(sq);
     const cnt = sq ? Object.values(sq.playerNotes).filter(v => (v || '').trim()).length : 0;
-    sub.textContent = st ? st : (cnt ? `선수별 지시 ${cnt}건` : '이 스쿼드의 전략과 선수별 지시');
-    sub.style.color = st ? 'var(--text-2)' : 'var(--text-3)';
+    sub.textContent = st ? `📋 ${st}` : ms ? `⚽ ${ms}` : (cnt ? `선수별 지시 ${cnt}건` : '경기 전체 전략 · 쿼터 전략 · 선수별 지시');
+    sub.style.color = (st || ms) ? 'var(--text-2)' : 'var(--text-3)';
   }
 }
 
@@ -8053,12 +8356,20 @@ function openSquadPlan() {
       </button>`;
     }).join('');
 
+  const mt = matchOfSquad(sq);
+  const qLabel = (lineupMatchInfo(sq) || {}).quarter || sq.name;
+  const taStyle = 'width:100%; padding:10px 12px; background:var(--bg-2); border:1px solid var(--border-2); border-radius:8px; color:var(--text); font-size:13.5px; line-height:1.6; font-family:inherit; resize:vertical';
+  const matchBox = mt
+    ? `<div class="form-group sp-match-fg"><label>⚽ 경기 전체 전략 <em>vs ${escapeHtml(mt.opponent || '상대팀')} · 모든 쿼터 공통</em></label>
+        <textarea id="mgrF2" rows="4"${ro} placeholder="예: 오늘은 무리하게 라인 올리지 않는다. 측면 위주로 풀고, 코너는 전부 짧게." style="${taStyle}">${escapeHtml(mt.strategy || '')}</textarea></div>`
+    : `<div class="sp-hint">이 스쿼드가 아직 경기에 연결되지 않아 「경기 전체 전략」은 쓸 수 없어요. 일정에서 경기에 이 스쿼드를 넣으면 나타나요.</div>`;
   openMgrNoteModal(`📋 ${sq.name} · 전략`,
-    `<div class="form-group"><label>감독의 전략 설명</label>
-      <textarea id="mgrF1" rows="6"${ro} placeholder="예: 초반 15분은 라인 내리고 버틴다. 뺏으면 왼쪽 뒷공간으로 한 번에. 코너는 짧게 연결." style="width:100%; padding:10px 12px; background:var(--bg-2); border:1px solid var(--border-2); border-radius:8px; color:var(--text); font-size:13.5px; line-height:1.6; font-family:inherit; resize:vertical">${escapeHtml(sq.strategy)}</textarea></div>
+    matchBox +
+    `<div class="form-group"><label>📋 이 쿼터 전략 <em>${escapeHtml(qLabel)}에만 적용</em></label>
+      <textarea id="mgrF1" rows="5"${ro} placeholder="예: 초반 15분은 라인 내리고 버틴다. 뺏으면 왼쪽 뒷공간으로 한 번에." style="${taStyle}">${escapeHtml(sq.strategy)}</textarea></div>
      <div class="sp-sec">👤 선수별 지시 <small>${editable ? '이름을 누르면 개별 지시를 적을 수 있어요' : '보기 전용'}</small></div>
      ${rows || '<div class="podium-empty">아직 이 스쿼드에 배치된 선수가 없어요</div>'}`,
-    { kind: 'squadPlan', squadId: sq.id });
+    { kind: 'squadPlan', squadId: sq.id, matchId: mt ? mt.id : null });
 
   document.querySelectorAll('[data-plan-pid]').forEach(b =>
     b.addEventListener('click', () => openSquadPlayerNote(b.dataset.planPid)));
@@ -8153,6 +8464,10 @@ function saveMgrNote() {
     if (!canManageSquad()) { closeMgrNote(); return; }
     const sq = store.squads.find(x => x.id === ctx.squadId); if (!sq) { closeMgrNote(); return; }
     ensureSquadPlan(sq); sq.strategy = v1;
+    if (ctx.matchId) {
+      const mm = store.matches.find(x => x.id === ctx.matchId);
+      if (mm) { ensureMatchPlan(mm); mm.strategy = v2; }
+    }
   } else if (ctx.kind === 'squadPlayer') {
     if (!canManageSquad()) { closeMgrNote(); return; }
     const sq = store.squads.find(x => x.id === ctx.squadId); if (!sq) { closeMgrNote(); return; }
@@ -9168,6 +9483,7 @@ let store = {
   traitCats: undefined, // [{ id, emoji, label, traits:[{id,name,createdBy?}], createdBy? }]  (undefined → seed defaults once)
   traitRatings: {},      // { playerId: { traitId: { userId: value 0-100 } } }
   chemistry: [],         // [{ id, a:playerId, b:playerId, score 0-100, note, createdBy, createdAt }]
+  prospects: [],         // 🌱 예비 이스트 — [{ id, name, pos, intro, status, scores, votes, concerns }]
   mgrBoard: undefined,   // 감독 전용: { formations: { '4-3-3': { pros, cons, slots:{idx:{duty,ideal}} } }, players: { pid: {traits,usage,rating} } }
   currentSquadId: null,
 };
@@ -9832,6 +10148,7 @@ function switchTab(name) {
   if (name === 'hall') renderHall();
   if (name === 'goh') renderGoh();
   if (name === 'blacklist') renderBlacklist();
+  if (name === 'prospect') renderProspects();
   if (name === 'admin') renderAdmin();
   if (name === 'squad') { renderPlayerList(); renderField(); renderSquadList(); updateSquadPlanDot(); renderSquadMatchBar(); applyNewFeatureGlow(); }
   if (_drawerOpen) buildDrawer();
@@ -13297,6 +13614,542 @@ function deleteBlacklistItem(kind, id) {
   toast('삭제됨');
 }
 
+/* ==================== 🌱 예비 이스트 (영입 평가) ====================
+   회원 누구나 예비 선수를 추천하고, 4개 항목 점수(각 100점 → 평균 100점 만점)와
+   익명 투표(찬성·보류·반대), 익명 제보로 함께 영입을 결정한다.
+   최종 승인(영입 확정)이 나면 그 자리에서 선수 탭에 자동 등록된다. */
+/* 이스트 정신은 한 덩어리로 매기면 감으로 찍게 된다 → 6개 세부 종목으로 쪼개 각각 매기고 평균낸다 */
+const PROS_SPIRIT = [
+  { k: 'sp_will',   emoji: '💪', label: '의지',        desc: '지고 있어도 끝까지 뛰고, 부족한 건 배우려 하는지' },
+  { k: 'sp_fire',   emoji: '🔥', label: '열정',        desc: '축구 자체를 좋아하는 정도 · 연습과 모임에 대한 열의' },
+  { k: 'sp_energy', emoji: '⚡', label: '활력',        desc: '그라운드에서 목소리 내고 팀 텐션을 끌어올리는지' },
+  { k: 'sp_syn',    emoji: '🌈', label: '긍정 시너지',  desc: '실수한 동료를 끌어올리고 분위기를 되살리는지' },
+  { k: 'sp_mental', emoji: '🧊', label: '멘탈 · 매너',  desc: '판정이나 실점에 흔들리지 않고, 상대·심판에게 예의를 지키는지' },
+  { k: 'sp_duty',   emoji: '🫱', label: '책임감',      desc: '약속 시간 · 회비 · 장비 · 뒷정리 같은 궂은일을 챙기는지' },
+  { k: 'sp_humor',  emoji: '😂', label: '유머러스',     desc: '웃긴가 안 웃긴가 · 분위기를 웃게 만드는 사람인지 (마이너스도 가능)',
+    min: -100, max: 100, step: 10, def: 0, signed: true },
+];
+const PROS_CRIT = [
+  { k: 'bond',   emoji: '🏫', label: '성남동중 인연',  short: '인연',   desc: '성남동중 출신이거나 선수단과 학연·지연이 있는지' },
+  { k: 'chem',   emoji: '🤝', label: '선수단 친화력',  short: '친화력', desc: '팀에 잘 섞이고 분위기를 좋게 만들 사람인지' },
+  { k: 'attend', emoji: '📅', label: '매치 참여도',    short: '참여도', desc: '꾸준히 나올 수 있는 상황인지 (거리·직업·의지)' },
+  { k: 'spirit', emoji: '🔥', label: '이스트 정신',    short: '정신',   desc: '아래 7개 종목을 각각 매기면 평균이 이 점수가 돼요', subs: PROS_SPIRIT },
+];
+const PROS_STATUS = {
+  open: { t: '검토 중', c: '#60a5fa' },
+  hold: { t: '보류',    c: '#f59e0b' },
+  in:   { t: '영입 확정', c: '#22c55e' },
+  out:  { t: '부결',    c: '#ef4444' },
+};
+const PROS_VOTE = {
+  yes:  { t: '추천',   emoji: '👍', c: '#22c55e' },
+  hold: { t: '보류',   emoji: '⏸️', c: '#f59e0b' },
+  no:   { t: '비추천', emoji: '👎', c: '#ef4444' },
+};
+const PROS_POS = ['GK', 'CB', 'FB', 'WB', 'CDM', 'CM', 'CAM', 'WM', 'WNG', 'ST'];
+
+let _prosSort = 'score';
+let _prosOpenId = null;
+
+function ensureProspects() {
+  if (!Array.isArray(store.prospects)) store.prospects = [];
+  store.prospects.forEach(pr => {
+    if (!pr.scores || typeof pr.scores !== 'object' || Array.isArray(pr.scores)) pr.scores = {};
+    if (!pr.votes || typeof pr.votes !== 'object' || Array.isArray(pr.votes)) pr.votes = {};
+    // 예전엔 'yes' 같은 문자열만 저장했다 → 사유를 담을 수 있는 형태로 올린다
+    Object.keys(pr.votes).forEach(uid => {
+      const v = pr.votes[uid];
+      if (typeof v === 'string') pr.votes[uid] = { v, reason: '', at: 0 };
+      else if (!v || typeof v !== 'object' || !PROS_VOTE[v.v]) delete pr.votes[uid];
+    });
+    if (!Array.isArray(pr.concerns)) pr.concerns = [];
+    if (!PROS_STATUS[pr.status]) pr.status = 'open';
+  });
+  return store.prospects;
+}
+function getProspect(id) { return ensureProspects().find(p => p.id === id) || null; }
+
+/* 점수: 항목별 평균 → 4항목 평균이 총점(100점 만점)
+   세부 종목이 있는 항목(이스트 정신)은 세부 종목 평균이 그 항목의 점수가 된다. */
+const _avg = a => a.length ? Math.round(a.reduce((x, y) => x + y, 0) / a.length) : null;
+function prosCritValOf(sc, c) {
+  if (!sc) return null;
+  if (c.subs) {
+    const vals = c.subs.map(x => typeof sc[x.k] === 'number' ? prosNorm(sc[x.k], x) : null).filter(v => v !== null);
+    if (vals.length) return _avg(vals);
+    return typeof sc[c.k] === 'number' ? sc[c.k] : null;   // 예전 형식(한 덩어리 점수) 호환
+  }
+  return typeof sc[c.k] === 'number' ? sc[c.k] : null;
+}
+function prosCritAvg(pr, c) {
+  const crit = typeof c === 'string' ? PROS_CRIT.find(x => x.k === c) : c;
+  if (!crit) return null;
+  return _avg(Object.values(pr.scores || {}).map(sc => prosCritValOf(sc, crit)).filter(v => v !== null));
+}
+function prosSubAvg(pr, subKey) {
+  return _avg(Object.values(pr.scores || {})
+    .map(sc => (sc && typeof sc[subKey] === 'number') ? sc[subKey] : null).filter(v => v !== null));
+}
+function prosSubDef(x) { return (x && x.def != null) ? x.def : 50; }
+/* 마이너스가 있는 종목은 0~100 척도로 환산해서 평균에 넣는다 (총점은 계속 100점 만점) */
+function prosNorm(v, x) {
+  if (!x || x.min == null) return v;
+  return Math.round((v - x.min) / (x.max - x.min) * 100);
+}
+function prosMySub(sc, crit, subKey) {
+  const x = (crit.subs || []).find(y => y.k === subKey);
+  if (sc && typeof sc[subKey] === 'number') return sc[subKey];
+  if (sc && typeof sc[crit.k] === 'number' && !(x && x.signed)) return sc[crit.k];   // 예전 형식 호환
+  return prosSubDef(x);
+}
+function prosSigned(v, x) { return (x && x.signed && v > 0) ? '+' + v : String(v); }
+function prosTotal(pr) {
+  const avgs = PROS_CRIT.map(c => prosCritAvg(pr, c)).filter(v => v !== null);
+  return _avg(avgs);
+}
+function prosRaterCount(pr) { return Object.keys(pr.scores || {}).length; }
+function prosVoteCount(pr) {
+  const c = { yes: 0, hold: 0, no: 0 };
+  Object.values(pr.votes || {}).forEach(x => {
+    const k = (x && typeof x === 'object') ? x.v : x;
+    if (c[k] != null) c[k]++;
+  });
+  c.total = c.yes + c.hold + c.no;
+  return c;
+}
+function prosMyVote(pr) {
+  const u = currentUser();
+  const x = u ? pr.votes[u.id] : null;
+  if (!x) return null;
+  return (typeof x === 'object') ? x : { v: x, reason: '', at: 0 };
+}
+/* 사유가 적힌 의견만 모은다 — 작성자는 화면에 절대 안 나온다 */
+function prosOpinions(pr) {
+  return Object.values(pr.votes || {})
+    .filter(x => x && typeof x === 'object' && (x.reason || '').trim())
+    .sort((a, b) => (b.at || 0) - (a.at || 0));
+}
+function prosMyScore(pr) {
+  const u = currentUser();
+  return (u && pr.scores[u.id]) ? pr.scores[u.id] : null;
+}
+function prosScoreColor(v) {
+  if (v == null) return 'var(--text-4)';
+  if (v >= 80) return '#22c55e';
+  if (v >= 65) return '#84cc16';
+  if (v >= 50) return '#f59e0b';
+  return '#ef4444';
+}
+function canManageProspect(pr) {
+  const u = currentUser();
+  return isAdmin() || !!(pr && pr.createdBy && u && pr.createdBy === u.id);
+}
+
+/* ---------- 목록 ---------- */
+function renderProspects() {
+  const list = ensureProspects();
+  const el = document.getElementById('prosList');
+  if (!el) return;
+  document.querySelectorAll('#prosSort [data-psort]').forEach(b => b.classList.toggle('on', b.dataset.psort === _prosSort));
+  if (!list.length) {
+    el.innerHTML = `<div class="pros-empty">아직 추천된 예비 선수가 없어요.<br>오른쪽 위 <b>+ 예비 선수 추천</b>으로 시작해 보세요.</div>`;
+    return;
+  }
+  const rank = { open: 0, hold: 1, in: 2, out: 3 };
+  const sorted = list.slice().sort((a, b) => {
+    const ra = rank[a.status] ?? 0, rb = rank[b.status] ?? 0;
+    if (ra !== rb) return ra - rb;
+    if (_prosSort === 'new') return (b.createdAt || 0) - (a.createdAt || 0);
+    if (_prosSort === 'vote') return prosVoteCount(b).yes - prosVoteCount(a).yes;
+    return (prosTotal(b) ?? -1) - (prosTotal(a) ?? -1);
+  });
+  el.innerHTML = sorted.map(pr => {
+    const tot = prosTotal(pr);
+    const st = PROS_STATUS[pr.status];
+    const vc = prosVoteCount(pr);
+    const op = prosOpinions(pr).length;
+    const bars = PROS_CRIT.map(c => {
+      const v = prosCritAvg(pr, c);
+      return `<div class="pc-mini" title="${c.label}">
+        <span class="pcm-l">${c.emoji}</span>
+        <span class="pcm-bar"><i style="width:${v == null ? 0 : v}%; background:${prosScoreColor(v)}"></i></span>
+        <span class="pcm-v">${v == null ? '–' : v}</span></div>`;
+    }).join('');
+    return `<button class="pros-card st-${pr.status}" data-pros-id="${pr.id}">
+      <div class="pros-top">
+        <span class="pros-name">${escapeHtml(pr.name)}</span>
+        ${pr.pos ? `<span class="pros-pos">${escapeHtml(pr.pos)}</span>` : ''}
+        <span class="pros-st" style="color:${st.c}; border-color:${st.c}55; background:${st.c}1a">${st.t}</span>
+      </div>
+      <div class="pros-mid">
+        <div class="pros-score" style="color:${prosScoreColor(tot)}">
+          ${tot == null ? '–' : tot}<span>/100</span>
+        </div>
+        <div class="pros-bars">${bars}</div>
+      </div>
+      <div class="pros-bot">
+        <span class="pros-votes">
+          <b class="pv up">👍 추천 ${vc.yes}</b>
+          <b class="pv down">👎 비추천 ${vc.no}</b>
+          ${vc.hold ? `<b class="pv hold">⏸️ ${vc.hold}</b>` : ''}
+        </span>
+        <span class="pros-meta">평가 ${prosRaterCount(pr)}명${op ? ` · 의견 ${op}` : ''}${pr.concerns.length ? ` · 제보 ${pr.concerns.length}` : ''} · 등록 ${escapeHtml(pr.createdByName || '?')}</span>
+      </div>
+    </button>`;
+  }).join('');
+  el.querySelectorAll('[data-pros-id]').forEach(b =>
+    b.addEventListener('click', () => openProspect(b.dataset.prosId)));
+}
+
+/* ---------- 추천 등록 ---------- */
+/* 점수 슬라이더 묶음 — 등록 폼과 상세 창이 같은 모양을 쓴다 */
+function prosScoreFormHtml(prefix, my) {
+  const row = (key, mine, x) => `<div class="pd-crit-mine">
+      <input type="range" min="${x && x.min != null ? x.min : 0}" max="${x && x.max != null ? x.max : 100}" step="${x && x.step ? x.step : 5}"
+        value="${mine}" data-${prefix}-crit="${key}" data-signed="${x && x.signed ? 1 : 0}" class="pd-range${x && x.signed ? ' signed' : ''}" />
+      <span class="pd-mine-v${x && x.signed ? ' signed' : ''}" data-${prefix}-critv="${key}">${prosSigned(mine, x)}</span>
+    </div>`;
+  return PROS_CRIT.map(c => {
+    if (!c.subs) {
+      const mine = my && typeof my[c.k] === 'number' ? my[c.k] : 50;
+      return `<div class="pd-crit">
+        <div class="pd-crit-h"><span class="pd-crit-n">${c.emoji} ${c.label}</span></div>
+        <div class="pd-crit-d">${c.desc}</div>${row(c.k, mine)}</div>`;
+    }
+    const subs = c.subs.map(x => {
+      const sMine = my ? prosMySub(my, c, x.k) : 50;
+      return `<div class="pd-sc${x.signed ? ' signed' : ''}">
+        <div class="pd-sc-h"><span class="pd-sc-n">${x.emoji} ${x.label}</span>${x.signed ? '<span class="pd-sc-range">-100 ~ +100</span>' : ''}</div>
+        <div class="pd-sc-d">${x.desc}</div>${row(x.k, sMine, x)}</div>`;
+    }).join('');
+    return `<div class="pd-crit spirit">
+      <div class="pd-crit-h"><span class="pd-crit-n">${c.emoji} ${c.label}</span></div>
+      <div class="pd-crit-d">${c.desc}</div>
+      <div class="pd-scs">${subs}</div></div>`;
+  }).join('');
+}
+function bindProsRanges(root, prefix) {
+  root.querySelectorAll(`[data-${prefix}-crit]`).forEach(r => r.addEventListener('input', () => {
+    const key = r.getAttribute(`data-${prefix}-crit`);
+    const v = root.querySelector(`[data-${prefix}-critv="${key}"]`);
+    const n = parseInt(r.value, 10);
+    if (v) v.textContent = (r.dataset.signed === '1' && n > 0) ? '+' + n : String(n);
+  }));
+}
+function collectProsScore(root, prefix) {
+  const sc = {};
+  const put = k => {
+    const r = root.querySelector(`[data-${prefix}-crit="${k}"]`);
+    if (r) sc[k] = parseInt(r.value, 10) || 0;
+  };
+  PROS_CRIT.forEach(c => { if (c.subs) c.subs.forEach(x => put(x.k)); else put(c.k); });
+  sc.at = Date.now();
+  return sc;
+}
+function openProsAdd() {
+  if (!isLoggedIn()) { toast('로그인이 필요합니다'); return; }
+  const sel = document.getElementById('prosPos');
+  sel.innerHTML = '<option value="">-</option>' + PROS_POS.map(k =>
+    `<option value="${k}">${k} · ${escapeHtml((ROLES[k] || {}).name || k)}</option>`).join('');
+  document.getElementById('prosName').value = '';
+  document.getElementById('prosFrom').value = '';
+  document.getElementById('prosIntro').value = '';
+  const sbox = document.getElementById('prosAddScore');
+  sbox.innerHTML = prosScoreFormHtml('pad', null);
+  bindProsRanges(sbox, 'pad');
+  document.getElementById('prosAddModal').classList.add('show');
+  document.querySelector('#prosAddModal .modal').scrollTop = 0;
+  setTimeout(() => document.getElementById('prosName').focus(), 80);
+}
+function saveProsAdd() {
+  const u = currentUser();
+  const name = (document.getElementById('prosName').value || '').trim();
+  if (!name) { toast('이름을 입력해 주세요'); return; }
+  const pr = {
+    id: uid(),
+    name,
+    pos: document.getElementById('prosPos').value || '',
+    from: (document.getElementById('prosFrom').value || '').trim(),
+    intro: (document.getElementById('prosIntro').value || '').trim(),
+    status: 'open',
+    createdBy: u ? u.id : null,
+    createdByName: u ? (u.displayName || u.username || '') : '',
+    createdAt: Date.now(),
+    scores: {}, votes: {}, concerns: [],
+  };
+  // 추천한 사람의 점수를 처음부터 같이 기록한다
+  if (u) pr.scores[u.id] = collectProsScore(document.getElementById('prosAddScore'), 'pad');
+  ensureProspects().push(pr);
+  saveState();
+  document.getElementById('prosAddModal').classList.remove('show');
+  renderProspects();
+  toast(`${name} 님을 예비 이스트에 올렸어요`);
+  openProspect(pr.id);
+}
+
+/* ---------- 상세 · 평가 ---------- */
+function openProspect(id) {
+  const pr = getProspect(id); if (!pr) return;
+  _prosOpenId = id;
+  document.getElementById('prosModal').classList.add('show');
+  renderProspectDetail();
+}
+function closeProspect() {
+  document.getElementById('prosModal').classList.remove('show');
+  _prosOpenId = null;
+  renderProspects();
+}
+function renderProspectDetail() {
+  const pr = getProspect(_prosOpenId); if (!pr) { closeProspect(); return; }
+  const box = document.getElementById('prosModalBody'); if (!box) return;
+  const u = currentUser();
+  const my = prosMyScore(pr);
+  const mv = prosMyVote(pr);
+  const myVote = mv ? mv.v : '';
+  const opinions = prosOpinions(pr);
+  const tot = prosTotal(pr);
+  const st = PROS_STATUS[pr.status];
+  const vc = prosVoteCount(pr);
+  const manage = canManageProspect(pr);
+  const admin = isAdmin();
+
+  const critRow = (key, mine, x) => `<div class="pd-crit-mine">
+        <input type="range" min="${x && x.min != null ? x.min : 0}" max="${x && x.max != null ? x.max : 100}" step="${x && x.step ? x.step : 5}"
+          value="${mine}" data-pros-crit="${key}" data-signed="${x && x.signed ? 1 : 0}" class="pd-range${x && x.signed ? ' signed' : ''}" />
+        <span class="pd-mine-v${x && x.signed ? ' signed' : ''}" data-pros-critv="${key}">${prosSigned(mine, x)}</span>
+      </div>`;
+  const crits = PROS_CRIT.map(c => {
+    const avg = prosCritAvg(pr, c);
+    const head = `<div class="pd-crit-h">
+        <span class="pd-crit-n">${c.emoji} ${c.label}</span>
+        <span class="pd-crit-avg" style="color:${prosScoreColor(avg)}">${avg == null ? '평가 없음' : '평균 ' + avg}</span>
+      </div>
+      <div class="pd-crit-d">${c.desc}</div>
+      <div class="pd-crit-bar"><i style="width:${avg == null ? 0 : avg}%; background:${prosScoreColor(avg)}"></i></div>`;
+    if (!c.subs) {
+      const mine = my && typeof my[c.k] === 'number' ? my[c.k] : 50;
+      return `<div class="pd-crit">${head}${critRow(c.k, mine)}</div>`;
+    }
+    const subs = c.subs.map(x => {
+      const sAvg = prosSubAvg(pr, x.k);
+      const sMine = my ? prosMySub(my, c, x.k) : prosSubDef(x);
+      return `<div class="pd-sc${x.signed ? ' signed' : ''}">
+        <div class="pd-sc-h">
+          <span class="pd-sc-n">${x.emoji} ${x.label}</span>
+          ${x.signed ? '<span class="pd-sc-range">-100 ~ +100</span>' : ''}
+          <span class="pd-sc-avg" style="color:${prosScoreColor(sAvg == null ? null : prosNorm(sAvg, x))}">${sAvg == null ? '–' : prosSigned(sAvg, x)}</span>
+        </div>
+        <div class="pd-sc-d">${x.desc}</div>
+        ${critRow(x.k, sMine, x)}
+      </div>`;
+    }).join('');
+    return `<div class="pd-crit spirit">${head}<div class="pd-scs">${subs}</div></div>`;
+  }).join('');
+
+  const votePct = k => vc.total ? Math.round(vc[k] / vc.total * 100) : 0;
+  const concerns = pr.concerns.slice().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+  box.innerHTML = `
+    <div class="pd-head">
+      <div>
+        <h3 class="pd-name">${escapeHtml(pr.name)}
+          ${pr.pos ? `<span class="pros-pos">${escapeHtml(pr.pos)}</span>` : ''}
+          <span class="pros-st" style="color:${st.c}; border-color:${st.c}55; background:${st.c}1a">${st.t}</span>
+        </h3>
+        <div class="pd-sub">${pr.from ? escapeHtml(pr.from) + ' · ' : ''}추천 ${escapeHtml(pr.createdByName || '?')}</div>
+      </div>
+      <div class="pd-total" style="color:${prosScoreColor(tot)}">
+        ${tot == null ? '–' : tot}<span>/100</span>
+        <em>${prosRaterCount(pr)}명 평가</em>
+      </div>
+    </div>
+    ${pr.intro ? `<div class="pd-intro">${escapeHtml(pr.intro)}</div>` : ''}
+
+    <div class="pd-sec">📊 영입 점수 <small>🙌 회원 누구나 매길 수 있어요 · 전원 평균으로 계산돼요</small></div>
+    ${crits}
+    <div class="pd-save-row">
+      <button class="btn primary" id="prosScoreSave">${my ? '내 점수 수정 저장' : '내 점수 등록'}</button>
+      ${my ? '<button class="btn" id="prosScoreClear">내 점수 취소</button>' : ''}
+    </div>
+
+    <div class="pd-sec">🗳️ 추천 · 비추천 <small>🔒 익명 · 누가 뭘 눌렀는지 아무도 안 보여요</small></div>
+    <div class="pd-vote">
+      ${Object.keys(PROS_VOTE).map(k => `<button type="button" class="pd-vbtn${myVote === k ? ' on' : ''}" data-pros-vote="${k}"
+        style="${myVote === k ? `border-color:${PROS_VOTE[k].c}; background:${PROS_VOTE[k].c}22; color:${PROS_VOTE[k].c}` : ''}">
+        ${PROS_VOTE[k].emoji} ${PROS_VOTE[k].t}<b>${vc[k]}</b></button>`).join('')}
+    </div>
+    <div class="pd-vbar">
+      ${Object.keys(PROS_VOTE).map(k => `<i style="width:${votePct(k)}%; background:${PROS_VOTE[k].c}"></i>`).join('')}
+    </div>
+    <div class="pd-vmeta">${vc.total ? `총 ${vc.total}명 · 추천 ${votePct('yes')}%` : '아직 의견이 없어요'}</div>
+    <div class="pd-reason">
+      <textarea id="prosReason" maxlength="200" placeholder="${myVote ? '사유를 적어두면 다른 사람이 판단할 때 도움이 돼요 (선택)' : '먼저 위에서 추천 / 보류 / 비추천을 골라주세요'}"${myVote ? '' : ' disabled'}>${escapeHtml(mv ? (mv.reason || '') : '')}</textarea>
+      <button class="btn" id="prosReasonSave"${myVote ? '' : ' disabled'}>사유 저장</button>
+    </div>
+    ${opinions.length ? `<div class="pd-ops">
+      <div class="pd-ops-t">💬 남겨진 의견 ${opinions.length}건 <small>익명</small></div>
+      ${opinions.map(o => `<div class="pd-op ${o.v}">
+        <span class="pd-op-b" style="color:${PROS_VOTE[o.v].c}; border-color:${PROS_VOTE[o.v].c}55; background:${PROS_VOTE[o.v].c}1a">${PROS_VOTE[o.v].emoji} ${PROS_VOTE[o.v].t}</span>
+        <span class="pd-op-t">${escapeHtml(o.reason)}</span></div>`).join('')}
+    </div>` : '<div class="pd-none">아직 사유를 남긴 사람이 없어요.</div>'}
+
+    <div class="pd-sec">🤫 익명 제보 <small>불화가 있거나 불편한 관계라면 여기에 · 작성자는 저장되지 않아요</small></div>
+    <div class="pd-concern-add">
+      <textarea id="prosConcern" maxlength="200" placeholder="예: 예전 팀에서 다툰 적 있음 / 특정 멤버와 불편한 사이"></textarea>
+      <button class="btn" id="prosConcernAdd">익명 등록</button>
+    </div>
+    ${concerns.length ? `<div class="pd-concerns">${concerns.map(c => `<div class="pd-concern">
+        <span>${escapeHtml(c.text)}</span>
+        ${admin ? `<button class="pd-cdel" data-pros-cdel="${c.id}" title="삭제">🗑️</button>` : ''}
+      </div>`).join('')}</div>`
+      : '<div class="pd-none">아직 제보가 없어요.</div>'}
+
+    ${admin ? `<div class="pd-sec">🛡️ 운영 <small>운영진·오너만 보여요</small></div>
+      <div class="pd-status">
+        ${Object.keys(PROS_STATUS).map(k => `<button type="button" class="pd-sbtn${pr.status === k ? ' on' : ''}" data-pros-status="${k}"
+          style="${pr.status === k ? `border-color:${PROS_STATUS[k].c}; background:${PROS_STATUS[k].c}22; color:${PROS_STATUS[k].c}` : ''}">${PROS_STATUS[k].t}</button>`).join('')}
+      </div>
+      ${pr.playerId && getPlayer(pr.playerId)
+        ? `<div class="pd-joined">✅ 선수 탭에 <b>${escapeHtml(pr.name)}</b> 등록 완료</div>`
+        : `<button class="btn primary pd-approve" id="prosApprove">✅ 최종 승인 · 선수로 영입</button>`}` : ''}
+
+    <div class="modal-actions">
+      ${manage ? '<button class="btn danger" id="prosDelete">삭제</button>' : ''}
+      <button class="btn" id="prosClose">닫기</button>
+    </div>`;
+
+  // 슬라이더 값 표시
+  box.querySelectorAll('[data-pros-crit]').forEach(r => r.addEventListener('input', () => {
+    const v = box.querySelector(`[data-pros-critv="${r.dataset.prosCrit}"]`);
+    if (v) v.textContent = r.value;
+  }));
+  box.querySelector('#prosScoreSave')?.addEventListener('click', saveProsScore);
+  box.querySelector('#prosScoreClear')?.addEventListener('click', clearProsScore);
+  box.querySelectorAll('[data-pros-vote]').forEach(b =>
+    b.addEventListener('click', () => voteProspect(b.dataset.prosVote)));
+  box.querySelector('#prosReasonSave')?.addEventListener('click', saveProsReason);
+  box.querySelector('#prosConcernAdd')?.addEventListener('click', addProsConcern);
+  box.querySelectorAll('[data-pros-cdel]').forEach(b =>
+    b.addEventListener('click', () => delProsConcern(b.dataset.prosCdel)));
+  box.querySelectorAll('[data-pros-status]').forEach(b =>
+    b.addEventListener('click', () => setProsStatus(b.dataset.prosStatus)));
+  box.querySelector('#prosApprove')?.addEventListener('click', approveProspect);
+  box.querySelector('#prosDelete')?.addEventListener('click', deleteProspect);
+  box.querySelector('#prosClose')?.addEventListener('click', closeProspect);
+}
+
+function saveProsScore() {
+  const pr = getProspect(_prosOpenId); if (!pr) return;
+  const u = currentUser(); if (!u) { toast('로그인이 필요합니다'); return; }
+  const box = document.getElementById('prosModalBody');
+  pr.scores[u.id] = collectProsScore(box, 'pros');
+  saveState();
+  renderProspectDetail();
+  toast('점수를 저장했어요');
+}
+function clearProsScore() {
+  const pr = getProspect(_prosOpenId); if (!pr) return;
+  const u = currentUser(); if (!u) return;
+  delete pr.scores[u.id];
+  saveState();
+  renderProspectDetail();
+  toast('내 점수를 지웠어요');
+}
+function voteProspect(v) {
+  const pr = getProspect(_prosOpenId); if (!pr) return;
+  const u = currentUser(); if (!u) { toast('로그인이 필요합니다'); return; }
+  const cur = prosMyVote(pr);
+  // 사유를 적던 중이면 지우지 않고 가져간다
+  const typed = (document.getElementById('prosReason')?.value || '').trim();
+  if (cur && cur.v === v) delete pr.votes[u.id];     // 같은 걸 다시 누르면 취소
+  else pr.votes[u.id] = { v, reason: typed || (cur ? cur.reason || '' : ''), at: Date.now() };
+  saveState();
+  renderProspectDetail();
+}
+function saveProsReason() {
+  const pr = getProspect(_prosOpenId); if (!pr) return;
+  const u = currentUser(); if (!u) { toast('로그인이 필요합니다'); return; }
+  const cur = prosMyVote(pr);
+  if (!cur) { toast('먼저 추천 / 보류 / 비추천을 골라주세요'); return; }
+  cur.reason = (document.getElementById('prosReason').value || '').trim();
+  cur.at = Date.now();
+  pr.votes[u.id] = cur;
+  saveState();
+  renderProspectDetail();
+  toast(cur.reason ? '의견을 저장했어요' : '사유를 지웠어요');
+}
+function addProsConcern() {
+  const pr = getProspect(_prosOpenId); if (!pr) return;
+  const ta = document.getElementById('prosConcern');
+  const t = (ta.value || '').trim();
+  if (!t) { toast('내용을 적어주세요'); return; }
+  // 작성자 정보를 일부러 저장하지 않는다 (익명 제보)
+  pr.concerns.push({ id: uid(), text: t, createdAt: Date.now() });
+  saveState();
+  renderProspectDetail();
+  toast('익명으로 등록했어요');
+}
+function delProsConcern(cid) {
+  const pr = getProspect(_prosOpenId); if (!pr) return;
+  if (!isAdmin()) { toast('운영진만 삭제할 수 있어요'); return; }
+  if (!confirm('이 제보를 삭제할까요?')) return;
+  pr.concerns = pr.concerns.filter(c => c.id !== cid);
+  saveState();
+  renderProspectDetail();
+}
+function setProsStatus(k) {
+  const pr = getProspect(_prosOpenId); if (!pr) return;
+  if (!isAdmin()) { toast('운영진만 바꿀 수 있어요'); return; }
+  if (k === 'in') { approveProspect(); return; }
+  pr.status = k;
+  saveState();
+  renderProspectDetail();
+  toast(`상태: ${PROS_STATUS[k].t}`);
+}
+
+/* 최종 승인 → 그 자리에서 선수 탭에 등록 */
+function approveProspect() {
+  const pr = getProspect(_prosOpenId); if (!pr) return;
+  if (!isAdmin()) { toast('운영진·오너만 승인할 수 있어요'); return; }
+  if (pr.playerId && getPlayer(pr.playerId)) { toast('이미 선수로 등록돼 있어요'); return; }
+  const dup = store.players.find(p => (p.name || '').trim() === pr.name.trim());
+  if (dup && !confirm(`선수 탭에 이미 「${pr.name}」이(가) 있어요. 그래도 새로 등록할까요?`)) return;
+  if (!dup && !confirm(`${pr.name} 님을 정식 선수로 영입할까요?\n선수 탭에 바로 등록됩니다.`)) return;
+  const stats = {};
+  STAT_KEYS.forEach(k => { stats[k] = STAT_DEFAULT(k); });
+  const np = {
+    id: uid(),
+    name: pr.name,
+    number: 0,
+    foot: 'R',
+    positions: pr.pos && ROLES[pr.pos] ? [pr.pos] : ['CM'],
+    stats,
+    ratings: {},
+    peerStats: defaultPeerStats(),
+    fromProspect: pr.id,
+    joinedAt: Date.now(),
+  };
+  store.players.push(np);
+  pr.playerId = np.id;
+  pr.status = 'in';
+  pr.approvedAt = Date.now();
+  const u = currentUser();
+  pr.approvedByName = u ? (u.displayName || u.username || '') : '';
+  saveState();
+  renderProspectDetail();
+  if (currentTab === 'players') renderPlayersTable();
+  toast(`🎉 ${pr.name} 님 영입 완료 · 선수 탭에 등록했어요`);
+}
+function deleteProspect() {
+  const pr = getProspect(_prosOpenId); if (!pr) return;
+  if (!canManageProspect(pr)) { toast('추천한 본인이나 운영진만 삭제할 수 있어요'); return; }
+  if (!confirm(`「${pr.name}」 예비 등록을 삭제할까요?\n점수·투표·제보가 모두 사라집니다.`)) return;
+  store.prospects = ensureProspects().filter(x => x.id !== pr.id);
+  saveState();
+  closeProspect();
+  toast('삭제했어요');
+}
+
 /* ---- 팀컬러 탭 ---- */
 function renderChemistry() {
   const el = document.getElementById('chemContent');
@@ -13784,6 +14637,17 @@ function bindEvents() {
   document.getElementById('chemModal').addEventListener('click', e => { if (e.target.id === 'chemModal') closeChemModal(); });
 
   // 블랙리스트
+  // 🌱 예비 이스트
+  document.getElementById('btnProsAdd')?.addEventListener('click', openProsAdd);
+  document.getElementById('prosAddSave')?.addEventListener('click', saveProsAdd);
+  document.getElementById('prosAddCancel')?.addEventListener('click', () => document.getElementById('prosAddModal').classList.remove('show'));
+  document.getElementById('prosAddModal')?.addEventListener('click', e => { if (e.target.id === 'prosAddModal') e.currentTarget.classList.remove('show'); });
+  document.getElementById('prosModal')?.addEventListener('click', e => { if (e.target.id === 'prosModal') closeProspect(); });
+  document.getElementById('prosSort')?.addEventListener('click', e => {
+    const b = e.target.closest('[data-psort]'); if (!b) return;
+    _prosSort = b.dataset.psort; renderProspects();
+  });
+
   document.getElementById('blVenueAdd').addEventListener('click', () => addBlacklistItem('venues'));
   document.getElementById('blTeamAdd').addEventListener('click', () => addBlacklistItem('teams'));
   ['blVenueName','blVenueReason'].forEach(id => document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addBlacklistItem('venues'); } }));
