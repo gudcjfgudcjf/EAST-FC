@@ -3749,6 +3749,63 @@
     box-shadow: 0 6px 20px rgba(0,0,0,.5), 0 0 0 1px rgba(244,196,48,.35) inset;
   }
   .scen-play:active { transform: translate(-50%,-50%) scale(.93); }
+  .scen-dice {
+    position: absolute; right: 8px; bottom: 8px; cursor: pointer;
+    padding: 7px 11px; border-radius: 9px; font-family: inherit;
+    font-size: 11.5px; font-weight: 700; white-space: nowrap;
+    border: 1px solid rgba(244,196,48,.35); background: rgba(10,10,12,.72);
+    color: var(--gold-warm); backdrop-filter: blur(4px);
+  }
+  .scen-dice:active { transform: scale(.95); }
+  /* 재생 중 전체화면 보기 */
+  .scen-theater {
+    position: fixed; inset: 0; z-index: 2200; background: #000;
+    display: flex; align-items: center; justify-content: center;
+    animation: stIn .16s ease-out;
+  }
+  @keyframes stIn { from { opacity: 0 } to { opacity: 1 } }
+  .scen-theater .st-body {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px);
+  }
+  .scen-theater .st-el {
+    width: auto; height: auto;
+    max-width: 100vw; max-height: 100vh;
+    max-height: 100dvh; display: block; background: #08090b;
+  }
+  .scen-theater .st-close {
+    position: absolute; z-index: 2; cursor: pointer;
+    top: calc(12px + env(safe-area-inset-top, 0px)); right: 14px;
+    width: 42px; height: 42px; border-radius: 50%; border: none;
+    background: rgba(255,255,255,.14); color: #fff; font-size: 17px; line-height: 1;
+    backdrop-filter: blur(4px);
+  }
+  .scen-theater .st-close:active { transform: scale(.93); }
+  /* 데스크톱·태블릿에선 화면을 다 채우면 너무 크다 — 적당한 크기로 */
+  @media (min-width: 700px) {
+    .scen-theater { background: rgba(0,0,0,.9); }
+    .scen-theater .st-el {
+      max-height: 86vh; max-width: min(64vw, 540px);
+      border-radius: 14px; box-shadow: 0 26px 70px rgba(0,0,0,.65);
+    }
+  }
+  @media (min-width: 1100px) {
+    .scen-theater .st-el { max-height: 84vh; max-width: 470px; }
+  }
+  @media (max-height: 520px) and (orientation: landscape) {
+    .scen-theater .st-el { max-height: 96vh; max-width: 90vw; }
+  }
+  body.st-on { overflow: hidden; }
+  .scen-expand {
+    position: absolute; right: 8px; top: 8px; cursor: pointer;
+    padding: 7px 11px; border-radius: 9px; font-family: inherit;
+    font-size: 11.5px; font-weight: 700; white-space: nowrap;
+    border: 1px solid rgba(255,255,255,.2); background: rgba(10,10,12,.72);
+    color: #e6eaef; backdrop-filter: blur(4px);
+  }
+  .scen-expand:active { transform: scale(.95); }
+
   .scen-meta { margin-bottom: 12px; }
   .scen-vs {
     font-size: 13px; font-weight: 800; color: var(--text-1); margin-bottom: 8px;
@@ -3761,11 +3818,18 @@
     background: rgba(255,255,255,.035); border-left: 3px solid rgba(244,196,48,.55);
     border-radius: 0 8px 8px 0;
   }
-  .scen-tip b { font-size: 12.5px; font-weight: 800; color: var(--text-1); }
+  .scen-tip b { font-size: 12.5px; font-weight: 800; color: var(--text-1); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .scen-tip b i {
+    font-style: normal; font-size: 10.5px; font-weight: 800; letter-spacing: .2px;
+    padding: 2px 7px; border-radius: 20px; flex: none;
+    background: rgba(244,196,48,.16); color: var(--gold-warm);
+  }
+  .scen-tip b i:empty { display: none; }
   .scen-tip span { font-size: 11.5px; line-height: 1.5; color: var(--text-3); }
   @media (max-height: 500px) and (orientation: landscape) {
     .scen-stage canvas, .scen-stage video { max-height: 32vh; }
     .scen-meta { max-height: 80px; overflow-y: auto; }
+    .scen-dice { font-size: 10.5px; padding: 5px 9px; }
   }
 
   /* 스크롤이 생겨도 버튼은 항상 보이게 아래에 고정 */
@@ -4786,7 +4850,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 46;
+const APP_VERSION = 48;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -5820,108 +5884,10 @@ function renderSquadMatchBar() {
 }
 
 /* ==================== 🎬 전술 시나리오 (공격/수비 시뮬레이션) ====================
-   우리 실제 배치 vs 상대 포메이션을 비교해 수적 우위/약점을 찾고,
-   그 논리대로 공·수 시나리오를 만들어 캔버스로 애니메이션 → 영상으로 공유. */
+   우리 실제 배치 vs 상대 포메이션을 비교해 약점을 찾고,
+   전술 패턴 라이브러리에서 상황에 맞는 장면을 골라 애니메이션 → 영상으로 공유.
+   장면마다 팀 대형(라인 높이·좌우 폭)이 바뀌고, 선수 몇 명은 실제로 뛰어 들어간다. */
 const SCEN_W = 720, SCEN_H = 1000;   // 세로 영상 (카톡에서 잘 보이는 비율)
-
-function shapeOf(formationKey) {
-  const t = FORMATIONS[formationKey] || [];
-  let df = 0, mf = 0, fw = 0;
-  t.forEach(x => {
-    const cat = (ROLES[LABEL_TO_ROLE[x.label]] || {}).cat || 'MF';
-    if (cat === 'DF') df++; else if (cat === 'MF') mf++; else if (cat === 'FW') fw++;
-  });
-  return { df, mf, fw, str: [df, mf, fw].filter(n => n).join('-') };
-}
-function ourShape(sq) {
-  const slots = ensureSquadSlots(sq);
-  let df = 0, mf = 0, fw = 0;
-  slots.forEach(sl => {
-    const cat = (ROLES[effRole(sl)] || {}).cat || 'MF';
-    if (cat === 'DF') df++; else if (cat === 'MF') mf++; else if (cat === 'FW') fw++;
-  });
-  return { df, mf, fw, str: [df, mf, fw].filter(n => n).join('-') };
-}
-
-/* 매치업 분석 → 공격/수비 요지 */
-function analyzeMatchup(us, them) {
-  const A = [], D = [];
-  if (us.mf > them.mf) A.push({ k: 'mid', t: `중원 ${us.mf}대${them.mf} 우위`, d: '중앙에서 한 명이 남는다. 짧게 연결해 끌어낸 뒤 측면으로 전환.' });
-  else if (us.mf < them.mf) A.push({ k: 'wide', t: `중원 열세 (${us.mf}대${them.mf})`, d: '중앙 싸움은 피하고 측면과 뒷공간으로 빠르게.' });
-  if (them.df <= 3) A.push({ k: 'wing', t: `상대 백${them.df} — 측면이 비었다`, d: '윙이 넓게 벌려 1대1을 만들고 측면 뒷공간을 노린다.' });
-  else A.push({ k: 'half', t: `상대 백${them.df} — 하프스페이스 공략`, d: '풀백과 센터백 사이로 침투해 수비를 끌어낸다.' });
-  if (us.fw >= 3) A.push({ k: 'press', t: `전방 ${us.fw}명 압박`, d: '상대 수비가 볼을 잡는 순간 앞에서 끊어 짧은 역습.' });
-  if (us.df >= 5) A.push({ k: 'wb', t: `백${us.df} — 윙백이 공격수`, d: '윙백이 높이 올라가 측면을 만들고, 센터백 3명이 뒤를 지킨다.' });
-  A.push({ k: 'switch', t: '한 번에 반대편 전환', d: '한쪽으로 몰아 상대를 모은 뒤 크게 열어 반대 측면을 노린다.' });
-  A.push({ k: 'third', t: '세 번째 선수의 침투', d: '볼을 잡은 선수 말고, 그 다음 선수가 뒷공간으로 뛴다.' });
-
-  if (them.fw >= 3) D.push({ k: 'line', t: `상대 전방 ${them.fw}명`, d: '백라인 간격 좁게. 한 명이 나가면 나머지가 즉시 커버.' });
-  else D.push({ k: 'compact', t: `상대 전방 ${them.fw}명`, d: '수적 여유가 있다. 한 명은 항상 커버로 남긴다.' });
-  if (them.mf > us.mf) D.push({ k: 'block', t: `상대 중원 ${them.mf}명 우세`, d: '라인을 내려 중앙을 압축하고, 측면으로 몰아 가둔다.' });
-  else D.push({ k: 'press2', t: '중원 대등 이상', d: '중앙에서 먼저 압박해 상대 전개를 끊는다.' });
-  D.push({ k: 'trans', t: '뺏은 직후 3초', d: '가장 먼저 앞을 본다. 없으면 안전하게 옆으로.' });
-  D.push({ k: 'side', t: '측면으로 가둔다', d: '중앙을 막고 사이드라인 쪽으로 몰아 둘이서 협력 수비.' });
-  return { attack: A.slice(0, 3), defense: D.slice(0, 3) };
-}
-
-/* 상대 배치(미러) */
-function themPositions(formationKey) {
-  return (FORMATIONS[formationKey] || []).map(t => ({ x: 100 - t.x, y: 100 - t.y, label: t.label }));
-}
-function usPositions(sq) {
-  const slots = ensureSquadSlots(sq);
-  return slots.map((sl, i) => {
-    const pid = sq.assignments[i];
-    const pl = pid ? getPlayer(pid) : null;
-    return { x: sl.x, y: sl.y, label: tagForSideRole(sideZone(sl.x), effRole(sl)),
-             name: pl ? pl.name : '', num: pl ? pl.number : '', cat: (ROLES[effRole(sl)] || {}).cat || 'MF' };
-  });
-}
-
-/* 시나리오(장면) 만들기 — 볼 경로 + 강조 선수 + 자막 */
-function buildScenes(sq, oppKey, mode) {
-  const us = usPositions(sq), them = themPositions(oppKey);
-  const A = analyzeMatchup(ourShape(sq), shapeOf(oppKey));
-  const pick = (cat, side) => {
-    const list = us.filter(p => p.cat === cat);
-    if (!list.length) return us[Math.floor(us.length / 2)];
-    if (side === 'L') return list.reduce((a, b) => a.x < b.x ? a : b);
-    if (side === 'R') return list.reduce((a, b) => a.x > b.x ? a : b);
-    return list.reduce((a, b) => Math.abs(a.x - 50) < Math.abs(b.x - 50) ? a : b);
-  };
-  const gk = us.find(p => p.cat === 'GK') || { x: 50, y: 92 };
-  const cb = pick('DF'), lw = pick('FW', 'L'), rw = pick('FW', 'R'), cm = pick('MF'), st = pick('FW');
-
-  if (mode === 'attack') {
-    const w = A.attack.find(a => a.k === 'wing') ? lw : rw;
-    const a1 = A.attack.find(a => a.k === 'mid' || a.k === 'wide') || A.attack[0];
-    const a3 = A.attack.find(a => a.k === 'wing' || a.k === 'half' || a.k === 'switch') || A.attack[1] || A.attack[0];
-    return [
-      { cap: a1 ? `① ${a1.t}` : '① 빌드업 시작', sub: a1 ? a1.d : '',
-        ball: [{ x: gk.x, y: gk.y }, { x: cb.x, y: cb.y }], hi: [cb], arrows: [] },
-      { cap: '② 중앙으로 끌어낸다', sub: '상대 수비를 안쪽으로 모아 측면을 비운다.',
-        ball: [{ x: cb.x, y: cb.y }, { x: cm.x, y: cm.y }], hi: [cm], arrows: [[cm, { x: cm.x, y: cm.y - 8 }]] },
-      { cap: a3 ? `③ ${a3.t}` : '③ 측면 전환', sub: a3 ? a3.d : '',
-        ball: [{ x: cm.x, y: cm.y }, { x: w.x, y: w.y }], hi: [w], arrows: [[w, { x: w.x, y: Math.max(12, w.y - 18) }]] },
-      { cap: '④ 마무리', sub: '컷백은 페널티 마크, 크로스는 니어포스트.',
-        ball: [{ x: w.x, y: Math.max(12, w.y - 18) }, { x: 50, y: 5 }], hi: [st], arrows: [[st, { x: 50, y: 13 }]], shot: true },
-    ];
-  }
-  const thFw = them.filter(t => (ROLES[LABEL_TO_ROLE[t.label]] || {}).cat === 'FW');
-  const thTarget = thFw[0] || { x: 50, y: 30 };
-  return [
-    { cap: A.defense[0] ? `① ${A.defense[0].t}` : '① 대형 유지', sub: A.defense[0] ? A.defense[0].d : '',
-      ball: [{ x: 50, y: 12 }, { x: thTarget.x, y: thTarget.y }], hi: us.filter(p => p.cat === 'DF'), arrows: [] },
-    { cap: A.defense[1] ? `② ${A.defense[1].t}` : '② 중앙 압축', sub: A.defense[1] ? A.defense[1].d : '',
-      ball: [{ x: thTarget.x, y: thTarget.y }, { x: thTarget.x < 50 ? 22 : 78, y: 45 }],
-      hi: [cm, cb], arrows: [[cm, { x: thTarget.x < 50 ? 30 : 70, y: cm.y }]] },
-    { cap: '③ 측면으로 몰아 가둔다', sub: '터치라인을 한 명 더로 쓰고, 안쪽 패스 길을 막는다.',
-      ball: [{ x: thTarget.x < 50 ? 22 : 78, y: 45 }, { x: thTarget.x < 50 ? 16 : 84, y: 62 }],
-      hi: [cb], arrows: [[cb, { x: thTarget.x < 50 ? 24 : 76, y: 60 }]] },
-    { cap: '④ 끊고 즉시 전환', sub: '뺏으면 가장 먼저 앞을 본다.',
-      ball: [{ x: thTarget.x < 50 ? 16 : 84, y: 62 }, { x: cm.x, y: cm.y - 6 }], hi: [cm], arrows: [[cm, { x: cm.x, y: cm.y - 20 }]], steal: true },
-  ];
-}
 
 /* ---------- 이징: Robert Penner easing equations (오픈소스 표준 공식) ---------- */
 const SEZ = {
@@ -5929,6 +5895,7 @@ const SEZ = {
   outCubic: t => 1 - Math.pow(1 - t, 3),
   inOutCubic: t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
   outQuint: t => 1 - Math.pow(1 - t, 5),
+  inOutQuart: t => t < .5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2,
   outBack: t => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); },
 };
 const sClamp = (v, a, b) => v < a ? a : v > b ? b : v;
@@ -5937,11 +5904,28 @@ const sLerp = (a, b, t) => a + (b - a) * t;
 const sSub = (t, a, b) => s01((t - a) / (b - a));
 const SF = "'Pretendard Variable','Pretendard','Noto Sans KR',sans-serif";
 
+/* 재현 가능한 난수 (같은 seed면 미리보기와 영상이 똑같이 나온다) */
+function scenRnd(seedStr) {
+  let h = 1779033703 ^ String(seedStr).length;
+  for (let i = 0; i < String(seedStr).length; i++) {
+    h = Math.imul(h ^ String(seedStr).charCodeAt(i), 3432918353);
+    h = (h << 13) | (h >>> 19);
+  }
+  let a = h >>> 0;
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 /* 피치 좌표 (0~100 → 캔버스) */
 const SCEN_L = { px: 26, py: 150, pw: SCEN_W - 52, ph: 700, capTop: 866 };
 const sX = x => SCEN_L.px + x / 100 * SCEN_L.pw;
 const sY = y => SCEN_L.py + y / 100 * SCEN_L.ph;
-function scenCatOf(label) { return (ROLES[LABEL_TO_ROLE[label]] || {}).cat || 'MF'; }
+const BALL_DX = 19, BALL_DY = 14;   // 볼이 선수 발 앞에 놓이도록
+function scenCatOf(label) { return (ROLES[label] || ROLES[LABEL_TO_ROLE[label]] || {}).cat || 'MF'; }
 
 let _scenCrestImg;
 function scenCrest() {
@@ -5955,6 +5939,919 @@ function scenCrest() {
     i.onerror = () => { _scenCrestImg = null; res(null); };
     i.src = url;
   });
+}
+
+/* ---------- 포메이션 해석 ---------- */
+function scenDetail(labels) {
+  const d = { gk: 0, df: 0, mf: 0, fw: 0, wb: 0, dm: 0, am: 0, wing: 0, wide: 0 };
+  labels.forEach(L => {
+    const cat = scenCatOf(L);
+    if (cat === 'GK') d.gk++; else if (cat === 'DF') d.df++; else if (cat === 'MF') d.mf++; else d.fw++;
+    if (/WB$/.test(L)) { d.wb++; d.wide++; }
+    if (/^[LR]B$|^FB$|^IWB$/.test(L)) d.wide++;
+    if (/DM$|^DLP$|^ANC$/.test(L)) d.dm++;
+    if (/AM$|^REG$|^SS$/.test(L)) d.am++;
+    if (/^[LR]W$|^[LR]M$|^WNG$|^IW$|^WM$/.test(L)) d.wing++;
+  });
+  d.str = [d.df, d.mf, d.fw].filter(n => n).join('-');
+  return d;
+}
+function shapeOf(formationKey) {
+  return scenDetail((FORMATIONS[formationKey] || []).map(t => t.label));
+}
+function ourShape(sq) {
+  const slots = ensureSquadSlots(sq);
+  return scenDetail(slots.map(sl => effRole(sl)));
+}
+
+/* 배치 좌표 */
+function themPositions(formationKey) {
+  return (FORMATIONS[formationKey] || []).map(t => ({
+    x: 100 - t.x, y: 100 - t.y, label: t.label, cat: scenCatOf(t.label), name: '', num: '',
+  }));
+}
+function usPositions(sq) {
+  const slots = ensureSquadSlots(sq);
+  return slots.map((sl, i) => {
+    const pid = sq.assignments[i];
+    const pl = pid ? getPlayer(pid) : null;
+    return {
+      x: sl.x, y: sl.y, label: tagForSideRole(sideZone(sl.x), effRole(sl)),
+      role: effRole(sl), name: pl ? pl.name : '', num: pl ? pl.number : '',
+      cat: (ROLES[effRole(sl)] || {}).cat || 'MF',
+    };
+  });
+}
+
+/* 역할별 대표 선수 뽑기 — 없으면 가장 비슷한 선수로 대체해서 항상 값이 나온다 */
+function scenRoles(list, side) {
+  const P = list.map((p, i) => Object.assign({}, p, { i: i }));
+  const any = P[Math.floor(P.length / 2)] || { i: 0, x: 50, y: 50, cat: 'MF', name: '', label: '' };
+  const fwdY = side === 'us' ? (a, b) => a.y < b.y ? a : b : (a, b) => a.y > b.y ? a : b;   // 가장 앞선 선수
+  const backY = side === 'us' ? (a, b) => a.y > b.y ? a : b : (a, b) => a.y < b.y ? a : b;  // 가장 뒤
+  const by = c => P.filter(p => p.cat === c);
+  const pickL = a => a.length ? a.reduce((x, y) => x.x < y.x ? x : y) : null;
+  const pickR = a => a.length ? a.reduce((x, y) => x.x > y.x ? x : y) : null;
+  const pickC = a => a.length ? a.reduce((x, y) => Math.abs(x.x - 50) < Math.abs(y.x - 50) ? x : y) : null;
+  const pickF = a => a.length ? a.reduce(fwdY) : null;
+  const pickB = a => a.length ? a.reduce(backY) : null;
+  const df = by('DF'), mf = by('MF'), fw = by('FW'), gk = by('GK');
+  const outfield = P.filter(p => p.cat !== 'GK');
+  const R = {};
+  R.gk = pickB(gk.length ? gk : P) || any;
+  R.cbs = df.filter(p => Math.abs(p.x - 50) < 22);
+  R.cbL = pickL(R.cbs.length ? R.cbs : df) || pickL(P) || any;
+  R.cbR = pickR(R.cbs.length ? R.cbs : df) || pickR(P) || any;
+  R.cbC = pickC(R.cbs.length ? R.cbs : df) || any;
+  R.lb = pickL(df.length ? df : outfield) || any;
+  R.rb = pickR(df.length ? df : outfield) || any;
+  R.dm = pickB(mf.length ? mf : outfield) || any;
+  R.cm = pickC(mf.length ? mf : outfield) || any;
+  R.am = pickF(mf.length ? mf : outfield) || any;
+  R.st = pickC(fw.length ? fw : (mf.length ? mf : outfield)) || any;
+  R.st2 = fw.length > 1 ? (fw.filter(p => p.i !== R.st.i)[0] || R.st) : R.st;
+  const wideCands = P.filter(p => p.cat !== 'GK' && Math.abs(p.x - 50) > 18);
+  R.wideL = pickL(wideCands.length ? wideCands : outfield) || any;
+  R.wideR = pickR(wideCands.length ? wideCands : outfield) || any;
+  // 앞선 측면 자원 (윙어/윙백)
+  const attWide = P.filter(p => p.cat !== 'GK' && p.cat !== 'DF' && Math.abs(p.x - 50) > 15);
+  R.wingL = pickL(attWide.length ? attWide : [R.wideL]) || R.wideL;
+  R.wingR = pickR(attWide.length ? attWide : [R.wideR]) || R.wideR;
+  R.tip = pickF(outfield) || any;   // 최전방
+  // 같은 선수가 두 역할로 뽑히면 문장도 화살표도 이상해진다 → 겹치면 다른 선수로 바꾼다
+  const front = (excl, leftSide) => {
+    const c = P.filter(p => p.cat !== 'GK' && p.i !== excl.i && (leftSide == null || (leftSide ? p.x < 52 : p.x > 48)));
+    if (!c.length) return null;
+    return c.reduce(fwdY);
+  };
+  if (R.wingL.i === R.lb.i) R.wingL = front(R.lb, true) || R.wingL;
+  if (R.wingR.i === R.rb.i) R.wingR = front(R.rb, false) || R.wingR;
+  if (R.wideL.i === R.wingL.i && df.length) R.wideL = pickL(df) || R.wideL;
+  if (R.wideR.i === R.wingR.i && df.length) R.wideR = pickR(df) || R.wideR;
+  if (R.st2.i === R.st.i) R.st2 = front(R.st) || R.st2;
+  if (R.am.i === R.cm.i) {
+    const c = P.filter(p => p.cat !== 'GK' && p.cat !== 'DF' && p.i !== R.cm.i);
+    if (c.length) R.am = c.reduce(fwdY);
+  }
+  if (R.dm.i === R.cm.i) {
+    const c = P.filter(p => p.cat !== 'GK' && p.i !== R.cm.i && p.cat !== 'FW');
+    if (c.length) R.dm = c.reduce(backY);
+  }
+  if (R.cbL.i === R.cbR.i && df.length > 1) {
+    const sorted = df.slice().sort((a, b) => a.x - b.x);
+    R.cbL = sorted[0]; R.cbR = sorted[sorted.length - 1];
+  }
+  R.all = P;
+  return R;
+}
+const nmOf = p => (p && p.name) ? p.name : (p && p.label) ? p.label : '선수';
+
+/* ---------- 매치업 분석: 숫자뿐 아니라 구조까지 본다 ---------- */
+function analyzeMatchup(us, them) {
+  const A = [], D = [];
+  const push = (arr, k, t, d) => { if (!arr.some(x => x.k === k)) arr.push({ k, t, d }); };
+
+  // 공격 포인트
+  if (us.mf > them.mf) push(A, 'mid', `중원 ${us.mf}대${them.mf} 우위`, '중앙에서 한 명이 남는다. 짧게 붙여 상대를 끌어낸 뒤 빈 쪽으로 넘긴다.');
+  else if (us.mf < them.mf) push(A, 'wide', `중원 ${us.mf}대${them.mf} 열세`, '중앙 싸움은 피한다. 두 번 안에 측면·뒷공간으로 빠져나간다.');
+  else push(A, 'even', `중원 ${us.mf}대${them.mf} 대등`, '먼저 움직이는 쪽이 이긴다. 한 명이 내려받아 숫자를 만든다.');
+  if (them.df <= 3) push(A, 'wing', `상대 백${them.df} — 측면이 비어 있다`, '윙이 최대한 넓게 벌려 1대1을 만들고, 측면 뒷공간을 반복해서 노린다.');
+  else push(A, 'half', `상대 백${them.df} — 하프스페이스`, '풀백과 센터백 사이 반 칸으로 침투해 백라인을 흔든다.');
+  if (them.dm >= 2) push(A, 'pivot', `상대 더블 볼란치`, '두 명 사이 공간에 한 명을 세워 둔다. 그 선수가 돌아서면 바로 전진.');
+  if (them.wing >= 2) push(A, 'behindWing', `상대 윙어 ${them.wing}명`, '상대 윙어가 내려오기 전에 그 뒤 공간을 먼저 쓴다. 전환은 빠르게.');
+  if (us.wb >= 2) push(A, 'wb', `윙백 ${us.wb}명이 공격수다`, '윙백이 높이 올라가 폭을 만들고, 센터백들이 뒤를 커버한다.');
+  if (us.fw >= 3) push(A, 'press', `전방 ${us.fw}명`, '상대 수비가 볼을 잡는 순간 앞에서 끊어 짧은 역습으로 끝낸다.');
+  if (us.am >= 1) push(A, 'am', '2선이 자유롭다', '2선 선수가 상대 미드와 수비 사이에 서서 등지고 받는다.');
+  push(A, 'switch', '한 번에 반대편 전환', '한쪽으로 몰아 상대를 모은 뒤 크게 열어 반대 측면을 친다.');
+  push(A, 'third', '세 번째 선수의 침투', '볼을 잡은 선수 말고, 그다음 선수가 뒷공간으로 달린다.');
+
+  // 수비 포인트
+  if (them.fw >= 3) push(D, 'line', `상대 전방 ${them.fw}명`, '백라인 간격을 좁게. 한 명이 나가면 나머지가 바로 커버로 들어간다.');
+  else push(D, 'compact', `상대 전방 ${them.fw}명`, '수적 여유가 있다. 한 명은 항상 뒤에 남겨 커버를 세운다.');
+  if (them.mf > us.mf) push(D, 'block', `상대 중원 ${them.mf}명 우세`, '라인을 내려 중앙을 압축하고, 측면으로 몰아 가둔다.');
+  else push(D, 'press2', `중원 ${us.mf}대${them.mf}`, '중앙에서 먼저 압박해 상대의 전개를 끊는다.');
+  if (them.wing >= 2) push(D, 'wing', `상대 윙어 ${them.wing}명`, '풀백이 혼자 서지 않게 한다. 항상 옆 선수가 안쪽을 받쳐 준다.');
+  if (them.wb >= 2) push(D, 'wb', '상대 윙백이 높다', '윙백이 올라간 뒤 공간이 상대의 약점이다. 뺏으면 그쪽으로 바로 나간다.');
+  if (them.df <= 3 && us.fw >= 2) push(D, 'trap', '상대 백3 압박', '센터백 3명에게 우리 공격수 2명이 붙어 옆으로만 돌게 만든다.');
+  push(D, 'trigger', '백패스가 신호', '상대가 뒤로 돌리는 순간이 압박 시작. 그 전엔 자리를 지킨다.');
+  push(D, 'trans', '뺏은 직후 3초', '가장 먼저 앞을 본다. 없으면 안전하게 옆으로 빼고 다시 만든다.');
+  push(D, 'side', '측면으로 가둔다', '사이드라인을 한 명 더 쓴다고 생각하고, 안쪽 패스 길을 먼저 막는다.');
+  return { attack: A, defense: D };
+}
+
+/* ---------- 팀 대형 프리셋 ----------
+   off  : 자기 골대 쪽으로 얼마나 물러나는지 (+가 후퇴, -가 전진)
+   w    : 좌우 폭 (1보다 크면 넓게 벌림, 작으면 안으로 압축)
+   bs   : 볼 있는 쪽으로 팀 전체가 따라가는 정도 */
+const SCEN_SHAPES = {
+  build:    { gk: +1, df: +3, mf: +1, fw: -2, w: 1.14, bs: .10 },
+  progress: { gk: -2, df: -5, mf: -7, fw: -4, w: 1.06, bs: .18 },
+  attack:   { gk: -4, df: -11, mf: -13, fw: -7, w: 1.10, bs: .22 },
+  final:    { gk: -5, df: -14, mf: -16, fw: -9, w: 1.14, bs: .26 },
+  trans:    { gk: -1, df: -3, mf: -8, fw: -13, w: 1.00, bs: .20 },
+  high:     { gk: -4, df: -14, mf: -9, fw: -2, w: .90, bs: .32 },
+  mid:      { gk: 0, df: +4, mf: +12, fw: +22, w: .82, bs: .36 },
+  low:      { gk: +1, df: +9, mf: +19, fw: +30, w: .72, bs: .40 },
+  narrow:   { gk: 0, df: +4, mf: +12, fw: +24, w: .70, bs: .44 },
+};
+function scenShapeState(base, side, key, ballX) {
+  const S = SCEN_SHAPES[key] || SCEN_SHAPES.mid;
+  const sgn = side === 'us' ? 1 : -1;
+  return base.map(p => {
+    const cat = p.cat || 'MF';
+    const off = cat === 'GK' ? S.gk : cat === 'DF' ? S.df : cat === 'MF' ? S.mf : S.fw;
+    const wide = cat === 'GK' ? 1 : S.w;
+    const pull = cat === 'GK' ? S.bs * .3 : S.bs;
+    return Object.assign({}, p, {
+      x: sClamp(50 + (p.x - 50) * wide + (ballX - 50) * pull, 5, 95),
+      y: sClamp(p.y + sgn * off, 4, 96),
+    });
+  });
+}
+function scenRunDelta(r, from) {
+  return {
+    dx: r.tx != null ? (r.tx - from.x) : (r.dx || 0),
+    dy: r.ty != null ? (r.ty - from.y) : (r.dy || 0),
+  };
+}
+function scenApplyRuns(pos, runs, tt) {
+  const out = pos.map(p => Object.assign({}, p));
+  (runs || []).forEach(r => {
+    const p = out[r.p]; if (!p) return;
+    const k = SEZ.inOutCubic(sSub(tt, r.from == null ? .22 : r.from, r.to == null ? .9 : r.to));
+    const d = scenRunDelta(r, pos[r.p]);
+    p.x = sClamp(p.x + d.dx * k, 4, 96);
+    p.y = sClamp(p.y + d.dy * k, 4, 96);
+    if (k > .03 && k < .97) p.moving = true;
+  });
+  return out;
+}
+function scenLerpArr(a, b, k) {
+  return a.map((p, i) => Object.assign({}, b[i] || p, { x: sLerp(p.x, (b[i] || p).x, k), y: sLerp(p.y, (b[i] || p).y, k) }));
+}
+/* 원판이 겹쳐 보이지 않게 상대 선수를 살짝 밀어낸다 (우리 배치는 그대로 둔다) */
+function scenSeparate(us, th) {
+  for (let it = 0; it < 3; it++) {
+    for (let i = 0; i < us.length; i++) {
+      const a = us[i];
+      if (a.cat === 'GK') continue;
+      for (let j = 0; j < us.length; j++) {
+        if (i === j || us[j].cat === 'GK') continue;
+        const b = us[j];
+        const dx = a.x - b.x, dy = (a.y - b.y) * 1.55, d = Math.hypot(dx, dy);
+        if (d > .001 && d < 6.0) {
+          const k = (6.0 - d) / d * .26;
+          a.x = sClamp(a.x + dx * k, 4, 96); a.y = sClamp(a.y + dy * k / 1.55, 5, 95);
+        }
+      }
+    }
+  }
+  for (let it = 0; it < 3; it++) {
+    for (let i = 0; i < th.length; i++) {
+      const a = th[i];
+      for (let j = 0; j < us.length; j++) {
+        const b = us[j];
+        const dx = a.x - b.x, dy = (a.y - b.y) * 1.4, d = Math.hypot(dx, dy);
+        if (d > .001 && d < 5.6) {
+          const k = (5.6 - d) / d * .55;
+          a.x = sClamp(a.x + dx * k, 3, 97); a.y = sClamp(a.y + dy * k / 1.4, 3, 97);
+        }
+      }
+      for (let j = 0; j < th.length; j++) {
+        if (i === j) continue;
+        const b = th[j];
+        const dx = a.x - b.x, dy = (a.y - b.y) * 1.4, d = Math.hypot(dx, dy);
+        if (d > .001 && d < 5.2) {
+          const k = (5.2 - d) / d * .28;
+          a.x = sClamp(a.x + dx * k, 3, 97); a.y = sClamp(a.y + dy * k / 1.4, 3, 97);
+        }
+      }
+    }
+  }
+}
+
+/* ---------- 전술 패턴 라이브러리 ----------
+   role: 장면 순서 슬롯. 공격 start→build→create→finish, 수비 set→guide→press→end
+   need: 이 상황에서만 쓸 수 있는 패턴인지
+   w   : 매치업에 얼마나 잘 맞는지 (클수록 자주 뽑힘) */
+const ATTACK_PLAYS = [
+  {
+    id: 'buildOut', role: 'start', tag: '빌드업', w: () => 3,
+    make: c => {
+      const { R } = c;
+      return {
+        cap: '뒤에서 안전하게 시작', sub: `${nmOf(R.dm)}가 센터백 사이로 내려와 3명이 볼을 돌린다. 서두르지 않는다.`,
+        shape: 'build', tshape: 'high',
+        ball: [{ p: R.gk.i }, { p: R.cbL.i }, { p: R.dm.i }],
+        runs: [
+          { p: R.dm.i, dx: (R.dm.x - 50) * -.4, dy: 8, from: .05, to: .55, arrow: true, label: '내려받기' },
+          { p: R.lb.i, dx: -4, dy: -8, from: .2, to: .9, arrow: true },
+          { p: R.rb.i, dx: 4, dy: -8, from: .2, to: .9, arrow: true },
+        ],
+        hi: [R.dm.i],
+      };
+    },
+  },
+  {
+    id: 'pressBait', role: 'start', tag: '유인', w: c => c.tD.fw >= 2 ? 4 : 1.5,
+    make: c => {
+      const { R } = c;
+      return {
+        cap: '끌어낸 다음 뒤로 넘긴다', sub: '일부러 낮게 돌려 상대 전방을 올라오게 만든 뒤, 그 뒤 공간으로 한 번에 넘긴다.',
+        shape: 'build', tshape: 'high',
+        ball: [{ p: R.cbR.i }, { p: R.gk.i }, { p: R.cbL.i }, { x: R.tip.x, y: 26 }],
+        runs: [{ p: R.tip.i, ty: 24, from: .5, to: .95, arrow: true, label: '뒷공간 침투' }],
+        zone: { x1: 18, y1: 16, x2: 82, y2: 32, label: '상대 라인 뒤' },
+        hi: [R.tip.i],
+      };
+    },
+  },
+  {
+    id: 'counterStart', role: 'start', tag: '역습 시작', w: c => c.uD.fw >= 2 ? 3 : 1.5,
+    make: c => {
+      const { R } = c;
+      return {
+        cap: '끊자마자 앞을 본다', sub: `${nmOf(R.cm)}가 끊는 즉시 첫 패스는 무조건 전진. 3초 안에 상대 진영으로 넘어간다.`,
+        shape: 'trans', tshape: 'progress',
+        ball: [{ x: R.cm.x, y: R.cm.y + 4 }, { p: R.cm.i }, { p: R.tip.i }],
+        runs: [
+          { p: R.tip.i, dx: 0, dy: -12, from: .3, to: .95, arrow: true, label: '전진' },
+          { p: R.wingR.i, dx: 5, dy: -14, from: .35, to: .95, arrow: true },
+        ],
+        hi: [R.cm.i], fx: 'steal',
+      };
+    },
+  },
+  {
+    id: 'dropReceive', role: 'build', tag: '내려받기', w: c => c.uD.mf <= c.tD.mf ? 4 : 2,
+    make: c => {
+      const { R } = c;
+      return {
+        cap: '한 명 내려와 숫자를 만든다', sub: `${nmOf(R.am)}가 상대 미드 뒤로 내려와 등지고 받는다. 돌아설 수 있으면 바로 전진.`,
+        shape: 'progress', tshape: 'mid',
+        ball: [{ p: R.cbC.i }, { p: R.am.i }, { p: R.cm.i }],
+        runs: [
+          { p: R.am.i, dx: 0, dy: 7, from: .05, to: .5, arrow: true, label: '내려서기' },
+          { p: R.st.i, dx: -3, dy: -8, from: .35, to: .95, arrow: true },
+        ],
+        hi: [R.am.i],
+      };
+    },
+  },
+  {
+    id: 'pivotGap', role: 'build', tag: '볼란치 사이', need: c => c.tD.dm >= 2, w: () => 5,
+    make: c => {
+      const { R } = c;
+      return {
+        cap: '더블 볼란치 사이에 세운다', sub: '상대 수비형 미드 두 명 사이에 한 명이 서 있는다. 그 선수가 돌아서면 상대 라인이 무너진다.',
+        shape: 'progress', tshape: 'mid',
+        ball: [{ p: R.cbL.i }, { p: R.cm.i }, { p: R.am.i }],
+        runs: [{ p: R.am.i, dx: (R.am.x - 50) * -.3, dy: 3, from: .1, to: .6, arrow: true, label: '사이 공간' }],
+        zone: { x1: 36, y1: 34, x2: 64, y2: 50, label: '볼란치 사이' },
+        hi: [R.am.i],
+      };
+    },
+  },
+  {
+    id: 'overload', role: 'build', tag: '한쪽 몰기', w: () => 4,
+    make: c => {
+      const { R, side } = c;
+      const A = side === 'L' ? R.wingL : R.wingR, B = side === 'L' ? R.lb : R.rb;
+      const sgn = side === 'L' ? -1 : 1;
+      return {
+        cap: '한쪽에 세 명을 모은다', sub: '짧게 세 번 붙여 상대 수비를 이쪽으로 끌어온다. 반대편은 일부러 비워 둔다.',
+        shape: 'progress', tshape: 'mid',
+        ball: [{ p: R.cm.i }, { p: B.i }, { p: A.i }, { p: R.cm.i }],
+        runs: [
+          { p: B.i, dx: sgn * 4, dy: -9, from: .15, to: .8, arrow: true },
+          { p: R.cm.i, dx: sgn * 8, dy: -3, from: .2, to: .85, arrow: true, label: '지원' },
+        ],
+        zone: side === 'L' ? { x1: 4, y1: 30, x2: 40, y2: 62, label: '숫자 우위' } : { x1: 60, y1: 30, x2: 96, y2: 62, label: '숫자 우위' },
+        hi: [A.i, B.i],
+      };
+    },
+  },
+  {
+    id: 'longTarget', role: 'build', tag: '롱볼·세컨볼', w: c => c.uD.mf < c.tD.mf ? 4 : 1.5,
+    make: c => {
+      const { R } = c;
+      return {
+        cap: '앞으로 한 번에, 세컨볼을 잡는다', sub: `압박이 세면 ${nmOf(R.st)}에게 길게 붙이고, 떨어지는 볼을 중앙에서 먼저 잡는다.`,
+        shape: 'progress', tshape: 'high',
+        ball: [{ p: R.cbC.i }, { p: R.st.i }, { p: R.cm.i }],
+        runs: [
+          { p: R.cm.i, dx: 0, dy: -10, from: .3, to: .9, arrow: true, label: '세컨볼' },
+          { p: R.st2.i, dx: 4, dy: -4, from: .3, to: .9, arrow: true },
+        ],
+        hi: [R.st.i, R.cm.i],
+      };
+    },
+  },
+  {
+    id: 'switchPlay', role: 'create', tag: '전환', w: () => 4,
+    make: c => {
+      const { R, side } = c;
+      const from = side === 'L' ? R.wingL : R.wingR, to = side === 'L' ? R.wingR : R.wingL;
+      const sgn = side === 'L' ? 1 : -1;
+      return {
+        cap: '한 번에 반대편으로', sub: '상대가 볼 쪽으로 다 넘어온 순간, 크게 열어 반대 측면 1대1을 만든다.',
+        shape: 'attack', tshape: 'mid',
+        ball: [{ p: from.i }, { p: R.cm.i }, { p: to.i }],
+        runs: [{ p: to.i, dx: sgn * 5, dy: -8, from: .45, to: .95, arrow: true, label: '1대1' }],
+        zone: side === 'L' ? { x1: 62, y1: 18, x2: 96, y2: 50, label: '빈 측면' } : { x1: 4, y1: 18, x2: 38, y2: 50, label: '빈 측면' },
+        hi: [to.i],
+      };
+    },
+  },
+  {
+    id: 'overlap', role: 'create', tag: '오버랩', w: c => c.uD.wide >= 2 ? 5 : 2,
+    make: c => {
+      const { R, side } = c;
+      const W = side === 'L' ? R.wingL : R.wingR, B = side === 'L' ? R.lb : R.rb;
+      const sgn = side === 'L' ? -1 : 1;
+      return {
+        cap: '윙어 바깥으로 풀백이 돈다', sub: `${nmOf(W)}가 안으로 접어 수비를 붙이고, 그 바깥으로 ${nmOf(B)}가 돌아 나가 크로스 각을 연다.`,
+        shape: 'attack', tshape: 'mid',
+        ball: [{ p: R.cm.i }, { p: W.i }, { p: B.i }],
+        runs: [
+          { p: W.i, dx: -sgn * 8, dy: -5, from: .2, to: .8, arrow: true, label: '안으로' },
+          { p: B.i, dx: sgn * 7, dy: -17, from: .3, to: .95, arrow: true, label: '오버랩' },
+        ],
+        hi: [W.i, B.i],
+      };
+    },
+  },
+  {
+    id: 'underlap', role: 'create', tag: '언더랩', w: c => c.tD.df >= 4 ? 4 : 2,
+    make: c => {
+      const { R, side } = c;
+      const W = side === 'L' ? R.wingL : R.wingR, B = side === 'L' ? R.lb : R.rb;
+      const sgn = side === 'L' ? -1 : 1;
+      const hsX = side === 'L' ? 33 : 67;
+      return {
+        cap: '안쪽으로 파고든다', sub: `${nmOf(W)}가 넓게 벌려 수비를 바깥으로 끌고, 그 안쪽 반 칸으로 ${nmOf(B)}가 들어간다.`,
+        shape: 'attack', tshape: 'mid',
+        ball: [{ p: R.am.i }, { p: W.i }, { x: hsX, y: 22 }],
+        runs: [
+          { p: W.i, dx: sgn * 5, dy: -3, from: .15, to: .7, arrow: true, label: '벌리기' },
+          { p: B.i, tx: hsX, ty: 24, from: .3, to: .95, arrow: true, label: '언더랩' },
+        ],
+        zone: { x1: hsX - 9, y1: 14, x2: hsX + 9, y2: 36, label: '하프스페이스' },
+        hi: [B.i],
+      };
+    },
+  },
+  {
+    id: 'halfSpace', role: 'create', tag: '하프스페이스', w: c => c.tD.df >= 4 ? 5 : 2,
+    make: c => {
+      const { R, side } = c;
+      const hsX = side === 'L' ? 32 : 68;
+      const runner = R.am.cat === 'GK' ? R.st : R.am;
+      return {
+        cap: '풀백과 센터백 사이를 찌른다', sub: '수비 두 명 사이 반 칸이 제일 약하다. 그 길로 한 번에 넣어 준다.',
+        shape: 'attack', tshape: 'mid',
+        ball: [{ p: R.cm.i }, { x: hsX, y: 19 }],
+        runs: [
+          { p: runner.i, tx: hsX, ty: 19, from: .2, to: .9, arrow: true, label: '침투' },
+          { p: R.st.i, dx: (50 - R.st.x) * .5, dy: -5, from: .3, to: .9, arrow: true },
+        ],
+        zone: { x1: hsX - 10, y1: 12, x2: hsX + 10, y2: 34, label: '하프스페이스' },
+        hi: [runner.i],
+      };
+    },
+  },
+  {
+    id: 'thirdMan', role: 'create', tag: '제3의 선수', w: () => 4,
+    make: c => {
+      const { R } = c;
+      return {
+        cap: '세 번째 선수가 뛴다', sub: `${nmOf(R.st)}가 등지고 받아 내주면, 준 사람이 아니라 ${nmOf(R.am)}가 뒷공간으로 달린다.`,
+        shape: 'attack', tshape: 'mid',
+        ball: [{ p: R.cm.i }, { p: R.st.i }, { p: R.am.i }],
+        runs: [
+          { p: R.st.i, dx: 0, dy: 5, from: .1, to: .5, arrow: true, label: '등지고' },
+          { p: R.am.i, dx: (50 - R.am.x) * .3, dy: -19, from: .3, to: .95, arrow: true, label: '침투' },
+        ],
+        hi: [R.am.i],
+      };
+    },
+  },
+  {
+    id: 'wingIso', role: 'create', tag: '측면 1대1', need: c => c.tD.df <= 3, w: () => 5,
+    make: c => {
+      const { R, side } = c;
+      const W = side === 'L' ? R.wingL : R.wingR;
+      const sgn = side === 'L' ? -1 : 1;
+      return {
+        cap: '백3 옆은 비어 있다', sub: `${nmOf(W)}를 최대한 넓게 세워 1대1을 만든다. 붙기 전에 먼저 보낸다.`,
+        shape: 'attack', tshape: 'mid',
+        ball: [{ p: R.cm.i }, { p: W.i }],
+        runs: [{ p: W.i, dx: sgn * 4, dy: -14, from: .3, to: .95, arrow: true, label: '돌파' }],
+        zone: side === 'L' ? { x1: 4, y1: 12, x2: 28, y2: 44, label: '백3 옆 공간' } : { x1: 72, y1: 12, x2: 96, y2: 44, label: '백3 옆 공간' },
+        hi: [W.i],
+      };
+    },
+  },
+  {
+    id: 'wbHigh', role: 'create', tag: '윙백 전진', need: c => c.uD.wb >= 1, w: () => 4,
+    make: c => {
+      const { R, side } = c;
+      const B = side === 'L' ? R.lb : R.rb;
+      const sgn = side === 'L' ? -1 : 1;
+      return {
+        cap: '윙백이 최전방까지 올라간다', sub: `${nmOf(B)}가 폭을 책임진다. 센터백들은 옆으로 벌려 뒤를 커버한다.`,
+        shape: 'attack', tshape: 'mid',
+        ball: [{ p: R.cbC.i }, { p: R.cm.i }, { p: B.i }],
+        runs: [
+          { p: B.i, dx: sgn * 3, dy: -20, from: .15, to: .9, arrow: true, label: '전진' },
+          { p: R.cbC.i, dx: -sgn * 6, dy: 3, from: .2, to: .9, arrow: true, label: '커버' },
+        ],
+        hi: [B.i],
+      };
+    },
+  },
+  {
+    id: 'cutback', role: 'finish', tag: '컷백', w: () => 5,
+    make: c => {
+      const { R, side } = c;
+      const W = side === 'L' ? R.wingL : R.wingR;
+      const cx = side === 'L' ? 17 : 83;
+      return {
+        cap: '돌파 후 페널티 마크로 컷백', sub: '골라인까지 간 다음 뒤로 빼 준다. 마무리는 페널티 마크에서 들어오는 선수.',
+        shape: 'final', tshape: 'low',
+        ball: [{ p: W.i }, { x: cx, y: 9 }, { x: 50, y: 19 }],
+        runs: [
+          { p: W.i, tx: cx, ty: 11, from: .05, to: .55, arrow: true, label: '돌파' },
+          { p: R.st.i, tx: side === 'L' ? 42 : 58, ty: 13, from: .3, to: .9, arrow: true, label: '니어' },
+          { p: R.am.i, tx: 50, ty: 22, from: .35, to: .95, arrow: true, label: '페널티 마크' },
+        ],
+        hi: [R.am.i], fx: 'shot',
+      };
+    },
+  },
+  {
+    id: 'nearPost', role: 'finish', tag: '크로스', w: c => c.uD.fw >= 2 ? 5 : 3,
+    make: c => {
+      const { R, side } = c;
+      const B = side === 'L' ? R.lb : R.rb;
+      const cx = side === 'L' ? 15 : 85;
+      const near = side === 'L' ? 40 : 60, far = side === 'L' ? 62 : 38;
+      return {
+        cap: '니어포스트로 빠르게', sub: '높이 띄우지 않는다. 니어로 빠른 크로스, 반대편은 파포스트로 들어간다.',
+        shape: 'final', tshape: 'low',
+        ball: [{ p: B.i }, { x: cx, y: 20 }, { x: near, y: 9 }],
+        runs: [
+          { p: B.i, tx: cx, ty: 23, from: .05, to: .5, arrow: true, label: '측면 돌파' },
+          { p: R.st.i, tx: near, ty: 12, from: .35, to: .92, arrow: true, label: '니어' },
+          { p: R.st2.i, tx: far, ty: 15, from: .35, to: .95, arrow: true, label: '파포스트' },
+        ],
+        hi: [R.st.i], fx: 'shot',
+      };
+    },
+  },
+  {
+    id: 'centralCombo', role: 'finish', tag: '중앙 마무리', w: () => 4,
+    make: c => {
+      const { R } = c;
+      return {
+        cap: '박스 앞에서 원투', sub: '한 번 대고 바로 받는다. 수비가 붙는 순간이 제일 열려 있다.',
+        shape: 'final', tshape: 'low',
+        ball: [{ p: R.am.i }, { p: R.st.i }, { p: R.am.i }, { x: 50, y: 4 }],
+        runs: [
+          { p: R.am.i, tx: 50, ty: 16, from: .25, to: .9, arrow: true, label: '들어가기' },
+          { p: R.st.i, dx: -6, dy: -3, from: .2, to: .8, arrow: true },
+        ],
+        hi: [R.am.i], fx: 'shot',
+      };
+    },
+  },
+  {
+    id: 'lateRunner', role: 'finish', tag: '뒤에서 들어오기', w: () => 3.5,
+    make: c => {
+      const { R } = c;
+      return {
+        cap: '뒤에서 늦게 들어온다', sub: `앞 선수들이 수비를 끌고 들어가면, ${nmOf(R.cm)}가 박스 앞으로 늦게 들어와 마무리한다.`,
+        shape: 'final', tshape: 'low',
+        ball: [{ p: R.wingR.i }, { x: 50, y: 24 }, { x: 50, y: 4 }],
+        runs: [
+          { p: R.st.i, dx: -7, dy: -8, from: .2, to: .8, arrow: true, label: '끌어주기' },
+          { p: R.st2.i, dx: 7, dy: -8, from: .2, to: .8, arrow: true },
+          { p: R.cm.i, tx: 50, ty: 26, from: .35, to: .95, arrow: true, label: '늦게 침투' },
+        ],
+        hi: [R.cm.i], fx: 'shot',
+      };
+    },
+  },
+];
+
+const DEFENSE_PLAYS = [
+  {
+    id: 'midBlock', role: 'set', tag: '미들블록', w: () => 4,
+    make: c => {
+      const { R } = c, T = c.TR;
+      return {
+        cap: '가운데에 벽을 세운다', sub: '하프라인 근처에서 두 줄로 선다. 줄 사이 간격은 10미터 안쪽으로 유지.',
+        shape: 'mid', tshape: 'progress',
+        ball: [{ o: T.cbC.i }, { o: T.dm.i }],
+        runs: [
+          { p: R.st.i, dx: 0, dy: 6, from: .1, to: .7, arrow: true, label: '패스 길 막기' },
+          { p: R.cm.i, dx: 0, dy: 4, from: .1, to: .7, arrow: true },
+        ],
+        zone: { x1: 26, y1: 40, x2: 74, y2: 66, label: '중앙 차단' },
+        hi: [R.cm.i],
+      };
+    },
+  },
+  {
+    id: 'lowBlock', role: 'set', tag: '로우블록', w: c => (c.tD.fw >= 3 || c.tD.mf > c.uD.mf) ? 5 : 2,
+    make: c => {
+      const { R } = c, T = c.TR;
+      return {
+        cap: '라인을 내리고 좁힌다', sub: '뒷공간을 주지 않는다. 박스 앞을 두껍게 만들고 슛만 막는다는 생각으로.',
+        shape: 'low', tshape: 'attack',
+        ball: [{ o: T.cm.i }, { o: T.wingR.i }],
+        runs: [
+          { p: R.cbL.i, dx: 3, dy: 2, from: .1, to: .8 },
+          { p: R.cbR.i, dx: -3, dy: 2, from: .1, to: .8 },
+          { p: R.cm.i, dx: 0, dy: 7, from: .15, to: .85, arrow: true, label: '내려서기' },
+        ],
+        zone: { x1: 24, y1: 66, x2: 76, y2: 88, label: '박스 앞 보호' },
+        hi: [R.cbC.i],
+      };
+    },
+  },
+  {
+    id: 'highLine', role: 'set', tag: '라인 올리기', need: c => c.tD.fw <= 2, w: () => 4,
+    make: c => {
+      const { R } = c, T = c.TR;
+      return {
+        cap: '라인을 끌어올린다', sub: '상대 전방이 적다. 백라인을 하프라인까지 올려 경기장을 반으로 줄인다.',
+        shape: 'high', tshape: 'build',
+        ball: [{ o: T.gk.i }, { o: T.cbL.i }],
+        runs: [
+          { p: R.cbL.i, dx: 0, dy: -10, from: .1, to: .85, arrow: true, label: '라인 업' },
+          { p: R.cbR.i, dx: 0, dy: -10, from: .1, to: .85, arrow: true },
+          { p: R.cbC.i, dx: 0, dy: -10, from: .1, to: .85, arrow: true },
+        ],
+        zone: { x1: 8, y1: 44, x2: 92, y2: 56, label: '오프사이드 라인' },
+        hi: [R.cbC.i],
+      };
+    },
+  },
+  {
+    id: 'backThree', role: 'set', tag: '백3 압박', need: c => c.tD.df <= 3 && c.uD.fw >= 2, w: () => 5,
+    make: c => {
+      const { R } = c, T = c.TR;
+      return {
+        cap: '센터백 3명을 옆으로만 돌린다', sub: `${nmOf(R.st)}와 ${nmOf(R.st2)}가 안쪽 패스 길을 지우고 바깥으로만 흐르게 만든다.`,
+        shape: 'high', tshape: 'build',
+        ball: [{ o: T.cbC.i }, { o: T.cbL.i }],
+        runs: [
+          { p: R.st.i, dx: -6, dy: -8, from: .15, to: .85, arrow: true, label: '각도 압박' },
+          { p: R.st2.i, dx: 6, dy: -6, from: .2, to: .85, arrow: true },
+        ],
+        hi: [R.st.i, R.st2.i],
+      };
+    },
+  },
+  {
+    id: 'forceWide', role: 'guide', tag: '측면 유도', w: () => 5,
+    make: c => {
+      const { R, side } = c, T = c.TR;
+      const sgn = side === 'L' ? -1 : 1;
+      return {
+        cap: '중앙을 막고 옆으로 흘린다', sub: '몸의 방향으로 안쪽을 지운다. 상대가 측면으로 갈 수밖에 없게 만든다.',
+        shape: 'mid', tshape: 'progress',
+        ball: [{ o: T.dm.i }, { o: side === 'L' ? T.wingR.i : T.wingL.i }],
+        runs: [
+          { p: R.cm.i, dx: sgn * 6, dy: -3, from: .15, to: .85, arrow: true, label: '안쪽 지우기' },
+          { p: R.am.i, dx: sgn * 4, dy: -2, from: .2, to: .85, arrow: true },
+        ],
+        zone: { x1: 36, y1: 34, x2: 64, y2: 64, label: '여긴 못 준다' },
+        hi: [R.cm.i],
+      };
+    },
+  },
+  {
+    id: 'markPivot', role: 'guide', tag: '볼란치 차단', need: c => c.tD.dm >= 1, w: () => 4,
+    make: c => {
+      const { R } = c, T = c.TR;
+      return {
+        cap: '상대 중심을 지운다', sub: `상대 볼 배급수는 ${nmOf(R.am)}가 그림자처럼 따라다닌다. 그 선수한테 안 가면 상대는 길게 찰 수밖에 없다.`,
+        shape: 'mid', tshape: 'build',
+        ball: [{ o: T.cbC.i }, { o: T.wideR.i }],
+        runs: [{ p: R.am.i, tx: sClamp(T.dm.x, 22, 78), dy: -6, from: .1, to: .85, arrow: true, label: '커버 섀도' }],
+        hi: [R.am.i],
+      };
+    },
+  },
+  {
+    id: 'squeeze', role: 'guide', tag: '중앙 압축', w: c => c.tD.mf >= c.uD.mf ? 4 : 2,
+    make: c => {
+      const { R } = c, T = c.TR;
+      return {
+        cap: '볼 쪽으로 전부 밀어준다', sub: '볼 반대쪽 선수도 안으로 들어온다. 반대편은 버리고 볼 근처에서 숫자를 만든다.',
+        shape: 'narrow', tshape: 'attack',
+        ball: [{ o: T.wingL.i }, { o: T.cm.i }],
+        runs: [
+          { p: R.wideR.i, dx: -10, dy: 2, from: .1, to: .85, arrow: true, label: '안으로' },
+          { p: R.cm.i, dx: -6, dy: 1, from: .1, to: .85, arrow: true },
+        ],
+        hi: [R.wideR.i],
+      };
+    },
+  },
+  {
+    id: 'pressTrigger', role: 'press', tag: '압박 스위치', w: () => 5,
+    make: c => {
+      const { R } = c, T = c.TR;
+      return {
+        cap: '백패스가 신호다', sub: '상대가 뒤로 돌리는 순간 앞 두 명이 동시에 나간다. 그 전엔 절대 혼자 나가지 않는다.',
+        shape: 'high', tshape: 'build',
+        ball: [{ o: T.dm.i }, { o: T.cbC.i }, { o: T.gk.i }],
+        runs: [
+          { p: R.st.i, tx: sClamp(T.cbC.x, 20, 80), dy: -11, from: .35, to: .95, arrow: true, label: '압박' },
+          { p: R.st2.i, dx: -4, dy: -8, from: .4, to: .95, arrow: true },
+          { p: R.cm.i, dx: 0, dy: -7, from: .45, to: .95, arrow: true },
+        ],
+        hi: [R.st.i],
+      };
+    },
+  },
+  {
+    id: 'trapSide', role: 'press', tag: '사이드 가두기', w: () => 5,
+    make: c => {
+      const { R, side } = c, T = c.TR;
+      const W = side === 'L' ? R.wideL : R.wideR;
+      const M = side === 'L' ? R.cm : R.am;
+      const sgn = side === 'L' ? -1 : 1;
+      return {
+        cap: '사이드라인까지 몰아 가둔다', sub: '터치라인을 한 명 더 쓴다고 생각한다. 둘이 붙어서 되돌아가는 길만 남긴다.',
+        shape: 'mid', tshape: 'progress',
+        ball: [{ o: T.cm.i }, { o: side === 'L' ? T.wingR.i : T.wingL.i }],
+        runs: [
+          { p: W.i, dx: sgn * 3, dy: -8, from: .3, to: .9, arrow: true, label: '1차 압박' },
+          { p: M.i, dx: sgn * 9, dy: -4, from: .35, to: .95, arrow: true, label: '협력' },
+        ],
+        zone: side === 'L' ? { x1: 4, y1: 30, x2: 30, y2: 60, label: '가두는 구역' } : { x1: 70, y1: 30, x2: 96, y2: 60, label: '가두는 구역' },
+        hi: [W.i, M.i],
+      };
+    },
+  },
+  {
+    id: 'doubleWing', role: 'press', tag: '측면 2대1', need: c => c.tD.wing >= 2 || c.tD.wb >= 2, w: () => 4.5,
+    make: c => {
+      const { R, side } = c, T = c.TR;
+      const B = side === 'L' ? R.lb : R.rb;
+      const W = side === 'L' ? R.wingL : R.wingR;
+      const sgn = side === 'L' ? -1 : 1;
+      return {
+        cap: '풀백을 혼자 두지 않는다', sub: `상대 윙어가 붙으면 ${nmOf(W)}가 바로 내려와 안쪽을 받쳐 준다. 항상 둘이 상대한다.`,
+        shape: 'mid', tshape: 'attack',
+        ball: [{ o: T.cm.i }, { o: side === 'L' ? T.wingR.i : T.wingL.i }],
+        runs: [
+          { p: W.i, dx: sgn * 2, dy: 11, from: .2, to: .9, arrow: true, label: '내려오기' },
+          { p: B.i, dx: sgn * 2, dy: -3, from: .3, to: .9, arrow: true },
+        ],
+        hi: [W.i, B.i],
+      };
+    },
+  },
+  {
+    id: 'secondBall', role: 'press', tag: '세컨볼', w: c => c.tD.fw >= 2 ? 4 : 2.5,
+    make: c => {
+      const { R } = c, T = c.TR;
+      return {
+        cap: '떨어지는 볼을 먼저 잡는다', sub: '롱볼이 오면 헤딩보다 그다음이 중요하다. 중앙 두 명이 앞뒤로 서서 세컨볼을 노린다.',
+        shape: 'mid', tshape: 'progress',
+        ball: [{ o: T.gk.i }, { x: 50, y: 40 }, { p: R.cm.i }],
+        runs: [
+          { p: R.cbC.i, dx: 0, dy: -6, from: .2, to: .7, arrow: true, label: '경합' },
+          { p: R.cm.i, dx: 0, dy: -4, from: .35, to: .9, arrow: true, label: '세컨볼' },
+        ],
+        hi: [R.cm.i],
+      };
+    },
+  },
+  {
+    id: 'counterPress', role: 'press', tag: '즉시 재압박', w: () => 4,
+    make: c => {
+      const { R } = c, T = c.TR;
+      return {
+        cap: '뺏긴 순간 5초 안에 다시', sub: '내려서기 전에 가장 가까운 세 명이 바로 달려든다. 여기서 다시 뺏으면 상대는 대형이 없다.',
+        shape: 'high', tshape: 'trans',
+        ball: [{ p: R.cm.i }, { o: T.cm.i }],
+        runs: [
+          { p: R.cm.i, dx: 4, dy: -5, from: .3, to: .9, arrow: true, label: '즉시' },
+          { p: R.am.i, dx: -5, dy: -6, from: .35, to: .9, arrow: true },
+          { p: R.st.i, dx: 2, dy: 5, from: .35, to: .9, arrow: true },
+        ],
+        hi: [R.cm.i, R.am.i],
+      };
+    },
+  },
+  {
+    id: 'blockCross', role: 'end', tag: '크로스 차단', w: () => 4,
+    make: c => {
+      const { R, side } = c, T = c.TR;
+      const B = side === 'L' ? R.lb : R.rb;
+      const sgn = side === 'L' ? -1 : 1;
+      return {
+        cap: '니어는 몸으로, 파포스트는 눈으로', sub: '크로스는 니어에서 먼저 끊는다. 반대편 선수는 뒤에서 들어오는 상대를 놓치지 않는다.',
+        shape: 'low', tshape: 'final',
+        ball: [{ o: side === 'L' ? T.wingR.i : T.wingL.i }, { x: 50, y: 84 }],
+        runs: [
+          { p: B.i, dx: sgn * 4, dy: -4, from: .2, to: .8, arrow: true, label: '차단' },
+          { p: R.cbC.i, dx: sgn * 3, dy: 2, from: .2, to: .85, arrow: true, label: '니어' },
+          { p: side === 'L' ? R.rb.i : R.lb.i, dx: -sgn * 7, dy: 2, from: .25, to: .9, arrow: true, label: '파포스트' },
+        ],
+        hi: [R.cbC.i],
+      };
+    },
+  },
+  {
+    id: 'transitionOut', role: 'end', tag: '역습 전환', w: () => 5,
+    make: c => {
+      const { R } = c, T = c.TR;
+      return {
+        cap: '끊고 3초, 가장 먼저 앞을 본다', sub: `${nmOf(R.cm)}가 끊으면 바로 앞으로. 없으면 옆으로 빼고 다시 만든다. 억지로 뚫지 않는다.`,
+        shape: 'trans', tshape: 'attack',
+        ball: [{ o: T.am.i }, { p: R.cm.i }, { p: R.tip.i }],
+        runs: [
+          { p: R.tip.i, dx: 0, dy: -16, from: .35, to: .95, arrow: true, label: '전진' },
+          { p: R.wingR.i, dx: 5, dy: -13, from: .4, to: .95, arrow: true },
+        ],
+        hi: [R.cm.i], fx: 'steal',
+      };
+    },
+  },
+  {
+    id: 'offsideEnd', role: 'end', tag: '오프사이드 트랩', need: c => c.tD.fw <= 2, w: () => 3.5,
+    make: c => {
+      const { R } = c, T = c.TR;
+      return {
+        cap: '동시에 나가면 잡힌다', sub: '볼 찰 준비가 보이는 순간 백라인 전원이 한 발 앞으로. 한 명만 늦으면 실패한다.',
+        shape: 'high', tshape: 'progress',
+        ball: [{ o: T.cm.i }, { x: 50, y: 34 }],
+        runs: [
+          { p: R.cbL.i, dx: 0, dy: -9, from: .4, to: .85, arrow: true },
+          { p: R.cbC.i, dx: 0, dy: -9, from: .4, to: .85, arrow: true, label: '동시에' },
+          { p: R.cbR.i, dx: 0, dy: -9, from: .4, to: .85, arrow: true },
+        ],
+        zone: { x1: 8, y1: 40, x2: 92, y2: 52, label: '오프사이드 라인' },
+        hi: [R.cbC.i],
+      };
+    },
+  },
+];
+
+/* ---------- 장면 고르기 ---------- */
+function scenBallHintX(sc, usBase, themBase) {
+  const r = sc.ball[sc.ball.length - 1];
+  if (r.p != null && usBase[r.p]) return usBase[r.p].x;
+  if (r.o != null && themBase[r.o]) return themBase[r.o].x;
+  return r.x != null ? r.x : 50;
+}
+const SCEN_NUM = ['①', '②', '③', '④', '⑤', '⑥'];
+function buildScenes(sq, oppKey, mode, seed, count) {
+  const us = usPositions(sq), them = themPositions(oppKey);
+  const R = scenRoles(us, 'us'), TR = scenRoles(them, 'them');
+  const uD = ourShape(sq), tD = shapeOf(oppKey);
+  const rnd = scenRnd(`${sq.id}|${oppKey}|${mode}|${seed}|${us.length}`);
+  const baseSide = rnd() < .5 ? 'L' : 'R';
+  const flip = s => s === 'L' ? 'R' : 'L';
+  const ctx = { R, TR, us, them, uD, tD, rnd, oppKey, side: baseSide };
+  const pool = mode === 'attack' ? ATTACK_PLAYS : DEFENSE_PLAYS;
+  const seq = mode === 'attack'
+    ? (count >= 5 ? ['start', 'build', 'create', 'create', 'finish'] : ['start', 'build', 'create', 'finish'])
+    : (count >= 5 ? ['set', 'guide', 'press', 'press', 'end'] : ['set', 'guide', 'press', 'end']);
+  const used = {};
+  const scenes = [];
+  seq.forEach((role, i) => {
+    // 후반부는 반대 측면으로 — 한쪽만 보여 주면 단조롭다
+    ctx.side = i >= seq.length - 2 ? flip(baseSide) : baseSide;
+    let cands = pool.filter(p => p.role === role && !used[p.id] && (!p.need || p.need(ctx)));
+    if (!cands.length) cands = pool.filter(p => p.role === role && (!p.need || p.need(ctx)));
+    if (!cands.length) cands = pool.filter(p => !used[p.id]);
+    if (!cands.length) cands = pool;
+    const tot = cands.reduce((s, p) => s + (p.w ? p.w(ctx) : 1), 0);
+    let r = rnd() * tot, sel = cands[cands.length - 1];
+    for (const p of cands) { r -= (p.w ? p.w(ctx) : 1); if (r <= 0) { sel = p; break; } }
+    used[sel.id] = 1;
+    const sc = sel.make(ctx);
+    sc.id = sel.id;
+    sc.tag = sc.tag || sel.tag;
+    sc.cap = `${SCEN_NUM[i] || ''} ${sc.cap}`;
+    // 안전장치: 잘못된 인덱스·골키퍼 장거리 이동 제거
+    sc.runs = (sc.runs || []).filter(rn => {
+      const p = us[rn.p];
+      if (!p) return false;
+      if (p.cat === 'GK' && (Math.abs(rn.dx || 0) + Math.abs(rn.dy || 0)) > 6) return false;
+      return true;
+    });
+    // 한 선수에게 두 개의 움직임이 걸리면 화살표가 꼬인다 → 목표에 가장 가까운 다른 선수로 넘긴다
+    const usedP = {};
+    sc.runs.forEach(rn => {
+      if (usedP[rn.p]) {
+        const src = us[rn.p];
+        const tx = rn.tx != null ? rn.tx : src.x + (rn.dx || 0);
+        const ty = rn.ty != null ? rn.ty : src.y + (rn.dy || 0);
+        let best = -1, bd = 1e9;
+        us.forEach((pp, k) => {
+          if (usedP[k] || pp.cat === 'GK') return;
+          const d = (pp.x - tx) * (pp.x - tx) + (pp.y - ty) * (pp.y - ty);
+          if (d < bd) { bd = d; best = k; }
+        });
+        if (best >= 0) {
+          if (rn.tx == null && rn.dx != null) rn.tx = tx;
+          if (rn.ty == null && rn.dy != null) rn.ty = ty;
+          rn.p = best;
+        }
+      }
+      usedP[rn.p] = 1;
+    });
+    sc.ball = (sc.ball || []).filter(b => (b.p == null || us[b.p]) && (b.o == null || them[b.o]));
+    if (sc.ball.length < 2) sc.ball = [{ x: 50, y: 60 }, { x: 50, y: 40 }];
+    sc.hi = (sc.hi || []).filter(k => us[k]);
+    scenes.push(sc);
+  });
+  return scenes;
+}
+
+/* ---------- 영상 구성 ---------- */
+function buildScenMovie(sq, oppKey, mode, seed) {
+  const usBase = usPositions(sq);
+  const themBase = themPositions(oppKey);
+  const info = lineupMatchInfo(sq);
+  const usSh = ourShape(sq), thSh = shapeOf(oppKey);
+  const anal = analyzeMatchup(usSh, thSh);
+  const mds = mode === 'both' ? ['attack', 'defense'] : [mode];
+  const perMode = mode === 'both' ? 4 : 5;
+  const segs = [];
+  mds.forEach((md, mi) => {
+    const scenes = buildScenes(sq, oppKey, md, seed, perMode);
+    let prevUs = null, prevTh = null;
+    scenes.forEach(sc => {
+      const bx = scenBallHintX(sc, usBase, themBase);
+      sc._us = scenShapeState(usBase, 'us', sc.shape, bx);
+      sc._th = scenShapeState(themBase, 'them', sc.tshape, bx);
+      sc._usPrev = prevUs || sc._us;
+      sc._thPrev = prevTh || sc._th;
+      prevUs = scenApplyRuns(sc._us, sc.runs, 1);
+      prevTh = sc._th;
+    });
+    segs.push({ kind: 'title', dur: mi ? 1.5 : 2.0, md });
+    scenes.forEach((sc, i) => segs.push({ kind: 'scene', dur: 2.7, md, sc, i, n: scenes.length }));
+    segs.push({ kind: 'end', dur: 2.6, md, tips: (md === 'attack' ? anal.attack : anal.defense).slice(0, 3) });
+  });
+  let t = 0;
+  segs.forEach(s => { s.t0 = t; t += s.dur; });
+  return {
+    segs, dur: t, usBase, themBase, info, mode, oppKey, sq, anal, seed,
+    ourStr: usSh.str || sq.formation, oppStr: thSh.str || oppKey,
+    oppName: (info && info.m && info.m.opponent) || '상대팀',
+    quarter: info ? info.quarter : '',
+  };
 }
 
 /* ---------- 그리기 유틸 ---------- */
@@ -5985,11 +6882,11 @@ function qPt(x1, y1, cx, cy, x2, y2, t) {
 function scenCurve(x1, y1, x2, y2, bend) {
   const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
   const dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy) || 1;
-  return { cx: mx - dy / len * len * bend, cy: my + dx / len * len * bend };
+  return { cx: mx - dy * bend, cy: my + dx * bend };
 }
-function drawScenArrow(g, ax, ay, bx, by, p, color, dash) {
-  if (p <= 0.01) return;
-  const { cx, cy } = scenCurve(ax, ay, bx, by, .16);
+function drawScenArrow(g, ax, ay, bx, by, p, color, dash, label) {
+  if (p <= 0.02) return;
+  const { cx, cy } = scenCurve(ax, ay, bx, by, .13);
   g.save();
   g.strokeStyle = color; g.lineWidth = 5; g.lineCap = 'round'; g.lineJoin = 'round';
   if (dash) { g.setLineDash([14, 11]); g.lineDashOffset = -dash; }
@@ -6001,8 +6898,8 @@ function drawScenArrow(g, ax, ay, bx, by, p, color, dash) {
   }
   g.stroke();
   g.setLineDash([]);
-  if (p > .55) {
-    const tip = qPt(ax, ay, cx, cy, bx, by, p), pre = qPt(ax, ay, cx, cy, bx, by, Math.max(0, p - .05));
+  const tip = qPt(ax, ay, cx, cy, bx, by, p), pre = qPt(ax, ay, cx, cy, bx, by, Math.max(0, p - .06));
+  if (p > .35) {
     const a = Math.atan2(tip.y - pre.y, tip.x - pre.x), s = 17;
     g.fillStyle = color;
     g.beginPath();
@@ -6010,6 +6907,35 @@ function drawScenArrow(g, ax, ay, bx, by, p, color, dash) {
     g.lineTo(tip.x - s * Math.cos(a - .42), tip.y - s * Math.sin(a - .42));
     g.lineTo(tip.x - s * Math.cos(a + .42), tip.y - s * Math.sin(a + .42));
     g.closePath(); g.fill();
+  }
+  g.restore();
+  return tip;
+}
+function drawScenRunLabel(g, tip, up, text, a, color) {
+  if (!text || a <= .02) return;
+  g.save(); g.globalAlpha = a;
+  g.font = `800 15px ${SF}`; g.textAlign = 'center';
+  const ly = tip.y + (up ? -18 : 30);
+  g.lineWidth = 5; g.strokeStyle = 'rgba(0,0,0,.85)';
+  g.strokeText(text, tip.x, ly);
+  g.fillStyle = color; g.fillText(text, tip.x, ly);
+  g.textAlign = 'left'; g.restore();
+}
+function drawScenZone(g, z, a, gold) {
+  if (!z || a <= .01) return;
+  const x = sX(Math.min(z.x1, z.x2)), y = sY(Math.min(z.y1, z.y2));
+  const w = sX(Math.max(z.x1, z.x2)) - x, h = sY(Math.max(z.y1, z.y2)) - y;
+  g.save(); g.globalAlpha = a;
+  g.fillStyle = gold ? 'rgba(244,196,48,.12)' : 'rgba(96,165,250,.13)';
+  g.beginPath(); g.roundRect(x, y, w, h, 12); g.fill();
+  g.strokeStyle = gold ? 'rgba(244,196,48,.55)' : 'rgba(96,165,250,.6)';
+  g.lineWidth = 2.5; g.setLineDash([10, 8]); g.stroke(); g.setLineDash([]);
+  if (z.label) {
+    g.font = `800 15px ${SF}`; g.textAlign = 'left';
+    g.lineWidth = 4; g.strokeStyle = 'rgba(0,0,0,.7)';
+    g.strokeText(z.label, x + 11, y + 24);
+    g.fillStyle = gold ? '#ffd166' : '#93c5fd';
+    g.fillText(z.label, x + 11, y + 24);
   }
   g.restore();
 }
@@ -6025,7 +6951,6 @@ function drawScenPitch(g) {
   const vg = g.createRadialGradient(px + pw / 2, py + ph / 2, pw * .2, px + pw / 2, py + ph / 2, pw * .82);
   vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.45)');
   g.fillStyle = vg; g.fillRect(px, py, pw, ph);
-
   const inset = 16;
   const L = px + inset, R = px + pw - inset, T = py + inset, B = py + ph - inset;
   const W = R - L, H = B - T, CX = L + W / 2, CY = T + H / 2;
@@ -6059,12 +6984,18 @@ function drawScenPitch(g) {
   });
   g.restore();
 }
-function drawScenDisc(g, X, Y, ours, num, label, name, hi) {
+function drawScenDisc(g, X, Y, ours, num, label, name, hi, moving, t) {
   const r = 21;
   g.save();
   g.fillStyle = 'rgba(0,0,0,.45)';
   g.beginPath(); g.ellipse(X, Y + r * .82, r * .9, r * .33, 0, 0, Math.PI * 2); g.fill();
   g.restore();
+  if (moving) {   // 뛰는 중이면 잔상
+    g.save(); g.globalAlpha = .18;
+    g.fillStyle = ours ? '#f4c430' : '#8a919b';
+    g.beginPath(); g.arc(X, Y, r * 1.28, 0, Math.PI * 2); g.fill();
+    g.restore();
+  }
   if (hi > 0) {
     g.strokeStyle = `rgba(244,196,48,${.65 * hi})`; g.lineWidth = 3.5;
     g.beginPath(); g.arc(X, Y, r + 7 + (1 - hi) * 10, 0, Math.PI * 2); g.stroke();
@@ -6080,14 +7011,35 @@ function drawScenDisc(g, X, Y, ours, num, label, name, hi) {
   g.font = `800 ${txt.length > 2 ? 14 : 19}px ${SF}`;
   g.fillText(txt, X, Y + 1);
   g.textBaseline = 'alphabetic';
-  if (ours && name) {
-    g.font = `700 15px ${SF}`;
-    g.lineWidth = 4; g.strokeStyle = 'rgba(0,0,0,.8)';
-    g.strokeText(name, X, Y + r + 19);
-    g.fillStyle = 'rgba(255,255,255,.95)';
-    g.fillText(name, X, Y + r + 19);
-  }
   g.textAlign = 'left';
+}
+function scenHit(a, b) { return !(a.x + a.w < b.x || b.x + b.w < a.x || a.y + a.h < b.y || b.y + b.h < a.y); }
+function drawScenNames(g, us, th) {
+  const taken = [];
+  us.concat(th || []).forEach(p => taken.push({ x: sX(p.x) - 23, y: sY(p.y) - 23, w: 46, h: 46 }));
+  g.font = `700 15px ${SF}`;
+  us.slice().sort((a, b) => a.y - b.y).forEach(p => {
+    if (!p.name) return;
+    const X = sX(p.x), Y = sY(p.y);
+    const tw = g.measureText(p.name).width;
+    const cands = [
+      { x: X - tw / 2 - 6, y: Y + 26, w: tw + 12, h: 21 },
+      { x: X - tw / 2 - 6, y: Y - 47, w: tw + 12, h: 21 },
+      { x: X + 26, y: Y - 10, w: tw + 12, h: 21 },
+      { x: X - tw - 38, y: Y - 10, w: tw + 12, h: 21 },
+      { x: X - tw / 2 - 6, y: Y + 46, w: tw + 12, h: 21 },
+    ];
+    let box = null;
+    for (let i = 0; i < cands.length; i++) { if (!taken.some(t => scenHit(cands[i], t))) { box = cands[i]; break; } }
+    if (!box) return;   // 자리가 없으면 생략 — 번호로 구분된다
+    taken.push(box);
+    g.fillStyle = 'rgba(8,10,13,.78)';
+    g.beginPath(); g.roundRect(box.x, box.y, box.w, box.h, 6); g.fill();
+    g.fillStyle = 'rgba(255,255,255,.96)';
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText(p.name, box.x + box.w / 2, box.y + 11);
+    g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+  });
 }
 function drawScenBall(g, X, Y, trail) {
   (trail || []).forEach((p, i) => {
@@ -6106,81 +7058,45 @@ function drawScenBall(g, X, Y, trail) {
   g.restore();
 }
 
-/* ---------- 시나리오 영상 구성 ---------- */
-function scenNearest(base, obj) {
-  let best = 0, bd = 1e9;
-  base.forEach((p, i) => { const d = (p.x - obj.x) ** 2 + (p.y - obj.y) ** 2; if (d < bd) { bd = d; best = i; } });
-  return best;
+/* ---------- 볼 경로 ---------- */
+function scenRef(ref, us, th) {
+  if (ref.p != null && us[ref.p]) return { x: sX(us[ref.p].x) + BALL_DX, y: sY(us[ref.p].y) + BALL_DY };
+  if (ref.o != null && th[ref.o]) return { x: sX(th[ref.o].x) + BALL_DX, y: sY(th[ref.o].y) + BALL_DY };
+  return { x: sX(ref.x != null ? ref.x : 50), y: sY(ref.y != null ? ref.y : 50) };
 }
-function scenAnchor(base, pt) {
-  const i = scenNearest(base, pt);
-  const p = base[i];
-  return (p && (p.x - pt.x) ** 2 + (p.y - pt.y) ** 2 < 12) ? i : -1;
+function scenBallAt(pts, tt) {
+  const n = pts.length - 1;
+  if (n < 1) return pts[0];
+  const u = sSub(tt, .15, .9) * n;
+  const k = Math.min(n - 1, Math.floor(u));
+  const local = SEZ.outQuint(s01(u - k));
+  const a = pts[k], b = pts[k + 1];
+  const c = scenCurve(a.x, a.y, b.x, b.y, .13);
+  return qPt(a.x, a.y, c.cx, c.cy, b.x, b.y, local);
 }
-const BALL_DX = 20, BALL_DY = 15;   // 선수 발 앞에 놓이도록 살짝 비켜서
-function scenPos(base, side, md, prog, ballX) {
-  return base.map(p => {
-    const cat = p.cat || 'MF';
-    const fwd = side === 'us' ? -1 : 1;
-    const attacking = (side === 'us') === (md === 'attack');
-    const dir = fwd * (attacking ? 1 : -1);
-    const push = cat === 'GK' ? 2 : cat === 'DF' ? 7 : cat === 'MF' ? 10.5 : 12.5;
-    const shift = (cat === 'GK' ? .05 : .17) * (.45 + .55 * prog);
-    return {
-      x: sClamp(p.x + (ballX - 50) * shift, 5, 95),
-      y: sClamp(p.y + dir * push * prog, 5, 95),
-      cat, label: p.label, name: p.name, num: p.num,
-    };
-  });
+function drawScenPassPath(g, pts, tt, t, shot, ours) {
+  const n = pts.length - 1;
+  if (n < 1) return;
+  const u = sSub(tt, .15, .9) * n;
+  g.save();
+  g.strokeStyle = shot ? 'rgba(255,255,255,.75)' : ours ? 'rgba(244,196,48,.6)' : 'rgba(214,220,228,.5)';
+  g.lineWidth = shot ? 5 : 3.5; g.setLineDash([11, 9]); g.lineDashOffset = -t * 34; g.lineCap = 'round';
+  for (let k = 0; k < n; k++) {
+    const p = s01(u - k); if (p <= 0) break;
+    const a = pts[k], b = pts[k + 1];
+    const c = scenCurve(a.x, a.y, b.x, b.y, .13);
+    const e = SEZ.outQuint(p);
+    g.beginPath();
+    for (let i = 0; i <= 22; i++) {
+      const q = qPt(a.x, a.y, c.cx, c.cy, b.x, b.y, i / 22 * e);
+      i ? g.lineTo(q.x, q.y) : g.moveTo(q.x, q.y);
+    }
+    g.stroke();
+  }
+  g.restore();
 }
-function buildScenMovie(sq, oppKey, mode) {
-  const usBase = usPositions(sq);
-  const themBase = themPositions(oppKey).map(t => ({ x: t.x, y: t.y, label: t.label, cat: scenCatOf(t.label) }));
-  const info = lineupMatchInfo(sq);
-  const usSh = ourShape(sq), thSh = shapeOf(oppKey);
-  const anal = analyzeMatchup(usSh, thSh);
-  const mds = mode === 'both' ? ['attack', 'defense'] : [mode];
-  const segs = [];
-  mds.forEach((md, mi) => {
-    const scenes = buildScenes(sq, oppKey, md);
-    scenes.forEach(sc => {
-      sc._hi = (sc.hi || []).map(h => scenNearest(usBase, h));
-      sc._arr = (sc.arrows || []).map(a => ({
-        i: scenAnchor(usBase, a[0]),
-        a: { x: a[0].x, y: a[0].y }, b: { x: a[1].x, y: a[1].y },
-        dx: a[1].x - a[0].x, dy: a[1].y - a[0].y,
-      }));
-      // 볼의 출발/도착이 우리 선수라면 그 선수(움직인 위치)의 발 앞에 붙인다
-      sc._from = scenAnchor(usBase, sc.ball[0]);
-      sc._to = scenAnchor(usBase, sc.ball[1]);
-    });
-    segs.push({ kind: 'title', dur: mi ? 1.5 : 2.0, md });
-    scenes.forEach((sc, i) => segs.push({ kind: 'scene', dur: 2.6, md, sc, i, n: scenes.length }));
-    segs.push({ kind: 'end', dur: 2.6, md, tips: md === 'attack' ? anal.attack : anal.defense });
-  });
-  let t = 0;
-  segs.forEach(s => { s.t0 = t; t += s.dur; });
-  return {
-    segs, dur: t, usBase, themBase, info, mode, oppKey, sq, anal,
-    ourStr: usSh.str || sq.formation, oppStr: thSh.str || oppKey,
-    oppName: (info && info.m && info.m.opponent) || '상대팀',
-    quarter: info ? info.quarter : '',
-  };
-}
-function scenBallEnds(sc, usA, usB) {
-  const a = sc._from >= 0 && usA[sc._from]
-    ? { x: sX(usA[sc._from].x) + BALL_DX, y: sY(usA[sc._from].y) + BALL_DY }
-    : { x: sX(sc.ball[0].x), y: sY(sc.ball[0].y) };
-  const b = sc._to >= 0 && usB[sc._to]
-    ? { x: sX(usB[sc._to].x) + BALL_DX, y: sY(usB[sc._to].y) + BALL_DY }
-    : { x: sX(sc.ball[1].x), y: sY(sc.ball[1].y) };
-  return [a, b];
-}
-function scenBallAt(sc, tt, ends) {
-  const p = SEZ.outQuint(sSub(tt, .18, .74));
-  const c = scenCurve(ends[0].x, ends[0].y, ends[1].x, ends[1].y, sc.shot ? .05 : .14);
-  return qPt(ends[0].x, ends[0].y, c.cx, c.cy, ends[1].x, ends[1].y, p);
-}
+
+/* ---------- 화면 구성 ---------- */
 function drawScenHeader(g, M, md) {
   g.fillStyle = '#0b0c0f'; g.fillRect(0, 0, SCEN_W, SCEN_L.py - 8);
   const gl = g.createLinearGradient(0, 0, SCEN_W, 0);
@@ -6206,18 +7122,30 @@ function drawScenHeader(g, M, md) {
     md === 'attack' ? '#ffd166' : '#93c5fd');
   if (M.quarter) scenPill(g, 24 + w1 + 9, 96, M.quarter, 'rgba(255,255,255,.09)', '#dfe3e8');
 }
-function drawScenCaption(g, cap, sub, a) {
+function drawScenCaption(g, sc, a, md) {
   const x = 26, y = SCEN_L.capTop, w = SCEN_W - 52, h = 108;
   g.save(); g.globalAlpha = a;
   g.fillStyle = 'rgba(18,19,23,.94)';
   g.beginPath(); g.roundRect(x, y, w, h, 16); g.fill();
-  g.strokeStyle = 'rgba(244,196,48,.28)'; g.lineWidth = 1.5; g.stroke();
-  g.fillStyle = '#f4c430';
+  g.strokeStyle = md === 'attack' ? 'rgba(244,196,48,.28)' : 'rgba(96,165,250,.28)';
+  g.lineWidth = 1.5; g.stroke();
+  g.fillStyle = md === 'attack' ? '#f4c430' : '#60a5fa';
   g.beginPath(); g.roundRect(x, y + 14, 5, h - 28, 3); g.fill();
-  g.font = `800 29px ${SF}`; g.fillStyle = '#ffd166'; g.textAlign = 'left';
-  g.fillText(cap || '', x + 22, y + 44);
+  g.textAlign = 'left';
+  let cx = x + 22;
+  if (sc.tag) {
+    g.font = `800 14px ${SF}`;
+    const tw = g.measureText(sc.tag).width + 18;
+    g.fillStyle = md === 'attack' ? 'rgba(244,196,48,.16)' : 'rgba(96,165,250,.16)';
+    g.beginPath(); g.roundRect(cx, y + 20, tw, 26, 13); g.fill();
+    g.fillStyle = md === 'attack' ? '#ffd166' : '#93c5fd';
+    g.textBaseline = 'middle'; g.fillText(sc.tag, cx + 9, y + 34); g.textBaseline = 'alphabetic';
+    cx += tw + 10;
+  }
+  g.font = `800 27px ${SF}`; g.fillStyle = '#ffffff';
+  g.fillText(sc.cap || '', cx, y + 43);
   g.font = `500 19px ${SF}`; g.fillStyle = '#c2c8d0';
-  scenWrap(g, sub || '', w - 46).slice(0, 2).forEach((ln, i) => g.fillText(ln, x + 22, y + 74 + i * 26));
+  scenWrap(g, sc.sub || '', w - 46).slice(0, 2).forEach((ln, i) => g.fillText(ln, x + 22, y + 74 + i * 26));
   g.restore();
 }
 function drawScenProgress(g, p) {
@@ -6244,8 +7172,7 @@ function drawScenTitle(g, M, seg, tt) {
   g.fillStyle = '#f4c430'; g.font = `900 42px ${SF}`;
   g.fillText('EAST FC', SCEN_W / 2, 452 - rise);
   g.fillStyle = '#9aa1ab'; g.font = `600 24px ${SF}`;
-  const line = `vs ${M.oppName}${M.quarter ? ' · ' + M.quarter : ''}`;
-  g.fillText(line, SCEN_W / 2, 492 - rise);
+  g.fillText(`vs ${M.oppName}${M.quarter ? ' · ' + M.quarter : ''}`, SCEN_W / 2, 492 - rise);
   const a2 = SEZ.outCubic(sSub(tt, .22, .6));
   g.save(); g.globalAlpha = inA * outA * a2;
   g.fillStyle = '#ffffff'; g.font = `900 56px ${SF}`;
@@ -6269,20 +7196,24 @@ function drawScenEnd(g, M, seg, tt) {
   const last = scenes[scenes.length - 1];
   drawScenHeader(g, M, seg.md);
   drawScenPitch(g);
-  const us = scenPos(M.usBase, 'us', seg.md, 1, last ? last.sc.ball[1].x : 50);
-  const th = scenPos(M.themBase, 'them', seg.md, 1, last ? last.sc.ball[1].x : 50);
-  th.forEach(p => drawScenDisc(g, sX(p.x), sY(p.y), false, '', p.label, '', 0));
-  us.forEach(p => drawScenDisc(g, sX(p.x), sY(p.y), true, p.num, p.label, p.name, 0));
+  if (last) {
+    const us = scenApplyRuns(last.sc._us, last.sc.runs, 1);
+    const th = last.sc._th.map(p => Object.assign({}, p));
+    scenSeparate(us, th);
+    th.forEach(p => drawScenDisc(g, sX(p.x), sY(p.y), false, '', p.label, '', 0));
+    us.forEach(p => drawScenDisc(g, sX(p.x), sY(p.y), true, p.num, p.label, p.name, 0));
+    drawScenNames(g, us, th);
+  }
   g.fillStyle = `rgba(6,7,9,${.93 * SEZ.outCubic(sSub(tt, 0, .25))})`;
   g.fillRect(0, 0, SCEN_W, SCEN_H);
   const x = 44, w = SCEN_W - 88;
+  const tips = (seg.tips || []).slice(0, 3);
+  const blockH = tips.length * 132 - 20;
+  const top = Math.max(300, (SCEN_H - blockH) / 2 + 24);
   g.textAlign = 'left';
   g.globalAlpha = SEZ.outCubic(sSub(tt, .08, .32));
   g.fillStyle = seg.md === 'attack' ? '#ffd166' : '#93c5fd';
   g.font = `900 38px ${SF}`;
-  const tips = (seg.tips || []).slice(0, 3);
-  const blockH = tips.length * 132 - 20;
-  const top = Math.max(300, (SCEN_H - blockH) / 2 + 24);
   g.fillText(seg.md === 'attack' ? '⚔️ 공격 포인트' : '🛡️ 수비 포인트', x, top - 52);
   g.globalAlpha = 1;
   tips.forEach((tp, i) => {
@@ -6315,15 +7246,17 @@ function drawScenFrame(g, M, t) {
   if (seg.kind === 'title') { drawScenTitle(g, M, seg, tt); drawScenProgress(g, t / M.dur); return; }
   if (seg.kind === 'end') { drawScenEnd(g, M, seg, tt); drawScenProgress(g, t / M.dur); return; }
 
-  const sc = seg.sc, n = seg.n, i = seg.i;
-  const pA = i / n, pB = (i + 1) / n;
-  const mv = SEZ.inOutCubic(sSub(tt, .05, .82));
-  const usA = scenPos(M.usBase, 'us', seg.md, pA, sc.ball[0].x);
-  const usB = scenPos(M.usBase, 'us', seg.md, pB, sc.ball[1].x);
-  const thA = scenPos(M.themBase, 'them', seg.md, pA, sc.ball[0].x);
-  const thB = scenPos(M.themBase, 'them', seg.md, pB, sc.ball[1].x);
-  const mix = (a, b) => a.map((p, k) => ({ ...p, x: sLerp(p.x, b[k].x, mv), y: sLerp(p.y, b[k].y, mv) }));
-  const us = mix(usA, usB), th = mix(thA, thB);
+  const sc = seg.sc, atk = seg.md === 'attack';
+  // 대형 전환 (상대는 조금 늦게 반응한다)
+  const kUs = SEZ.inOutCubic(sSub(tt, 0, .52));
+  const kTh = SEZ.inOutCubic(sSub(tt, .14, .74));
+  const baseUs = scenLerpArr(sc._usPrev, sc._us, kUs);
+  const th = scenLerpArr(sc._thPrev, sc._th, kTh);
+  const us = scenApplyRuns(baseUs, sc.runs, tt);
+  // 미세한 흔들림 — 완전히 멈춰 있으면 인형처럼 보인다
+  us.forEach((p, i) => { p.x += Math.sin(t * 1.5 + i * 1.7) * .45; p.y += Math.cos(t * 1.25 + i * 2.3) * .45; });
+  th.forEach((p, i) => { p.x += Math.sin(t * 1.35 + i * 2.1) * .45; p.y += Math.cos(t * 1.1 + i * 1.4) * .45; });
+  scenSeparate(us, th);
 
   drawScenHeader(g, M, seg.md);
   drawScenPitch(g);
@@ -6331,93 +7264,130 @@ function drawScenFrame(g, M, t) {
   g.save();
   g.beginPath(); g.roundRect(SCEN_L.px, SCEN_L.py, SCEN_L.pw, SCEN_L.ph, 18); g.clip();
 
-  // 패스 경로 (볼이 지나온 길)
-  const ends = scenBallEnds(sc, usA, usB);
-  const bp = SEZ.outQuint(sSub(tt, .18, .74));
-  if (bp > 0) {
-    const x1 = ends[0].x, y1 = ends[0].y, x2 = ends[1].x, y2 = ends[1].y;
-    const c = scenCurve(x1, y1, x2, y2, sc.shot ? .05 : .14);
-    g.save();
-    g.strokeStyle = sc.shot ? 'rgba(255,255,255,.75)' : 'rgba(244,196,48,.6)';
-    g.lineWidth = sc.shot ? 5 : 3.5; g.setLineDash([11, 9]); g.lineDashOffset = -t * 34; g.lineCap = 'round';
-    g.beginPath();
-    for (let k = 0; k <= 24; k++) {
-      const q = qPt(x1, y1, c.cx, c.cy, x2, y2, k / 24 * bp);
-      k ? g.lineTo(q.x, q.y) : g.moveTo(q.x, q.y);
+  drawScenZone(g, sc.zone, SEZ.outCubic(sSub(tt, .08, .35)) * (1 - sSub(tt, .9, 1)), atk);
+
+  const pts = sc.ball.map(r => scenRef(r, us, th));
+  drawScenPassPath(g, pts, tt, t, sc.fx === 'shot', sc.ball[0] && sc.ball[0].o == null);
+
+  const runLabels = [];
+  const runColor = atk ? 'rgba(255,209,102,.95)' : 'rgba(147,197,253,.95)';
+  (sc.runs || []).forEach(r => {
+    if (!r.arrow) return;
+    const from = baseUs[r.p]; if (!from) return;
+    const d = scenRunDelta(r, from);
+    const to = { x: sClamp(from.x + d.dx, 4, 96), y: sClamp(from.y + d.dy, 4, 96) };
+    const dist = Math.hypot(to.x - from.x, to.y - from.y);
+    if (dist < 2.5) return;
+    const p = SEZ.outCubic(sSub(tt, r.from == null ? .22 : r.from, (r.to == null ? .9 : r.to)));
+    const tip = drawScenArrow(g, sX(from.x), sY(from.y), sX(to.x), sY(to.y), p, runColor, t * 26);
+    if (r.label && dist >= 6 && tip) {
+      runLabels.push({ tip, up: to.y < from.y, text: r.label, a: sSub(p, .55, .8) });
     }
-    g.stroke(); g.restore();
-  }
-  // 움직임 화살표
-  const ap = SEZ.outCubic(sSub(tt, .34, .88));
-  (sc._arr || []).forEach(a => {
-    const src = a.i >= 0 && usB[a.i] ? usB[a.i] : a.a;
-    const dst = a.i >= 0 && usB[a.i] ? { x: sClamp(src.x + a.dx, 4, 96), y: sClamp(src.y + a.dy, 4, 96) } : a.b;
-    drawScenArrow(g, sX(src.x), sY(src.y), sX(dst.x), sY(dst.y), ap,
-      seg.md === 'attack' ? 'rgba(255,209,102,.9)' : 'rgba(147,197,253,.9)', t * 26);
   });
 
-  // 가로채기 / 슛 이펙트
-  if (sc.steal) {
-    const s = sSub(tt, .1, .38);
+  if (sc.fx === 'steal') {
+    const s = sSub(tt, .1, .4);
     if (s > 0 && s < 1) {
       g.strokeStyle = `rgba(239,68,68,${(1 - s) * .9})`; g.lineWidth = 5;
-      g.beginPath(); g.arc(ends[0].x, ends[0].y, 14 + s * 40, 0, Math.PI * 2); g.stroke();
+      g.beginPath(); g.arc(pts[0].x, pts[0].y, 14 + s * 42, 0, Math.PI * 2); g.stroke();
     }
   }
-  if (sc.shot) {
-    const s = sSub(tt, .68, 1);
+  if (sc.fx === 'shot') {
+    const s = sSub(tt, .74, 1);
     if (s > 0) {
       g.strokeStyle = `rgba(255,255,255,${(1 - s) * .95})`; g.lineWidth = 6;
-      g.beginPath(); g.arc(ends[1].x, ends[1].y, 12 + s * 62, 0, Math.PI * 2); g.stroke();
+      const e = pts[pts.length - 1];
+      g.beginPath(); g.arc(e.x, e.y, 12 + s * 62, 0, Math.PI * 2); g.stroke();
     }
   }
 
   th.forEach(p => drawScenDisc(g, sX(p.x), sY(p.y), false, '', p.label, '', 0));
   us.forEach((p, k) => {
-    const isHi = (sc._hi || []).indexOf(k) >= 0;
-    drawScenDisc(g, sX(p.x), sY(p.y), true, p.num, p.label, p.name, isHi ? SEZ.outCubic(sSub(tt, .05, .45)) : 0);
+    const isHi = (sc.hi || []).indexOf(k) >= 0;
+    drawScenDisc(g, sX(p.x), sY(p.y), true, p.num, p.label, p.name,
+      isHi ? SEZ.outCubic(sSub(tt, .05, .45)) : 0, p.moving, t);
   });
 
-  const b = scenBallAt(sc, tt, ends);
+  const b = scenBallAt(pts, tt);
   const trail = [];
-  for (let k = 1; k <= 7; k++) trail.push(scenBallAt(sc, Math.max(0, tt - k * .022), ends));
+  for (let k = 1; k <= 7; k++) trail.push(scenBallAt(pts, Math.max(0, tt - k * .022)));
   drawScenBall(g, b.x, b.y, trail);
+  drawScenNames(g, us, th);
+  runLabels.forEach(L => drawScenRunLabel(g, L.tip, L.up, L.text, L.a, runColor));
   g.restore();
 
-  if (sc.shot) {
-    const s = sSub(tt, .68, 1);
+  if (sc.fx === 'shot') {
+    const s = sSub(tt, .74, 1);
     if (s > 0) {
+      const e = pts[pts.length - 1];
       g.save(); g.globalAlpha = (1 - s) * .95;
       g.textAlign = 'center'; g.font = `900 ${44 + s * 18}px ${SF}`;
       g.lineWidth = 8; g.strokeStyle = 'rgba(0,0,0,.6)';
-      const ty = sClamp(ends[1].y + 96 + s * 18, SCEN_L.py + 60, SCEN_L.capTop - 30);
-      g.strokeText('SHOOT!', ends[1].x, ty);
-      g.fillStyle = '#ffffff'; g.fillText('SHOOT!', ends[1].x, ty);
+      const ty = sClamp(e.y + 96 + s * 18, SCEN_L.py + 60, SCEN_L.capTop - 30);
+      g.strokeText('SHOOT!', e.x, ty);
+      g.fillStyle = '#ffffff'; g.fillText('SHOOT!', e.x, ty);
       g.restore(); g.textAlign = 'left';
     }
   }
 
-  drawScenCaption(g, sc.cap, sc.sub, SEZ.outCubic(sSub(tt, 0, .16)) * (1 - sSub(tt, .93, 1)));
+  drawScenCaption(g, sc, SEZ.outCubic(sSub(tt, 0, .16)) * (1 - sSub(tt, .94, 1)), seg.md);
   drawScenProgress(g, t / M.dur);
 }
 
 /* ---------- 재생 / 녹화 ---------- */
-let _scenRAF = 0;
-function scenStopPlay() { if (_scenRAF) cancelAnimationFrame(_scenRAF); _scenRAF = 0; }
+let _scenRAF = 0, _scenResolve = null;
+function scenStopPlay() {
+  if (_scenRAF) cancelAnimationFrame(_scenRAF);
+  _scenRAF = 0;
+  if (_scenResolve) { const r = _scenResolve; _scenResolve = null; r(); }
+}
 function scenPlay(cv, M, onTick) {
   scenStopPlay();
   const g = cv.getContext('2d');
   const t0 = performance.now();
   return new Promise(res => {
+    _scenResolve = res;
     const step = () => {
       const t = (performance.now() - t0) / 1000;
       drawScenFrame(g, M, t);
       if (onTick) onTick(t / M.dur);
-      if (t >= M.dur) { _scenRAF = 0; res(); return; }
+      if (t >= M.dur) { _scenRAF = 0; _scenResolve = null; res(); return; }
       _scenRAF = requestAnimationFrame(step);
     };
     _scenRAF = requestAnimationFrame(step);
   });
+}
+
+/* 재생할 때는 화면 가득 채워서 본다 — 팝업 안 미리보기는 너무 작다 */
+let _scenTheater = null;
+function scenTheaterOpen(el, onClose) {
+  scenTheaterClose();
+  const ov = document.createElement('div');
+  ov.className = 'scen-theater';
+  const body = document.createElement('div');
+  body.className = 'st-body';
+  const close = document.createElement('button');
+  close.type = 'button'; close.className = 'st-close'; close.textContent = '✕';
+  ov.appendChild(body); ov.appendChild(close);
+  document.body.appendChild(ov);
+  const home = el.parentNode, next = el.nextSibling;
+  el.classList.add('st-el');
+  body.appendChild(el);
+  document.body.classList.add('st-on');
+  _scenTheater = { ov, el, home, next, onClose };
+  close.addEventListener('click', scenTheaterClose);
+  ov.addEventListener('click', e => { if (e.target === ov || e.target === body) scenTheaterClose(); });
+  return ov;
+}
+function scenTheaterClose() {
+  const T = _scenTheater;
+  if (!T) return;
+  _scenTheater = null;
+  T.el.classList.remove('st-el');
+  if (T.home) T.home.insertBefore(T.el, T.next);
+  T.ov.remove();
+  document.body.classList.remove('st-on');
+  if (T.onClose) T.onClose();
 }
 function scenMime() {
   if (!window.MediaRecorder) return null;
@@ -6433,7 +7403,7 @@ async function scenRecord(cv, M, onProg) {
   const stream = cv.captureStream(30);
   const chunks = [];
   let rec;
-  const bps = M.dur > 20 ? 3200000 : 4800000;   // 카톡 업로드에 부담 없는 용량
+  const bps = M.dur > 22 ? 2800000 : 4000000;   // 카톡 업로드에 부담 없는 용량
   try { rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: bps }); }
   catch (e) { try { rec = new MediaRecorder(stream); } catch (e2) { return null; } }
   rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
@@ -6461,7 +7431,7 @@ async function openScenarioPop() {
   const keys = Object.keys(FORMATIONS);
   let oppKey = (m && FORMATIONS[m.oppFormation] && m.oppFormation) || (FORMATIONS[sq.oppFormation] && sq.oppFormation) || '4-4-2';
   if (!FORMATIONS[oppKey]) oppKey = keys[0];
-  let mode = 'attack', movie = null, made = null, busy = false;
+  let mode = 'attack', seed = 1, movie = null, made = null, busy = false;
 
   const bd = document.createElement('div');
   bd.id = 'orderPopBd'; bd.className = 'order-pop-backdrop';
@@ -6484,6 +7454,7 @@ async function openScenarioPop() {
     <div class="scen-stage" id="scenStage">
       <canvas id="scenCv" width="${SCEN_W}" height="${SCEN_H}"></canvas>
       <button type="button" class="scen-play" id="scenPlayBtn">▶</button>
+      <button type="button" class="scen-dice" id="scenDice" title="다른 전개로 새로 짜기">🎲 다른 전개</button>
     </div>
     <div class="scen-meta" id="scenMeta"></div>
     <div class="share-btns">
@@ -6500,25 +7471,28 @@ async function openScenarioPop() {
   const stage = pop.querySelector('#scenStage');
   const meta = pop.querySelector('#scenMeta');
   const playBtn = pop.querySelector('#scenPlayBtn');
+  const diceBtn = pop.querySelector('#scenDice');
   const makeBtn = pop.querySelector('#scenMake');
   const prevBtn = pop.querySelector('#scenPreview');
 
   function rebuild() {
     scenStopPlay();
-    movie = buildScenMovie(sq, oppKey, mode);
+    movie = buildScenMovie(sq, oppKey, mode, seed);
     const first = movie.segs.find(s => s.kind === 'scene');
     drawScenFrame(ctx, movie, first ? first.t0 + first.dur * .55 : 0);
-    const tips = mode === 'defense' ? movie.anal.defense : movie.anal.attack;
+    const scenes = movie.segs.filter(s => s.kind === 'scene');
     meta.innerHTML = `<div class="scen-vs"><b>${escapeHtml(movie.ourStr)}</b> vs <b>${escapeHtml(movie.oppStr)}</b>
-        <span>${escapeHtml(movie.oppName)}${movie.quarter ? ' · ' + escapeHtml(movie.quarter) : ''} · 약 ${Math.round(movie.dur)}초</span></div>
-      ${tips.map(t => `<div class="scen-tip"><b>${escapeHtml(t.t)}</b><span>${escapeHtml(t.d)}</span></div>`).join('')}`;
+        <span>${escapeHtml(movie.oppName)}${movie.quarter ? ' · ' + escapeHtml(movie.quarter) : ''} · 약 ${Math.round(movie.dur)}초 · ${scenes.length}장면</span></div>
+      ${scenes.map(s => `<div class="scen-tip"><b><i>${escapeHtml(s.sc.tag || '')}</i>${escapeHtml(s.sc.cap)}</b><span>${escapeHtml(s.sc.sub)}</span></div>`).join('')}`;
     made = null;
     resetOut();
   }
   function resetOut() {
-    stage.querySelectorAll('video').forEach(v => v.remove());
+    scenTheaterClose();
+    stage.querySelectorAll('video, .scen-expand').forEach(v => v.remove());
     cv.style.display = '';
     playBtn.style.display = '';
+    diceBtn.style.display = '';
     makeBtn.textContent = '🎬 영상 만들기';
     makeBtn.disabled = false;
     prevBtn.textContent = '▶ 미리보기';
@@ -6526,19 +7500,22 @@ async function openScenarioPop() {
   }
   async function doPreview() {
     if (busy) return;
-    busy = true; playBtn.style.display = 'none';
+    busy = true; playBtn.style.display = 'none'; diceBtn.style.display = 'none';
     prevBtn.textContent = '재생 중…';
+    scenTheaterOpen(cv, () => scenStopPlay());
     await scenPlay(cv, movie);
+    scenTheaterClose();
     prevBtn.textContent = '▶ 미리보기';
-    playBtn.style.display = '';
+    playBtn.style.display = ''; diceBtn.style.display = '';
     busy = false;
   }
   playBtn.addEventListener('click', doPreview);
   prevBtn.onclick = doPreview;
+  diceBtn.addEventListener('click', () => { if (busy) return; seed++; rebuild(); });
 
   pop.querySelector('#scenOpp').addEventListener('change', e => {
     oppKey = e.target.value;
-    if (canManageSquad && canManageSquad()) {
+    if (typeof canManageSquad === 'function' && canManageSquad()) {
       if (m) { m.oppFormation = oppKey; } else { sq.oppFormation = oppKey; }
       try { saveState(); } catch (err) {}
     } else { sq.oppFormation = oppKey; }
@@ -6549,37 +7526,6 @@ async function openScenarioPop() {
     mode = b.dataset.m;
     pop.querySelectorAll('#scenModes button').forEach(x => x.classList.toggle('on', x === b));
     rebuild();
-  });
-
-  makeBtn.addEventListener('click', async () => {
-    if (busy) return;
-    if (made) { shareMade(); return; }
-    busy = true; playBtn.style.display = 'none';
-    makeBtn.disabled = true;
-    const out = await scenRecord(cv, movie, p => { makeBtn.textContent = `만드는 중 ${Math.round(p * 100)}%`; });
-    busy = false; makeBtn.disabled = false;
-    if (!out) {
-      makeBtn.textContent = '🎬 영상 만들기';
-      playBtn.style.display = '';
-      toast('이 브라우저는 영상 저장을 지원하지 않아요 · 미리보기로 봐주세요');
-      return;
-    }
-    made = out;
-    const url = URL.createObjectURL(out.blob);
-    cv.style.display = 'none';
-    const v = document.createElement('video');
-    v.src = url; v.controls = true; v.autoplay = true; v.loop = true; v.playsInline = true;
-    v.setAttribute('playsinline', ''); v.muted = true;
-    stage.appendChild(v);
-    makeBtn.textContent = '📤 영상 공유';
-    prevBtn.textContent = '💾 저장';
-    prevBtn.onclick = () => {
-      const a = document.createElement('a');
-      a.href = url; a.download = fileName();
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      toast('영상을 저장했어요');
-    };
-    if (out.ext !== 'mp4') toast('mp4를 지원하지 않아 webm으로 만들었어요');
   });
 
   function fileName() {
@@ -6596,6 +7542,41 @@ async function openScenarioPop() {
     }
     toast('바로 공유가 안 돼요 · 💾 저장 후 올려주세요');
   }
+
+  makeBtn.addEventListener('click', async () => {
+    if (busy) return;
+    if (made) { shareMade(); return; }
+    busy = true; playBtn.style.display = 'none'; diceBtn.style.display = 'none';
+    makeBtn.disabled = true;
+    const out = await scenRecord(cv, movie, p => { makeBtn.textContent = `만드는 중 ${Math.round(p * 100)}%`; });
+    busy = false; makeBtn.disabled = false;
+    if (!out) {
+      makeBtn.textContent = '🎬 영상 만들기';
+      playBtn.style.display = ''; diceBtn.style.display = '';
+      toast('이 브라우저는 영상 저장을 지원하지 않아요 · 미리보기로 봐주세요');
+      return;
+    }
+    made = out;
+    const url = URL.createObjectURL(out.blob);
+    cv.style.display = 'none';
+    const v = document.createElement('video');
+    v.src = url; v.controls = true; v.autoplay = true; v.loop = true; v.playsInline = true;
+    v.setAttribute('playsinline', ''); v.muted = true;
+    stage.appendChild(v);
+    const exp = document.createElement('button');
+    exp.type = 'button'; exp.className = 'scen-expand'; exp.textContent = '⛶ 크게 보기';
+    exp.addEventListener('click', () => { scenTheaterOpen(v, () => { try { v.pause(); } catch (e) {} }); try { v.play(); } catch (e) {} });
+    stage.appendChild(exp);
+    makeBtn.textContent = '📤 영상 공유';
+    prevBtn.textContent = '💾 저장';
+    prevBtn.onclick = () => {
+      const a = document.createElement('a');
+      a.href = url; a.download = fileName();
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      toast('영상을 저장했어요');
+    };
+    if (out.ext !== 'mp4') toast('mp4를 지원하지 않아 webm으로 만들었어요');
+  });
 
   rebuild();
 }
@@ -6967,7 +7948,7 @@ function openStrategyPop() {
 
 /* ---------- 선수 지시 열람 박스 (필드에서 「📋 지시」 칩을 누르면) ---------- */
 function closeOrderPop() {
-  try { scenStopPlay(); } catch (e) {}
+  try { scenStopPlay(); scenTheaterClose(); } catch (e) {}
   document.getElementById('orderPop')?.remove();
   document.getElementById('orderPopBd')?.remove();
 }
