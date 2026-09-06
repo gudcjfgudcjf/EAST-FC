@@ -3770,6 +3770,12 @@
 
   /* ---------- 👤 선수 상세 정보 ---------- */
   .pf-bits { font-size: 11px; color: var(--text-3); margin-top: 2px; font-weight: 600; }
+  #bioModalBody.has-photo {
+    background-repeat: no-repeat;
+    border-color: rgba(244,196,48,.22);
+  }
+  #bioModalBody.has-photo .bio-rows .bio-row { background: rgba(255,255,255,.055); backdrop-filter: blur(2px); }
+  #bioModalBody.has-photo .bio-col { backdrop-filter: blur(2px); }
   .bio-head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
   .bio-head .pf-avatar, .bio-head .pf-ava { flex: none; }
   .bio-h-txt { min-width: 0; }
@@ -5242,7 +5248,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 58;
+const APP_VERSION = 59;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -14995,6 +15001,16 @@ function openPlayerBio(playerId) {
   ].filter(r => r[1]);
 
   const box = document.getElementById('bioModalBody');
+  // 선수 사진을 뒤 레이어로 깔고 위에 어두운 막을 씌워 글씨가 읽히게 한다
+  if (p.photo) {
+    box.style.backgroundImage = `linear-gradient(180deg, rgba(12,12,14,.70) 0%, rgba(12,12,14,.89) 42%, rgba(12,12,14,.96) 100%), url("${p.photo}")`;
+    box.style.backgroundSize = 'cover';
+    box.style.backgroundPosition = 'center 12%';
+    box.classList.add('has-photo');
+  } else {
+    box.style.backgroundImage = '';
+    box.classList.remove('has-photo');
+  }
   box.innerHTML = `
     <div class="bio-head">
       ${pfAvatar(p)}
@@ -15017,12 +15033,14 @@ function openPlayerBio(playerId) {
       </div>` : ''}
     <div class="modal-actions">
       ${canEdit ? '<button class="btn" id="bioPhoto">📸 사진</button>' : ''}
-      ${canEdit ? '<button class="btn primary" id="bioEdit">✏️ 정보 입력</button>' : ''}
+      ${canEdit ? '<button class="btn" id="bioEdit">✏️ 정보 입력</button>' : ''}
+      <button class="btn primary" id="bioShare">📤 공유</button>
       <button class="btn" id="bioClose">닫기</button>
     </div>`;
   document.getElementById('bioModal').classList.add('show');
   box.querySelector('#bioPhoto')?.addEventListener('click', () => { closePlayerBio(); openPhotoModal(playerId); });
   box.querySelector('#bioEdit')?.addEventListener('click', () => openBioEdit(playerId));
+  box.querySelector('#bioShare')?.addEventListener('click', () => openSharePlayer(playerId));
   box.querySelector('#bioClose')?.addEventListener('click', closePlayerBio);
 }
 function closePlayerBio() { document.getElementById('bioModal').classList.remove('show'); }
@@ -15076,6 +15094,220 @@ function saveBioEdit() {
   if (currentTab === 'profile') renderProfile();
   if (currentTab === 'players') renderPlayersTable();
   toast('선수 정보를 저장했어요');
+}
+
+/* ---------- 👤 선수 프로필 카드 공유 (사진을 배경으로) ---------- */
+function bioLoadImg(src) {
+  return new Promise(res => {
+    if (!src) { res(null); return; }
+    const i = new Image();
+    i.onload = () => res(i);
+    i.onerror = () => res(null);
+    i.src = src;
+  });
+}
+function buildPlayerNotice(p) {
+  const b = ensureBio(p);
+  const age = bioAge(b.birth);
+  const L = [];
+  L.push('👤 EAST FC 선수 프로필');
+  L.push(`${p.number ? 'NO.' + p.number + ' ' : ''}${p.name}${(p.positions || []).length ? ` (${(p.positions || []).join('/')})` : ''}`);
+  if (b.motto) L.push(`“${b.motto}”`);
+  L.push('');
+  if (b.nation) L.push(`🌏 국적 : ${b.nation}`);
+  if (b.birth) L.push(`🎂 생년월일 : ${bioBirthText(b.birth)}${age != null ? ` (${age}세)` : ''}`);
+  if (b.height || b.weight) L.push(`📏 키 / 몸무게 : ${b.height ? b.height + 'cm' : '–'} / ${b.weight ? b.weight + 'kg' : '–'}`);
+  if (p.foot) L.push(`🦶 주발 : ${BIO_FOOT[p.foot] || p.foot}`);
+  if (p.number) L.push(`🔢 등번호 : ${p.number}번`);
+  if ((p.positions || []).length) L.push(`⚽ 포지션 : ${(p.positions || []).join(' · ')}`);
+  if (b.strengths.length) { L.push(''); L.push(`👍 장점 · ${b.strengths.join(', ')}`); }
+  if (b.weaknesses.length) L.push(`👎 단점 · ${b.weaknesses.join(', ')}`);
+  return L.join('\n');
+}
+async function buildPlayerCard(p) {
+  const W = 1080, H = 1500;
+  const cv = document.createElement('canvas');
+  cv.width = W; cv.height = H;
+  const g = cv.getContext('2d');
+  const F = "'Pretendard Variable','Noto Sans KR',sans-serif";
+  const GOLD = '#f4c430', GOLDW = '#ffd166';
+  const b = ensureBio(p);
+  const age = bioAge(b.birth);
+
+  g.fillStyle = '#0b0b0d'; g.fillRect(0, 0, W, H);
+  // 선수 사진을 배경으로 깔고 어둡게
+  const ph = await bioLoadImg(p.photo);
+  if (ph) {
+    const sc = Math.max(W / ph.naturalWidth, H / ph.naturalHeight);
+    const dw = ph.naturalWidth * sc, dh = ph.naturalHeight * sc;
+    g.save(); g.globalAlpha = .9;
+    g.drawImage(ph, (W - dw) / 2, (H - dh) * .18, dw, dh);
+    g.restore();
+    const sc1 = g.createLinearGradient(0, 0, 0, H);
+    sc1.addColorStop(0, 'rgba(10,10,12,.64)');
+    sc1.addColorStop(.35, 'rgba(10,10,12,.84)');
+    sc1.addColorStop(1, 'rgba(10,10,12,.96)');
+    g.fillStyle = sc1; g.fillRect(0, 0, W, H);
+  } else {
+    const bg = g.createLinearGradient(0, 0, W, H);
+    bg.addColorStop(0, 'rgba(244,196,48,.10)'); bg.addColorStop(.55, 'rgba(0,0,0,0)');
+    g.fillStyle = bg; g.fillRect(0, 0, W, H);
+  }
+
+  await scenCrest();
+  if (_scenCrestImg) {
+    const ch = 100, cw = _scenCrestImg.width / _scenCrestImg.height * ch;
+    g.drawImage(_scenCrestImg, 54, 46, cw, ch);
+  }
+  g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+  g.fillStyle = GOLD; g.font = `800 36px ${F}`;
+  g.fillText('EAST FC', 172, 92);
+  g.fillStyle = '#9aa1ab'; g.font = `600 24px ${F}`;
+  g.fillText('👤 선수 프로필', 172, 128);
+
+  // 이름
+  let y = 268;
+  if (p.number) {
+    g.fillStyle = GOLD; g.font = `900 32px ${F}`;
+    g.fillText(`NO.${p.number}`, 54, y - 62);
+  }
+  g.fillStyle = '#ffffff'; g.font = `900 82px ${F}`;
+  g.fillText(p.name, 54, y);
+  y += 20;
+  const pos = p.positions || [];
+  if (pos.length) {
+    let bx = 54;
+    g.font = `800 26px ${F}`;
+    pos.forEach(k => {
+      const w = g.measureText(k).width + 30;
+      g.fillStyle = 'rgba(244,196,48,.18)';
+      g.beginPath(); g.roundRect(bx, y, w, 44, 22); g.fill();
+      g.fillStyle = GOLDW; g.textBaseline = 'middle';
+      g.fillText(k, bx + 15, y + 23); g.textBaseline = 'alphabetic';
+      bx += w + 9;
+    });
+    y += 60;
+  }
+  if (b.motto) {
+    g.fillStyle = GOLDW; g.font = `600 27px ${F}`;
+    g.fillText(`“${b.motto}”`, 54, y + 32);
+    y += 52;
+  }
+
+  // 선수 정보
+  y += 52;
+  g.fillStyle = GOLDW; g.font = `800 30px ${F}`;
+  g.fillText('📋 선수 정보', 54, y);
+  y += 20;
+  const rows = [
+    ['국적', b.nation || ''],
+    ['생년월일', bioBirthText(b.birth)],
+    ['나이', age != null ? `${age}세` : ''],
+    ['키 / 몸무게', (b.height || b.weight) ? `${b.height ? b.height + 'cm' : '–'} / ${b.weight ? b.weight + 'kg' : '–'}` : ''],
+    ['주발', BIO_FOOT[p.foot] || ''],
+    ['등번호', p.number ? `${p.number}번` : ''],
+    ['포지션', pos.join(' · ')],
+  ].filter(r => r[1]);
+  if (!rows.length) {
+    g.fillStyle = '#6b7280'; g.font = `500 26px ${F}`;
+    g.fillText('아직 입력된 정보가 없어요', 54, y + 46);
+    y += 70;
+  }
+  rows.forEach(r => {
+    y += 56;
+    g.fillStyle = 'rgba(255,255,255,.05)';
+    g.beginPath(); g.roundRect(54, y - 36, W - 108, 50, 10); g.fill();
+    g.fillStyle = '#8b9099'; g.font = `700 25px ${F}`;
+    g.fillText(r[0], 72, y);
+    g.textAlign = 'right';
+    g.fillStyle = '#ffffff'; g.font = `800 28px ${F}`;
+    g.fillText(r[1], W - 72, y);
+    g.textAlign = 'left';
+  });
+
+  // 장점 · 단점
+  if (b.strengths.length || b.weaknesses.length) {
+    y += 76;
+    g.fillStyle = GOLDW; g.font = `800 30px ${F}`;
+    g.fillText('⚖️ 장점 · 단점', 54, y);
+    y += 26;
+    const colW = (W - 108 - 18) / 2;
+    const maxN = Math.max(b.strengths.length, b.weaknesses.length);
+    const boxH = 62 + maxN * 40;
+    [[b.strengths, '👍 장점', '#22c55e', 54], [b.weaknesses, '👎 단점', '#ef4444', 54 + colW + 18]].forEach(([arr, t, c, x]) => {
+      g.fillStyle = c + '14';
+      g.beginPath(); g.roundRect(x, y, colW, boxH, 14); g.fill();
+      g.strokeStyle = c + '3d'; g.lineWidth = 2; g.stroke();
+      g.fillStyle = c === '#22c55e' ? '#4ade80' : '#fca5a5';
+      g.font = `800 25px ${F}`;
+      g.fillText(t, x + 18, y + 40);
+      g.fillStyle = '#e6eaef'; g.font = `700 25px ${F}`;
+      (arr.length ? arr : ['–']).forEach((it, i) => g.fillText('· ' + it, x + 18, y + 80 + i * 40));
+    });
+    y += boxH + 10;
+  }
+
+  const H2 = Math.max(820, Math.min(H, Math.round(y + 100)));
+  const out = document.createElement('canvas');
+  out.width = W; out.height = H2;
+  const g2 = out.getContext('2d');
+  g2.drawImage(cv, 0, 0);
+  g2.fillStyle = '#5a5f66'; g2.font = `500 21px ${F}`;
+  g2.textAlign = 'left';
+  g2.fillText('EFM · East Football Manager', 54, H2 - 40);
+  g2.textAlign = 'left';
+  return new Promise(res => out.toBlob(res, 'image/png'));
+}
+async function openSharePlayer(playerId) {
+  const p = getPlayer(playerId); if (!p) return;
+  closeOrderPop();
+  const bd = document.createElement('div');
+  bd.id = 'orderPopBd'; bd.className = 'order-pop-backdrop';
+  bd.addEventListener('click', closeOrderPop);
+  document.body.appendChild(bd);
+
+  const pop = document.createElement('div');
+  pop.id = 'orderPop'; pop.className = 'order-pop share-pop';
+  pop.innerHTML = `<div class="op-label">👤 선수 프로필 공유</div>
+    <div class="share-preview" id="sharePreview"><div class="share-loading">카드 만드는 중…</div></div>
+    <div class="share-notice" id="shareNotice"></div>
+    <div class="share-btns">
+      <button class="edit" id="shareImg">📤 이미지 공유</button>
+      <button id="shareSave">💾 이미지 저장</button>
+      <button id="shareCopy">📋 정보 복사</button>
+    </div>
+    <div class="order-pop-foot"><button data-op-close>닫기</button></div>`;
+  document.body.appendChild(pop);
+  pop.style.left = '50%'; pop.style.top = '50%'; pop.style.transform = 'translate(-50%, -50%)';
+  pop.querySelector('[data-op-close]').addEventListener('click', closeOrderPop);
+
+  const notice = buildPlayerNotice(p);
+  document.getElementById('shareNotice').textContent = notice;
+  const blob = await buildPlayerCard(p);
+  const url = URL.createObjectURL(blob);
+  document.getElementById('sharePreview').innerHTML = `<img src="${url}" alt="선수 프로필" />`;
+  const fname = `EASTFC_프로필_${(p.name || '').replace(/\s+/g, '_')}.png`;
+
+  document.getElementById('shareImg').addEventListener('click', async () => {
+    const file = new File([blob], fname, { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], text: notice }); return; } catch (e) { if (e.name === 'AbortError') return; }
+    }
+    toast('이 기기는 바로 공유가 안 돼요 · 저장 후 올려주세요');
+  });
+  document.getElementById('shareSave').addEventListener('click', () => {
+    const a = document.createElement('a'); a.href = url; a.download = fname;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    toast('이미지를 저장했어요');
+  });
+  document.getElementById('shareCopy').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(notice); toast('프로필 정보를 복사했어요'); }
+    catch (e) {
+      const ta = document.createElement('textarea'); ta.value = notice; document.body.appendChild(ta);
+      ta.select(); try { document.execCommand('copy'); toast('프로필 정보를 복사했어요'); } catch (_) { toast('복사에 실패했어요'); }
+      document.body.removeChild(ta);
+    }
+  });
 }
 
 const _crop = { playerId: null, img: null, baseMin: 1, zoom: 1, ox: 0, oy: 0, D: 220 };
