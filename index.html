@@ -2361,6 +2361,7 @@
   .cond-opt.cond-flash { animation: condSiren 0.7s steps(1,end) infinite; }
 
   .admin-player-select { max-width: 210px; }
+  .admin-unlinked { font-size: 10.5px; font-weight: 800; color: #fca5a5; background: rgba(239,68,68,.12); border: 1px solid rgba(239,68,68,.3); padding: 1px 6px; border-radius: 6px; margin-left: 4px; white-space: nowrap; }
   .admin-link-chip {
     display: inline-flex; align-items: center; gap: 4px;
     background: var(--bg-3); border: 1px solid var(--border-2);
@@ -4451,6 +4452,30 @@
     backdrop-filter: blur(4px);
   }
   .scen-theater .st-close:active { transform: scale(.93); }
+  .scen-theater .st-wrap { display: flex; flex-direction: column; align-items: center; max-width: 100vw; max-height: 100vh; max-height: 100dvh; }
+  .scen-theater.has-ctl .st-el { max-height: calc(100dvh - 118px); }
+  .st-ctl { width: 100%; max-width: 540px; padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)); color: #fff; }
+  .sc-row { display: flex; align-items: center; gap: 10px; }
+  .sc-row2 { margin-top: 6px; gap: 8px; align-items: flex-start; }
+  .sc-play { flex: none; width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer; font-size: 16px; line-height: 1;
+    background: rgba(255,255,255,.16); color: #fff; }
+  .sc-play:active { transform: scale(.93); }
+  .sc-bar { position: relative; flex: 1; min-width: 0; height: 28px; display: flex; align-items: center; }
+  .sc-bar input[type="range"] { width: 100%; margin: 0; accent-color: var(--gold); cursor: pointer; }
+  .sc-ticks { position: absolute; left: 8px; right: 8px; top: 50%; height: 10px; transform: translateY(-50%); pointer-events: none; }
+  .sc-ticks i { position: absolute; top: 0; width: 2px; height: 10px; margin-left: -1px; background: rgba(255,255,255,.55); border-radius: 1px; }
+  .sc-time { flex: none; font-size: 11.5px; font-weight: 700; color: rgba(255,255,255,.7); font-variant-numeric: tabular-nums; min-width: 66px; text-align: right; }
+  .sc-speed { flex: none; display: flex; gap: 4px; }
+  .sc-speed button { min-width: 40px; padding: 6px 7px; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 11.5px; font-weight: 800;
+    color: rgba(255,255,255,.65); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); }
+  .sc-speed button.on { color: #0d0d0f; background: var(--gold); border-color: var(--gold); }
+  .sc-chips { flex: 1; min-width: 0; display: flex; gap: 5px; overflow-x: auto; padding-bottom: 2px; -webkit-overflow-scrolling: touch; }
+  .sc-chips::-webkit-scrollbar { height: 3px; }
+  .sc-chip { flex: none; display: flex; align-items: center; gap: 5px; padding: 6px 9px; border-radius: 8px; cursor: pointer; font-family: inherit;
+    font-size: 11px; font-weight: 700; color: rgba(255,255,255,.7); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); white-space: nowrap; }
+  .sc-chip b { font-size: 10px; font-weight: 900; color: #0d0d0f; background: rgba(255,255,255,.8); border-radius: 5px; padding: 1px 5px; }
+  .sc-chip.on { color: #fff; border-color: var(--gold); background: rgba(111,159,196,.22); }
+  .sc-chip.on b { background: var(--gold); }
   /* 데스크톱·태블릿에선 화면을 다 채우면 너무 크다 — 적당한 크기로 */
   @media (min-width: 700px) {
     .scen-theater { background: rgba(0,0,0,.9); }
@@ -5644,7 +5669,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 89;
+const APP_VERSION = 91;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -8135,47 +8160,147 @@ function drawScenFrame(g, M, t) {
   drawScenProgress(g, t / M.dur);
 }
 
-/* ---------- 재생 / 녹화 ---------- */
-let _scenRAF = 0, _scenResolve = null;
+/* ---------- 재생 / 녹화 ----------
+   프레임이 시간 t 의 함수(drawScenFrame)라서 일시정지·배속·탐색이 전부 t 하나로 된다.
+   _scenP = 현재 재생 상태. 녹화(scenRecord)도 같은 플레이어를 1배속으로 돌린다. */
+let _scenP = null;
 function scenStopPlay() {
-  if (_scenRAF) cancelAnimationFrame(_scenRAF);
-  _scenRAF = 0;
-  if (_scenResolve) { const r = _scenResolve; _scenResolve = null; r(); }
+  const P = _scenP; if (!P) return;
+  _scenP = null;
+  if (P.raf) cancelAnimationFrame(P.raf);
+  if (P.res) P.res();
 }
-function scenPlay(cv, M, onTick) {
+function scenPlay(cv, M, onTick, opts) {
   scenStopPlay();
-  const g = cv.getContext('2d');
-  const t0 = performance.now();
+  const o = opts || {};
+  const P = { cv, g: cv.getContext('2d'), M, t: o.from || 0, speed: o.speed || 1, playing: true, raf: 0, last: 0, onTick, res: null, ui: null };
+  _scenP = P;
   return new Promise(res => {
-    _scenResolve = res;
-    const step = () => {
-      const t = (performance.now() - t0) / 1000;
-      drawScenFrame(g, M, t);
-      if (onTick) onTick(t / M.dur);
-      if (t >= M.dur) { _scenRAF = 0; _scenResolve = null; res(); return; }
-      _scenRAF = requestAnimationFrame(step);
+    P.res = res;
+    const step = (now) => {
+      if (_scenP !== P) return;
+      if (P.playing) {
+        if (P.last) P.t += ((now - P.last) / 1000) * P.speed;
+        P.last = now;
+      }
+      drawScenFrame(P.g, M, P.t);
+      if (onTick) onTick(Math.min(1, P.t / M.dur));
+      scenUiSync(P);
+      if (P.t >= M.dur) {
+        P.t = M.dur - .001; P.playing = false; P.last = 0;
+        drawScenFrame(P.g, M, P.t); scenUiSync(P);
+        if (o.holdEnd) { P.raf = 0; const r = P.res; P.res = null; if (r) r(); return; }   // 끝에서 멈춰 대기 (탐색 가능)
+        P.raf = 0; _scenP = null; res(); return;
+      }
+      P.raf = requestAnimationFrame(step);
     };
-    _scenRAF = requestAnimationFrame(step);
+    P.raf = requestAnimationFrame(step);
   });
+}
+function scenPause() { const P = _scenP; if (!P) return; P.playing = false; P.last = 0; scenUiSync(P); }
+function scenResume() {
+  const P = _scenP; if (!P) return;
+  if (P.t >= P.M.dur - .01) P.t = 0;         // 끝난 상태에서 재생 누르면 처음부터
+  P.playing = true; P.last = 0;
+  if (!P.raf) {                                // holdEnd 로 멈춰 있던 루프 다시 시동
+    const loop = (now) => {
+      if (_scenP !== P) return;
+      if (P.playing) { if (P.last) P.t += ((now - P.last) / 1000) * P.speed; P.last = now; }
+      drawScenFrame(P.g, P.M, P.t); if (P.onTick) P.onTick(Math.min(1, P.t / P.M.dur)); scenUiSync(P);
+      if (P.t >= P.M.dur) { P.t = P.M.dur - .001; P.playing = false; P.last = 0; P.raf = 0; drawScenFrame(P.g, P.M, P.t); scenUiSync(P); return; }
+      P.raf = requestAnimationFrame(loop);
+    };
+    P.raf = requestAnimationFrame(loop);
+  }
+  scenUiSync(P);
+}
+function scenToggle() { const P = _scenP; if (!P) return; if (P.playing) scenPause(); else scenResume(); }
+function scenSeek(t) {
+  const P = _scenP; if (!P) return;
+  P.t = sClamp(t, 0, P.M.dur - .001); P.last = 0;
+  drawScenFrame(P.g, P.M, P.t); if (P.onTick) P.onTick(P.t / P.M.dur); scenUiSync(P);
+}
+function scenSetSpeed(x) { const P = _scenP; if (!P) return; P.speed = x; scenUiSync(P); }
+
+/* 극장 하단 컨트롤 — 재생/일시정지 · 느리게 · 탐색바(장면 눈금) · 장면 바로가기 */
+function scenControlsHtml(M) {
+  const scenes = M.segs.filter(sg => sg.kind === 'scene');
+  const ticks = scenes.map(sg => `<i style="left:${(sg.t0 / M.dur * 100).toFixed(2)}%"></i>`).join('');
+  const chips = scenes.map((sg, i) => `<button type="button" class="sc-chip" data-t="${sg.t0.toFixed(2)}"><b>${i + 1}</b>${escapeHtml(sg.sc.tag || sg.sc.cap || '')}</button>`).join('');
+  return `<div class="sc-row">
+      <button type="button" class="sc-play" id="scPlay" aria-label="재생/일시정지">⏸</button>
+      <div class="sc-bar"><div class="sc-ticks">${ticks}</div>
+        <input type="range" id="scSeek" min="0" max="${M.dur.toFixed(2)}" step="0.02" value="0" /></div>
+      <span class="sc-time" id="scTime">0:00</span>
+    </div>
+    <div class="sc-row sc-row2">
+      <div class="sc-speed">${[0.25, 0.5, 1].map(x => `<button type="button" data-sp="${x}" class="${x === 1 ? 'on' : ''}">${x === 1 ? '1×' : x + '×'}</button>`).join('')}</div>
+      <div class="sc-chips">${chips}</div>
+    </div>`;
+}
+function scenBindControls(box) {
+  const play = box.querySelector('#scPlay'), seek = box.querySelector('#scSeek');
+  play.addEventListener('click', scenToggle);
+  let wasPlaying = false;
+  seek.addEventListener('pointerdown', () => { const P = _scenP; wasPlaying = !!(P && P.playing); if (P) { P.playing = false; P.last = 0; } });
+  seek.addEventListener('input', e => scenSeek(parseFloat(e.target.value)));
+  seek.addEventListener('change', () => { if (wasPlaying) scenResume(); });
+  box.querySelectorAll('[data-sp]').forEach(b => b.addEventListener('click', () => {
+    scenSetSpeed(parseFloat(b.dataset.sp));
+    box.querySelectorAll('[data-sp]').forEach(x => x.classList.toggle('on', x === b));
+  }));
+  box.querySelectorAll('.sc-chip').forEach(b => b.addEventListener('click', () => { scenSeek(parseFloat(b.dataset.t)); scenResume(); }));
+  const key = e => {
+    if (!_scenP || !_scenTheater) return;
+    if (e.code === 'Space') { e.preventDefault(); scenToggle(); }
+    else if (e.code === 'ArrowRight') { e.preventDefault(); scenSeek(_scenP.t + 1); }
+    else if (e.code === 'ArrowLeft') { e.preventDefault(); scenSeek(_scenP.t - 1); }
+  };
+  document.addEventListener('keydown', key);
+  box._unkey = () => document.removeEventListener('keydown', key);
+}
+function scenUiSync(P) {
+  const ui = P.ui; if (!ui || !ui.isConnected) return;
+  const play = ui.querySelector('#scPlay'), seek = ui.querySelector('#scSeek'), tm = ui.querySelector('#scTime');
+  if (play) play.textContent = P.playing ? '⏸' : (P.t >= P.M.dur - .01 ? '↻' : '▶');
+  if (seek && document.activeElement !== seek) seek.value = P.t.toFixed(2);
+  if (tm) { const f = x => `${Math.floor(x / 60)}:${String(Math.floor(x % 60)).padStart(2, '0')}`; tm.textContent = `${f(P.t)} / ${f(P.M.dur)}`; }
+  const scenes = P.M.segs.filter(sg => sg.kind === 'scene');
+  const cur = scenes.findIndex(sg => P.t >= sg.t0 && P.t < sg.t0 + sg.dur);
+  ui.querySelectorAll('.sc-chip').forEach((c, i) => c.classList.toggle('on', i === cur));
 }
 
 /* 재생할 때는 화면 가득 채워서 본다 — 팝업 안 미리보기는 너무 작다 */
 let _scenTheater = null;
-function scenTheaterOpen(el, onClose) {
+function scenTheaterOpen(el, onClose, M) {
   scenTheaterClose();
   const ov = document.createElement('div');
-  ov.className = 'scen-theater';
+  ov.className = 'scen-theater' + (M ? ' has-ctl' : '');
   const body = document.createElement('div');
   body.className = 'st-body';
   const close = document.createElement('button');
   close.type = 'button'; close.className = 'st-close'; close.textContent = '✕';
   ov.appendChild(body); ov.appendChild(close);
-  document.body.appendChild(ov);
-  const home = el.parentNode, next = el.nextSibling;
-  el.classList.add('st-el');
-  body.appendChild(el);
-  document.body.classList.add('st-on');
-  _scenTheater = { ov, el, home, next, onClose };
+  let ctl = null;
+  if (M) {   // 캔버스 미리보기일 때만 — 완성된 <video> 는 브라우저 기본 컨트롤을 쓴다
+    const wrap = document.createElement('div'); wrap.className = 'st-wrap';
+    ctl = document.createElement('div'); ctl.className = 'st-ctl'; ctl.innerHTML = scenControlsHtml(M);
+    body.appendChild(wrap);
+    document.body.appendChild(ov);
+    const home = el.parentNode, next = el.nextSibling;
+    el.classList.add('st-el'); wrap.appendChild(el); wrap.appendChild(ctl);
+    document.body.classList.add('st-on');
+    _scenTheater = { ov, el, home, next, onClose, ctl };
+    scenBindControls(ctl);
+    ctl.addEventListener('click', e => e.stopPropagation());
+  } else {
+    document.body.appendChild(ov);
+    const home = el.parentNode, next = el.nextSibling;
+    el.classList.add('st-el');
+    body.appendChild(el);
+    document.body.classList.add('st-on');
+    _scenTheater = { ov, el, home, next, onClose };
+  }
   close.addEventListener('click', scenTheaterClose);
   ov.addEventListener('click', e => { if (e.target === ov || e.target === body) scenTheaterClose(); });
   return ov;
@@ -8184,6 +8309,7 @@ function scenTheaterClose() {
   const T = _scenTheater;
   if (!T) return;
   _scenTheater = null;
+  if (T.ctl && T.ctl._unkey) T.ctl._unkey();
   T.el.classList.remove('st-el');
   if (T.home) T.home.insertBefore(T.el, T.next);
   T.ov.remove();
@@ -8299,16 +8425,21 @@ async function openScenarioPop() {
     prevBtn.textContent = '▶ 미리보기';
     prevBtn.onclick = doPreview;
   }
-  async function doPreview() {
+  function doPreview() {
     if (busy) return;
     busy = true; playBtn.style.display = 'none'; diceBtn.style.display = 'none';
     prevBtn.textContent = '재생 중…';
-    scenTheaterOpen(cv, () => scenStopPlay());
-    await scenPlay(cv, movie);
-    scenTheaterClose();
-    prevBtn.textContent = '▶ 미리보기';
-    playBtn.style.display = ''; diceBtn.style.display = '';
-    busy = false;
+    const done = () => {
+      scenStopPlay();
+      const first = movie.segs.find(sg => sg.kind === 'scene');
+      drawScenFrame(ctx, movie, first ? first.t0 + first.dur * .55 : 0);
+      prevBtn.textContent = '▶ 미리보기';
+      playBtn.style.display = ''; diceBtn.style.display = '';
+      busy = false;
+    };
+    scenTheaterOpen(cv, done, movie);
+    scenPlay(cv, movie, null, { holdEnd: true });
+    if (_scenP && _scenTheater) _scenP.ui = _scenTheater.ctl;
   }
   playBtn.addEventListener('click', doPreview);
   prevBtn.onclick = doPreview;
@@ -9212,6 +9343,31 @@ function showAuthGate() {
   updateAuthUI();
   setTimeout(() => document.getElementById('authUsername').focus(), 100);
 }
+/* 계정 ↔ 선수 자동 연결
+   가입만 하고 선수와 안 묶인 계정은 참석 투표·이스트도르·프로필이 전부 막힌다.
+   이름이 정확히 같은 선수가 있고 그 선수가 아직 아무 계정과도 안 묶여 있으면 자동으로 묶는다.
+   이미 다른 계정과 묶여 있으면(중복 가입) 자동으로 뺏지 않고 운영진에게 넘긴다. */
+function autoLinkMyPlayer(opt) {
+  const u = currentUser(); if (!u || u.playerId) return null;
+  const nm = (u.displayName || '').trim(); if (!nm) return null;
+  const cands = store.players.filter(p => (p.name || '').trim() === nm && !isRetiredNow(p));
+  if (!cands.length) return null;
+  const free = cands.find(p => !authStore.users.some(o => o.id !== u.id && o.playerId === p.id));
+  if (free) {
+    u.playerId = free.id; free.userId = u.id;
+    saveAuth(); saveState();
+    if (!(opt && opt.silent)) toast(`✅ 「${free.name} #${free.number || '?'}」 선수와 연결됐어요`);
+    refreshUserUI();
+    return free;
+  }
+  if (!(opt && opt.silent)) {
+    const taken = cands[0];
+    const other = authStore.users.find(o => o.id !== u.id && o.playerId === taken.id);
+    toast(`「${taken.name}」 선수는 이미 다른 계정(@${other ? other.username : '?'})과 연결돼 있어요 · 운영진에게 계정 연결을 요청하세요`, 5000);
+  }
+  return null;
+}
+
 function hideAuthGate() {
   document.body.classList.remove('not-authed');
   document.getElementById('authGate').classList.remove('show');
@@ -9225,6 +9381,7 @@ function hideAuthGate() {
   applyUpdateGlow();
   const sq = getCurrentSquad();
   if (sq) { $('#squadName').value = sq.name; $('#formationSelect').value = sq.formation; }
+  setTimeout(() => autoLinkMyPlayer({ silent: true }), 1200);   // 스토어 동기화 뒤 한 번
 }
 
 function logout() {
@@ -9424,7 +9581,7 @@ function renderAdminTable() {
           <div class="admin-user-cell">
             <div class="admin-user-avatar ${avatarCls}">${escapeHtml((u.displayName||'?').slice(0,1))}</div>
             <div>
-              <div class="admin-user-name">${escapeHtml(u.displayName)}${isSelf?' <span style="color:var(--gold); font-size:11px;">(나)</span>':''}</div>
+              <div class="admin-user-name">${escapeHtml(u.displayName)}${isSelf?' <span style="color:var(--gold); font-size:11px;">(나)</span>':''}${(!u.playerId && u.role !== 'owner') ? ' <span class="admin-unlinked">⚠️ 선수 미연결</span>' : ''}</div>
               <div class="admin-user-id-inline">@${escapeHtml(u.username)}</div>
             </div>
           </div>
@@ -10321,13 +10478,13 @@ function getCurrentSquad() {
 function haptic(ms) {
   try { if (navigator.vibrate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) navigator.vibrate(ms || 8); } catch (e) {}
 }
-function toast(msg) {
+function toast(msg, ms) {
   const t = $('#toast');
   t.textContent = msg;
   t.classList.add('show');
   haptic(8);
   clearTimeout(toast._h);
-  toast._h = setTimeout(() => t.classList.remove('show'), 1800);
+  toast._h = setTimeout(() => t.classList.remove('show'), ms || 1800);
 }
 
 // 모든 역할 OVR에 공통으로 반영되는 신규 스탯 가중치
@@ -12588,8 +12745,15 @@ function refreshAttendSection(matchId) {
 }
 // 본인 선수의 참석 투표
 function setMatchAttendance(matchId, status) {
-  const p = myPlayer();
-  if (!p) { toast('본인 선수 프로필 연결이 필요해요'); return; }
+  let p = myPlayer();
+  if (!p) p = autoLinkMyPlayer();          // 이름 같은 선수가 비어 있으면 그 자리에서 연결
+  if (!p) {
+    const u = currentUser();
+    const nm = u ? (u.displayName || '').trim() : '';
+    const same = store.players.find(x => (x.name || '').trim() === nm);
+    if (!same) toast('내 계정이 선수와 연결되지 않았어요 · 운영진에게 「관리자 탭 → 선수 프로필 연결」을 요청하세요', 5000);
+    return;
+  }
   const m = store.matches.find(x => x.id === matchId);
   if (!m) return;
   if (!m.attendance) m.attendance = {};
