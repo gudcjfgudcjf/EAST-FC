@@ -5086,6 +5086,19 @@
     <div class="lb-foot"><button id="lbFont">✍️ 서체</button><button id="lbSave">💾 이미지 저장</button><button id="lbShare">📤 공유</button></div>
     <div class="lb-fonts" id="lbFonts" hidden></div>
   </div>
+  <div class="modal-overlay" id="acctModal">
+    <div class="modal">
+      <div class="ud-head"><h3 id="acctTitle">🔑 계정 재설정</h3><button class="ud-x" onclick="closeAcctReset()">✕</button></div>
+      <div class="uni-tip" style="margin:0 0 12px">비밀번호는 암호화돼 저장돼서 원래 값을 볼 수 없어요. 새로 정해서 본인에게 알려주고, 로그인 후 바꾸라고 하세요.</div>
+      <div class="form-group"><label>아이디</label><input type="text" id="acctUser" autocomplete="off" maxlength="30" /></div>
+      <div class="form-group"><label>새 비밀번호 <em>비워두면 그대로</em></label><input type="text" id="acctPass" autocomplete="off" maxlength="40" placeholder="예: east1234" /></div>
+      <div id="acctMsg" style="color:#fca5a5;font-size:12px;min-height:16px;margin-top:4px"></div>
+      <div class="modal-actions">
+        <button class="btn" onclick="closeAcctReset()">취소</button>
+        <button class="btn primary" onclick="saveAcctReset()">저장</button>
+      </div>
+    </div>
+  </div>
   <div class="modal-overlay" id="markModal">
     <div class="modal" id="markModalBody"></div>
   </div>
@@ -5669,7 +5682,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 91;
+const APP_VERSION = 92;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -5834,7 +5847,7 @@ function rerenderCurrent() {
   else if (t === 'blacklist') renderBlacklist();
   else if (t === 'uniform') renderUniform();
   else if (t === 'prospect') renderProspects();
-  else if (t === 'admin' && isOwner()) renderAdmin();
+  else if (t === 'admin' && isAdmin()) renderAdmin();
 }
 
 // True while the user is doing something a re-render would disrupt.
@@ -9419,7 +9432,7 @@ function refreshUserUI() {
   // 감독 모드 활성 시 플로팅 배지 표시(오너 제외 — 오너는 상시 권한)
   document.getElementById('managerBadge').classList.toggle('show', session.managerModeActive && !isOwner());
   // Admin tab visible only to admins (owner + 운영진)
-  document.getElementById('tabAdmin').style.display = isOwner() ? 'flex' : 'none';
+  document.getElementById('tabAdmin').style.display = isAdmin() ? 'flex' : 'none';
   // 👑 오너 전용 페이지 버튼 — 오너 계정만 (감독/운영진은 절대 안 보임)
   const _btnOwnerPage = document.getElementById('btnOwnerPage');
   if (_btnOwnerPage) _btnOwnerPage.style.display = canOpenOwnerPage() ? '' : 'none';
@@ -9492,17 +9505,23 @@ async function confirmManagerUnlock() {
 
 /* ==================== Admin tab (member management) ==================== */
 function renderAdmin() {
-  if (!isOwner()) {
-    // 오너 외에는 도달할 수 없음 — 스쿼드로 되돌림
+  if (!isAdmin()) {
     switchTab('squad');
-    toast('오너 전용 탭입니다');
+    toast('운영진 전용 탭입니다');
     return;
   }
   renderAdminStats();
   renderAdminTable();
   renderMgrPassStatus();
-  // Only the owner may create new 운영진 accounts
+  // 감독 비밀번호 · 운영진 계정 생성은 오너만
   document.getElementById('adminCreatePanel').style.display = isOwner() ? 'block' : 'none';
+  const mp = document.getElementById('adminMgrPass'); if (mp && mp.closest('.admin-panel')) mp.closest('.admin-panel').style.display = isOwner() ? 'block' : 'none';
+}
+/* 계정 재설정 권한: 오너는 오너 아닌 누구나, 운영진은 일반 회원만 */
+function canResetAcct(u) {
+  if (!u || u.role === 'owner') return false;
+  if (isOwner()) return true;
+  return isAdmin() && u.role === 'member';
 }
 
 function renderAdminStats() {
@@ -9528,6 +9547,42 @@ function adminActivityFor(userId) {
     if (arr.some(v => v.voterId === userId)) dorVotes++;
   });
   return { posts, dorVotes };
+}
+
+/* ---------- 계정 재설정 모달 (아이디 변경 · 새 비밀번호) ----------
+   비밀번호는 해시로만 저장되어 원래 값을 알 수 없다. 잊어버리면 여기서 새로 정해 알려준다. */
+let _acctUid = null;
+function openAcctReset(uid) {
+  const u = authStore.users.find(x => x.id === uid); if (!u) return;
+  if (!canResetAcct(u)) { toast('권한이 없어요'); return; }
+  _acctUid = uid;
+  document.getElementById('acctTitle').textContent = `🔑 ${u.displayName} 계정 재설정`;
+  document.getElementById('acctUser').value = u.username || '';
+  document.getElementById('acctPass').value = '';
+  document.getElementById('acctMsg').textContent = '';
+  document.getElementById('acctModal').classList.add('show');
+  setTimeout(() => document.getElementById('acctPass').focus(), 50);
+}
+function closeAcctReset() { _acctUid = null; document.getElementById('acctModal').classList.remove('show'); }
+async function saveAcctReset() {
+  const u = authStore.users.find(x => x.id === _acctUid); if (!u) { closeAcctReset(); return; }
+  if (!canResetAcct(u)) { toast('권한이 없어요'); return; }
+  const msg = document.getElementById('acctMsg');
+  const nu = (document.getElementById('acctUser').value || '').trim();
+  const np = (document.getElementById('acctPass').value || '');
+  if (nu.length < 2) { msg.textContent = '아이디는 2자 이상이어야 해요'; return; }
+  if (nu.toLowerCase() !== (u.username || '').toLowerCase() && authStore.users.some(x => x.id !== u.id && (x.username || '').toLowerCase() === nu.toLowerCase())) {
+    msg.textContent = '이미 쓰고 있는 아이디예요'; return;
+  }
+  if (np && np.length < 4) { msg.textContent = '비밀번호는 4자 이상이어야 해요'; return; }
+  const changed = [];
+  if (nu !== u.username) { u.username = nu; changed.push('아이디'); }
+  if (np) { u.passHash = await sha256(np); changed.push('비밀번호'); }
+  if (!changed.length) { msg.textContent = '바뀐 게 없어요'; return; }
+  saveAuth();
+  closeAcctReset();
+  renderAdminTable();
+  toast(`🔑 ${u.displayName} ${changed.join('·')} 재설정 완료 · 본인에게 알려주세요`);
 }
 
 function renderAdminTable() {
@@ -9572,6 +9627,7 @@ function renderAdminTable() {
     // Delete: owner can delete anyone except self/other owners; admin cannot delete
     const canDel = meIsOwner && u.role !== 'owner' && !isSelf;
     const actions = [];
+    if (canResetAcct(u)) actions.push(`<button data-reset-user="${u.id}" title="아이디·비밀번호 재설정">🔑</button>`);
     if (canDel) actions.push(`<button class="danger" data-del-user="${u.id}" title="회원 삭제">🗑️</button>`);
     const actionsHtml = actions.length ? actions.join('') : '<span style="color:var(--text-4); font-size:11px;">—</span>';
 
@@ -9608,6 +9664,8 @@ function renderAdminTable() {
       }
     });
   });
+  // 아이디·비밀번호 재설정 (오너 + 운영진)
+  tbody.querySelectorAll('[data-reset-user]').forEach(btn => btn.addEventListener('click', () => openAcctReset(btn.dataset.resetUser)));
   // Delete user
   tbody.querySelectorAll('[data-del-user]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -10879,9 +10937,9 @@ function switchTab(name) {
   currentTab = name;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + name));
-  if (name === 'admin' && !isOwner()) {
-    // Guard: 관리자(계정 관리) 탭은 오너 전용 — 오너 > 감독 > 운영진
-    toast('오너 전용 탭입니다');
+  if (name === 'admin' && !isAdmin()) {
+    // Guard: 관리자 탭은 오너·운영진 — 회원 계정 재설정을 운영진도 할 수 있게 열었다 (v92)
+    toast('운영진 전용 탭입니다');
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === 'squad'));
     document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-squad'));
     currentTab = 'squad';
@@ -17000,6 +17058,7 @@ function bindEvents() {
   document.getElementById('kitShotFile').addEventListener('change', kitShotFile);
   bindLightbox();
   document.getElementById('markModal').addEventListener('click', e => { if (e.target.id === 'markModal') closeMarkEditor(); });
+  document.getElementById('acctModal').addEventListener('click', e => { if (e.target.id === 'acctModal') closeAcctReset(); });
   document.getElementById('photoFile').addEventListener('change', e => {
     const f = e.target.files && e.target.files[0]; if (!f) return;
     const fr = new FileReader();
