@@ -1603,7 +1603,7 @@
   .stats-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
   .stats-header h1 { font-family: var(--font-brand); font-size: 24px; color: var(--text); letter-spacing: -0.01em; font-weight: 800; }
   .stats-header .spacer { flex: 1; }
-  #recordsContent, #attendContent, #hallContent, #guideContent, #chemContent, #presenceContent, #profileContent, #gohContent, #scoutContent { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-right: 4px; padding-bottom: 30px; min-height: 0; }
+  #recordsContent, #attendContent, #hallContent, #guideContent, #chemContent, #presenceContent, #profileContent, #gohContent, #scoutContent, #uniformContent, #prosBody { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-right: 4px; padding-bottom: 30px; min-height: 0; }
 
   /* ---------- 👑🎯 전용 페이지 오버레이 (오너/감독) ---------- */
   .priv-overlay {
@@ -4099,7 +4099,7 @@
   .usz.on { color: #0d0d0f; background: var(--gold); border-color: var(--gold); }
 
   /* 라이트박스 */
-  .lb { position: fixed; inset: 0; z-index: 9000; display: none; flex-direction: column; align-items: center; justify-content: center;
+  .lb { position: fixed; inset: 0; z-index: 9000; display: none; flex-direction: column; align-items: center; justify-content: center; overflow-y: auto;
     background: rgba(6,6,8,.94); backdrop-filter: blur(6px); padding: 14px; }
   .lb.show { display: flex; }
   .lb-stage { position: relative; width: 100%; max-width: 560px; max-height: 72vh; display: flex; align-items: center; justify-content: center; touch-action: pan-y; }
@@ -4134,6 +4134,17 @@
   .lbf.on { border-color: var(--gold); background: rgba(111,159,196,.2); color: var(--gold-warm); }
   .lbf-foot { text-align: center; font-size: 11.5px; color: rgba(255,255,255,.55); margin-top: 2px; }
   .lbf-foot .btn { padding: 8px 14px; }
+
+  /* 가로모드 폰(높이 500px 이하): 달력이 81px로 눌려 날짜가 아예 안 보이던 것 → 통째로 스크롤 */
+  @media (max-height: 500px) {
+    #view-calendar { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .calendar-view { height: auto; min-height: 100%; }
+    .cal-grid { flex: 0 0 auto; grid-auto-rows: minmax(52px, auto); }
+    .cal-upcoming { max-height: none; }
+    .lb { justify-content: flex-start; overflow-y: auto; padding-top: 56px; }
+    .lb-stage { max-height: none; }
+    .lb-stage .uph, .lb-stage .uph > img { max-height: 70vh; }
+  }
 
   /* 실착 사진 갤러리 */
   .ush-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
@@ -5062,6 +5073,7 @@
         <h1>🌱 예비 이스트</h1>
         <button class="btn primary" id="btnProsAdd">+ 예비 선수 추천</button>
       </div>
+      <div id="prosBody">
       <div class="pros-intro">
         영입을 고민 중인 선수를 등록하고, <b>회원 누구나</b> 점수·투표·제보에 참여해 함께 결정하는 곳이에요.
         점수는 4개 항목 평균으로 <b>100점 만점</b>(이스트 정신은 7개 세부 종목), 투표와 제보는 <b>익명</b>입니다.
@@ -5072,6 +5084,7 @@
         <button type="button" data-psort="new">최신순</button>
       </div>
       <div id="prosList" class="pros-list"></div>
+      </div>
     </div>
   </section>
 
@@ -5631,7 +5644,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 88;
+const APP_VERSION = 89;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
