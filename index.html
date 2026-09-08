@@ -5089,8 +5089,9 @@
   <div class="modal-overlay" id="acctModal">
     <div class="modal">
       <div class="ud-head"><h3 id="acctTitle">🔑 계정 재설정</h3><button class="ud-x" onclick="closeAcctReset()">✕</button></div>
-      <div class="uni-tip" style="margin:0 0 12px">비밀번호는 암호화돼 저장돼서 원래 값을 볼 수 없어요. 새로 정해서 본인에게 알려주고, 로그인 후 바꾸라고 하세요.</div>
-      <div class="form-group"><label>아이디</label><input type="text" id="acctUser" autocomplete="off" maxlength="30" /></div>
+      <div class="uni-tip" style="margin:0 0 12px">비밀번호는 암호화돼 저장돼서 원래 값을 볼 수 없어요. 잊어버렸으면 새로 정하면 돼요.</div>
+      <div class="form-group"><label>회원명 <em>남들에게 보이는 이름</em></label><input type="text" id="acctName" autocomplete="off" maxlength="20" /></div>
+      <div class="form-group"><label>아이디 <em>로그인용 · 본인만 볼 수 있어요</em></label><input type="text" id="acctUser" autocomplete="off" maxlength="30" /></div>
       <div class="form-group"><label>새 비밀번호 <em>비워두면 그대로</em></label><input type="text" id="acctPass" autocomplete="off" maxlength="40" placeholder="예: east1234" /></div>
       <div id="acctMsg" style="color:#fca5a5;font-size:12px;min-height:16px;margin-top:4px"></div>
       <div class="modal-actions">
@@ -5271,7 +5272,7 @@
       <div class="admin-header">
         <h1>🛡️ 관리자 · 회원 관리</h1>
         <div class="spacer"></div>
-        <input type="search" class="search" id="adminSearch" placeholder="아이디/이름 검색..." />
+        <input type="search" class="search" id="adminSearch" placeholder="이름 검색..." />
         <select id="adminRoleFilter">
           <option value="">전체 등급</option>
           <option value="owner">오너</option>
@@ -5682,7 +5683,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 92;
+const APP_VERSION = 93;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -5847,7 +5848,7 @@ function rerenderCurrent() {
   else if (t === 'blacklist') renderBlacklist();
   else if (t === 'uniform') renderUniform();
   else if (t === 'prospect') renderProspects();
-  else if (t === 'admin' && isAdmin()) renderAdmin();
+  else if (t === 'admin' && currentUser()) renderAdmin();
 }
 
 // True while the user is doing something a re-render would disrupt.
@@ -9432,7 +9433,7 @@ function refreshUserUI() {
   // 감독 모드 활성 시 플로팅 배지 표시(오너 제외 — 오너는 상시 권한)
   document.getElementById('managerBadge').classList.toggle('show', session.managerModeActive && !isOwner());
   // Admin tab visible only to admins (owner + 운영진)
-  document.getElementById('tabAdmin').style.display = isAdmin() ? 'flex' : 'none';
+  const _ta = document.getElementById('tabAdmin'); _ta.style.display = currentUser() ? 'flex' : 'none'; _ta.textContent = isAdmin() ? '🛡️ 관리자' : '👥 회원';
   // 👑 오너 전용 페이지 버튼 — 오너 계정만 (감독/운영진은 절대 안 보임)
   const _btnOwnerPage = document.getElementById('btnOwnerPage');
   if (_btnOwnerPage) _btnOwnerPage.style.display = canOpenOwnerPage() ? '' : 'none';
@@ -9505,11 +9506,10 @@ async function confirmManagerUnlock() {
 
 /* ==================== Admin tab (member management) ==================== */
 function renderAdmin() {
-  if (!isAdmin()) {
-    switchTab('squad');
-    toast('운영진 전용 탭입니다');
-    return;
-  }
+  if (!currentUser()) { switchTab('squad'); return; }
+  // 회원에게는 '회원 목록 + 내 계정' 화면으로 보인다
+  const h1 = document.querySelector('#view-admin h1');
+  if (h1) h1.textContent = isAdmin() ? '🛡️ 관리자 · 회원 관리' : '👥 회원 · 내 계정';
   renderAdminStats();
   renderAdminTable();
   renderMgrPassStatus();
@@ -9517,11 +9517,19 @@ function renderAdmin() {
   document.getElementById('adminCreatePanel').style.display = isOwner() ? 'block' : 'none';
   const mp = document.getElementById('adminMgrPass'); if (mp && mp.closest('.admin-panel')) mp.closest('.admin-panel').style.display = isOwner() ? 'block' : 'none';
 }
-/* 계정 재설정 권한: 오너는 오너 아닌 누구나, 운영진은 일반 회원만 */
+/* 계정 수정 권한: 본인은 누구나 / 오너는 오너 아닌 누구나 / 운영진은 일반 회원 */
 function canResetAcct(u) {
-  if (!u || u.role === 'owner') return false;
+  if (!u) return false;
+  if (u.id === session.currentUserId) return true;
+  if (u.role === 'owner') return false;
   if (isOwner()) return true;
   return isAdmin() && u.role === 'member';
+}
+/* 아이디는 본인 것만 보인다 (오너는 계정 관리 때문에 전부) */
+function canSeeUsername(u) { return isOwner() || (u && u.id === session.currentUserId); }
+function maskUsername(u) {
+  const n = (u.username || '');
+  return canSeeUsername(u) ? '@' + escapeHtml(n) : '@' + escapeHtml(n.slice(0, 1)) + '•'.repeat(Math.max(3, Math.min(8, n.length - 1)));
 }
 
 function renderAdminStats() {
@@ -9556,8 +9564,12 @@ function openAcctReset(uid) {
   const u = authStore.users.find(x => x.id === uid); if (!u) return;
   if (!canResetAcct(u)) { toast('권한이 없어요'); return; }
   _acctUid = uid;
-  document.getElementById('acctTitle').textContent = `🔑 ${u.displayName} 계정 재설정`;
-  document.getElementById('acctUser').value = u.username || '';
+  const self = u.id === session.currentUserId;
+  document.getElementById('acctTitle').textContent = self ? '🔑 내 계정' : `🔑 ${u.displayName} 계정 재설정`;
+  document.getElementById('acctName').value = u.displayName || '';
+  const ui = document.getElementById('acctUser');
+  ui.value = canSeeUsername(u) ? (u.username || '') : '';
+  ui.placeholder = canSeeUsername(u) ? '' : '(비공개) 바꾸려면 새 아이디 입력';
   document.getElementById('acctPass').value = '';
   document.getElementById('acctMsg').textContent = '';
   document.getElementById('acctModal').classList.add('show');
@@ -9568,14 +9580,22 @@ async function saveAcctReset() {
   const u = authStore.users.find(x => x.id === _acctUid); if (!u) { closeAcctReset(); return; }
   if (!canResetAcct(u)) { toast('권한이 없어요'); return; }
   const msg = document.getElementById('acctMsg');
-  const nu = (document.getElementById('acctUser').value || '').trim();
+  const nn = (document.getElementById('acctName').value || '').trim();
+  const nuRaw = (document.getElementById('acctUser').value || '').trim();
+  const nu = nuRaw || u.username;                       // 비워두면(비공개 상태) 그대로
   const np = (document.getElementById('acctPass').value || '');
+  if (nn.length < 1) { msg.textContent = '회원명을 입력하세요'; return; }
+  if (nn.length > 20) { msg.textContent = '회원명은 20자까지예요'; return; }
   if (nu.length < 2) { msg.textContent = '아이디는 2자 이상이어야 해요'; return; }
   if (nu.toLowerCase() !== (u.username || '').toLowerCase() && authStore.users.some(x => x.id !== u.id && (x.username || '').toLowerCase() === nu.toLowerCase())) {
     msg.textContent = '이미 쓰고 있는 아이디예요'; return;
   }
   if (np && np.length < 4) { msg.textContent = '비밀번호는 4자 이상이어야 해요'; return; }
   const changed = [];
+  if (nn !== u.displayName) {
+    u.displayName = nn; changed.push('회원명');
+    if (u.id === session.currentUserId) refreshUserUI();
+  }
   if (nu !== u.username) { u.username = nu; changed.push('아이디'); }
   if (np) { u.passHash = await sha256(np); changed.push('비밀번호'); }
   if (!changed.length) { msg.textContent = '바뀐 게 없어요'; return; }
@@ -9592,11 +9612,15 @@ function renderAdminTable() {
   const meIsOwner = isOwner();
 
   let list = authStore.users.slice();
-  if (q) list = list.filter(u => (u.username||'').toLowerCase().includes(q) || (u.displayName||'').toLowerCase().includes(q));
+  // 아이디로 검색은 오너만 — 아니면 글자 하나씩 넣어 남의 아이디를 알아낼 수 있다
+  if (q) list = list.filter(u => (u.displayName||'').toLowerCase().includes(q) || (canSeeUsername(u) && (u.username||'').toLowerCase().includes(q)));
   if (roleFilter) list = list.filter(u => u.role === roleFilter);
   // Sort: owner first, then admin, then member; then by join date
   const roleOrder = { owner: 0, admin: 1, member: 2 };
   list.sort((a,b) => (roleOrder[a.role] - roleOrder[b.role]) || (a.createdAt||'').localeCompare(b.createdAt||''));
+  // 내 계정은 맨 위로 (회원명·비밀번호 바꾸러 오는 경우가 대부분)
+  const _mi = list.findIndex(u => u.id === session.currentUserId);
+  if (_mi > 0) list.unshift(list.splice(_mi, 1)[0]);
 
   if (list.length === 0) {
     tbody.innerHTML = '<tr><td colspan="7" class="empty">검색 결과가 없습니다</td></tr>';
@@ -9605,7 +9629,10 @@ function renderAdminTable() {
 
   tbody.innerHTML = list.map(u => {
     const avatarCls = u.role === 'owner' ? 'owner' : u.role === 'admin' ? 'admin' : '';
-    const linkSelect = `<select class="admin-role-select admin-player-select" data-link-user="${u.id}">${playerLinkOptions(u.playerId||'', u.id)}</select>`;
+    const _lp = u.playerId ? store.players.find(p => p.id === u.playerId) : null;
+    const linkSelect = isAdmin()
+      ? `<select class="admin-role-select admin-player-select" data-link-user="${u.id}">${playerLinkOptions(u.playerId||'', u.id)}</select>`
+      : `<span style="font-size:12px;color:var(--text-2)">${_lp ? escapeHtml(_lp.name) + ' #' + (_lp.number || '-') : '<span style=\"color:var(--text-4)\">—</span>'}</span>`;
     const joined = u.createdAt ? new Date(u.createdAt).toLocaleDateString('ko-KR', {year:'2-digit', month:'2-digit', day:'2-digit'}) : '-';
     const act = adminActivityFor(u.id);
     const isSelf = u.id === session.currentUserId;
@@ -9627,7 +9654,7 @@ function renderAdminTable() {
     // Delete: owner can delete anyone except self/other owners; admin cannot delete
     const canDel = meIsOwner && u.role !== 'owner' && !isSelf;
     const actions = [];
-    if (canResetAcct(u)) actions.push(`<button data-reset-user="${u.id}" title="아이디·비밀번호 재설정">🔑</button>`);
+    if (canResetAcct(u)) actions.push(`<button data-reset-user="${u.id}" title="회원명·아이디·비밀번호 변경">${u.id === session.currentUserId ? '✏️' : '🔑'}</button>`);
     if (canDel) actions.push(`<button class="danger" data-del-user="${u.id}" title="회원 삭제">🗑️</button>`);
     const actionsHtml = actions.length ? actions.join('') : '<span style="color:var(--text-4); font-size:11px;">—</span>';
 
@@ -9638,11 +9665,11 @@ function renderAdminTable() {
             <div class="admin-user-avatar ${avatarCls}">${escapeHtml((u.displayName||'?').slice(0,1))}</div>
             <div>
               <div class="admin-user-name">${escapeHtml(u.displayName)}${isSelf?' <span style="color:var(--gold); font-size:11px;">(나)</span>':''}${(!u.playerId && u.role !== 'owner') ? ' <span class="admin-unlinked">⚠️ 선수 미연결</span>' : ''}</div>
-              <div class="admin-user-id-inline">@${escapeHtml(u.username)}</div>
+              <div class="admin-user-id-inline">${maskUsername(u)}</div>
             </div>
           </div>
         </td>
-        <td class="admin-user-id" data-label="아이디">@${escapeHtml(u.username)}</td>
+        <td class="admin-user-id" data-label="아이디">${maskUsername(u)}</td>
         <td data-label="등급">${roleControl}</td>
         <td data-label="선수 프로필">${linkSelect}</td>
         <td data-label="가입일" style="color:var(--text-2); white-space:nowrap;">${joined}</td>
@@ -10937,9 +10964,8 @@ function switchTab(name) {
   currentTab = name;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + name));
-  if (name === 'admin' && !isAdmin()) {
-    // Guard: 관리자 탭은 오너·운영진 — 회원 계정 재설정을 운영진도 할 수 있게 열었다 (v92)
-    toast('운영진 전용 탭입니다');
+  if (name === 'admin' && !currentUser()) {
+    toast('로그인이 필요해요');
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === 'squad'));
     document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-squad'));
     currentTab = 'squad';
