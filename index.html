@@ -4187,7 +4187,7 @@
     background: rgba(0,0,0,.5); padding: 4px 10px; border-radius: 12px; pointer-events: none; }
   .ig-tools { display: flex; align-items: center; gap: 10px; margin: 12px auto 0; max-width: 440px; }
   .ig-tools .btn { flex: none; }
-  .ig-zoom { flex: 1; display: flex; align-items: center; gap: 8px; font-size: 14px; }
+  .ig-zoom { flex: 1; display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; color: var(--text-3); }
   .ig-zoom input { flex: 1; min-width: 0; accent-color: var(--gold); }
   .ig-sec { display: flex; align-items: baseline; gap: 8px; font-size: 13px; font-weight: 800; color: var(--gold-warm);
     margin: 20px 0 9px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,.09); }
@@ -5735,7 +5735,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 94;
+const APP_VERSION = 96;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -15586,24 +15586,31 @@ function igPickFile(e) {
   const rd = new FileReader();
   rd.onload = () => {
     const im = new Image();
-    im.onload = () => { _ig.img = im; _ig.imgName = f.name; _ig.zoom = 1; _ig.ox = 0; _ig.oy = 0; igCenter(); igDraw(); toast('사진 불러왔어요 · 끌어서 위치 조정'); };
+    im.onload = () => { _ig.img = im; _ig.imgName = f.name; _ig.zoom = igMinZoom(); _ig.ox = 0; _ig.oy = 0; igCenter(); renderInsta(); toast('사진 전체가 보이게 넣었어요 · 슬라이더로 확대'); };
     im.src = rd.result;
   };
   rd.readAsDataURL(f);
 }
 function igSize() { return { W: IG_W, H: IG_ASPECT[_ig.aspect] || 1350 }; }
+/* 줌 1 = 꽉 채움(cover). 그보다 작게도 내려가서 사진 전체(contain)가 다 보이게 한다 — 가로 사진 옆이 안 잘리게 */
 function igBaseScale() { const { W, H } = igSize(); const im = _ig.img; return im ? Math.max(W / im.naturalWidth, H / im.naturalHeight) : 1; }
+function igMinZoom() { const { W, H } = igSize(); const im = _ig.img; if (!im) return 1; return Math.min(W / im.naturalWidth, H / im.naturalHeight) / igBaseScale(); }
 function igCenter() {
   const { W, H } = igSize(); const im = _ig.img; if (!im) return;
   const s = igBaseScale() * _ig.zoom;
-  _ig.ox = (W - im.naturalWidth * s) / 2; _ig.oy = (H - im.naturalHeight * s) / 2 - H * 0.06;   // 얼굴이 보통 위쪽이라 살짝 위로
+  const ih = im.naturalHeight * s;
+  _ig.ox = (W - im.naturalWidth * s) / 2;
+  if (ih > H) _ig.oy = (H - ih) / 2 - H * 0.06;                       // 세로로 넘치면 살짝 위로(얼굴)
+  else _ig.oy = (H - ih) * (_ig.layout === 'top' ? 0.78 : 0.3);     // 전체샷이면 글자 블록 반대쪽으로 붙여 사진을 안 가리게
   igClamp();
 }
 function igClamp() {
   const { W, H } = igSize(); const im = _ig.img; if (!im) return;
   const s = igBaseScale() * _ig.zoom;
-  _ig.ox = Math.min(0, Math.max(W - im.naturalWidth * s, _ig.ox));
-  _ig.oy = Math.min(0, Math.max(H - im.naturalHeight * s, _ig.oy));
+  const dw = W - im.naturalWidth * s, dh = H - im.naturalHeight * s;
+  // 사진이 캔버스보다 크면 [dw,0] 안에서, 작으면 [0,dw] 안에서 움직인다
+  _ig.ox = Math.max(Math.min(0, dw), Math.min(Math.max(0, dw), _ig.ox));
+  _ig.oy = Math.max(Math.min(0, dh), Math.min(Math.max(0, dh), _ig.oy));
 }
 
 /* ---- 그리기 ---- */
@@ -15626,8 +15633,18 @@ function igDraw(cv) {
   g.setTransform(1, 0, 0, 1, 0, 0);
   g.fillStyle = '#0b1220'; g.fillRect(0, 0, W, H);
   if (_ig.img) {
-    const s = igBaseScale() * _ig.zoom;
-    g.drawImage(_ig.img, _ig.ox, _ig.oy, _ig.img.naturalWidth * s, _ig.img.naturalHeight * s);
+    const im = _ig.img, s = igBaseScale() * _ig.zoom;
+    const iw = im.naturalWidth * s, ih = im.naturalHeight * s;
+    if (iw < W - 1 || ih < H - 1) {
+      // 사진이 다 안 채워지면 뒤를 같은 사진을 흐리고 어둡게 해서 깐다 (인스타 흐림 배경 느낌)
+      const cs = igBaseScale() * 1.12;
+      g.save();
+      if ('filter' in g) g.filter = 'blur(38px) brightness(.5) saturate(.9)';
+      g.drawImage(im, (W - im.naturalWidth * cs) / 2, (H - im.naturalHeight * cs) / 2, im.naturalWidth * cs, im.naturalHeight * cs);
+      g.restore();
+      if (!('filter' in g)) { g.fillStyle = 'rgba(0,0,0,.55)'; g.fillRect(0, 0, W, H); }
+    }
+    g.drawImage(im, _ig.ox, _ig.oy, iw, ih);
   } else {
     const gr = g.createLinearGradient(0, 0, W, H); gr.addColorStop(0, '#16345c'); gr.addColorStop(1, '#0a1628');
     g.fillStyle = gr; g.fillRect(0, 0, W, H);
@@ -15636,6 +15653,8 @@ function igDraw(cv) {
     g.fillText('📷 사진을 선택하세요', W / 2, H / 2); g.textAlign = 'left'; g.textBaseline = 'alphabetic';
   }
   const top = _ig.layout === 'top';
+  const story = _ig.aspect === '9:16';
+  const safeT = story ? 210 : 0, safeB = story ? 250 : 0;   // 인스타 스토리 UI 가 덮는 위·아래
   // 그라데이션 / 카드
   if (_ig.layout === 'grad' || top) {
     const gr = top ? g.createLinearGradient(0, 0, 0, H * .62) : g.createLinearGradient(0, H * .38, 0, H);
@@ -15648,7 +15667,7 @@ function igDraw(cv) {
 
   // 엠블럼 + 팀명 (상단 왼쪽) · FULL TIME 칩 (상단 오른쪽)
   const cr = igCrest();
-  const ey = top ? H - 200 : 54;
+  const ey = top ? H - 200 - safeB : 54 + safeT;
   g.save(); g.shadowColor = 'rgba(0,0,0,.5)'; g.shadowBlur = 24; g.shadowOffsetY = 6;
   g.fillStyle = '#fff'; g.beginPath(); g.arc(54 + 66, ey + 66, 70, 0, Math.PI * 2); g.fill(); g.restore();
   if (cr.complete && cr.naturalWidth) g.drawImage(cr, 54, ey, 132, 132);
@@ -15706,16 +15725,16 @@ function igDraw(cv) {
   const total = lines.reduce((a, l) => a + l.h, 0) + 40;
   let y;
   if (_ig.layout === 'card') {
-    const ch = total + 40; y = H - ch - 36;
+    const ch = total + 40; y = H - ch - 36 - safeB;
     g.save(); g.shadowColor = 'rgba(0,0,0,.5)'; g.shadowBlur = 40; g.fillStyle = 'rgba(8,11,18,.9)'; igRR(g, 30, y - 30, W - 60, ch + 30, 36); g.fill(); g.restore();
     g.fillStyle = ACC; igRR(g, 30, y - 30, 12, ch + 30, [36, 0, 0, 36]); g.fill();
     y += 10;
-  } else if (top) { y = 250; }
-  else { y = H - total - 44; }
+  } else if (top) { y = 250 + safeT; }
+  else { y = H - total - 44 - safeB; }
   lines.forEach(l => { l.draw(y); y += l.h; });
 
   // 워터마크 엠블럼 (아래 오른쪽, 상단형은 위 오른쪽)
-  if (cr.complete && cr.naturalWidth) { g.save(); g.globalAlpha = .9; g.drawImage(cr, W - 54 - 84, top ? 54 : H - 54 - 84, 84, 84); g.restore(); }
+  if (cr.complete && cr.naturalWidth) { g.save(); g.globalAlpha = .9; g.drawImage(cr, W - 54 - 84, top ? 54 + safeT : H - 54 - 84 - safeB, 84, 84); g.restore(); }
 }
 
 /* ---- 화면 ---- */
@@ -15734,7 +15753,7 @@ function renderInsta() {
         <div class="ig-hint" id="igHint">${_ig.img ? '끌어서 위치 조정 · 두 손가락으로 확대' : '아래 「사진 선택」'}</div></div>
       <div class="ig-tools">
         <button class="btn primary" onclick="document.getElementById('igFile').value='';document.getElementById('igFile').click()">📷 사진 선택</button>
-        <label class="ig-zoom">🔍 <input type="range" min="1" max="3" step="0.02" value="${_ig.zoom}" oninput="igZoom(this.value)"></label>
+        <label class="ig-zoom"><span>전체</span><input type="range" min="${igMinZoom().toFixed(3)}" max="3" step="0.01" value="${_ig.zoom}" oninput="igZoom(this.value)"><span>확대</span></label>
       </div>
       <div class="ig-sec">🏟️ 경기 <small>일정 탭 기록을 그대로 가져와요</small></div>
       <select class="ig-sel" onchange="igSetMatch(this.value)">${ms.length ? ms.map(x => `<option value="${x.id}"${x.id === _ig.matchId ? ' selected' : ''}>${escapeHtml((x.date || '').slice(5).replace('-', '/'))} ${escapeHtml(x.opponent || '')}${x.scoreUs != null && x.scoreThem != null ? ` · ${x.scoreUs}:${x.scoreThem}` : ''}</option>`).join('') : '<option>경기 없음</option>'}</select>
@@ -15766,9 +15785,9 @@ function renderInsta() {
 }
 function igSetMatch(id) { _ig.matchId = id; igFillFromMatch(); renderInsta(); }
 function igTxt(k, v) { _ig.txt[k] = v; igDraw(); }
-function igZoom(v) { const { W, H } = igSize(); const im = _ig.img; const old = igBaseScale() * _ig.zoom; _ig.zoom = parseFloat(v) || 1; if (im) { const nw = igBaseScale() * _ig.zoom; /* 화면 중심 기준 확대 */ _ig.ox = W / 2 - (W / 2 - _ig.ox) * nw / old; _ig.oy = H / 2 - (H / 2 - _ig.oy) * nw / old; igClamp(); } igDraw(); }
-function igAspect(a) { _ig.aspect = a; if (_ig.img) igCenter(); renderInsta(); }
-function igLayout(k) { _ig.layout = k; renderInsta(); }
+function igZoom(v) { const { W, H } = igSize(); const im = _ig.img; const old = igBaseScale() * _ig.zoom; _ig.zoom = Math.min(3, Math.max(igMinZoom(), parseFloat(v) || 1)); if (im) { const nw = igBaseScale() * _ig.zoom; /* 화면 중심 기준 확대 */ _ig.ox = W / 2 - (W / 2 - _ig.ox) * nw / old; _ig.oy = H / 2 - (H / 2 - _ig.oy) * nw / old; igClamp(); } igDraw(); }
+function igAspect(a) { _ig.aspect = a; if (_ig.img) { _ig.zoom = igMinZoom(); igCenter(); } renderInsta(); }
+function igLayout(k) { _ig.layout = k; if (_ig.img && _ig.zoom <= igMinZoom() + 1e-6) igCenter(); renderInsta(); }
 function igToggle(k) { _ig.show[k] = !_ig.show[k]; renderInsta(); }
 function igBindDrag() {
   const cv = document.getElementById('igCv'); if (!cv || cv._igBound) return; cv._igBound = true;
@@ -15782,7 +15801,7 @@ function igBindDrag() {
   const end = () => { _ig.drag = null; };
   cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
   cv.addEventListener('touchstart', e => { if (e.touches.length === 2) { pinch = { d: Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY), z: _ig.zoom }; } }, { passive: true });
-  cv.addEventListener('touchmove', e => { if (pinch && e.touches.length === 2) { const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); igZoom(Math.min(3, Math.max(1, pinch.z * d / pinch.d))); const r = document.querySelector('.ig-zoom input'); if (r) r.value = _ig.zoom; e.preventDefault(); } }, { passive: false });
+  cv.addEventListener('touchmove', e => { if (pinch && e.touches.length === 2) { const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); igZoom(pinch.z * d / pinch.d); const r = document.querySelector('.ig-zoom input'); if (r) r.value = _ig.zoom; e.preventDefault(); } }, { passive: false });
   cv.addEventListener('touchend', () => { pinch = null; });
 }
 async function igExport(mode) {
