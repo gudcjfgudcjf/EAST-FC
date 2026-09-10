@@ -4610,6 +4610,16 @@
     background: linear-gradient(180deg, transparent, #1a1a1a 22%);
   }
   .share-pop .share-btns { padding-bottom: 4px; background: linear-gradient(180deg, transparent, #1a1a1a 22%, #1a1a1a); }
+  .share-mode { display: flex; gap: 5px; margin: 6px 0 10px; }
+  .share-mode button { flex: 1; padding: 8px 4px; border-radius: 9px; font-size: 12px; font-weight: 800; font-family: inherit; cursor: pointer;
+    background: rgba(255,255,255,.05); border: 1px solid var(--border-2); color: var(--text-3); white-space: nowrap; }
+  .share-mode button.on { color: #0d0d0f; background: var(--gold); border-color: var(--gold); }
+  .share-notice-edit { width: 100%; resize: vertical; min-height: 120px; font-family: inherit; line-height: 1.5; outline: none; }
+  .share-notice-edit:focus { border-color: var(--gold); }
+  .op-label small { font-weight: 600; color: var(--text-3); margin-left: 6px; font-size: 11.5px; }
+  .mst-btn.notice { opacity: 1; color: var(--gold-warm); border-color: rgba(111,159,196,.4); background: rgba(111,159,196,.1); }
+  .mst-notice { display: block; width: 100%; margin-top: 10px; padding: 10px; border-radius: 9px; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 800;
+    color: #0a0a0a; background: linear-gradient(180deg, var(--gold-warm), var(--gold)); border: none; }
   .share-btns button {
     flex: 1; padding: 11px 6px; border-radius: 9px; font-size: 12.5px; font-weight: 700;
     font-family: inherit; cursor: pointer; border: 1px solid var(--border-2);
@@ -4918,7 +4928,7 @@
         <button class="cal-nav-btn" id="calNext">›</button>
         <button class="today-btn" id="calToday">오늘</button>
         <div class="spacer"></div>
-        <button class="add-btn ghost" id="btnShareNextMatch" title="다음 경기 공지를 톡방에 올리기">📢 다음 경기 공지</button>
+        <button class="add-btn ghost" id="btnShareNextMatch" title="다음 경기 공지를 톡방에 올리기 · 다른 경기는 아래 목록의 📢">📢 다음 경기 공지</button>
         <button class="add-btn" id="btnAddMatch">+ 경기 추가</button>
       </div>
       <div class="cal-grid" id="calGrid"></div>
@@ -5775,7 +5785,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 98;
+const APP_VERSION = 99;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -12608,6 +12618,7 @@ function matchStatusPanel(m) {
     <div class="mst-head">${matchStatusHtml(m)}<small>${who}</small></div>
     <div class="mst-btns">${Object.entries(MATCH_ST).map(([key, st]) => `<button type="button" class="mst-btn ${key}${key === k ? ' on' : ''}" onclick="setMatchStatus('${m.id}','${key}')">${st.dot} ${st.t}</button>`).join('')}</div>
     <div class="mst-tip">회원 누구나 바꿀 수 있어요 · 카톡에서 정해진 대로 눌러두면 돼요</div>
+    <button type="button" class="mst-notice" onclick="closeMatchModal(); openShareMatch('${m.id}')">📢 이 경기 공지 만들기</button>
   </div>`;
 }
 
@@ -12634,6 +12645,7 @@ function renderUpcoming() {
       <span class="mst-quick" onclick="event.stopPropagation()">
         <button type="button" class="mst-btn confirmed${k === 'confirmed' ? ' on' : ''}" onclick="setMatchStatus('${m.id}','confirmed')">🟢 확정</button>
         <button type="button" class="mst-btn tentative${k === 'tentative' ? ' on' : ''}" onclick="setMatchStatus('${m.id}','tentative')">🟡 미확정</button>
+        <button type="button" class="mst-btn notice" onclick="openShareMatch('${m.id}')">📢 공지</button>
       </span>
     </div>`;
   }).join('');
@@ -13266,48 +13278,80 @@ async function openShareMatch(matchId) {
   bd.addEventListener('click', closeOrderPop);
   document.body.appendChild(bd);
 
+  const d = parseYmd(m.date || ymd(new Date()));
+  const dl = `${d.getMonth() + 1}/${d.getDate()} (${['일','월','화','수','목','금','토'][d.getDay()]})`;
   const pop = document.createElement('div');
   pop.id = 'orderPop'; pop.className = 'order-pop share-pop';
-  pop.innerHTML = `<div class="op-label">📢 일정 공지</div>
+  pop.innerHTML = `<div class="op-label">📢 경기 공지 <small>${escapeHtml(dl)} vs ${escapeHtml(m.opponent || '상대팀')}</small></div>
+    <div class="share-mode" id="shareMode">
+      <button data-mode="both" class="on">📝+🖼️ 글과 이미지</button>
+      <button data-mode="text">📝 글만</button>
+      <button data-mode="image">🖼️ 이미지만</button>
+    </div>
     <div class="share-preview" id="sharePreview"><div class="share-loading">공지 만드는 중…</div></div>
-    <div class="share-notice" id="shareNotice"></div>
+    <textarea class="share-notice share-notice-edit" id="shareNotice" spellcheck="false"></textarea>
     <div class="share-btns">
-      <button class="edit" id="shareImg">📤 이미지 공유</button>
-      <button id="shareSave">💾 저장</button>
-      <button id="shareCopy">📋 공지 복사</button>
+      <button class="edit" id="shareGo">📤 톡방에 올리기</button>
+      <button id="shareSave">💾 이미지 저장</button>
+      <button id="shareCopy">📋 글 복사</button>
     </div>
     <div class="order-pop-foot"><button data-op-close>닫기</button></div>`;
   document.body.appendChild(pop);
   pop.style.left = '50%'; pop.style.top = '50%'; pop.style.transform = 'translate(-50%, -50%)';
   pop.querySelector('[data-op-close]').addEventListener('click', closeOrderPop);
 
-  const notice = buildScheduleNotice(m);
-  document.getElementById('shareNotice').textContent = notice;
+  const ta = document.getElementById('shareNotice');
+  ta.value = buildScheduleNotice(m);
+  const prev = document.getElementById('sharePreview');
   const blob = await buildScheduleImage(m);
   const url = URL.createObjectURL(blob);
-  document.getElementById('sharePreview').innerHTML = `<img src="${url}" alt="일정 공지" />`;
+  prev.innerHTML = `<img src="${url}" alt="일정 공지" />`;
   const fname = `EASTFC_일정_${(m.date || '').replace(/-/g, '')}_${(m.opponent || '').replace(/\s+/g, '_')}.png`;
+  const notice = () => ta.value.trim();
 
-  document.getElementById('shareImg').addEventListener('click', async () => {
-    const file = new File([blob], fname, { type: 'image/png' });
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try { await navigator.share({ files: [file], text: notice }); return; } catch (e) { if (e.name === 'AbortError') return; }
+  let mode = 'both';
+  const goBtn = document.getElementById('shareGo'), saveBtn = document.getElementById('shareSave'), copyBtn = document.getElementById('shareCopy');
+  const applyMode = () => {
+    prev.style.display = mode === 'text' ? 'none' : '';
+    ta.style.display = mode === 'image' ? 'none' : '';
+    saveBtn.style.display = mode === 'text' ? 'none' : '';
+    copyBtn.style.display = mode === 'image' ? 'none' : '';
+    goBtn.textContent = mode === 'text' ? '📤 글 올리기' : mode === 'image' ? '📤 이미지 올리기' : '📤 톡방에 올리기';
+    document.querySelectorAll('#shareMode button').forEach(b => b.classList.toggle('on', b.dataset.mode === mode));
+  };
+  document.getElementById('shareMode').addEventListener('click', e => { const b = e.target.closest('[data-mode]'); if (!b) return; mode = b.dataset.mode; applyMode(); });
+  applyMode();
+
+  const copyText = async () => {
+    try { await navigator.clipboard.writeText(notice()); toast('공지 글을 복사했어요 · 톡방에 붙여넣기'); return true; }
+    catch (e) {
+      const t = document.createElement('textarea'); t.value = notice(); document.body.appendChild(t); t.select();
+      let ok = false; try { ok = document.execCommand('copy'); } catch (_) {}
+      document.body.removeChild(t); toast(ok ? '공지 글을 복사했어요 · 톡방에 붙여넣기' : '복사에 실패했어요'); return ok;
     }
-    toast('이 기기는 바로 공유가 안 돼요 · 저장 후 올려주세요');
-  });
-  document.getElementById('shareSave').addEventListener('click', () => {
+  };
+  const saveImg = () => {
     const a = document.createElement('a'); a.href = url; a.download = fname;
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     toast('이미지를 저장했어요');
-  });
-  document.getElementById('shareCopy').addEventListener('click', async () => {
-    try { await navigator.clipboard.writeText(notice); toast('공지 문구를 복사했어요'); }
-    catch (e) {
-      const ta = document.createElement('textarea'); ta.value = notice; document.body.appendChild(ta);
-      ta.select(); try { document.execCommand('copy'); toast('공지 문구를 복사했어요'); } catch (_) { toast('복사에 실패했어요'); }
-      document.body.removeChild(ta);
+  };
+  goBtn.addEventListener('click', async () => {
+    if (mode === 'text') {
+      if (navigator.share) { try { await navigator.share({ text: notice() }); return; } catch (e) { if (e.name === 'AbortError') return; } }
+      await copyText(); return;
     }
+    const file = new File([blob], fname, { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      // 카톡은 사진과 글을 한 번에 받으면 글이 잘리는 경우가 있어 글은 클립보드에도 넣어둔다
+      if (mode === 'both') { try { await navigator.clipboard.writeText(notice()); } catch (_) {} }
+      try { await navigator.share(mode === 'both' ? { files: [file], text: notice() } : { files: [file] }); if (mode === 'both') toast('글은 복사해뒀어요 · 안 붙었으면 붙여넣기'); return; }
+      catch (e) { if (e.name === 'AbortError') return; }
+    }
+    toast('이 기기는 바로 공유가 안 돼요 · 저장 후 올려주세요');
+    saveImg(); if (mode === 'both') copyText();
   });
+  saveBtn.addEventListener('click', saveImg);
+  copyBtn.addEventListener('click', copyText);
 }
 
 /* ==================== Org chart ==================== */
