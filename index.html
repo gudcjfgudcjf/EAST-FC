@@ -737,7 +737,44 @@
   .cal-match:hover { filter: brightness(1.15); transform: translateX(2px); transition: all 0.15s; }
   .cal-upcoming { margin-top: 16px; background: var(--bg-2); border: 1px solid var(--bg-3); border-radius: 10px; padding: 14px; max-height: 150px; overflow-y: auto; }
   .cal-upcoming h3 { font-size: 12px; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
-  .cal-upcoming-item { display: flex; align-items: center; gap: 12px; padding: 8px; border-radius: 6px; font-size: 13px; cursor: pointer; }
+  .cal-upcoming-item { display: flex; align-items: center; gap: 10px; padding: 9px 8px; border-radius: 8px; font-size: 13px; cursor: pointer; border-left: 4px solid transparent; }
+  .cal-up-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .cal-up-l1 { display: flex; align-items: center; gap: 8px; }
+  .cal-up-l2 { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .mst-quick { flex: none; display: flex; flex-direction: column; gap: 4px; }
+  .mst-quick .mst-btn { font-size: 11px; padding: 5px 8px; white-space: nowrap; }
+  @media (min-width: 640px) { .mst-quick { flex-direction: row; } }
+  .cal-upcoming-item.st-confirmed { border-left-color: #22c55e; background: rgba(34,197,94,.06); }
+  .cal-upcoming-item.st-tentative { border-left-color: #f59e0b; }
+  .cal-upcoming-item.st-cancelled { border-left-color: #ef4444; opacity: .6; text-decoration: line-through; }
+  .cal-up-loc { color: var(--text-3); font-size: 12px; }
+  /* 확정/미확정 표시 */
+  .mst { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 800; padding: 3px 9px 3px 7px; border-radius: 20px; white-space: nowrap;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); color: var(--text-2); }
+  .mst i { width: 9px; height: 9px; border-radius: 50%; background: #9ca3af; box-shadow: 0 0 0 2px rgba(255,255,255,.08); }
+  .mst.confirmed { color: #4ade80; border-color: rgba(34,197,94,.4); background: rgba(34,197,94,.1); }
+  .mst.confirmed i { background: #22c55e; box-shadow: 0 0 0 2px rgba(34,197,94,.25), 0 0 10px #22c55e; animation: mstGlow 1.8s ease-in-out infinite; }
+  .mst.tentative { color: #fbbf24; border-color: rgba(245,158,11,.4); background: rgba(245,158,11,.1); }
+  .mst.tentative i { background: #f59e0b; }
+  .mst.cancelled { color: #f87171; border-color: rgba(239,68,68,.4); background: rgba(239,68,68,.1); }
+  .mst.cancelled i { background: #ef4444; }
+  @keyframes mstGlow { 0%,100% { box-shadow: 0 0 0 2px rgba(34,197,94,.25), 0 0 6px #22c55e; } 50% { box-shadow: 0 0 0 3px rgba(34,197,94,.35), 0 0 16px #22c55e; } }
+  .mst-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 4px; vertical-align: middle; background: #9ca3af; }
+  .mst-dot.confirmed { background: #22c55e; box-shadow: 0 0 6px #22c55e; }
+  .mst-dot.tentative { background: #f59e0b; }
+  .mst-dot.cancelled { background: #ef4444; }
+  .mst-btn { cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 800; padding: 5px 8px; border-radius: 8px; line-height: 1;
+    background: rgba(255,255,255,.05); border: 1px solid var(--border-2); color: var(--text-3); opacity: .55; }
+  .mst-btn.on { opacity: 1; color: var(--text); }
+  .mst-btn.confirmed.on { border-color: #22c55e; background: rgba(34,197,94,.16); }
+  .mst-btn.tentative.on { border-color: #f59e0b; background: rgba(245,158,11,.16); }
+  .mst-btn.cancelled.on { border-color: #ef4444; background: rgba(239,68,68,.16); }
+  .mst-panel { margin: 0 0 14px; padding: 12px; border-radius: 12px; background: rgba(255,255,255,.04); border: 1px solid var(--border-2); }
+  .mst-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .mst-head small { font-size: 11px; color: var(--text-4); }
+  .mst-btns { display: flex; gap: 6px; }
+  .mst-btns .mst-btn { flex: 1; padding: 10px 6px; font-size: 13px; }
+  .mst-tip { margin-top: 8px; font-size: 11px; color: var(--text-4); }
   .cal-upcoming-item:hover { background: var(--bg-hover); }
   .cal-upcoming-date { color: var(--gold); font-weight: 700; min-width: 90px; }
 
@@ -5454,6 +5491,7 @@
 <div class="modal-overlay" id="matchModal">
   <div class="modal">
     <h3 id="matchModalTitle">경기 추가</h3>
+    <div id="matchStatusBox"></div>
     <div class="form-row">
       <div class="form-group"><label>날짜</label><input type="date" id="mDate" /></div>
       <div class="form-group"><label>시간</label><input type="time" id="mTime" value="15:00" /></div>
@@ -5737,7 +5775,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 97;
+const APP_VERSION = 98;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -12522,6 +12560,7 @@ function makeDayCell(d, otherMonth, todayStr) {
     mel.style.borderLeft = `4px solid ${matchColorFor(m)}`;
     const scoreStr = (m.scoreUs != null && m.scoreThem != null && m.scoreUs !== '' && m.scoreThem !== '') ? ` ${m.scoreUs}:${m.scoreThem}` : '';
     mel.textContent = `${m.time || ''} ${m.opponent || '상대'}${scoreStr}`;
+    if (m.date >= todayStr) { const sd = document.createElement('i'); sd.className = 'mst-dot ' + matchStatus(m); sd.title = MATCH_ST[matchStatus(m)].t; mel.prepend(sd); }
     { const b = document.createElement('span'); b.className = 'match-new-bulb' + (isMatchUnseen(m) ? '' : ' off'); b.textContent = '💡'; mel.appendChild(b); }
     mel.title = `${m.time || ''} ${m.homeAway === 'away' ? '원정' : '홈'} vs ${m.opponent}${m.location ? ' @ ' + m.location : ''}`;
     mel.addEventListener('click', e => { e.stopPropagation(); openMatchModal(m.id); });
@@ -12536,6 +12575,42 @@ function makeDayCell(d, otherMonth, todayStr) {
   cell.addEventListener('click', () => openDayModal(dstr));
   return cell;
 }
+/* ---------- 경기 확정 / 미확정 ----------
+   카톡에서 이미 "이번 주 뛴다/안 뛴다" 정해놓고 EFM 에서 또 투표하는 게 귀찮다는 요청.
+   → 상태는 회원 누구나 바꿀 수 있고, 누가 언제 바꿨는지만 남긴다. */
+const MATCH_ST = {
+  confirmed: { t: '확정',   dot: '🟢', c: '#22c55e' },
+  tentative: { t: '미확정', dot: '🟡', c: '#f59e0b' },
+  cancelled: { t: '취소',   dot: '🔴', c: '#ef4444' },
+};
+function matchStatus(m) { return MATCH_ST[m && m.status] ? m.status : 'tentative'; }
+function matchStatusHtml(m, small) {
+  const k = matchStatus(m), st = MATCH_ST[k];
+  return `<span class="mst ${k}${small ? ' sm' : ''}"><i></i>${st.t}</span>`;
+}
+function setMatchStatus(matchId, k) {
+  const u = currentUser(); if (!u) { toast('로그인이 필요해요'); return; }
+  const m = store.matches.find(x => x.id === matchId); if (!m || !MATCH_ST[k]) return;
+  if (matchStatus(m) === k) return;
+  m.status = k; m.statusBy = u.displayName || u.username || ''; m.statusAt = new Date().toISOString();
+  bumpMatchRev(m);
+  saveState();
+  markMatchSeen(matchId);
+  toast(`${MATCH_ST[k].dot} ${m.opponent || '경기'} ${MATCH_ST[k].t}`);
+  if (currentTab === 'calendar') renderCalendar();
+  const box = document.getElementById('matchStatusBox'); if (box && editingMatchId === matchId) box.innerHTML = matchStatusPanel(m);
+  if (typeof updateSquadPlanDot === 'function') { try { updateSquadPlanDot(); } catch (e) {} }
+}
+function matchStatusPanel(m) {
+  const k = matchStatus(m);
+  const who = m.statusBy ? `${escapeHtml(m.statusBy)} · ${m.statusAt ? new Date(m.statusAt).toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' }) + ' ' + new Date(m.statusAt).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : ''}` : '아직 아무도 안 정함';
+  return `<div class="mst-panel">
+    <div class="mst-head">${matchStatusHtml(m)}<small>${who}</small></div>
+    <div class="mst-btns">${Object.entries(MATCH_ST).map(([key, st]) => `<button type="button" class="mst-btn ${key}${key === k ? ' on' : ''}" onclick="setMatchStatus('${m.id}','${key}')">${st.dot} ${st.t}</button>`).join('')}</div>
+    <div class="mst-tip">회원 누구나 바꿀 수 있어요 · 카톡에서 정해진 대로 눌러두면 돼요</div>
+  </div>`;
+}
+
 function renderUpcoming() {
   const now = new Date(); const todayStr = ymd(now);
   const upcoming = store.matches
@@ -12550,10 +12625,16 @@ function renderUpcoming() {
     const dateLabel = `${d.getMonth()+1}/${d.getDate()} (${dowNames[d.getDay()]})`;
     const haLabel = m.homeAway === 'away' ? '[원정]' : '[홈]';
     const bulb = `<span class="match-new-bulb ${isMatchUnseen(m) ? '' : 'off'}" title="${isMatchUnseen(m) ? '새 일정 · 열어보면 꺼져요' : '확인함'}">💡</span>`;
-    return `<div class="cal-upcoming-item" data-id="${m.id}">
-      <span class="cal-upcoming-date">${dateLabel} ${m.time || ''}</span>
-      <span>${haLabel} vs <strong>${escapeHtml(m.opponent || '상대팀')}</strong>${bulb}</span>
-      <span style="color:var(--text-2); margin-left:auto">${escapeHtml(m.location || '')}</span>
+    const k = matchStatus(m);
+    return `<div class="cal-upcoming-item st-${k}" data-id="${m.id}">
+      <div class="cal-up-main">
+        <div class="cal-up-l1">${matchStatusHtml(m)}<span class="cal-upcoming-date">${dateLabel} ${m.time || ''}</span></div>
+        <div class="cal-up-l2">${haLabel} vs <strong>${escapeHtml(m.opponent || '상대팀')}</strong>${bulb}${m.location ? `<span class="cal-up-loc">· ${escapeHtml(m.location)}</span>` : ''}</div>
+      </div>
+      <span class="mst-quick" onclick="event.stopPropagation()">
+        <button type="button" class="mst-btn confirmed${k === 'confirmed' ? ' on' : ''}" onclick="setMatchStatus('${m.id}','confirmed')">🟢 확정</button>
+        <button type="button" class="mst-btn tentative${k === 'tentative' ? ' on' : ''}" onclick="setMatchStatus('${m.id}','tentative')">🟡 미확정</button>
+      </span>
     </div>`;
   }).join('');
   el.querySelectorAll('.cal-upcoming-item').forEach(item => {
@@ -12655,6 +12736,8 @@ function openMatchModal(matchId, defaultDate) {
   $('#mNotes').value = m?.notes || '';
   // Attendance voting — only for existing matches (can't vote on an unsaved one)
   const attSec = document.getElementById('matchAttendSection');
+  const stBox = document.getElementById('matchStatusBox');
+  if (stBox) stBox.innerHTML = m ? matchStatusPanel(m) : '';
   if (m) {
     attSec.innerHTML = attendanceSectionHtml(m);
     bindAttendanceButtons(attSec);
