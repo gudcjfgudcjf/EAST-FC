@@ -4180,7 +4180,9 @@
   /* ---------- 📸 인스타 ---------- */
   .ig-wrap { max-width: 560px; margin: 0 auto; }
   .ig-stage { position: relative; width: 100%; max-width: 440px; margin: 0 auto; border-radius: 14px; overflow: hidden;
-    box-shadow: 0 16px 40px rgba(0,0,0,.55); border: 1px solid rgba(255,255,255,.1); background: #000; touch-action: none; }
+    box-shadow: 0 16px 40px rgba(0,0,0,.55); border: 1px solid rgba(255,255,255,.1); background: #000; touch-action: pan-y; }
+  .ig-stage.pan { touch-action: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(111,159,196,.35), 0 16px 40px rgba(0,0,0,.55); }
+  .ig-stage.pan .ig-hint { background: var(--gold); color: #0a0a0b; }
   .ig-stage canvas { display: block; width: 100%; height: auto; cursor: grab; }
   .ig-stage canvas:active { cursor: grabbing; }
   .ig-hint { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); font-size: 11px; font-weight: 700; color: rgba(255,255,255,.7);
@@ -5735,7 +5737,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 96;
+const APP_VERSION = 97;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -15543,7 +15545,7 @@ const _ig = {
   aspect: '4:5', layout: 'grad',
   show: { goals: true, assists: true, date: true, tags: true, loc: true },
   txt: { ours: 'EAST FC', opp: '', us: '', them: '', goals: '', assists: '', mom: '', caption: '', tags: '#EASTFC #이스트FC #조기축구' },
-  crest: null, drag: null, dirty: false, auto: true,
+  crest: null, drag: null, dirty: false, auto: true, pan: false,
 };
 function igCrest() {
   if (_ig.crest) return _ig.crest;
@@ -15749,10 +15751,11 @@ function renderInsta() {
   const chip = (on, label, on_click) => `<button class="ig-chip${on ? ' on' : ''}" onclick="${on_click}">${label}</button>`;
   el.innerHTML = `
     <div class="ig-wrap">
-      <div class="ig-stage" id="igStage"><canvas id="igCv"></canvas>
-        <div class="ig-hint" id="igHint">${_ig.img ? '끌어서 위치 조정 · 두 손가락으로 확대' : '아래 「사진 선택」'}</div></div>
+      <div class="ig-stage${_ig.pan ? ' pan' : ''}" id="igStage"><canvas id="igCv"></canvas>
+        <div class="ig-hint" id="igHint">${!_ig.img ? '아래 「사진 선택」' : _ig.pan ? '✋ 끌어서 옮기기 · 두 손가락 확대 · 끝나면 완료' : '위치 바꾸려면 「위치 조정」'}</div></div>
       <div class="ig-tools">
         <button class="btn primary" onclick="document.getElementById('igFile').value='';document.getElementById('igFile').click()">📷 사진 선택</button>
+        ${_ig.img ? `<button class="btn${_ig.pan ? ' primary' : ''}" onclick="igPan()">${_ig.pan ? '✓ 완료' : '✋ 위치 조정'}</button>` : ''}
         <label class="ig-zoom"><span>전체</span><input type="range" min="${igMinZoom().toFixed(3)}" max="3" step="0.01" value="${_ig.zoom}" oninput="igZoom(this.value)"><span>확대</span></label>
       </div>
       <div class="ig-sec">🏟️ 경기 <small>일정 탭 기록을 그대로 가져와요</small></div>
@@ -15787,20 +15790,28 @@ function igSetMatch(id) { _ig.matchId = id; igFillFromMatch(); renderInsta(); }
 function igTxt(k, v) { _ig.txt[k] = v; igDraw(); }
 function igZoom(v) { const { W, H } = igSize(); const im = _ig.img; const old = igBaseScale() * _ig.zoom; _ig.zoom = Math.min(3, Math.max(igMinZoom(), parseFloat(v) || 1)); if (im) { const nw = igBaseScale() * _ig.zoom; /* 화면 중심 기준 확대 */ _ig.ox = W / 2 - (W / 2 - _ig.ox) * nw / old; _ig.oy = H / 2 - (H / 2 - _ig.oy) * nw / old; igClamp(); } igDraw(); }
 function igAspect(a) { _ig.aspect = a; if (_ig.img) { _ig.zoom = igMinZoom(); igCenter(); } renderInsta(); }
+function igPan() {
+  _ig.pan = !_ig.pan; renderInsta();
+  if (_ig.pan) { const st = document.getElementById('igStage'); if (st) st.scrollIntoView({ block: 'start', behavior: 'smooth' }); }
+}
 function igLayout(k) { _ig.layout = k; if (_ig.img && _ig.zoom <= igMinZoom() + 1e-6) igCenter(); renderInsta(); }
 function igToggle(k) { _ig.show[k] = !_ig.show[k]; renderInsta(); }
 function igBindDrag() {
   const cv = document.getElementById('igCv'); if (!cv || cv._igBound) return; cv._igBound = true;
   const scaleOf = () => IG_W / cv.getBoundingClientRect().width;
   let pinch = null;
-  cv.addEventListener('pointerdown', e => { if (!_ig.img) return; cv.setPointerCapture(e.pointerId); _ig.drag = { x: e.clientX, y: e.clientY, ox: _ig.ox, oy: _ig.oy }; });
+  cv.addEventListener('pointerdown', e => {
+    if (!_ig.img) return;
+    if (e.pointerType !== 'mouse' && !_ig.pan) return;   // 폰에서는 「위치 조정」 켰을 때만 — 아니면 페이지 스크롤이 막힌다
+    cv.setPointerCapture(e.pointerId); _ig.drag = { x: e.clientX, y: e.clientY, ox: _ig.ox, oy: _ig.oy };
+  });
   cv.addEventListener('pointermove', e => {
     if (!_ig.drag || !_ig.img) return; const k = scaleOf();
     _ig.ox = _ig.drag.ox + (e.clientX - _ig.drag.x) * k; _ig.oy = _ig.drag.oy + (e.clientY - _ig.drag.y) * k; igClamp(); igDraw(); e.preventDefault();
   });
   const end = () => { _ig.drag = null; };
   cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
-  cv.addEventListener('touchstart', e => { if (e.touches.length === 2) { pinch = { d: Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY), z: _ig.zoom }; } }, { passive: true });
+  cv.addEventListener('touchstart', e => { if (_ig.pan && e.touches.length === 2) { pinch = { d: Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY), z: _ig.zoom }; } }, { passive: true });
   cv.addEventListener('touchmove', e => { if (pinch && e.touches.length === 2) { const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); igZoom(pinch.z * d / pinch.d); const r = document.querySelector('.ig-zoom input'); if (r) r.value = _ig.zoom; e.preventDefault(); } }, { passive: false });
   cv.addEventListener('touchend', () => { pinch = null; });
 }
