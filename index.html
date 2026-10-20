@@ -1640,7 +1640,7 @@
   .stats-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
   .stats-header h1 { font-family: var(--font-brand); font-size: 24px; color: var(--text); letter-spacing: -0.01em; font-weight: 800; }
   .stats-header .spacer { flex: 1; }
-  #recordsContent, #attendContent, #hallContent, #guideContent, #chemContent, #presenceContent, #profileContent, #gohContent, #scoutContent, #uniformContent, #prosBody, #instaContent { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-right: 4px; padding-bottom: 30px; min-height: 0; }
+  #recordsContent, #attendContent, #hallContent, #guideContent, #chemContent, #presenceContent, #profileContent, #gohContent, #scoutContent, #uniformContent, #prosBody, #instaContent, #settleContent { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-right: 4px; padding-bottom: 30px; min-height: 0; }
 
   /* ---------- 👑🎯 전용 페이지 오버레이 (오너/감독) ---------- */
   .priv-overlay {
@@ -4248,6 +4248,201 @@
   .ig-actions .btn { flex: 1 1 auto; }
   .ig-view { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 16px; max-height: 100vh; }
   .ig-view img { max-width: min(92vw, 520px); max-height: 74vh; border-radius: 10px; -webkit-touch-callout: default; }
+
+  /* ⏱ 몇 쿼터부터 (투표) */
+  .amr-from { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin-top: 7px; }
+  .amr-from .amr-q-label { font-size: 11px; color: var(--text-2); font-weight: 700; margin-right: 3px; }
+  .amr-fq { padding: 6px 10px; border-radius: 8px; font-size: 11.5px; font-weight: 800; cursor: pointer; font-family: inherit;
+    background: var(--bg-2); border: 1px solid var(--border-2); color: var(--text-3); }
+  .amr-fq.on { background: rgba(253,186,116,.16); border-color: #fb923c; color: #fdba74; }
+  .amr-fq.on.full { background: rgba(34,197,94,0.18); border-color: #22c55e; color: #4ade80; }
+  .voter-chip small { font-weight: 800; color: #fdba74; margin-left: 4px; font-size: 10.5px; }
+  /* 🗳️ 투표 모아보기 */
+  #voteAllModal .modal { width: 94%; max-width: 560px; padding: 18px 16px; }
+  .va-item { border: 1px solid var(--border-2); border-radius: 14px; padding: 12px 12px 10px; margin-bottom: 10px; background: rgba(255,255,255,.025); }
+  .va-item.st-confirmed { border-left: 4px solid #22c55e; }
+  .va-item.st-tentative { border-left: 4px solid #facc15; }
+  .va-head { display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 8px; }
+  .va-date { font-size: 13px; font-weight: 800; color: var(--gold-warm); white-space: nowrap; }
+  .va-opp { flex: 1; min-width: 0; font-size: 14px; font-weight: 900; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .va-loc { font-size: 11px; color: var(--text-3); margin: -4px 0 8px; }
+  .va-cnt { font-size: 11px; color: var(--text-3); white-space: nowrap; }
+  .va-empty { text-align: center; color: var(--text-3); padding: 30px 0; font-size: 13px; }
+  .va-tip { font-size: 11.5px; color: var(--text-4); line-height: 1.6; margin-top: 6px; }
+  .va-item .attend-voters { margin-top: 8px; }
+  .va-item .attend-btn { padding: 9px 4px; font-size: 13px; min-height: 42px; }
+  /* 💰 정산 */
+  .se-wrap { max-width: 560px; margin: 0 auto; }
+  .se-top { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+  .se-top .btn { flex: 1 1 auto; }
+  .se-card { border: 1px solid var(--border-2); border-radius: 14px; padding: 12px 14px; margin-bottom: 10px; background: rgba(255,255,255,.025); cursor: pointer; }
+  .se-card.mine { border-left: 4px solid #ef4444; cursor: default; }
+  .se-card.mine.sent { border-left-color: #facc15; }
+  .se-card.mine.paid { border-left-color: #22c55e; }
+  .se-card.closed { opacity: .65; }
+  .se-l1 { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--gold-warm); font-weight: 800; }
+  .se-l1 .spacer { flex: 1; }
+  .se-title { font-size: 15px; font-weight: 900; color: var(--text); margin-top: 2px; }
+  .se-amt { font-size: 26px; font-weight: 900; color: var(--text); margin-top: 4px; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+  .se-amt small { font-size: 12px; color: #fdba74; font-weight: 700; margin-left: 6px; }
+  .se-meta { font-size: 11.5px; color: var(--text-3); margin-top: 3px; line-height: 1.5; }
+  .se-chip { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 800; padding: 2px 8px; border-radius: 20px; border: 1px solid transparent; white-space: nowrap; }
+  .se-chip.red { color: #f87171; background: rgba(239,68,68,.12); border-color: rgba(239,68,68,.45); }
+  .se-chip.grn { color: #4ade80; background: rgba(34,197,94,.12); border-color: rgba(34,197,94,.45); }
+  .se-chip.amb { color: #fbbf24; background: rgba(245,158,11,.12); border-color: rgba(245,158,11,.45); }
+  .se-chip.gray { color: var(--text-3); background: rgba(255,255,255,.05); border-color: var(--border-2); }
+  .se-pay { display: flex; flex-direction: column; gap: 7px; margin-top: 10px; }
+  .se-pay .btn { text-align: center; text-decoration: none; display: block; padding: 12px; font-size: 14px; }
+  .se-pay .kp { background: #fae100; color: #191919; border-color: #e6d000; }
+  .se-pay .kp:hover { background: #ffe81a; color: #191919; }
+  .se-pay .sent { color: #4ade80; border-color: rgba(34,197,94,.5); background: rgba(34,197,94,.12); }
+  .se-pay .sent.on { background: rgba(250,204,21,.15); color: #fde047; border-color: rgba(250,204,21,.5); }
+  .se-bar { height: 10px; border-radius: 5px; background: rgba(255,255,255,.07); overflow: hidden; margin-top: 8px; }
+  .se-bar i { display: block; height: 100%; background: linear-gradient(90deg,#22c55e,#4ade80); border-radius: 5px; }
+  .se-bar i.amb { background: linear-gradient(90deg,#f59e0b,#fbbf24); }
+  .se-bl { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-3); margin-top: 5px; font-variant-numeric: tabular-nums; }
+  .se-bl b { color: #4ade80; }
+  .se-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .se-p { font-size: 12px; font-weight: 700; padding: 6px 10px; border-radius: 9px; background: rgba(255,255,255,.05); border: 1px solid var(--border-2); color: var(--text-2); cursor: default; font-family: inherit; }
+  .se-p small { font-weight: 600; color: var(--text-4); margin-left: 5px; font-size: 10.5px; font-variant-numeric: tabular-nums; }
+  .se-p .q { color: #fdba74; margin-left: 4px; font-size: 10.5px; font-weight: 800; }
+  .se-p.paid { background: rgba(34,197,94,.14); border-color: rgba(34,197,94,.5); color: #fff; }
+  .se-p.sent { background: rgba(250,204,21,.14); border-color: rgba(250,204,21,.5); color: #fff; }
+  .se-p.none { opacity: .75; }
+  .se-p.me { box-shadow: 0 0 0 2px rgba(111,159,196,.5); }
+  .se-p.tap { cursor: pointer; }
+  .se-p.tap:active { transform: scale(.96); }
+  .se-box { background: rgba(255,255,255,.03); border: 1px solid var(--border-2); border-radius: 12px; overflow: hidden; margin-bottom: 8px; }
+  .se-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 12px; border-bottom: 1px solid rgba(255,255,255,.06); font-size: 13px; color: var(--text-2); }
+  .se-row:last-child { border-bottom: 0; }
+  .se-row b { color: var(--text); font-variant-numeric: tabular-nums; }
+  .se-row.sum { background: rgba(111,159,196,.08); }
+  .se-row.sum b { color: var(--gold-warm); font-size: 14px; }
+  .se-exp { display: grid; grid-template-columns: minmax(0,1fr) 110px 32px; gap: 6px; align-items: center; margin-bottom: 6px; }
+  .se-exp input { width: 100%; min-width: 0; padding: 9px 10px; border-radius: 9px; font-size: 14px; font-family: inherit; background: var(--bg-3); border: 1px solid var(--border-2); color: var(--text); }
+  .se-exp input.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .se-exp .x { width: 32px; height: 36px; border-radius: 8px; border: 1px solid var(--border-2); background: rgba(255,255,255,.05); color: var(--text-3); cursor: pointer; font-size: 13px; }
+  .se-ppl { display: flex; flex-direction: column; gap: 4px; }
+  .se-pr { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 10px; border: 1px solid var(--border-2); background: rgba(255,255,255,.03); }
+  .se-pr.off { opacity: .45; }
+  .se-pr .nm { flex: 1; min-width: 0; font-size: 13px; font-weight: 700; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .se-pr .nm small { color: var(--text-4); font-weight: 600; margin-left: 4px; }
+  .se-pr .nm .q { color: #fdba74; font-size: 10.5px; font-weight: 800; margin-left: 5px; }
+  .se-pr .tg { flex: none; width: 36px; height: 20px; border-radius: 10px; background: rgba(255,255,255,.12); position: relative; cursor: pointer; border: none; padding: 0; }
+  .se-pr .tg::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #6b7280; transition: left .15s; }
+  .se-pr .tg.on { background: #22c55e; } .se-pr .tg.on::after { left: 18px; background: #fff; }
+  .se-pr .am { flex: none; min-width: 78px; text-align: right; font-size: 13px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; background: none; border: 1px dashed transparent; border-radius: 7px; padding: 4px 6px; cursor: pointer; font-family: inherit; }
+  .se-pr .am.ovr { color: #fdba74; border-color: rgba(253,186,116,.5); }
+  .se-pr input.am-in { flex: none; width: 96px; padding: 5px 8px; border-radius: 7px; font-size: 13px; text-align: right; font-family: inherit; background: var(--bg-3); border: 1px solid var(--gold); color: var(--text); }
+  .se-pr input.gname { flex: 1; min-width: 0; padding: 6px 8px; border-radius: 7px; font-size: 13px; font-family: inherit; background: var(--bg-3); border: 1px solid var(--border-2); color: var(--text); }
+  .se-sum { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 6px; margin: 10px 0; }
+  .se-sum div { background: rgba(111,159,196,.08); border: 1px solid rgba(111,159,196,.3); border-radius: 10px; padding: 8px 4px; text-align: center; }
+  .se-sum div small { display: block; font-size: 10px; color: var(--text-3); font-weight: 700; }
+  .se-sum div b { display: block; font-size: 15px; color: var(--text); font-variant-numeric: tabular-nums; margin-top: 2px; }
+  .se-sum div.hi b { color: var(--gold-warm); font-size: 17px; }
+  .se-sec { display: flex; align-items: baseline; gap: 8px; font-size: 13px; font-weight: 800; color: var(--gold-warm); margin: 18px 0 8px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,.09); }
+  .se-sec small { font-size: 11px; font-weight: 500; color: var(--text-4); }
+  .se-sec .spacer { flex: 1; }
+  .se-f { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .se-f span { flex: none; width: 66px; font-size: 12px; font-weight: 800; color: var(--text-3); }
+  .se-f input, .se-f select { flex: 1; min-width: 0; width: 100%; padding: 9px 11px; border-radius: 9px; font-size: 14px; font-family: inherit; background: var(--bg-3); border: 1px solid var(--border-2); color: var(--text); }
+  .se-acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .se-acts .btn { flex: 1 1 auto; }
+  .se-back { background: none; border: none; color: var(--gold-warm); font-weight: 800; cursor: pointer; font-family: inherit; font-size: 13px; padding: 0; margin-bottom: 10px; }
+  .se-empty { text-align: center; color: var(--text-3); padding: 22px 0; font-size: 13px; line-height: 1.6; }
+  #settleModal .modal { width: 94%; max-width: 560px; padding: 18px 16px; }
+  @media (max-width: 480px) { .se-sum { grid-template-columns: repeat(2, minmax(0,1fr)); } .se-exp { grid-template-columns: minmax(0,1fr) 96px 32px; } }
+
+  /* 💬 카카오 로그인 · 카드 공유 */
+  .kakao-login { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 13px; border-radius: 10px; cursor: pointer;
+    background: #fee500; color: #191919; border: none; font-family: inherit; font-size: 15px; font-weight: 800; margin-bottom: 4px; }
+  .kakao-login:hover { filter: brightness(1.03); }
+  .kakao-login:active { transform: scale(.985); }
+  .auth-or { display: flex; align-items: center; gap: 10px; color: var(--text-3); font-size: 11.5px; margin: 14px 0 10px; }
+  .auth-or::before, .auth-or::after { content: ''; flex: 1; height: 1px; background: var(--border-2); }
+  .auth-intent { font-size: 12.5px; line-height: 1.5; color: #bbf7d0; background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.4); border-radius: 10px; padding: 9px 12px; margin: -10px 0 14px; text-align: center; }
+  .auth-intent b { color: #fff; }
+  .kakao-who { display: none; }
+  .auth-card.who-mode .kakao-who { display: block; }
+  .auth-card.who-mode .auth-tabs, .auth-card.who-mode .auth-form, .auth-card.who-mode .auth-note, .auth-card.who-mode .kakao-login,
+  .auth-card.who-mode .auth-or, .auth-card.who-mode .auth-subtitle, .auth-card.who-mode .auth-intent { display: none !important; }
+  .auth-card.who-mode { padding: 26px 18px; }
+  .kw-head { display: flex; align-items: center; gap: 10px; margin: 6px 0 12px; }
+  .kw-head img, .kw-head .kw-ico { width: 42px; height: 42px; border-radius: 14px; flex: none; object-fit: cover; background: #fee500; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .kw-head b { display: block; font-size: 15.5px; color: var(--text); font-weight: 900; }
+  .kw-head small { display: block; font-size: 11.5px; color: var(--text-3); margin-top: 2px; }
+  .kw-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px; max-height: 42vh; overflow-y: auto; padding: 2px; }
+  .kw-p { position: relative; padding: 9px 4px; border-radius: 10px; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 700; color: #cfd6de;
+    background: #16171a; border: 1px solid #2a2c32; text-align: center; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .kw-p b { display: block; font-size: 10.5px; color: var(--gold); font-weight: 800; }
+  .kw-p i { position: absolute; top: 3px; right: 5px; font-style: normal; font-size: 9px; opacity: .7; }
+  .kw-p.on { background: rgba(111,159,196,.22); border-color: var(--gold); color: #fff; }
+  .kw-go { display: block; width: 100%; margin-top: 12px; padding: 13px; border-radius: 11px; border: none; cursor: pointer; font-family: inherit; font-size: 14.5px; font-weight: 900;
+    background: linear-gradient(180deg, var(--gold-warm), var(--gold)); color: #0a0a0a; }
+  .kw-pass { margin-top: 12px; font-size: 12px; color: var(--text-2); line-height: 1.55; }
+  .kw-pass b { color: var(--text); }
+  .kw-pass input { width: 100%; margin-top: 8px; padding: 12px 14px; background: rgba(0,0,0,.6); color: var(--text); border: 1px solid var(--border-2); border-radius: 10px; font-size: 14px; font-family: inherit; outline: none; }
+  .kw-pass input:focus { border-color: var(--gold); }
+  .kw-pass small { display: block; margin-top: 7px; color: var(--text-4); font-size: 11px; }
+  .kw-alt { display: flex; gap: 8px; margin-top: 12px; }
+  .kw-alt button { flex: 1; padding: 10px 6px; border-radius: 9px; cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 700; background: rgba(255,255,255,.05); border: 1px solid var(--border-2); color: var(--text-2); }
+  .share-kakao { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; margin: 0 0 10px; padding: 12px; border-radius: 10px; border: none; cursor: pointer;
+    background: #fee500; color: #191919; font-family: inherit; font-size: 14px; font-weight: 900; }
+  .share-kakao small { font-size: 11px; font-weight: 700; color: #5c5300; }
+  .va-banner { font-size: 13px; line-height: 1.5; color: #d1fae5; background: rgba(34,197,94,.14); border: 1px solid rgba(34,197,94,.5); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; }
+  .va-banner b { color: #fff; }
+  .va-item.focus { box-shadow: 0 0 0 2px var(--gold), 0 0 24px rgba(111,159,196,.25); }
+  .admin-kakao { font-size: 11px; margin-left: 4px; padding: 1px 6px; border-radius: 8px; background: #fee500; color: #191919; font-weight: 800; }
+  .se-chk { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; color: var(--text-2); line-height: 1.5; margin-top: 8px; cursor: pointer; }
+  .se-chk input { margin-top: 2px; accent-color: var(--gold); }
+
+  /* ⚡ 퀵 매치 */
+  .topnav .nav-btn.quick, .cal-header button.add-btn.quick { background: linear-gradient(180deg, #ffd76a, #f5b81f); color: #1a1300; border-color: #f5b81f; font-weight: 900; }
+  .topnav .nav-btn.quick:hover { filter: brightness(1.05); }
+  .drawer-item.quick { color: #ffd76a; font-weight: 900; background: rgba(245,184,31,.1); }
+  #quickMatchModal .modal { width: 94%; max-width: 480px; padding: 18px 16px 16px; }
+  .qm-dots { display: inline-flex; gap: 5px; margin-left: 8px; vertical-align: middle; }
+  .qm-dots i { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.15); }
+  .qm-dots i.done { background: #f5b81f; } .qm-dots i.on { background: #ffd76a; box-shadow: 0 0 0 3px rgba(245,184,31,.3); }
+  .qm-sums { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 5px; margin-bottom: 14px; }
+  .qm-sum { min-width: 0; padding: 7px 3px; letter-spacing: -.02em; border-radius: 9px; font-family: inherit; font-size: 11.5px; font-weight: 800; cursor: pointer; color: var(--text-2);
+    background: rgba(255,255,255,.04); border: 1px dashed var(--border-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .qm-sum span { color: var(--text-4); font-weight: 600; }
+  .qm-sum.set { border-style: solid; color: var(--text); background: rgba(245,184,31,.08); border-color: rgba(245,184,31,.4); }
+  .qm-sum.cur { border-style: solid; border-color: #ffd76a; box-shadow: 0 0 0 2px rgba(245,184,31,.25); }
+  .qm-q { font-size: 20px; font-weight: 900; color: var(--text); margin-bottom: 12px; }
+  .qm-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
+  .qm-grid.four { grid-template-columns: repeat(4, minmax(0,1fr)); }
+  .qm-flow { display: flex; flex-wrap: wrap; gap: 6px; }
+  .qm-chip { min-height: 46px; padding: 8px 12px; border-radius: 12px; cursor: pointer; font-family: inherit; font-size: 15px; font-weight: 800; color: var(--text);
+    background: #16171a; border: 1px solid #2a2c32; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; }
+  .qm-chip.big { min-height: 64px; font-size: 17px; }
+  .qm-chip small { font-size: 11px; color: var(--gold); font-weight: 800; }
+  .qm-chip em { font-style: normal; font-size: 10.5px; color: #fdba74; font-weight: 700; }
+  .qm-chip.fav { border-color: rgba(111,159,196,.5); }
+  .qm-chip.on { background: rgba(245,184,31,.18); border-color: #f5b81f; color: #fff; }
+  .qm-chip:active { transform: scale(.97); }
+  .qm-row { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+  .qm-row:first-of-type { margin-top: 0; }
+  .qm-in { flex: 1; min-width: 0; width: 100%; padding: 13px 14px; border-radius: 11px; font-size: 16px; font-family: inherit; background: var(--bg-3); border: 1px solid var(--border-2); color: var(--text); outline: none; }
+  .qm-in:focus { border-color: #f5b81f; }
+  .qm-next { flex: none; padding: 13px 18px; border-radius: 11px; border: none; cursor: pointer; font-family: inherit; font-size: 15px; font-weight: 900; background: #f5b81f; color: #1a1300; }
+  .qm-direct { flex: 1; display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 13px; font-weight: 800; color: var(--text-3); }
+  .qm-row .qm-direct { margin-top: 0; }
+  .qm-direct input { flex: 1; min-width: 0; padding: 11px 12px; border-radius: 10px; font-size: 15px; font-family: inherit; background: var(--bg-3); border: 1px solid var(--border-2); color: var(--text); color-scheme: dark; }
+  .qm-sub { font-size: 11.5px; font-weight: 800; color: var(--text-3); margin: 14px 0 6px; }
+  .qm-skip { display: block; width: 100%; margin-top: 10px; padding: 11px; border-radius: 10px; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 700; color: var(--text-2); background: rgba(255,255,255,.04); border: 1px solid var(--border-2); }
+  .qm-opts { display: flex; flex-direction: column; gap: 7px; margin-top: 14px; }
+  .qm-opt { display: flex; align-items: center; gap: 10px; }
+  .qm-opt > span { flex: none; width: 62px; font-size: 12px; font-weight: 800; color: var(--text-3); }
+  .qm-seg { flex: 1; display: flex; gap: 4px; }
+  .qm-seg button { flex: 1; padding: 9px 4px; border-radius: 9px; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 800; color: var(--text-3); background: rgba(255,255,255,.04); border: 1px solid var(--border-2); white-space: nowrap; }
+  .qm-seg button.on { color: #1a1300; background: #f5b81f; border-color: #f5b81f; }
+  .qm-me input { width: 20px; height: 20px; accent-color: #f5b81f; }
+  .qm-warn { margin-top: 10px; font-size: 12px; line-height: 1.5; color: #fdba74; background: rgba(251,146,60,.1); border: 1px solid rgba(251,146,60,.4); border-radius: 10px; padding: 8px 10px; }
+  .qm-go { display: block; width: 100%; margin-top: 14px; padding: 15px; border-radius: 12px; border: none; cursor: pointer; font-family: inherit; font-size: 16px; font-weight: 900;
+    background: linear-gradient(180deg, #ffd76a, #f5b81f); color: #1a1300; box-shadow: 0 6px 20px rgba(245,184,31,.3); }
+  .qm-back { margin-top: 10px; background: none; border: none; color: var(--text-3); font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; padding: 4px 0; }
   .ig-view-tip { font-size: 13px; color: #fff; background: rgba(0,0,0,.6); padding: 8px 14px; border-radius: 20px; }
   .ig-view-tip b { color: var(--gold-warm); }
   #igView { align-items: center; justify-content: center; }
@@ -4711,6 +4906,9 @@
     <img class="auth-crest" src="data:image/webp;base64,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" alt="EAST FC 엠블럼" />
     <div class="auth-brand">EAST FC</div>
     <div class="auth-subtitle" id="authSubtitle">회원 전용 · 풋볼 매니저</div>
+    <div class="auth-intent" id="authIntent" style="display:none"></div>
+    <button type="button" class="kakao-login" id="btnKakaoLogin"><span>💬</span> 카카오로 1초 로그인</button>
+    <div class="auth-or" id="authOr">또는 아이디로</div>
     <div class="auth-tabs" id="authTabs">
       <button class="auth-tab active" data-mode="login">로그인</button>
       <button class="auth-tab" data-mode="signup">회원가입</button>
@@ -4723,6 +4921,7 @@
       <div class="auth-msg" id="authMsg"></div>
     </div>
     <div class="auth-note" id="authNote" style="display:none"></div>
+    <div class="kakao-who" id="kakaoWho"></div>
   </div>
 </div>
 
@@ -4754,6 +4953,7 @@
     <button class="tab-btn" data-tab="uniform" data-newfeat="uniform">👕 유니폼</button>
     <button class="tab-btn" data-tab="prospect" data-newfeat="prospect">🌱 예비 이스트</button>
     <button class="tab-btn" data-tab="insta" data-newfeat="insta">📸 인스타</button>
+    <button class="tab-btn" data-tab="settle" data-newfeat="settle">💰 정산</button>
     <button class="tab-btn" data-tab="admin" id="tabAdmin" style="display:none">🛡️ 관리자</button>
   </div>
   <div class="spacer"></div>
@@ -4768,6 +4968,7 @@
   </div>
   <button class="nav-menu-btn" id="navMenuBtn" title="메뉴" aria-label="메뉴">☰</button>
   <div class="nav-utils" id="navUtils">
+    <button class="nav-btn quick" id="btnQuickMatch" data-newfeat="quickMatch" title="날짜·시간·상대·장소만 고르면 경기 등록 + 투표 공지">⚡ 퀵 매치</button>
     <button class="nav-btn priv owner" id="btnOwnerPage" title="오너 전용 페이지" style="display:none">👑 오너 전용</button>
     <button class="nav-btn priv mgr" id="btnManagerPage" title="감독 전용 페이지" style="display:none">🎯 감독 전용</button>
     <button class="nav-btn" id="btnManagerToggle" title="감독 모드">🔒 감독 모드</button>
@@ -4928,7 +5129,9 @@
         <button class="cal-nav-btn" id="calNext">›</button>
         <button class="today-btn" id="calToday">오늘</button>
         <div class="spacer"></div>
-        <button class="add-btn ghost" id="btnShareNextMatch" title="다음 경기 공지를 톡방에 올리기 · 다른 경기는 아래 목록의 📢">📢 다음 경기 공지</button>
+        <button class="add-btn ghost" id="btnVoteAll" title="다가오는 경기 전부 한 화면에서 투표">🗳️ 투표 모아보기</button>
+        <button class="add-btn ghost" id="btnShareAll" title="다가오는 경기 전부 한 장으로 공지 · 투표 링크 포함 · 경기 하나만은 아래 목록의 📢">📢 전체 공지</button>
+        <button class="add-btn quick" id="btnQuickMatch2" title="4번 탭으로 경기 등록 + 투표 공지">⚡ 퀵 매치</button>
         <button class="add-btn" id="btnAddMatch">+ 경기 추가</button>
       </div>
       <div class="cal-grid" id="calGrid"></div>
@@ -5200,6 +5403,23 @@
     </div>
   </section>
   <input type="file" id="igFile" accept="image/*" hidden />
+
+  <!-- ============ 💰 정산 ============ -->
+  <section class="view" id="view-settle">
+    <div class="stats-view">
+      <div class="stats-header"><h1>💰 정산</h1></div>
+      <div id="settleContent"></div>
+    </div>
+  </section>
+  <div class="modal-overlay" id="settleModal">
+    <div class="modal" id="settleModalBody"></div>
+  </div>
+  <div class="modal-overlay" id="quickMatchModal">
+    <div class="modal" id="quickMatchBody"></div>
+  </div>
+  <div class="modal-overlay" id="voteAllModal">
+    <div class="modal" id="voteAllBody"></div>
+  </div>
   <div class="modal-overlay" id="igView"><div class="ig-view">
     <div class="ig-view-tip">사진을 <b>길게 눌러</b> 「사진에 추가」/「이미지 저장」 하세요</div>
     <img id="igViewImg" alt="" />
@@ -5785,7 +6005,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 99;
+const APP_VERSION = 101;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -5910,6 +6130,15 @@ function normalizeStore(s) {
     if (!m.momVotes || typeof m.momVotes !== 'object' || Array.isArray(m.momVotes)) m.momVotes = {};
   });
   if (!s.currentSquadId) s.currentSquadId = s.squads[0]?.id || null;
+  // 💰 정산
+  if (!s.settle || typeof s.settle !== 'object') s.settle = {};
+  if (!s.settle.acct || typeof s.settle.acct !== 'object') s.settle.acct = {};
+  s.settle.items = Array.isArray(s.settle.items) ? s.settle.items : (s.settle.items ? Object.values(s.settle.items) : []);
+  s.settle.items.forEach(it => {
+    if (!Array.isArray(it.exp)) it.exp = it.exp ? Object.values(it.exp) : [];
+    if (!it.ppl || typeof it.ppl !== 'object' || Array.isArray(it.ppl)) it.ppl = {};
+    if (!Array.isArray(it.guests)) it.guests = it.guests ? Object.values(it.guests) : [];
+  });
   return s;
 }
 function normalizeAuth(a) {
@@ -5922,7 +6151,11 @@ function normalizeAuth(a) {
 // Re-render whatever tab is active (called when remote data changes)
 function rerenderCurrent() {
   // Don't disrupt a user mid-edit: if a modal is open, defer.
-  if (document.querySelector('.modal-overlay.show')) { _pendingRerender = true; return; }
+  if (document.querySelector('.modal-overlay.show')) {
+    // 투표 모아보기는 입력칸이 없어서 바로 갱신해도 안전
+    if (document.getElementById('voteAllModal')?.classList.contains('show')) { try { renderVoteAll(); } catch (e) {} }
+    _pendingRerender = true; return;
+  }
   _pendingRerender = false;
   if (!isLoggedIn()) return;
   refreshUserUI();
@@ -5951,6 +6184,7 @@ function rerenderCurrent() {
   else if (t === 'uniform') renderUniform();
   else if (t === 'prospect') renderProspects();
   else if (t === 'insta') renderInsta();
+  else if (t === 'settle') renderSettle();
   else if (t === 'admin' && currentUser()) renderAdmin();
 }
 
@@ -8937,6 +9171,8 @@ const NEW_FEATURES = {
   prospect: 50,    // 🌱 예비 이스트 (영입 평가)
   uniform: 69,     // 👕 유니폼
   insta: 94,       // 📸 인스타 (경기 결과 사진 편집)
+  settle: 100,     // 💰 정산 (구장비 나누기 · 카카오페이)
+  quickMatch: 101, // ⚡ 퀵 매치
   drawerMenu: 31,  // ☰ 왼쪽 서랍 메뉴
 };
 const ACK_KEY = 'efm_ack_feats';
@@ -9390,6 +9626,10 @@ function updateAuthUI() {
     }
   }
   document.getElementById('authMsg').textContent = '';
+  const _kb = document.getElementById('btnKakaoLogin'), _ko = document.getElementById('authOr');
+  if (_kb) _kb.style.display = hasOwner ? '' : 'none';
+  if (_ko) _ko.style.display = hasOwner ? '' : 'none';
+  renderAuthIntent();
 }
 
 async function authSubmit() {
@@ -9459,7 +9699,7 @@ function showAuthGate() {
   document.getElementById('authPassword').value = '';
   document.getElementById('authDisplayName').value = '';
   updateAuthUI();
-  setTimeout(() => document.getElementById('authUsername').focus(), 100);
+  if (!('ontouchstart' in window)) setTimeout(() => document.getElementById('authUsername').focus(), 100);
 }
 /* 계정 ↔ 선수 자동 연결
    가입만 하고 선수와 안 묶인 계정은 참석 투표·이스트도르·프로필이 전부 막힌다.
@@ -9500,6 +9740,8 @@ function hideAuthGate() {
   const sq = getCurrentSquad();
   if (sq) { $('#squadName').value = sq.name; $('#formationSelect').value = sq.formation; }
   setTimeout(() => autoLinkMyPlayer({ silent: true }), 1200);   // 스토어 동기화 뒤 한 번
+  // 톡방 카드·고정 링크로 들어왔으면 그 목적지로 (?att · ?vote · ?settle)
+  setTimeout(applyIntent, 450);
 }
 
 function logout() {
@@ -9759,6 +10001,7 @@ function renderAdminTable() {
     const canDel = meIsOwner && u.role !== 'owner' && !isSelf;
     const actions = [];
     if (canResetAcct(u)) actions.push(`<button data-reset-user="${u.id}" title="회원명·아이디·비밀번호 변경">${u.id === session.currentUserId ? '✏️' : '🔑'}</button>`);
+    if (isSelf && !u.kakaoId) actions.push(`<button onclick="kakaoLogin('link')" title="카카오 계정 연결 · 다음부터 카카오로 바로 로그인" style="background:#fee500;color:#191919;border-color:#fee500">💬</button>`);
     if (canDel) actions.push(`<button class="danger" data-del-user="${u.id}" title="회원 삭제">🗑️</button>`);
     const actionsHtml = actions.length ? actions.join('') : '<span style="color:var(--text-4); font-size:11px;">—</span>';
 
@@ -9768,7 +10011,7 @@ function renderAdminTable() {
           <div class="admin-user-cell">
             <div class="admin-user-avatar ${avatarCls}">${escapeHtml((u.displayName||'?').slice(0,1))}</div>
             <div>
-              <div class="admin-user-name">${escapeHtml(u.displayName)}${isSelf?' <span style="color:var(--gold); font-size:11px;">(나)</span>':''}${(!u.playerId && u.role !== 'owner') ? ' <span class="admin-unlinked">⚠️ 선수 미연결</span>' : ''}</div>
+              <div class="admin-user-name">${escapeHtml(u.displayName)}${isSelf?' <span style="color:var(--gold); font-size:11px;">(나)</span>':''}${(!u.playerId && u.role !== 'owner') ? ' <span class="admin-unlinked">⚠️ 선수 미연결</span>' : ''}${u.kakaoId ? ' <span class="admin-kakao" title="카카오 연결됨">💬 카톡</span>' : ''}</div>
               <div class="admin-user-id-inline">${maskUsername(u)}</div>
             </div>
           </div>
@@ -10916,7 +11159,8 @@ function buildDrawer() {
   const tools = [tool('btnOwnerPage','owner'), tool('btnManagerPage','mgr'), tool('btnManagerToggle'),
                  tool('btnExport'), tool('btnImport')].filter(Boolean).join('');
 
-  body.innerHTML = `<div class="drawer-sec">화면</div>${tabHtml}`
+  const qmBtn = tool('btnQuickMatch', 'quick');
+  body.innerHTML = (qmBtn ? qmBtn + '<div class="drawer-divider"></div>' : '') + `<div class="drawer-sec">화면</div>${tabHtml}`
     + (tools ? `<div class="drawer-divider"></div><div class="drawer-sec">도구</div>${tools}` : '')
     + `<div class="drawer-divider"></div>`
     + `<button class="drawer-item danger" data-drawer-act="btnLogout"><span class="di-ico">↩</span><span>로그아웃</span></button>`;
@@ -11092,6 +11336,7 @@ function switchTab(name) {
   if (name === 'blacklist') renderBlacklist();
   if (name === 'uniform') renderUniform();
   if (name === 'insta') renderInsta();
+  if (name === 'settle') renderSettle();
   if (name === 'prospect') renderProspects();
   if (name === 'admin') renderAdmin();
   if (name === 'squad') { renderPlayerList(); renderField(); renderSquadList(); updateSquadPlanDot(); renderSquadMatchBar(); }
@@ -12619,6 +12864,7 @@ function matchStatusPanel(m) {
     <div class="mst-btns">${Object.entries(MATCH_ST).map(([key, st]) => `<button type="button" class="mst-btn ${key}${key === k ? ' on' : ''}" onclick="setMatchStatus('${m.id}','${key}')">${st.dot} ${st.t}</button>`).join('')}</div>
     <div class="mst-tip">회원 누구나 바꿀 수 있어요 · 카톡에서 정해진 대로 눌러두면 돼요</div>
     <button type="button" class="mst-notice" onclick="closeMatchModal(); openShareMatch('${m.id}')">📢 이 경기 공지 만들기</button>
+    ${typeof canSettle === 'function' && canSettle() ? `<button type="button" class="mst-notice" style="background:rgba(250,225,0,.9)" onclick="closeMatchModal(); openSettleEditor(null,'${m.id}')">💰 이 경기 정산 만들기</button>` : ''}
   </div>`;
 }
 
@@ -12865,7 +13111,7 @@ function attendanceSectionHtml(m) {
     }).join('');
     selfArea = `<div class="attend-selfname">내 참석 (#${mp.number||'?'} ${escapeHtml(mp.name)})</div><div class="attend-row">${attendBtns}</div>`;
     // 참석을 누른 회원 본인도 '뛸 수 있는 쿼터'를 직접 조정 가능 (기본 접힘)
-    if (mine === 'attend') selfArea += quarterPickerHtml(m, mp.id, '내가 뛸 수 있는 쿼터');
+    if (mine === 'attend') selfArea += quarterPickerHtml(m, mp.id, '몇 쿼터부터 뛰어요?');
   } else {
     const cnt = `<div style="display:flex; gap:6px; font-size:12px; color:var(--text-2); margin-bottom:6px;">현재 ✅${counts.attend} · ⏸️${counts.hold} · ❌${counts.absent}</div>`;
     selfArea = cnt + `<div class="attend-empty" style="margin-top:0;">본인 선수 프로필이 연결돼 있어야 직접 참석 투표할 수 있어요. (관리자 탭에서 연결)</div>`;
@@ -12902,13 +13148,54 @@ function quarterPickerHtml(m, pid, label) {
   if (nq <= 1) return '';
   const av = playerAvailQuarters(m, pid);
   const restricted = av.length < nq;
+  const fromK = availQFrom(m, pid);   // 1=처음부터, k=k쿼터부터(끝까지), 0=중간에 빠지는 패턴
+  const fromChips = Array.from({ length: nq }, (_, i) => i + 1).map(k =>
+    `<button type="button" class="amr-fq${fromK === k ? ' on' : ''}${k === 1 ? ' full' : ''}" data-from="${k}" data-player="${pid}" data-match="${m.id}">${k === 1 ? '처음부터' : k + 'Q부터'}</button>`
+  ).join('');
   const chips = Array.from({ length: nq }, (_, i) => i + 1).map(q =>
     `<button class="amr-q ${av.includes(q) ? 'on' : ''}" data-q="${q}" data-player="${pid}" data-match="${m.id}">${q}Q</button>`
   ).join('');
-  return `<details class="amr-qd" ${restricted ? 'open' : ''}>
-    <summary class="amr-qsum ${restricted ? 'restricted' : ''}">⏱ ${label || '가능 쿼터'}: <b>${availQSummary(m, pid)}</b><span class="amr-qedit">조정 ▾</span></summary>
+  return `<div class="amr-from"><span class="amr-q-label">⏱ ${label || '몇 쿼터부터?'}</span>${fromChips}</div>
+  <details class="amr-qd" ${restricted && !fromK ? 'open' : ''}>
+    <summary class="amr-qsum ${restricted ? 'restricted' : ''}">쿼터 세부: <b>${availQSummary(m, pid)}</b><span class="amr-qedit">중간에 빠지면 여기서 ▾</span></summary>
     <div class="amr-quarters">${chips}<span class="amr-qhint">못 뛰는 쿼터는 꺼주세요</span></div>
   </details>`;
+}
+// 가능 쿼터가 "k쿼터부터 끝까지" 꼴이면 k, 전체면 1, 그 외(중간에 빠짐)는 0
+function availQFrom(m, pid) {
+  const nq = matchQuarterCount(m);
+  const av = playerAvailQuarters(m, pid).slice().sort((a, b) => a - b);
+  if (av.length >= nq) return 1;
+  if (!av.length) return 0;
+  if (av[av.length - 1] !== nq) return 0;
+  for (let i = 1; i < av.length; i++) if (av[i] !== av[i - 1] + 1) return 0;
+  return av[0];
+}
+// 이름 옆에 붙는 짧은 표시: '' (전 쿼터) / '2Q~' / '1~3Q' / '1·3Q'
+function availQTag(m, pid) {
+  const nq = matchQuarterCount(m);
+  const av = playerAvailQuarters(m, pid);
+  if (av.length >= nq || !av.length) return '';
+  const k = availQFrom(m, pid);
+  if (k > 1) return `${k}Q~`;
+  return availQSummary(m, pid);
+}
+// "k쿼터부터" 한 번에 설정 (본인 또는 오너·감독)
+function setAvailFrom(matchId, playerId, k) {
+  const m = store.matches.find(x => x.id === matchId);
+  if (!m) return;
+  const isSelf = myPlayer() && myPlayer().id === playerId;
+  if (!canManageAttendance() && !isSelf) { toast('본인 또는 오너·감독(감독 모드)만 가능해요'); return; }
+  if (!m.availQ || typeof m.availQ !== 'object' || Array.isArray(m.availQ)) m.availQ = {};
+  const nq = matchQuarterCount(m);
+  k = Math.max(1, Math.min(nq, parseInt(k, 10) || 1));
+  if (k <= 1) delete m.availQ[playerId];
+  else m.availQ[playerId] = Array.from({ length: nq - k + 1 }, (_, i) => k + i);
+  bumpMatchRev(m);
+  saveState();
+  markMatchSeen(matchId);
+  refreshAttendSection(matchId);
+  toast(k <= 1 ? '⏱ 처음부터 뛰어요' : `⏱ ${k}쿼터부터 뛰어요`);
 }
 function managerRosterHtml(m) {
   const att = getMatchAttendance(m);
@@ -12941,6 +13228,9 @@ function bindAttendanceButtons(root) {
   root.querySelectorAll('.amr-q').forEach(btn => {
     btn.addEventListener('click', e => { e.stopPropagation(); toggleAvailQuarter(btn.dataset.match, btn.dataset.player, parseInt(btn.dataset.q, 10)); });
   });
+  root.querySelectorAll('.amr-fq').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); setAvailFrom(btn.dataset.match, btn.dataset.player, btn.dataset.from); });
+  });
 }
 // '가능 쿼터' 토글 (감독은 아무나, 회원은 본인만). 다 켜지면 저장 최소화 위해 배열 유지.
 function toggleAvailQuarter(matchId, playerId, q) {
@@ -12965,6 +13255,7 @@ function toggleAvailQuarter(matchId, playerId, q) {
 }
 function refreshAttendSection(matchId) {
   const m = store.matches.find(x => x.id === matchId);
+  if (document.getElementById('voteAllModal')?.classList.contains('show')) { try { renderVoteAll(); } catch (e) {} }
   const sec = document.getElementById('matchAttendSection');
   if (m && sec && editingMatchId === matchId) {
     // 투표를 눌러도 스크롤이 위로 안 튀게 현재 위치 보존 (모달 전체 + 명단 내부 목록 둘 다)
@@ -13022,10 +13313,10 @@ function buildVoterChips(m) {
     if (isRetiredNow(p)) return;
     const s = a[p.id];
     if (!s) return;
-    rows.push({ status: s, name: p.name, num: p.number, rank: ATTEND_META[s]?.rank ?? 2 });
+    rows.push({ status: s, name: p.name, num: p.number, rank: ATTEND_META[s]?.rank ?? 2, tag: s === 'attend' ? availQTag(m, p.id) : '' });
   });
   rows.sort((x, y) => (x.rank - y.rank) || ((x.num || 999) - (y.num || 999)));
-  return rows.map(r => `<span class="voter-chip ${r.status}">${r.num ? ('#' + r.num + ' ') : ''}${escapeHtml(r.name)}</span>`).join('');
+  return rows.map(r => `<span class="voter-chip ${r.status}">${r.num ? ('#' + r.num + ' ') : ''}${escapeHtml(r.name)}${r.tag ? `<small>${r.tag}</small>` : ''}</span>`).join('');
 }
 // Squad placement priority: find the soonest upcoming match that uses this squad
 function getUpcomingMatchForSquad(squadId) {
@@ -13127,12 +13418,13 @@ function buildScheduleNotice(m) {
   if (!m) return '';
   const g = matchAttendGroups(m);
   const nm = arr => arr.map(p => p.name).join(', ');
+  const nmQ = arr => arr.map(p => p.name + (availQTag(m, p.id) ? `(${availQTag(m, p.id)})` : '')).join(', ');
   const L = [];
   L.push(`⚽ EAST FC vs ${m.opponent || '상대팀'}  ${matchDdayText(m)}`);
   L.push(`📅 ${fmtMatchDate(m)}`);
   if (m.location) L.push(`📍 ${m.location}${m.homeAway === 'home' ? ' (홈)' : m.homeAway === 'away' ? ' (원정)' : ''}`);
   L.push('');
-  L.push(`✅ 참석 ${g.attend.length}명${g.attend.length ? ' · ' + nm(g.attend) : ''}`);
+  L.push(`✅ 참석 ${g.attend.length}명${g.attend.length ? ' · ' + nmQ(g.attend) : ''}`);
   if (g.hold.length) L.push(`⏸️ 보류 ${g.hold.length}명 · ${nm(g.hold)}`);
   if (g.absent.length) L.push(`❌ 불참 ${g.absent.length}명 · ${nm(g.absent)}`);
   if (g.none.length) { L.push(''); L.push(`❓ 아직 투표 안 한 ${g.none.length}명 · ${nm(g.none)}`); }
@@ -13141,7 +13433,8 @@ function buildScheduleNotice(m) {
   if (st) { L.push(''); L.push(`📢 경기 전략 · ${st}`); }
   if ((m.notes || '').trim()) { L.push(''); L.push(`📝 ${m.notes.trim()}`); }
   L.push('');
-  L.push('앱 「📅 일정」 탭에서 참석 투표 부탁드려요!');
+  L.push('🗳️ 참석 투표 (늦게 오면 몇 쿼터부터인지도)');
+  L.push(VOTE_URL);
   return L.join('\n');
 }
 async function buildScheduleImage(m) {
@@ -13221,12 +13514,13 @@ async function buildScheduleImage(m) {
   };
   const block = (emoji, label, arr, col, maxLines) => {
     if (!arr.length) return;
+    const names = arr.map(p => p.name + (label === '참석' && availQTag(m, p.id) ? `(${availQTag(m, p.id)})` : '')).join(', ');
     g.fillStyle = col; g.font = `800 28px ${F}`;
     g.fillText(`${emoji} ${label} ${arr.length}명`, 54, y);
     y += 38;
     g.fillStyle = '#c2c8d0'; g.font = `500 25px ${F}`;
-    wrap(arr.map(p => p.name).join(', '), W - 108, maxLines).forEach((ln, i) => g.fillText(ln, 54, y + i * 34));
-    y += Math.min(maxLines, Math.ceil(g.measureText(arr.map(p => p.name).join(', ')).width / (W - 108)) || 1) * 34 + 16;
+    wrap(names, W - 108, maxLines).forEach((ln, i) => g.fillText(ln, 54, y + i * 34));
+    y += Math.min(maxLines, Math.ceil(g.measureText(names).width / (W - 108)) || 1) * 34 + 16;
   };
   block('✅', '참석', gr.attend, '#4ade80', 3);
   block('⏸️', '보류', gr.hold, '#fcd34d', 2);
@@ -13269,25 +13563,23 @@ async function buildScheduleImage(m) {
   g2.textAlign = 'left';
   return new Promise(res => out.toBlob(res, 'image/png'));
 }
-async function openShareMatch(matchId) {
-  const m = store.matches.find(x => x.id === matchId);
-  if (!m) { toast('경기를 찾을 수 없어요'); return; }
+/* ==================== 📢 공지 팝업 (공용) ==================== */
+// o = { label, text, image: async () => Blob, fname }
+async function openSharePop(o) {
   closeOrderPop();
   const bd = document.createElement('div');
   bd.id = 'orderPopBd'; bd.className = 'order-pop-backdrop';
   bd.addEventListener('click', closeOrderPop);
   document.body.appendChild(bd);
-
-  const d = parseYmd(m.date || ymd(new Date()));
-  const dl = `${d.getMonth() + 1}/${d.getDate()} (${['일','월','화','수','목','금','토'][d.getDay()]})`;
   const pop = document.createElement('div');
   pop.id = 'orderPop'; pop.className = 'order-pop share-pop';
-  pop.innerHTML = `<div class="op-label">📢 경기 공지 <small>${escapeHtml(dl)} vs ${escapeHtml(m.opponent || '상대팀')}</small></div>
+  pop.innerHTML = `<div class="op-label">${o.label}</div>
     <div class="share-mode" id="shareMode">
       <button data-mode="both" class="on">📝+🖼️ 글과 이미지</button>
       <button data-mode="text">📝 글만</button>
       <button data-mode="image">🖼️ 이미지만</button>
     </div>
+    ${o.kakao ? `<button type="button" class="share-kakao" id="shareKakao">💬 카톡 카드로 보내기 <small>${o.kakao.hint || ''}</small></button>` : ''}
     <div class="share-preview" id="sharePreview"><div class="share-loading">공지 만드는 중…</div></div>
     <textarea class="share-notice share-notice-edit" id="shareNotice" spellcheck="false"></textarea>
     <div class="share-btns">
@@ -13299,14 +13591,37 @@ async function openShareMatch(matchId) {
   document.body.appendChild(pop);
   pop.style.left = '50%'; pop.style.top = '50%'; pop.style.transform = 'translate(-50%, -50%)';
   pop.querySelector('[data-op-close]').addEventListener('click', closeOrderPop);
+  if (o.kakao) {
+    // 카톡 카드: 팝업 열릴 때 미리 SDK·이미지 준비 → 누르면 바로 카톡 공유창
+    const kb = document.getElementById('shareKakao');
+    let kk = null;
+    const prep = (async () => {
+      const K = await kakaoSdk();
+      let url = '';
+      try { url = await kakaoUpload(K, await o.kakao.image()); } catch (e) { console.warn('카톡 이미지 업로드 실패', e); }
+      return { K, url };
+    })();
+    prep.then(v => { kk = v; }, () => {});
+    kb.addEventListener('click', async () => {
+      if (!kk) {
+        const t = kb.innerHTML; kb.innerHTML = '카드 준비 중…';
+        try { kk = await prep; } catch (e) { kb.innerHTML = t; toast(e.message || '카카오 연결 실패', 5000); return; }
+        kb.innerHTML = t;
+      }
+      try { kakaoSendCard(kk.K, o.kakao.card(), kk.url); }
+      catch (e) { toast('카톡 공유 실패 · ' + (e.message || e), 6000); }
+    });
+  }
 
   const ta = document.getElementById('shareNotice');
-  ta.value = buildScheduleNotice(m);
+  ta.value = o.text || '';
   const prev = document.getElementById('sharePreview');
-  const blob = await buildScheduleImage(m);
-  const url = URL.createObjectURL(blob);
-  prev.innerHTML = `<img src="${url}" alt="일정 공지" />`;
-  const fname = `EASTFC_일정_${(m.date || '').replace(/-/g, '')}_${(m.opponent || '').replace(/\s+/g, '_')}.png`;
+  let blob = null, url = '';
+  try { blob = await o.image(); } catch (e) { console.warn('공지 이미지 실패', e); }
+  if (!document.getElementById('orderPop')) return;   // 만드는 동안 닫았으면 중단
+  if (blob) { url = URL.createObjectURL(blob); prev.innerHTML = `<img src="${url}" alt="공지" />`; }
+  else prev.innerHTML = '<div class="share-loading">이미지를 못 만들었어요 · 글만 올려주세요</div>';
+  const fname = o.fname || 'EASTFC_공지.png';
   const notice = () => ta.value.trim();
 
   let mode = 'both';
@@ -13322,21 +13637,15 @@ async function openShareMatch(matchId) {
   document.getElementById('shareMode').addEventListener('click', e => { const b = e.target.closest('[data-mode]'); if (!b) return; mode = b.dataset.mode; applyMode(); });
   applyMode();
 
-  const copyText = async () => {
-    try { await navigator.clipboard.writeText(notice()); toast('공지 글을 복사했어요 · 톡방에 붙여넣기'); return true; }
-    catch (e) {
-      const t = document.createElement('textarea'); t.value = notice(); document.body.appendChild(t); t.select();
-      let ok = false; try { ok = document.execCommand('copy'); } catch (_) {}
-      document.body.removeChild(t); toast(ok ? '공지 글을 복사했어요 · 톡방에 붙여넣기' : '복사에 실패했어요'); return ok;
-    }
-  };
+  const copyText = () => copyToClip(notice(), '공지 글을 복사했어요 · 톡방에 붙여넣기');
   const saveImg = () => {
+    if (!url) { toast('이미지가 없어요'); return; }
     const a = document.createElement('a'); a.href = url; a.download = fname;
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     toast('이미지를 저장했어요');
   };
   goBtn.addEventListener('click', async () => {
-    if (mode === 'text') {
+    if (mode === 'text' || !blob) {
       if (navigator.share) { try { await navigator.share({ text: notice() }); return; } catch (e) { if (e.name === 'AbortError') return; } }
       await copyText(); return;
     }
@@ -13352,6 +13661,1094 @@ async function openShareMatch(matchId) {
   });
   saveBtn.addEventListener('click', saveImg);
   copyBtn.addEventListener('click', copyText);
+}
+async function copyToClip(text, msg) {
+  try { await navigator.clipboard.writeText(text); toast(msg || '복사했어요'); return true; }
+  catch (e) {
+    const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select();
+    let ok = false; try { ok = document.execCommand('copy'); } catch (_) {}
+    document.body.removeChild(t); toast(ok ? (msg || '복사했어요') : '복사에 실패했어요'); return ok;
+  }
+}
+async function openShareMatch(matchId) {
+  const m = store.matches.find(x => x.id === matchId);
+  if (!m) { toast('경기를 찾을 수 없어요'); return; }
+  const d = parseYmd(m.date || ymd(new Date()));
+  const dl = `${d.getMonth() + 1}/${d.getDate()} (${['일','월','화','수','목','금','토'][d.getDay()]})`;
+  openSharePop({
+    label: `📢 경기 공지 <small>${escapeHtml(dl)} vs ${escapeHtml(m.opponent || '상대팀')}</small>`,
+    text: buildScheduleNotice(m),
+    image: () => buildScheduleImage(m),
+    fname: `EASTFC_일정_${(m.date || '').replace(/-/g, '')}_${(m.opponent || '').replace(/\s+/g, '_')}.png`,
+    kakao: {
+      hint: '참석·불참 버튼 달림',
+      image: () => buildKakaoCard('match', { m, sub: '📅 경기 일정 · 참석 투표' }),
+      card: () => {
+        const c = attendCounts(m); const st = MATCH_ST[matchStatus(m)];
+        const ha = m.homeAway === 'home' ? ' (홈)' : m.homeAway === 'away' ? ' (원정)' : '';
+        return {
+          title: `${dl} ${m.time || ''} · vs ${m.opponent || '상대팀'}`,
+          desc: `${m.location ? '📍 ' + m.location + ha + '\n' : ''}${st.dot} ${st.t} · ✅ 참석 ${c.attend}명 · 늦게 오면 몇 쿼터부터인지도 체크`,
+          buttons: [{ title: '✅ 참석', url: `${APP_URL}?att=${m.id}&s=attend` }, { title: '❌ 불참', url: `${APP_URL}?att=${m.id}&s=absent` }],
+        };
+      },
+    },
+  });
+}
+
+/* ==================== 🗳️ 투표 모아보기 · 📢 전체 공지 ==================== */
+const APP_URL = 'https://gudcjfgudcjf.github.io/EAST-FC/';
+const VOTE_URL = APP_URL + '?vote';
+const SETTLE_URL = APP_URL + '?settle';
+function upcomingMatchesForVote() {
+  const today = ymd(new Date());
+  return store.matches.filter(m => m.date >= today && matchStatus(m) !== 'cancelled')
+    .sort((a, b) => a.date.localeCompare(b.date) || (a.time || '').localeCompare(b.time || ''));
+}
+let _vaOpts = null;
+function openVoteAll(opts) {
+  const ov = document.getElementById('voteAllModal'); if (!ov) return;
+  _vaOpts = opts || null;
+  renderVoteAll(); ov.classList.add('show');
+  if (_vaOpts && _vaOpts.focus) setTimeout(() => { const f = document.querySelector('#voteAllBody .va-item.focus'); if (f) f.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 120);
+}
+function closeVoteAll() {
+  _vaOpts = null;
+  document.getElementById('voteAllModal')?.classList.remove('show');
+  if (_pendingRerender) rerenderCurrent();
+}
+function renderVoteAll() {
+  const body = document.getElementById('voteAllBody'); if (!body) return;
+  const top = body.scrollTop;
+  const ms = upcomingMatchesForVote();
+  const mp = myPlayer();
+  const dow = ['일','월','화','수','목','금','토'];
+  const items = ms.map(m => {
+    const d = parseYmd(m.date); const dl = `${d.getMonth() + 1}/${d.getDate()} (${dow[d.getDay()]})`;
+    const counts = attendCounts(m); const mine = myAttend(m); const k = matchStatus(m);
+    let btns;
+    if (mp) {
+      btns = `<div class="attend-row">${['attend','hold','absent'].map(s => `<button class="attend-btn ${s} ${mine === s ? 'on' : ''}" data-att="${s}" data-match="${m.id}">${ATTEND_META[s].icon} ${ATTEND_META[s].label} <b>${counts[s]}</b></button>`).join('')}</div>`
+        + (mine === 'attend' ? quarterPickerHtml(m, mp.id) : '');
+    } else btns = `<div class="attend-empty" style="margin-top:0">본인 선수 프로필이 연결돼 있어야 투표할 수 있어요 (관리자 탭에서 연결)</div>`;
+    const chips = buildVoterChips(m);
+    const ha = m.homeAway === 'home' ? ' (홈)' : m.homeAway === 'away' ? ' (원정)' : '';
+    return `<div class="va-item st-${k}${_vaOpts && _vaOpts.focus === m.id ? ' focus' : ''}">
+      <div class="va-head" onclick="closeVoteAll(); openMatchModal('${m.id}')">${matchStatusHtml(m, true)}<span class="va-date">${dl} ${escapeHtml(m.time || '')}</span><span class="va-opp">vs ${escapeHtml(m.opponent || '상대팀')}</span><span class="va-cnt">상세 ›</span></div>
+      ${m.location ? `<div class="va-loc">📍 ${escapeHtml(m.location)}${ha}</div>` : ''}
+      ${btns}
+      ${chips ? `<div class="attend-voters">${chips}</div>` : '<div class="attend-empty" style="margin-top:8px">아직 투표한 선수가 없어요</div>'}
+    </div>`;
+  }).join('');
+  body.innerHTML = `<div class="ud-head"><h3>🗳️ 투표 모아보기 <small style="font-weight:600;color:var(--text-3);font-size:12px">다가오는 경기 ${ms.length}개</small></h3><button class="ud-x" onclick="closeVoteAll()">✕</button></div>
+    ${_vaOpts && _vaOpts.banner ? `<div class="va-banner">${_vaOpts.banner}</div>` : ''}
+    ${ms.length ? items : '<div class="va-empty">예정된 경기가 없어요</div>'}
+    <div class="va-tip">경기마다 ✅ ⏸️ ❌ 누르고, 늦게 오는 날은 <b>몇 쿼터부터</b>인지 찍어두면 스쿼드·정산에 그대로 반영돼요. 경기 줄을 누르면 상세로 가요.</div>`;
+  bindAttendanceButtons(body);
+  body.scrollTop = top;
+}
+function buildAllNotice(ms) {
+  const L = [`📅 EAST FC 다가오는 경기 ${ms.length}개`, ''];
+  ms.forEach((m, i) => {
+    const g = matchAttendGroups(m); const st = MATCH_ST[matchStatus(m)];
+    const ha = m.homeAway === 'home' ? ' (홈)' : m.homeAway === 'away' ? ' (원정)' : '';
+    L.push(`${i + 1}. ${fmtMatchDate(m)} ${st.dot} ${st.t}`);
+    L.push(`   vs ${m.opponent || '상대팀'}${m.location ? ' · 📍 ' + m.location + ha : ''}`);
+    L.push(`   ✅ ${g.attend.length} · ⏸️ ${g.hold.length} · ❌ ${g.absent.length} · ❓ ${g.none.length}`);
+    L.push('');
+  });
+  L.push('🗳️ 투표는 여기서 한 번에 (늦게 오면 몇 쿼터부터인지도 체크)');
+  L.push(VOTE_URL);
+  return L.join('\n');
+}
+async function buildAllImage(ms) {
+  const W = 1080; const list = ms.slice(0, 8); const n = list.length;
+  const H = 236 + n * 236 + 150;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const g = cv.getContext('2d');
+  const F = "'Pretendard Variable','Noto Sans KR',sans-serif";
+  const GOLD = '#6f9fc4', GOLDW = '#9dc0d8';
+  g.fillStyle = '#0a0a0a'; g.fillRect(0, 0, W, H);
+  const bg = g.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, 'rgba(111,159,196,.09)'); bg.addColorStop(.55, 'rgba(0,0,0,0)');
+  g.fillStyle = bg; g.fillRect(0, 0, W, H);
+  await scenCrest();
+  if (_scenCrestImg) { const ch = 110, cw = _scenCrestImg.width / _scenCrestImg.height * ch; g.drawImage(_scenCrestImg, 54, 44, cw, ch); }
+  g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+  g.fillStyle = GOLD; g.font = `800 40px ${F}`; g.fillText('EAST FC', 186, 92);
+  g.fillStyle = '#8b9099'; g.font = `600 25px ${F}`; g.fillText(`📅 다가오는 경기 ${ms.length}개`, 186, 130);
+  g.strokeStyle = 'rgba(111,159,196,.35)'; g.lineWidth = 2;
+  g.beginPath(); g.moveTo(54, 188); g.lineTo(W - 54, 188); g.stroke();
+  let y = 222;
+  list.forEach(m => {
+    const k = matchStatus(m); const st = MATCH_ST[k];
+    const col = k === 'confirmed' ? '#22c55e' : k === 'tentative' ? '#facc15' : '#ef4444';
+    g.fillStyle = 'rgba(255,255,255,.04)'; g.beginPath(); g.roundRect(54, y, W - 108, 212, 18); g.fill();
+    g.strokeStyle = 'rgba(255,255,255,.1)'; g.lineWidth = 2; g.stroke();
+    g.fillStyle = col; g.beginPath(); g.roundRect(54, y + 22, 7, 168, 3); g.fill();
+    g.font = `800 24px ${F}`;
+    const pt = `${st.dot} ${st.t}`; const pw = g.measureText(pt).width + 36;
+    g.fillStyle = col + '26'; g.beginPath(); g.roundRect(86, y + 26, pw, 42, 21); g.fill();
+    g.fillStyle = col; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(pt, 86 + pw / 2, y + 47);
+    g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+    g.fillStyle = GOLDW; g.font = `700 30px ${F}`; g.fillText(fmtMatchDate(m), 86 + pw + 18, y + 58);
+    g.fillStyle = '#ffffff'; g.font = `900 44px ${F}`; g.fillText(`vs ${m.opponent || '상대팀'}`, 86, y + 118);
+    const ha = m.homeAway === 'home' ? ' (홈)' : m.homeAway === 'away' ? ' (원정)' : '';
+    if (m.location) { g.fillStyle = '#8b9099'; g.font = `500 25px ${F}`; g.fillText(`📍 ${m.location}${ha}`, 86, y + 158); }
+    const gr = matchAttendGroups(m);
+    g.fillStyle = '#c2c8d0'; g.font = `700 25px ${F}`;
+    g.fillText(`✅ ${gr.attend.length}    ⏸️ ${gr.hold.length}    ❌ ${gr.absent.length}    ❓ ${gr.none.length}`, 86, y + 196);
+    y += 236;
+  });
+  y += 24;
+  g.fillStyle = GOLDW; g.font = `800 28px ${F}`; g.fillText('🗳️ 투표는 앱에서 한 번에 · 늦게 오면 몇 쿼터부터인지도 체크', 54, y); y += 42;
+  g.fillStyle = GOLD; g.font = `600 27px ${F}`; g.fillText(VOTE_URL, 54, y);
+  g.fillStyle = '#5a5f66'; g.font = `500 21px ${F}`;
+  g.fillText('EFM · East Football Manager', 54, H - 40);
+  return new Promise(res => cv.toBlob(res, 'image/png'));
+}
+function openShareAll() {
+  const ms = upcomingMatchesForVote();
+  if (!ms.length) { toast('예정된 경기가 없어요'); return; }
+  openSharePop({
+    label: `📢 전체 공지 <small>다가오는 경기 ${ms.length}개 · 투표 링크 포함</small>`,
+    text: buildAllNotice(ms),
+    image: () => buildAllImage(ms),
+    fname: `EASTFC_일정전체_${ymd(new Date()).replace(/-/g, '')}.png`,
+    kakao: {
+      hint: '투표 버튼 하나로 전부',
+      image: () => buildKakaoCard('all', { ms, sub: `📅 다가오는 경기 ${ms.length}개` }),
+      card: () => ({
+        title: `📅 EAST FC 다가오는 경기 ${ms.length}개`,
+        desc: ms.slice(0, 4).map(m => `${settleDateLabelOf(m.date)} vs ${m.opponent || ''} ${MATCH_ST[matchStatus(m)].dot}`).join('\n'),
+        buttons: [{ title: '🗳️ 한 번에 투표', url: VOTE_URL }],
+      }),
+    },
+  });
+}
+
+/* ==================== 💰 정산 ==================== */
+function settleRoot() {
+  if (!store.settle || typeof store.settle !== 'object') store.settle = {};
+  const S = store.settle;
+  if (!S.acct || typeof S.acct !== 'object') S.acct = {};
+  if (!Array.isArray(S.items)) S.items = S.items ? Object.values(S.items) : [];
+  S.items.forEach(settleNorm);
+  return S;
+}
+function settleNorm(it) {
+  if (!Array.isArray(it.exp)) it.exp = it.exp ? Object.values(it.exp) : [];
+  if (!it.ppl || typeof it.ppl !== 'object' || Array.isArray(it.ppl)) it.ppl = {};
+  if (!Array.isArray(it.guests)) it.guests = it.guests ? Object.values(it.guests) : [];
+  if (!it.mode) it.mode = 'equal';
+  if (it.round == null) it.round = 1000;
+  return it;
+}
+function canSettle() { return isAdmin(); }
+function won(n) { return (Math.round(Number(n)) || 0).toLocaleString('ko-KR') + '원'; }
+function settleMatch(it) { return it && it.matchId ? store.matches.find(m => m.id === it.matchId) || null : null; }
+function settleDateLabelOf(s) { if (!s) return ''; const d = parseYmd(s); return `${d.getMonth() + 1}/${d.getDate()} (${['일','월','화','수','목','금','토'][d.getDay()]})`; }
+function settleDueText(it) {
+  if (!it.due) return '';
+  const diff = Math.round((parseYmd(it.due) - parseYmd(ymd(new Date()))) / 86400000);
+  return diff > 0 ? `D-${diff}` : diff === 0 ? '오늘 마감' : `${-diff}일 지남`;
+}
+function isAmt(v) { return v != null && v !== '' && !isNaN(Number(v)); }
+// 금액 계산: 고정(조정) 금액 먼저 빼고, 나머지를 가중치(균등 1 / 쿼터 비례)로 나눠 올림
+function settleCalc(it) {
+  settleNorm(it);
+  const total = it.exp.reduce((s, e) => s + (Number(e.a) || 0), 0);
+  const m = settleMatch(it);
+  const nq = m ? matchQuarterCount(m) : 1;
+  const rows = [];
+  store.players.forEach(p => {
+    const e = it.ppl[p.id]; if (!e || !e.on) return;
+    const qn = m ? playerAvailQuarters(m, p.id).length : nq;
+    rows.push({ id: p.id, name: p.name, num: p.number, fixed: isAmt(e.amt) ? Number(e.amt) : null,
+      w: it.mode === 'quarter' ? Math.max(0, qn / nq) : 1, qtag: m ? availQTag(m, p.id) : '', st: e.st || 'none', at: e.at || '', guest: false });
+  });
+  it.guests.forEach(g => {
+    rows.push({ id: g.id, name: g.name || '게스트', num: null, fixed: isAmt(g.amt) ? Number(g.amt) : null, w: 1, qtag: '', st: g.st || 'none', at: g.at || '', guest: true });
+  });
+  const fixedSum = rows.reduce((s, r) => s + (r.fixed != null ? r.fixed : 0), 0);
+  const wsum = rows.reduce((s, r) => s + (r.fixed == null ? r.w : 0), 0);
+  const unit = wsum > 0 ? Math.max(0, total - fixedSum) / wsum : 0;
+  const R = Math.max(1, Number(it.round) || 1);
+  rows.forEach(r => { r.amt = r.fixed != null ? r.fixed : Math.ceil(unit * r.w / R - 1e-9) * R; });
+  const sum = rows.reduce((s, r) => s + r.amt, 0);
+  const paidRows = rows.filter(r => r.st === 'paid');
+  return { total, rows, sum, surplus: sum - total, base: Math.ceil(unit / R - 1e-9) * R, paid: paidRows.reduce((s, r) => s + r.amt, 0),
+    nPaid: paidRows.length, nSent: rows.filter(r => r.st === 'sent').length, n: rows.length };
+}
+function settleAcct() { const a = settleRoot().acct; return { bank: (a.bank || '').trim(), num: (a.num || '').trim(), holder: (a.holder || '').trim(), kp: (a.kp || '').trim(), kpAmt: a.kpAmt !== false }; }
+function acctText() { const a = settleAcct(); return [a.bank, a.num, a.holder].filter(Boolean).join(' '); }
+function copyAcct() { const t = acctText(); if (!t) { toast('등록된 계좌가 없어요'); return; } copyToClip(t, '계좌를 복사했어요 · 은행앱에 붙여넣기'); }
+// 카카오페이 송금코드 링크 + 금액 (카카오페이 앱이 만드는 금액 포함 코드와 같은 방식 · amount × 2^19 을 16진수로)
+function kpUrl(amount) {
+  const a = settleAcct(); if (!a.kp) return '';
+  const mt = a.kp.match(/^https?:\/\/qr\.kakaopay\.com\/([A-Za-z0-9]+)\/?$/);
+  if (mt && amount > 0 && a.kpAmt) return `https://qr.kakaopay.com/${mt[1]}${(Math.round(amount) * 524288).toString(16)}`;
+  return a.kp;
+}
+let _seView = null;   // 열어둔 정산 상세 id
+function openSettleDetail(id) { _seView = id; renderSettle(); const el = document.getElementById('settleContent'); if (el) el.scrollTop = 0; }
+function renderSettle() {
+  const el = document.getElementById('settleContent'); if (!el) return;
+  const S = settleRoot();
+  if (_seView) {
+    const it = S.items.find(x => x.id === _seView);
+    if (it) { el.innerHTML = settleDetailHtml(it); return; }
+    _seView = null;
+  }
+  const mp = myPlayer();
+  const byNew = (a, b) => (b.date || '').localeCompare(a.date || '') || (b.at || '').localeCompare(a.at || '');
+  const open = S.items.filter(x => !x.closed).sort(byNew);
+  const closedAll = S.items.filter(x => x.closed).sort(byNew);
+  const a = settleAcct();
+  let html = '<div class="se-wrap">';
+  if (canSettle()) {
+    html += `<div class="se-top"><button class="btn primary" onclick="openSettleEditor()">+ 정산 만들기</button><button class="btn" onclick="openSettleAcct()">⚙️ 입금 계좌 · 카카오페이</button></div>`;
+    if (!a.num && !a.kp) html += `<div class="uni-tip" style="margin-top:4px">먼저 <b>⚙️ 입금 계좌</b>에 계좌번호와 카카오페이 송금코드 링크를 넣어두면, 회원들이 버튼 한 번으로 보낼 수 있어요.</div>`;
+  }
+  html += `<div class="se-sec">내 정산 <small>${mp ? '#' + (mp.number || '?') + ' ' + escapeHtml(mp.name) : '선수 연결 필요'}</small></div>`;
+  const mine = mp ? open.map(it => { const c = settleCalc(it); return { it, c, r: c.rows.find(r => !r.guest && r.id === mp.id) }; }).filter(o => o.r) : [];
+  if (!mp) html += `<div class="se-empty">본인 선수 프로필이 연결돼 있어야 내 정산이 보여요<br>(관리자 탭에서 연결)</div>`;
+  else if (!mine.length) html += `<div class="se-empty">밀린 정산이 없어요 ✅</div>`;
+  else html += mine.map(o => settleMineCard(o.it, o.r)).join('');
+  html += `<div class="se-sec">진행 중 <small>${open.length}건</small></div>`;
+  html += open.length ? open.map(settleCard).join('') : `<div class="se-empty">진행 중인 정산이 없어요${canSettle() ? '<br>경기 끝나면 「+ 정산 만들기」' : ''}</div>`;
+  if (closedAll.length) html += `<div class="se-sec">지난 정산 <small>${closedAll.length}건</small></div>` + closedAll.slice(0, 12).map(settleCard).join('');
+  html += `<div class="uni-tip">💛 카카오페이 버튼은 그 사람 몫 금액까지 채워서 열려요 · 보낸 뒤 <b>「보냈어요」</b>를 누르면 운영진이 통장 확인 후 완료 처리해요.</div></div>`;
+  el.innerHTML = html;
+}
+function settleMineCard(it, r) {
+  const a = settleAcct(); const st = r.st; const dd = settleDueText(it);
+  const chip = st === 'paid' ? '<span class="se-chip grn">✅ 입금 확인됨</span>' : st === 'sent' ? '<span class="se-chip amb">⏳ 보냈어요 · 확인 대기</span>' : `<span class="se-chip red">미입금${dd ? ' · ' + dd : ''}</span>`;
+  const kp = kpUrl(r.amt);
+  const pay = st === 'paid' || it.closed ? '' : `<div class="se-pay">
+      ${kp ? `<a class="btn kp" href="${escapeHtml(kp)}" target="_blank" rel="noopener">💛 카카오페이로 ${won(r.amt)} 보내기</a>` : ''}
+      ${a.num ? `<button class="btn" onclick="copyAcct()">📋 계좌 복사 · ${escapeHtml(acctText())}</button>` : ''}
+      <button class="btn sent${st === 'sent' ? ' on' : ''}" onclick="settleMarkSent('${it.id}')">${st === 'sent' ? '↩ 아직 안 보냈어요 (취소)' : '✅ 보냈어요'}</button>
+    </div>`;
+  const note = it.mode === 'quarter' && r.qtag ? `<small>${r.qtag} · 쿼터 비례</small>` : r.fixed != null ? '<small>조정됨</small>' : '';
+  return `<div class="se-card mine ${st}">
+    <div class="se-l1">${escapeHtml(settleDateLabelOf(it.date))}<span class="spacer"></span>${chip}</div>
+    <div class="se-title">${escapeHtml(it.title || '정산')}</div>
+    <div class="se-amt">${won(r.amt)}${note}</div>
+    <div class="se-meta">${a.num ? escapeHtml(acctText()) : ''}${a.num && it.due ? ' · ' : ''}${it.due ? '마감 ' + escapeHtml(settleDateLabelOf(it.due)) : ''}</div>
+    ${pay}</div>`;
+}
+function settleCard(it) {
+  const c = settleCalc(it);
+  const pct = c.sum ? Math.round(c.paid / c.sum * 100) : 0;
+  const done = c.n > 0 && c.nPaid === c.n;
+  return `<div class="se-card${it.closed ? ' closed' : ''}" onclick="openSettleDetail('${it.id}')">
+    <div class="se-l1">${escapeHtml(settleDateLabelOf(it.date))}<span class="spacer"></span>${it.closed ? '<span class="se-chip gray">마감</span>' : `<span class="se-chip ${done ? 'grn' : 'amb'}">${c.nPaid}/${c.n}명 완료</span>`}</div>
+    <div class="se-title">${escapeHtml(it.title || '정산')}</div>
+    <div class="se-meta">합계 ${won(c.total)} · ${c.n}명 · 1인 ${won(c.base)}${it.mode === 'quarter' ? ' (쿼터 비례)' : ''}${it.due ? ' · 마감 ' + escapeHtml(settleDateLabelOf(it.due)) : ''}</div>
+    <div class="se-bar"><i class="${done ? '' : 'amb'}" style="width:${pct}%"></i></div>
+    <div class="se-bl"><span><b>${won(c.paid)}</b> 받음</span><span>${won(Math.max(0, c.sum - c.paid))} 남음${c.nSent ? ' · 확인 대기 ' + c.nSent : ''}</span></div>
+  </div>`;
+}
+function settleDetailHtml(it) {
+  const c = settleCalc(it); const a = settleAcct(); const mp = myPlayer(); const adm = canSettle();
+  const pct = c.sum ? Math.round(c.paid / c.sum * 100) : 0;
+  const m = settleMatch(it);
+  const done = c.n > 0 && c.nPaid === c.n;
+  const chip = r => `<button type="button" class="se-p ${r.st}${mp && !r.guest && r.id === mp.id ? ' me' : ''}${adm ? ' tap' : ''}" ${adm ? `onclick="settleCycle('${it.id}','${r.id}')"` : ''}>${escapeHtml(r.name)}${r.guest ? '<small>게스트</small>' : ''}${it.mode === 'quarter' && r.qtag ? `<span class="q">${r.qtag}</span>` : ''}<small>${r.amt.toLocaleString('ko-KR')}</small></button>`;
+  const group = (label, k, hint) => { const rs = c.rows.filter(r => r.st === k); return `<div class="se-sec">${label} <small>${rs.length}명${hint ? ' · ' + hint : ''}</small></div><div class="se-chips">${rs.length ? rs.map(chip).join('') : '<span style="font-size:12px;color:var(--text-4)">없음</span>'}</div>`; };
+  const expRows = it.exp.filter(e => e.n || Number(e.a)).map(e => `<div class="se-row"><span>${escapeHtml(e.n || '항목')}</span><b>${won(e.a)}</b></div>`).join('');
+  const my = mp ? c.rows.find(r => !r.guest && r.id === mp.id) : null;
+  return `<div class="se-wrap">
+    <button class="se-back" onclick="_seView=null;renderSettle()">‹ 정산 목록</button>
+    <div class="se-l1">${escapeHtml(settleDateLabelOf(it.date))}${m ? ` · vs ${escapeHtml(m.opponent || '')}` : ''}<span class="spacer"></span>${it.closed ? '<span class="se-chip gray">마감</span>' : '<span class="se-chip amb">진행중</span>'}</div>
+    <div class="se-title" style="font-size:18px">${escapeHtml(it.title || '정산')}</div>
+    <div class="se-meta">${it.due ? '마감 ' + escapeHtml(settleDateLabelOf(it.due)) + (settleDueText(it) ? ' · ' + settleDueText(it) : '') : ''}${it.by ? ' · 만든 사람 ' + escapeHtml(it.by) : ''}</div>
+    <div class="se-sum"><div><small>합계</small><b>${c.total.toLocaleString('ko-KR')}</b></div><div><small>인원</small><b>${c.n}명</b></div><div class="hi"><small>1인${it.mode === 'quarter' ? ' (전 쿼터)' : ''}</small><b>${c.base.toLocaleString('ko-KR')}</b></div><div><small>올림 잔액</small><b>${c.surplus > 0 ? '+' : ''}${c.surplus.toLocaleString('ko-KR')}</b></div></div>
+    ${expRows ? `<div class="se-box">${expRows}<div class="se-row sum"><span>합계</span><b>${won(c.total)}</b></div></div>` : ''}
+    <div class="se-bar"><i class="${done ? '' : 'amb'}" style="width:${pct}%"></i></div>
+    <div class="se-bl"><span><b>${c.nPaid}명 · ${won(c.paid)}</b> 받음</span><span>${c.n - c.nPaid}명 · ${won(Math.max(0, c.sum - c.paid))} 남음</span></div>
+    ${my && my.st !== 'paid' && !it.closed ? settleMineCard(it, my) : ''}
+    ${group('✅ 입금 완료', 'paid')}
+    ${group('⏳ 보냈다고 함', 'sent', adm ? '통장 확인되면 눌러서 완료' : '운영진 확인 대기')}
+    ${group('❌ 미입금', 'none', adm ? '입금 확인되면 눌러서 완료' : '')}
+    ${adm ? `<div class="uni-tip">이름을 누르면 <b>완료 ↔ 미입금</b>으로 바뀌어요.</div>` : ''}
+    ${adm ? `<div class="se-acts">
+      <button class="btn primary" onclick="openShareSettle('${it.id}')">📢 정산 공지</button>
+      <button class="btn" onclick="copySettleRemind('${it.id}')">📣 미입금 리마인드 복사</button>
+      <button class="btn" onclick="openSettleEditor('${it.id}')">✏️ 수정</button>
+      <button class="btn" onclick="settleToggleClose('${it.id}')">${it.closed ? '🔓 다시 열기' : '🏁 마감'}</button>
+      <button class="btn danger" onclick="settleDelete('${it.id}')">🗑 삭제</button>
+    </div>` : ''}
+    ${a.num || a.kp ? `<div class="uni-tip">입금: ${escapeHtml(acctText())}${a.kp ? ' · 💛 카카오페이 송금코드 등록됨' : ''}</div>` : ''}
+  </div>`;
+}
+function settleMarkSent(id) {
+  const it = settleRoot().items.find(x => x.id === id); const mp = myPlayer();
+  if (!it || !mp) { toast('본인 선수가 연결돼 있어야 해요'); return; }
+  const e = it.ppl[mp.id]; if (!e || !e.on) { toast('이 정산에 포함돼 있지 않아요'); return; }
+  if (e.st === 'paid') { toast('이미 입금 확인됐어요'); return; }
+  e.st = e.st === 'sent' ? 'none' : 'sent'; e.at = new Date().toISOString();
+  saveState(); renderSettle();
+  toast(e.st === 'sent' ? '✅ 보냈다고 표시했어요 · 운영진이 확인하면 완료돼요' : '취소했어요');
+}
+function settleCycle(id, rid) {
+  if (!canSettle()) return;
+  const it = settleRoot().items.find(x => x.id === id); if (!it) return;
+  let e = it.ppl[rid];
+  if (!e) e = it.guests.find(g => g.id === rid);
+  if (!e) return;
+  e.st = e.st === 'paid' ? 'none' : 'paid'; e.at = new Date().toISOString();
+  saveState(); renderSettle();
+}
+function settleToggleClose(id) {
+  const it = settleRoot().items.find(x => x.id === id); if (!it) return;
+  it.closed = !it.closed; saveState(); renderSettle();
+  toast(it.closed ? '🏁 정산 마감했어요' : '다시 열었어요');
+}
+function settleDelete(id) {
+  if (!canSettle()) return;
+  if (!confirm('이 정산을 삭제할까요?')) return;
+  const S = settleRoot(); S.items = S.items.filter(x => x.id !== id); _seView = null;
+  saveState(); renderSettle(); toast('삭제했어요');
+}
+function settleNoticeText(it) {
+  const c = settleCalc(it); const a = settleAcct(); const m = settleMatch(it);
+  const L = [`💰 ${it.title || '정산'} 정산 안내`];
+  if (m) L.push(`⚽ ${fmtMatchDate(m)} vs ${m.opponent || ''}`);
+  L.push('');
+  it.exp.filter(e => e.n || Number(e.a)).forEach(e => L.push(`· ${e.n || '항목'} ${won(e.a)}`));
+  L.push(`합계 ${won(c.total)} ÷ ${c.n}명`);
+  L.push(`👉 1인 ${won(c.base)}${it.mode === 'quarter' ? ' (전 쿼터 기준 · 쿼터 비례)' : ''}`);
+  const diff = c.rows.filter(r => r.amt !== c.base);
+  if (diff.length) L.push(`   ${diff.map(r => `${r.name} ${won(r.amt)}`).join(' · ')}`);
+  L.push('');
+  if (a.num) L.push(`🏦 ${acctText()}`);
+  if (it.due) L.push(`⏰ ${settleDateLabelOf(it.due)}까지`);
+  L.push(`👥 ${c.rows.map(r => r.name).join(', ')}`);
+  L.push('');
+  L.push('앱 💰 정산 탭 → 💛 카카오페이 버튼이면 금액까지 바로 들어가요');
+  L.push(SETTLE_URL);
+  return L.join('\n');
+}
+function settleRemindText(it) {
+  const c = settleCalc(it); const a = settleAcct();
+  const left = c.rows.filter(r => r.st !== 'paid');
+  const L = [`📣 ${it.title || '정산'} 정산 아직이에요${it.due ? ` (${settleDateLabelOf(it.due)}까지)` : ''}`,
+    `${c.nPaid}/${c.n}명 완료 · 남은 ${left.length}명`,
+    left.map(r => `${r.name} ${won(r.amt)}${r.st === 'sent' ? '(보냈다고 함·확인중)' : ''}`).join(', ')];
+  if (a.num) L.push(`🏦 ${acctText()}`);
+  L.push(SETTLE_URL);
+  return L.join('\n');
+}
+function copySettleRemind(id) { const it = settleRoot().items.find(x => x.id === id); if (!it) return; copyToClip(settleRemindText(it), '리마인드 글을 복사했어요 · 톡방에 붙여넣기'); }
+function openShareSettle(id) {
+  const it = settleRoot().items.find(x => x.id === id); if (!it) return;
+  openSharePop({ label: `📢 정산 공지 <small>${escapeHtml(it.title || '')}</small>`, text: settleNoticeText(it), image: () => buildSettleImage(it), fname: `EASTFC_정산_${(it.date || '').replace(/-/g, '')}.png`,
+    kakao: {
+      hint: '누르면 내 정산으로',
+      image: () => buildKakaoCard('settle', { it, sub: '💰 정산 안내' }),
+      card: () => { const c = settleCalc(it); return {
+        title: `💰 ${it.title || '정산'} 정산`,
+        desc: `1인 ${won(c.base)}${it.due ? ' · ' + settleDateLabelOf(it.due) + '까지' : ''} · ${c.n}명\n앱에서 카카오페이 버튼 누르면 금액까지 들어가요`,
+        buttons: [{ title: '💛 내 정산 보기', url: SETTLE_URL }],
+      }; },
+    },
+  });
+}
+async function buildSettleImage(it) {
+  const c = settleCalc(it); const a = settleAcct(); const m = settleMatch(it);
+  const W = 1080, HM = 1700;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = HM;
+  const g = cv.getContext('2d');
+  const F = "'Pretendard Variable','Noto Sans KR',sans-serif";
+  const GOLD = '#6f9fc4', GOLDW = '#9dc0d8';
+  g.fillStyle = '#0a0a0a'; g.fillRect(0, 0, W, HM);
+  const bg = g.createLinearGradient(0, 0, W, HM);
+  bg.addColorStop(0, 'rgba(111,159,196,.09)'); bg.addColorStop(.55, 'rgba(0,0,0,0)');
+  g.fillStyle = bg; g.fillRect(0, 0, W, HM);
+  await scenCrest();
+  if (_scenCrestImg) { const ch = 110, cw = _scenCrestImg.width / _scenCrestImg.height * ch; g.drawImage(_scenCrestImg, 54, 44, cw, ch); }
+  g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+  g.fillStyle = GOLD; g.font = `800 40px ${F}`; g.fillText('EAST FC', 186, 92);
+  g.fillStyle = '#8b9099'; g.font = `600 25px ${F}`; g.fillText('💰 정산 안내', 186, 130);
+  g.strokeStyle = 'rgba(111,159,196,.35)'; g.lineWidth = 2;
+  g.beginPath(); g.moveTo(54, 188); g.lineTo(W - 54, 188); g.stroke();
+  g.fillStyle = '#ffffff'; g.font = `900 54px ${F}`; g.fillText(it.title || '정산', 54, 262);
+  let y = 312;
+  if (m) { g.fillStyle = GOLDW; g.font = `700 29px ${F}`; g.fillText(`${fmtMatchDate(m)} · vs ${m.opponent || ''}`, 54, y); y += 50; }
+  else if (it.date) { g.fillStyle = GOLDW; g.font = `700 29px ${F}`; g.fillText(settleDateLabelOf(it.date), 54, y); y += 50; }
+  y += 8;
+  const exps = it.exp.filter(e => e.n || Number(e.a));
+  exps.forEach(e => {
+    g.fillStyle = '#c2c8d0'; g.font = `500 27px ${F}`; g.textAlign = 'left'; g.fillText(e.n || '항목', 54, y);
+    g.fillStyle = '#ffffff'; g.font = `700 27px ${F}`; g.textAlign = 'right'; g.fillText(won(e.a), W - 54, y);
+    y += 40;
+  });
+  g.textAlign = 'left';
+  g.strokeStyle = 'rgba(255,255,255,.15)'; g.lineWidth = 2; g.beginPath(); g.moveTo(54, y - 16); g.lineTo(W - 54, y - 16); g.stroke();
+  g.fillStyle = GOLDW; g.font = `800 29px ${F}`; g.fillText(`합계 ${won(c.total)} ÷ ${c.n}명`, 54, y + 22); y += 66;
+  g.fillStyle = 'rgba(111,159,196,.14)'; g.beginPath(); g.roundRect(54, y, W - 108, 150, 18); g.fill();
+  g.strokeStyle = 'rgba(111,159,196,.5)'; g.lineWidth = 2; g.stroke();
+  g.textAlign = 'center';
+  g.fillStyle = GOLDW; g.font = `800 26px ${F}`; g.fillText(`1인 부담${it.mode === 'quarter' ? ' (전 쿼터 기준 · 쿼터 비례)' : ''}`, W / 2, y + 48);
+  g.fillStyle = '#ffffff'; g.font = `900 64px ${F}`; g.fillText(won(c.base), W / 2, y + 120);
+  g.textAlign = 'left'; y += 196;
+  if (a.num) { g.fillStyle = '#ffffff'; g.font = `800 31px ${F}`; g.fillText(`🏦 ${acctText()}`, 54, y); y += 48; }
+  if (it.due) { g.fillStyle = '#fca5a5'; g.font = `700 28px ${F}`; g.fillText(`⏰ ${settleDateLabelOf(it.due)}까지`, 54, y); y += 50; }
+  y += 8;
+  g.fillStyle = GOLDW; g.font = `800 27px ${F}`; g.fillText(`👥 ${c.n}명`, 54, y); y += 40;
+  g.fillStyle = '#c2c8d0'; g.font = `500 25px ${F}`;
+  const names = c.rows.map(r => r.name + (r.amt !== c.base ? `(${r.amt.toLocaleString('ko-KR')})` : '')).join(', ');
+  const lines = []; let line = '';
+  names.split(/,\s*/).forEach(w => { const t = line ? line + ', ' + w : w; if (g.measureText(t).width > W - 108 && line) { lines.push(line); line = w; } else line = t; });
+  if (line) lines.push(line);
+  lines.slice(0, 6).forEach((ln, i) => g.fillText(ln, 54, y + i * 34));
+  y += Math.min(6, lines.length) * 34 + 26;
+  g.fillStyle = '#8b9099'; g.font = `500 24px ${F}`; g.fillText('앱 💰 정산 탭 → 💛 카카오페이 버튼이면 금액까지 바로 들어가요', 54, y); y += 38;
+  g.fillStyle = GOLD; g.font = `600 25px ${F}`; g.fillText(SETTLE_URL, 54, y); y += 20;
+  const H2 = Math.max(700, Math.min(HM, Math.round(y + 90)));
+  const out = document.createElement('canvas'); out.width = W; out.height = H2;
+  const g2 = out.getContext('2d'); g2.drawImage(cv, 0, 0);
+  g2.fillStyle = '#5a5f66'; g2.font = `500 21px ${F}`; g2.fillText('EFM · East Football Manager', 54, H2 - 40);
+  return new Promise(res => out.toBlob(res, 'image/png'));
+}
+/* ---- 정산 편집 ---- */
+let _se = null;
+function settleDefaultMatch() {
+  const t = ymd(new Date());
+  return store.matches.filter(m => m.date <= t && matchStatus(m) !== 'cancelled').sort((a, b) => b.date.localeCompare(a.date))[0] || null;
+}
+function openSettleEditor(id, matchId) {
+  if (!canSettle()) { toast('운영진만 정산을 만들 수 있어요'); return; }
+  const S = settleRoot();
+  const src = id ? S.items.find(x => x.id === id) : null;
+  if (src) { _se = JSON.parse(JSON.stringify(src)); settleNorm(_se); _se._new = false; }
+  else {
+    _se = { id: uid(), title: '', matchId: matchId || '', date: ymd(new Date()), due: '', exp: [{ n: '구장비', a: '' }], mode: 'equal', round: 1000, ppl: {}, guests: [], by: currentUser()?.displayName || '', at: new Date().toISOString(), closed: false, _new: true };
+    if (!_se.matchId) { const m = settleDefaultMatch(); if (m) _se.matchId = m.id; }
+    seApplyMatch(true);
+  }
+  renderSettleEditor();
+  document.getElementById('settleModal').classList.add('show');
+}
+function seApplyMatch(resetPpl) {
+  const m = settleMatch(_se);
+  if (m) {
+    _se.date = m.date;
+    if (!_se.title) _se.title = `${settleDateLabelOf(m.date)} vs ${m.opponent || ''}`;
+    if (!_se.due) { const d = parseYmd(m.date); d.setDate(d.getDate() + 3); _se.due = ymd(d); }
+    if (resetPpl) {
+      _se.ppl = {};
+      const att = getMatchAttendance(m);
+      store.players.forEach(p => { if (att[p.id] === 'attend') _se.ppl[p.id] = { on: true, st: 'none' }; });
+    }
+  } else {
+    if (!_se.title) _se.title = `${settleDateLabelOf(_se.date)} 회비`;
+    if (!_se.due) { const d = new Date(); d.setDate(d.getDate() + 7); _se.due = ymd(d); }
+  }
+}
+function seMatchOptions() {
+  const lo = ymd(new Date(Date.now() - 60 * 86400000)), hi = ymd(new Date(Date.now() + 30 * 86400000));
+  const ms = store.matches.filter(m => (m.date >= lo && m.date <= hi) || m.id === _se.matchId).sort((a, b) => b.date.localeCompare(a.date));
+  return `<option value="">경기 없음 (회비 · 기타)</option>` + ms.map(m => `<option value="${m.id}"${m.id === _se.matchId ? ' selected' : ''}>${escapeHtml(settleDateLabelOf(m.date))} vs ${escapeHtml(m.opponent || '')} · ✅${attendCounts(m).attend}</option>`).join('');
+}
+function seSumHtml(c) {
+  return `<div><small>합계</small><b>${c.total.toLocaleString('ko-KR')}</b></div><div><small>인원</small><b>${c.n}명</b></div><div class="hi"><small>1인</small><b>${c.base.toLocaleString('ko-KR')}</b></div><div><small>올림 잔액</small><b>${c.surplus > 0 ? '+' : ''}${c.surplus.toLocaleString('ko-KR')}</b></div>`;
+}
+function renderSettleEditor() {
+  const body = document.getElementById('settleModalBody'); if (!body || !_se) return;
+  const top = body.scrollTop;
+  const it = settleNorm(_se); const c = settleCalc(it); const m = settleMatch(it);
+  const att = m ? getMatchAttendance(m) : {};
+  const players = store.players.filter(p => !isRetiredNow(p) || (it.ppl[p.id] && it.ppl[p.id].on)).sort((a, b) => {
+    const oa = it.ppl[a.id] && it.ppl[a.id].on ? 0 : 1, ob = it.ppl[b.id] && it.ppl[b.id].on ? 0 : 1;
+    if (oa !== ob) return oa - ob;
+    return (a.number || 999) - (b.number || 999);
+  });
+  const rowOf = id => c.rows.find(x => x.id === id);
+  const pRows = players.map(p => {
+    const e = it.ppl[p.id]; const on = !!(e && e.on); const r = on ? rowOf(p.id) : null;
+    const amt = on ? `<button type="button" class="am${r && r.fixed != null ? ' ovr' : ''}" data-rid="${p.id}" onclick="seEditAmt('${p.id}',this,false)" title="눌러서 금액 조정">${r ? r.amt.toLocaleString('ko-KR') : 0}</button>` : `<span class="am" style="color:var(--text-4);cursor:default">면제</span>`;
+    const tag = m ? (att[p.id] === 'attend' ? '' : att[p.id] === 'hold' ? '<small>보류</small>' : att[p.id] === 'absent' ? '<small>불참</small>' : '<small>미투표</small>') : '';
+    const q = m && on && availQTag(m, p.id) ? `<span class="q">${availQTag(m, p.id)}</span>` : '';
+    return `<div class="se-pr${on ? '' : ' off'}"><button type="button" class="tg${on ? ' on' : ''}" onclick="seTogglePerson('${p.id}')" title="${on ? '끄면 면제' : '켜면 포함'}"></button><span class="nm">${escapeHtml(p.name)}<small>#${p.number || '?'}</small>${tag}${q}</span>${amt}</div>`;
+  }).join('');
+  const gRows = it.guests.map(gs => { const r = rowOf(gs.id); return `<div class="se-pr"><button type="button" class="tg on" onclick="seDelGuest('${gs.id}')" title="게스트 삭제"></button><input class="gname" value="${escapeHtml(gs.name || '')}" placeholder="게스트 이름" oninput="seGuestName('${gs.id}',this.value)"><button type="button" class="am${isAmt(gs.amt) ? ' ovr' : ''}" data-rid="${gs.id}" onclick="seEditAmt('${gs.id}',this,true)">${r ? r.amt.toLocaleString('ko-KR') : 0}</button></div>`; }).join('');
+  body.innerHTML = `<div class="ud-head"><h3>💰 ${it._new ? '정산 만들기' : '정산 수정'}</h3><button class="ud-x" onclick="closeSettleEditor()">✕</button></div>
+    <div class="se-f"><span>경기</span><select onchange="seSetMatch(this.value)">${seMatchOptions()}</select></div>
+    <div class="se-f"><span>제목</span><input value="${escapeHtml(it.title || '')}" oninput="_se.title=this.value"></div>
+    <div class="se-f"><span>마감</span><input type="date" value="${escapeHtml(it.due || '')}" onchange="_se.due=this.value"></div>
+    <div class="se-sec">지출 <small>구장비 · 음료 · 심판비 …</small></div>
+    <div id="seExp">${it.exp.map((e, i) => `<div class="se-exp"><input value="${escapeHtml(e.n || '')}" placeholder="항목" oninput="_se.exp[${i}].n=this.value"><input class="num" type="number" inputmode="numeric" value="${isAmt(e.a) ? e.a : ''}" placeholder="금액" oninput="_se.exp[${i}].a=this.value;seRefresh()"><button type="button" class="x" onclick="seDelExp(${i})">✕</button></div>`).join('')}</div>
+    <button type="button" class="btn" style="width:100%" onclick="seAddExp()">+ 항목 추가</button>
+    <div class="se-sec">나누기</div>
+    <div class="ig-row">${[['equal', '참석자 균등'], ['quarter', '쿼터 비례']].map(([k, l]) => `<button class="ig-chip${it.mode === k ? ' on' : ''}" onclick="_se.mode='${k}';renderSettleEditor()">${l}</button>`).join('')}<span style="width:6px"></span>${[[1000, '천원 올림'], [100, '백원 올림'], [1, '올림 없음']].map(([k, l]) => `<button class="ig-chip${Number(it.round) === k ? ' on' : ''}" onclick="_se.round=${k};renderSettleEditor()">${l}</button>`).join('')}</div>
+    ${it.mode === 'quarter' ? '<div class="uni-tip" style="margin-top:0">쿼터 비례: 투표에서 찍은 「몇 쿼터부터」로 계산해요. 4쿼터 경기에 2Q부터 온 사람은 3/4만 내요.</div>' : ''}
+    <div class="se-sum" id="seSum">${seSumHtml(c)}</div>
+    <div class="se-sec">명단 <small>${m ? '참석 투표한 사람이 켜져 있어요' : '낼 사람을 켜주세요'}</small><span class="spacer"></span><button class="ig-link" onclick="seAllOn(true)">전원 켜기</button>&nbsp;·&nbsp;<button class="ig-link" onclick="seAllOn(false)">전원 끄기</button></div>
+    <div class="uni-tip" style="margin:0 0 8px">스위치를 끄면 <b>면제</b>. 금액 숫자를 누르면 그 사람만 따로 조정할 수 있어요 (비우면 다시 자동).</div>
+    <div class="se-ppl">${pRows}${gRows}</div>
+    <button type="button" class="btn" style="width:100%;margin-top:8px" onclick="seAddGuest()">+ 게스트 (용병) 추가</button>
+    <div class="modal-actions"><button class="btn" onclick="closeSettleEditor()">취소</button><button class="btn primary" onclick="saveSettleEditor()">${it._new ? '💰 정산 올리기' : '저장'}</button></div>`;
+  body.scrollTop = top;
+}
+function seRefresh() {
+  if (!_se) return;
+  const c = settleCalc(_se);
+  const s = document.getElementById('seSum'); if (s) s.innerHTML = seSumHtml(c);
+  document.querySelectorAll('#settleModalBody .am[data-rid]').forEach(b => { const r = c.rows.find(x => x.id === b.dataset.rid); if (r) b.textContent = r.amt.toLocaleString('ko-KR'); });
+}
+function seTogglePerson(pid) {
+  const e = _se.ppl[pid];
+  if (e && e.on) e.on = false;
+  else _se.ppl[pid] = Object.assign({ st: 'none' }, e || {}, { on: true });
+  renderSettleEditor();
+}
+function seAllOn(on) {
+  store.players.filter(p => !isRetiredNow(p)).forEach(p => {
+    if (on) _se.ppl[p.id] = Object.assign({ st: 'none' }, _se.ppl[p.id] || {}, { on: true });
+    else if (_se.ppl[p.id]) _se.ppl[p.id].on = false;
+  });
+  renderSettleEditor();
+}
+function seEditAmt(rid, btn, isGuest) {
+  const e = isGuest ? _se.guests.find(g => g.id === rid) : _se.ppl[rid]; if (!e) return;
+  const inp = document.createElement('input');
+  inp.className = 'am-in'; inp.type = 'number'; inp.inputMode = 'numeric'; inp.placeholder = '자동';
+  inp.value = isAmt(e.amt) ? e.amt : '';
+  btn.replaceWith(inp); inp.focus(); inp.select();
+  let doneOnce = false;
+  const done = () => { if (doneOnce) return; doneOnce = true; const v = inp.value.trim(); if (v === '') delete e.amt; else e.amt = Math.max(0, Math.round(Number(v)) || 0); renderSettleEditor(); };
+  inp.addEventListener('blur', done);
+  inp.addEventListener('keydown', ev => { if (ev.key === 'Enter') { ev.preventDefault(); inp.blur(); } });
+}
+function seAddExp() {
+  _se.exp.push({ n: '', a: '' }); renderSettleEditor();
+  setTimeout(() => { const rows = document.querySelectorAll('#seExp .se-exp'); const last = rows[rows.length - 1]; if (last) last.querySelector('input').focus(); }, 40);
+}
+function seDelExp(i) { _se.exp.splice(i, 1); if (!_se.exp.length) _se.exp.push({ n: '', a: '' }); renderSettleEditor(); }
+function seAddGuest() { _se.guests.push({ id: uid(), name: '', st: 'none' }); renderSettleEditor(); setTimeout(() => { const ins = document.querySelectorAll('#settleModalBody .gname'); const last = ins[ins.length - 1]; if (last) last.focus(); }, 40); }
+function seDelGuest(id) { _se.guests = _se.guests.filter(g => g.id !== id); renderSettleEditor(); }
+function seGuestName(id, v) { const g = _se.guests.find(x => x.id === id); if (g) g.name = v; }
+function seSetMatch(v) { _se.matchId = v; _se.due = ''; _se.title = ''; seApplyMatch(true); renderSettleEditor(); }
+function closeSettleEditor() {
+  document.getElementById('settleModal')?.classList.remove('show'); _se = null;
+  if (_pendingRerender) rerenderCurrent();
+}
+function saveSettleEditor() {
+  if (!_se) return;
+  const it = settleNorm(_se);
+  it.exp = it.exp.filter(e => (e.n || '').trim() || Number(e.a)).map(e => ({ n: (e.n || '').trim(), a: Math.max(0, Math.round(Number(e.a)) || 0) }));
+  const c = settleCalc(it);
+  if (!c.total) { toast('지출 금액을 넣어주세요'); return; }
+  if (!c.n) { toast('낼 사람을 한 명 이상 켜주세요'); return; }
+  it.title = (it.title || '').trim() || '정산';
+  it.guests = it.guests.filter(g => (g.name || '').trim()).map(g => Object.assign(g, { name: g.name.trim() }));
+  Object.keys(it.ppl).forEach(k => { if (!it.ppl[k] || !it.ppl[k].on) delete it.ppl[k]; });   // 꺼진 사람(면제)은 저장 안 함
+  const isNew = !!it._new; delete it._new;
+  const S = settleRoot(); const idx = S.items.findIndex(x => x.id === it.id);
+  if (idx >= 0) S.items[idx] = it; else S.items.push(it);
+  saveState();
+  document.getElementById('settleModal')?.classList.remove('show'); _se = null;
+  _seView = it.id;
+  if (currentTab !== 'settle') switchTab('settle'); else renderSettle();
+  toast(isNew ? `💰 정산 올렸어요 · ${c.n}명 · 1인 ${won(c.base)}` : '저장했어요');
+  if (isNew) setTimeout(() => openShareSettle(it.id), 400);
+}
+/* ---- 입금 계좌 · 카카오페이 설정 ---- */
+function openSettleAcct() {
+  if (!canSettle()) return;
+  const a = settleAcct();
+  const body = document.getElementById('settleModalBody'); if (!body) return;
+  _se = null;
+  body.innerHTML = `<div class="ud-head"><h3>⚙️ 입금 계좌 · 카카오페이</h3><button class="ud-x" onclick="closeSettleEditor()">✕</button></div>
+    <div class="se-f"><span>은행</span><input id="seBank" value="${escapeHtml(a.bank)}" placeholder="예: 카카오뱅크"></div>
+    <div class="se-f"><span>계좌번호</span><input id="seNum" value="${escapeHtml(a.num)}" placeholder="3333-00-0000000"></div>
+    <div class="se-f"><span>예금주</span><input id="seHolder" value="${escapeHtml(a.holder)}" placeholder="총무 이름"></div>
+    <div class="se-sec">💛 카카오페이 송금코드 링크</div>
+    <div class="se-f"><span>링크</span><input id="seKp" value="${escapeHtml(a.kp)}" placeholder="https://qr.kakaopay.com/…" inputmode="url"></div>
+    <label class="se-chk"><input type="checkbox" id="seKpAmt" ${a.kpAmt ? 'checked' : ''}><span><b>금액 자동 입력</b> · 테스트했는데 금액이 안 들어가거나 오류가 나면 꺼주세요 (끄면 금액 없이 송금 화면만 열려요)</span></label>
+    <div class="uni-tip" style="margin-top:6px">카카오톡 → 더보기(…) → <b>pay</b> → <b>송금</b> → <b>송금코드</b> → 금액은 <b>비워두고</b> 「링크 복사」해서 붙여넣으세요.<br>붙여넣은 뒤 <b>폰에서</b> 「1,000원 테스트」를 눌러 송금 화면에 1,000원이 들어가는지 확인해보세요 (실제로 보내지는 않아요).</div>
+    <div class="modal-actions"><button class="btn" onclick="seKpTest()">💛 1,000원 테스트</button><button class="btn" onclick="closeSettleEditor()">취소</button><button class="btn primary" onclick="saveSettleAcct()">저장</button></div>`;
+  document.getElementById('settleModal').classList.add('show');
+}
+function seKpTest() {
+  const v = (document.getElementById('seKp')?.value || '').trim();
+  if (!v) { toast('링크를 먼저 붙여넣어 주세요'); return; }
+  const mt = v.match(/^https?:\/\/qr\.kakaopay\.com\/([A-Za-z0-9]+)\/?$/);
+  const withAmt = document.getElementById('seKpAmt')?.checked !== false;
+  if (!mt) toast('qr.kakaopay.com 링크가 아니면 금액 없이 열려요', 3500);
+  window.open(mt && withAmt ? `https://qr.kakaopay.com/${mt[1]}${(1000 * 524288).toString(16)}` : v, '_blank');
+}
+function saveSettleAcct() {
+  const v = id => (document.getElementById(id)?.value || '').trim();
+  const S = settleRoot();
+  S.acct = { bank: v('seBank'), num: v('seNum'), holder: v('seHolder'), kp: v('seKp'), kpAmt: document.getElementById('seKpAmt')?.checked !== false };
+  saveState(); closeSettleEditor(); renderSettle(); toast('저장했어요');
+}
+
+/* ==================== 💬 카카오 (로그인 · 카드 공유) ==================== */
+// 공개용 키만 들어있다 (JavaScript 키 · REST API 키). 클라이언트 시크릿·Admin 키는 절대 넣지 않는다.
+const KAKAO_JS_KEY = '97036070cb85777abb7a2fa4b6f8f4d1';
+const KAKAO_REST_KEY = '97e41d8b8da4a95a8376ef2a720a6996';
+// 로그인은 JavaScript 키로 (인가 코드 → 토큰). JS 키는 클라이언트 시크릿을 안 써서 서버 없이도 토큰을 받을 수 있다.
+const KAKAO_AUTH_KEY = KAKAO_JS_KEY;
+const KAKAO_SDK = { src: 'https://t1.kakaocdn.net/kakao_js_sdk/2.7.6/kakao.min.js', sri: 'sha384-WAtVcQYcmTO/N+C1N+1m6Gp8qxh+3NlnP7X1U7qP6P5dQY/MsRBNTh+e1ahJrkEm' };
+let _kakaoCode = null, _kakaoErr = null, _kakaoLinkMode = false, _intent = null;
+let _kkProf = null, _kkPick = null, _kkPickEff = null;
+
+function kakaoErrText(code, desc) {
+  const M = {
+    KOE004: '카카오 디벨로퍼 → 카카오 로그인 「활성화」가 꺼져 있어요',
+    KOE006: 'Redirect URI가 등록된 것과 달라요 (https://gudcjfgudcjf.github.io/EAST-FC/)',
+    KOE010: '카카오 디벨로퍼 → 클라이언트 시크릿(카카오 로그인)을 OFF로 해주세요',
+    KOE101: '앱 키가 잘못됐어요',
+    KOE320: '로그인 코드가 만료됐어요 · 다시 눌러주세요',
+    KOE303: 'Redirect URI가 등록된 것과 달라요',
+    access_denied: '카카오 동의를 취소했어요',
+  };
+  return M[code] || desc || code || '알 수 없는 오류';
+}
+function intentToState(it) {
+  if (!it) return 'login';
+  if (it.t === 'att') return `att.${it.m}.${it.s}`;
+  return it.t;
+}
+function stateToIntent(st) {
+  if (!st) return null;
+  if (st === 'vote' || st === 'settle') return { t: st };
+  const a = st.split('.');
+  if (a[0] === 'att' && a[1]) return { t: 'att', m: a[1], s: ['attend', 'hold', 'absent'].includes(a[2]) ? a[2] : 'attend' };
+  return null;
+}
+// 페이지 열릴 때 한 번: 주소 뒤에 붙은 것(?code ?att ?vote ?settle)을 읽어두고 주소는 깨끗하게
+function kakaoBootInit() {
+  document.getElementById('btnKakaoLogin')?.addEventListener('click', () => kakaoLogin());
+  let qp; try { qp = new URLSearchParams(location.search); } catch (e) { return; }
+  let it = null;
+  if (qp.get('code')) {
+    _kakaoCode = qp.get('code');
+    _kakaoLinkMode = qp.get('state') === 'link';
+    it = stateToIntent(qp.get('state') || '');
+  } else if (qp.get('error')) {
+    _kakaoErr = kakaoErrText(qp.get('error'), qp.get('error_description'));
+    it = stateToIntent(qp.get('state') || '');
+  } else if (qp.get('att')) {
+    const s = qp.get('s');
+    it = { t: 'att', m: qp.get('att'), s: ['attend', 'hold', 'absent'].includes(s) ? s : 'attend' };
+  } else if (qp.has('vote')) it = { t: 'vote' };
+  else if (qp.has('settle')) it = { t: 'settle' };
+  if (it) { _intent = it; try { sessionStorage.setItem('efm_intent', JSON.stringify(it)); } catch (e) {} }
+  else if (!_kakaoCode) { try { const s = sessionStorage.getItem('efm_intent'); if (s) _intent = JSON.parse(s); } catch (e) {} }
+  if ([...qp.keys()].length) { try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) {} }
+}
+// 첫 화면 결정: 카카오에서 돌아온 거면 로그인 마무리, 아니면 원래대로
+function bootRoute() {
+  if (_kakaoCode) { kakaoFinishLogin(); return; }
+  if (currentUser()) hideAuthGate();
+  else { showAuthGate(); if (_kakaoErr) { kakaoGateMsg(_kakaoErr, true); _kakaoErr = null; } }
+}
+function kakaoLogin(kind) {
+  const st = kind || intentToState(_intent);
+  const q = new URLSearchParams({ client_id: KAKAO_AUTH_KEY, redirect_uri: APP_URL, response_type: 'code', state: st });
+  location.href = 'https://kauth.kakao.com/oauth/authorize?' + q.toString();
+}
+function kakaoGateMsg(t, err) {
+  const m = document.getElementById('authMsg'); if (!m) return;
+  m.textContent = t; m.classList.toggle('success', !err);
+}
+async function kakaoProfileFromCode(code) {
+  const body = new URLSearchParams({ grant_type: 'authorization_code', client_id: KAKAO_AUTH_KEY, redirect_uri: APP_URL, code });
+  const r = await fetch('https://kauth.kakao.com/oauth/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' }, body });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok || !j.access_token) throw new Error(kakaoErrText(j.error_code || j.error, j.error_description));
+  const r2 = await fetch('https://kapi.kakao.com/v2/user/me', { headers: { Authorization: 'Bearer ' + j.access_token } });
+  const me = await r2.json().catch(() => ({}));
+  if (!r2.ok || !me.id) throw new Error('카카오 사용자 정보를 못 받았어요');
+  const pr = (me.kakao_account && me.kakao_account.profile) || {};
+  const props = me.properties || {};
+  return { id: String(me.id), nick: (pr.nickname || props.nickname || '').trim(), img: pr.thumbnail_image_url || props.thumbnail_image || '' };
+}
+function kakaoUserOf(kid) { return authStore.users.find(u => String(u.kakaoId || '') === String(kid)); }
+async function kakaoFinishLogin() {
+  const code = _kakaoCode; _kakaoCode = null;
+  const link = _kakaoLinkMode; _kakaoLinkMode = false;
+  const cur = currentUser();
+  showAuthGate(); kakaoGateMsg('💬 카카오 로그인 중…');
+  let prof;
+  try { prof = await kakaoProfileFromCode(code); }
+  catch (e) {
+    if (cur) { hideAuthGate(); toast('카카오 연결 실패 · ' + e.message, 6000); }
+    else kakaoGateMsg('카카오 로그인 실패 · ' + e.message, true);
+    return;
+  }
+  const owner = kakaoUserOf(prof.id);
+  if (cur) {   // 로그인된 상태에서 「카카오 연결」을 누르고 돌아온 경우
+    if (owner && owner.id !== cur.id) { hideAuthGate(); toast(`이 카카오 계정은 이미 「${owner.displayName}」에 연결돼 있어요`, 5000); return; }
+    cur.kakaoId = prof.id; cur.kakaoNick = prof.nick; saveAuth();
+    hideAuthGate(); toast('💬 카카오 연결 완료 · 다음부터 카카오로 바로 들어와요', 4000);
+    return;
+  }
+  if (owner) { kakaoLoginAs(owner, `💬 ${owner.displayName}님 반가워요`); return; }
+  showKakaoWho(prof);
+}
+function kakaoLoginAs(user, msg) {
+  session.currentUserId = user.id; saveSession();
+  document.querySelector('#authGate .auth-card')?.classList.remove('who-mode');
+  _kkProf = null;
+  hideAuthGate();
+  if (msg) toast(msg, 3500);
+}
+/* 처음 한 번: 카톡 닉네임 ≠ 본명이라 선수 목록에서 본인 고르기 */
+function showKakaoWho(prof) {
+  _kkProf = prof; _kkPick = null;
+  if (!store.players.length) { try { loadState(); } catch (e) {} }   // 오프라인 모드 대비 (Firebase면 이미 실려 있음)
+  document.querySelector('#authGate .auth-card')?.classList.add('who-mode');
+  renderKakaoWho();
+}
+function renderKakaoWho() {
+  const el = document.getElementById('kakaoWho'); const prof = _kkProf; if (!el || !prof) return;
+  const nick = prof.nick || '카카오 회원';
+  const live = store.players.filter(p => !isRetiredNow(p)).sort((a, b) => (a.number || 999) - (b.number || 999) || (a.name || '').localeCompare(b.name || ''));
+  const accOf = p => p.userId ? authStore.users.find(u => u.id === p.userId) : null;
+  const guess = live.find(p => (p.name || '').trim() === nick.trim());
+  const pickId = _kkPick || (guess ? guess.id : '');
+  _kkPickEff = pickId;
+  const sel = live.find(p => p.id === pickId) || null;
+  const selAcc = sel ? accOf(sel) : null;
+  const passTyped = document.getElementById('kwPass')?.value || '';
+  const grid = live.map(p => `<button type="button" class="kw-p${p.id === pickId ? ' on' : ''}" onclick="_kkPick='${p.id}';renderKakaoWho()"><b>#${p.number || '?'}</b>${escapeHtml(p.name)}${accOf(p) ? '<i title="이미 계정 있음">🔒</i>' : ''}</button>`).join('');
+  let action = '';
+  if (sel && selAcc) action = `<div class="kw-pass"><div>「${escapeHtml(sel.name)}」은 이미 계정이 있어요 (${maskUsername(selAcc)}). <b>그 계정 비밀번호를 한 번만</b> 넣으면 카카오로 이어지고 기록도 그대로예요.</div>
+      <input id="kwPass" type="password" placeholder="그 계정 비밀번호" autocomplete="current-password" value="${escapeHtml(passTyped)}" onkeydown="if(event.key==='Enter')kakaoWhoConfirm()">
+      <button type="button" class="kw-go" onclick="kakaoWhoConfirm()">✓ ${escapeHtml(sel.name)} #${sel.number || '?'} 로 연결</button>
+      <small>비밀번호를 모르면 운영진에게 「관리자 탭 → 🔑」로 새로 정해달라고 하세요</small></div>`;
+  else if (sel) action = `<button type="button" class="kw-go" onclick="kakaoWhoConfirm()">✓ ${escapeHtml(sel.name)} #${sel.number || '?'} 로 시작</button>`;
+  el.innerHTML = `<div class="kw-head">${prof.img ? `<img src="${escapeHtml(prof.img)}" alt="">` : '<span class="kw-ico">💬</span>'}<div><b>카톡 「${escapeHtml(nick)}」님, 누구세요?</b><small>선수 목록에서 본인을 골라주세요 · 처음 한 번만 물어봐요</small></div></div>
+    <div class="kw-grid">${grid}</div>
+    ${action}
+    <div class="kw-alt"><button type="button" onclick="kakaoWhoGuest()">명단에 없어요 (신입 · 게스트)</button><button type="button" onclick="kakaoWhoCancel()">취소</button></div>
+    <div class="auth-msg" id="kwMsg"></div>`;
+  if (sel && selAcc) setTimeout(() => document.getElementById('kwPass')?.focus(), 50);
+}
+async function kakaoWhoConfirm() {
+  const prof = _kkProf; if (!prof) return;
+  const msg = document.getElementById('kwMsg');
+  const p = store.players.find(x => x.id === _kkPickEff);
+  if (!p) { if (msg) msg.textContent = '본인 이름을 골라주세요'; return; }
+  const already = kakaoUserOf(prof.id);
+  if (already) { kakaoLoginAs(already, `💬 ${already.displayName}님 반가워요`); return; }
+  const acc = p.userId ? authStore.users.find(u => u.id === p.userId) : null;
+  if (acc) {
+    const pw = document.getElementById('kwPass')?.value || '';
+    if (!pw) { msg.textContent = '비밀번호를 넣어주세요'; return; }
+    if (!acc.passHash || acc.passHash !== await sha256(pw)) { msg.textContent = '비밀번호가 달라요'; return; }
+    acc.kakaoId = prof.id; acc.kakaoNick = prof.nick;
+    saveAuth();
+    kakaoLoginAs(acc, `💬 ${acc.displayName}님, 카카오로 연결됐어요 · 다음부턴 버튼 한 번`);
+    return;
+  }
+  const user = { id: uid(), username: 'k' + prof.id, passHash: '', displayName: p.name, role: 'member', playerId: p.id, kakaoId: prof.id, kakaoNick: prof.nick, createdAt: new Date().toISOString() };
+  authStore.users.push(user); p.userId = user.id;
+  saveAuth(); saveState();
+  kakaoLoginAs(user, `✅ ${p.name} #${p.number || '?'} 으로 시작해요`);
+}
+function kakaoWhoGuest() {
+  const prof = _kkProf; if (!prof) return;
+  const already = kakaoUserOf(prof.id);
+  if (already) { kakaoLoginAs(already); return; }
+  if (!confirm('선수 명단에 없는 신입·게스트로 가입할까요?\n운영진이 나중에 선수 프로필과 연결해줘요.')) return;
+  const user = { id: uid(), username: 'k' + prof.id, passHash: '', displayName: prof.nick || '카카오 회원', role: 'member', kakaoId: prof.id, kakaoNick: prof.nick, createdAt: new Date().toISOString() };
+  authStore.users.push(user); saveAuth();
+  kakaoLoginAs(user, '가입됐어요 · 운영진이 선수 프로필과 연결해줄 거예요');
+}
+function kakaoWhoCancel() {
+  _kkProf = null;
+  document.querySelector('#authGate .auth-card')?.classList.remove('who-mode');
+  updateAuthUI();
+}
+function renderAuthIntent() {
+  const el = document.getElementById('authIntent'); if (!el) return;
+  const it = _intent; let t = '';
+  if (it && it.t === 'att') {
+    const m = store.matches.find(x => x.id === it.m);
+    const meta = ATTEND_META[it.s] || ATTEND_META.attend;
+    t = m ? `로그인하면 바로 <b>${meta.icon} ${meta.label}</b> 등록돼요 · ${escapeHtml(settleDateLabelOf(m.date))} vs ${escapeHtml(m.opponent || '')}` : `로그인하면 바로 ${meta.icon} ${meta.label} 등록돼요`;
+  } else if (it && it.t === 'vote') t = '로그인하면 바로 <b>🗳️ 투표 모아보기</b>로 가요';
+  else if (it && it.t === 'settle') t = '로그인하면 바로 <b>💰 내 정산</b>으로 가요';
+  el.innerHTML = t; el.style.display = t ? '' : 'none';
+}
+// 로그인 끝난 뒤 한 번: 톡방 카드·링크로 들어온 목적지로 보내기
+function applyIntent() {
+  const it = _intent; _intent = null;
+  try { sessionStorage.removeItem('efm_intent'); } catch (e) {}
+  if (!it || !currentUser()) return;
+  if (it.t === 'vote') { switchTab('calendar'); openVoteAll(); return; }
+  if (it.t === 'settle') { switchTab('settle'); return; }
+  if (it.t !== 'att') return;
+  switchTab('calendar');
+  const m = store.matches.find(x => x.id === it.m);
+  if (!m) { openVoteAll(); toast('그 경기를 찾을 수 없어요 · 지워졌거나 바뀐 경기예요', 4500); return; }
+  const p = myPlayer() || autoLinkMyPlayer({ silent: true });
+  if (!p) { openVoteAll(); toast('내 계정이 선수와 연결돼 있지 않아요 · 운영진에게 「관리자 탭 → 선수 프로필 연결」을 요청하세요', 6000); return; }
+  if (m.date < ymd(new Date())) { openVoteAll(); toast('이미 지난 경기예요'); return; }
+  if (!m.attendance || typeof m.attendance !== 'object') m.attendance = {};
+  if (m.attendance[p.id] !== it.s) {
+    m.attendance[p.id] = it.s;
+    if (it.s !== 'attend' && m.availQ && m.availQ[p.id]) delete m.availQ[p.id];
+    bumpMatchRev(m); saveState();
+  }
+  markMatchSeen(m.id);
+  const meta = ATTEND_META[it.s];
+  const tail = it.s === 'attend' && matchQuarterCount(m) > 1 ? ' · 늦게 오면 아래에서 <b>몇 쿼터부터</b>인지 눌러주세요' : '';
+  openVoteAll({ focus: m.id, banner: `${meta.icon} <b>${meta.label}</b> 등록됐어요 · 현재 참석 ${attendCounts(m).attend}명${tail}` });
+}
+/* ---- 카톡 카드 공유 ---- */
+let _kakaoSdkP = null;
+function kakaoSdk() {
+  if (window.Kakao && Kakao.isInitialized && Kakao.isInitialized()) return Promise.resolve(Kakao);
+  if (_kakaoSdkP) return _kakaoSdkP;
+  _kakaoSdkP = new Promise((res, rej) => {
+    const sc = document.createElement('script');
+    sc.src = KAKAO_SDK.src; sc.integrity = KAKAO_SDK.sri; sc.crossOrigin = 'anonymous';
+    sc.onload = () => { try { if (!Kakao.isInitialized()) Kakao.init(KAKAO_JS_KEY); res(Kakao); } catch (e) { _kakaoSdkP = null; rej(e); } };
+    sc.onerror = () => { _kakaoSdkP = null; rej(new Error('카카오 SDK를 못 불러왔어요 · 인터넷 확인')); };
+    document.head.appendChild(sc);
+  });
+  return _kakaoSdkP;
+}
+async function kakaoUpload(K, blob) {
+  if (!blob) return '';
+  const file = new File([blob], 'efm.png', { type: 'image/png' });
+  let files = [file];
+  try { const dt = new DataTransfer(); dt.items.add(file); files = dt.files; } catch (_) {}
+  const r = await K.Share.uploadImage({ file: files });
+  return (r && r.infos && r.infos.original && r.infos.original.url) || '';
+}
+function kakaoSendCard(K, c, imageUrl) {
+  const link = u => ({ mobileWebUrl: u, webUrl: u });
+  const buttons = c.buttons.map(b => ({ title: b.title, link: link(b.url) }));
+  if (imageUrl) {
+    K.Share.sendDefault({ objectType: 'feed', content: { title: c.title, description: c.desc, imageUrl, imageWidth: 1000, imageHeight: 500, link: link(c.buttons[0].url) }, buttons });
+  } else {
+    K.Share.sendDefault({ objectType: 'text', text: (c.title + '\n' + c.desc).slice(0, 200), link: link(c.buttons[0].url), buttons });
+  }
+}
+// 카드용 가로 이미지 (1000×500 · 카톡 미리보기에 안 잘리게)
+async function buildKakaoCard(kind, d) {
+  const W = 1000, H = 500;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const g = cv.getContext('2d');
+  const F = "'Pretendard Variable','Noto Sans KR',sans-serif";
+  const GOLD = '#6f9fc4', GOLDW = '#9dc0d8';
+  g.fillStyle = '#0a0a0a'; g.fillRect(0, 0, W, H);
+  const bg = g.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, 'rgba(111,159,196,.16)'); bg.addColorStop(.6, 'rgba(0,0,0,0)');
+  g.fillStyle = bg; g.fillRect(0, 0, W, H);
+  await scenCrest();
+  if (_scenCrestImg) {
+    g.save(); g.globalAlpha = .07; const bh = 520, bw = _scenCrestImg.width / _scenCrestImg.height * bh; g.drawImage(_scenCrestImg, W - bw * .72, -10, bw, bh); g.restore();
+    const ch = 74, cw = _scenCrestImg.width / _scenCrestImg.height * ch; g.drawImage(_scenCrestImg, 44, 36, cw, ch);
+  }
+  g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+  g.fillStyle = GOLD; g.font = `800 34px ${F}`; g.fillText('EAST FC', 134, 74);
+  g.fillStyle = '#8b9099'; g.font = `600 22px ${F}`; g.fillText(d.sub || '', 134, 104);
+  const fit = (txt, max, size, weight) => { let s = size; g.font = `${weight} ${s}px ${F}`; while (g.measureText(txt).width > max && s > 24) { s -= 2; g.font = `${weight} ${s}px ${F}`; } };
+  const pill = (txt, col, x, y) => { g.font = `800 24px ${F}`; const w = g.measureText(txt).width + 34; g.fillStyle = col + '2a'; g.beginPath(); g.roundRect(x - w, y, w, 44, 22); g.fill(); g.strokeStyle = col + '99'; g.lineWidth = 2; g.stroke(); g.fillStyle = col; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(txt, x - w / 2, y + 23); g.textAlign = 'left'; g.textBaseline = 'alphabetic'; };
+  if (kind === 'match') {
+    const m = d.m; const k = matchStatus(m); const st = MATCH_ST[k];
+    pill(`${st.dot} ${st.t}`, st.c, W - 44, 46);
+    fit(`vs ${m.opponent || '상대팀'}`, W - 88, 70, 900); g.fillStyle = '#fff'; g.fillText(`vs ${m.opponent || '상대팀'}`, 44, 228);
+    g.fillStyle = GOLDW; g.font = `700 34px ${F}`; g.fillText(fmtMatchDate(m), 44, 284);
+    if (m.location) { g.fillStyle = '#9aa1aa'; g.font = `500 27px ${F}`; g.fillText(`📍 ${m.location}${m.homeAway === 'home' ? ' (홈)' : m.homeAway === 'away' ? ' (원정)' : ''}`, 44, 328); }
+    const gr = matchAttendGroups(m); const tot = gr.attend.length + gr.hold.length + gr.absent.length + gr.none.length || 1;
+    let px = 44; const bw = W - 88;
+    g.save(); g.beginPath(); g.roundRect(44, 372, bw, 16, 8); g.clip();
+    g.fillStyle = 'rgba(255,255,255,.08)'; g.fillRect(44, 372, bw, 16);
+    [[gr.attend.length, '#22c55e'], [gr.hold.length, '#f59e0b'], [gr.absent.length, '#ef4444']].forEach(([n, c]) => { const w = bw * n / tot; g.fillStyle = c; g.fillRect(px, 372, w, 16); px += w; });
+    g.restore();
+    g.fillStyle = '#e5e7eb'; g.font = `800 30px ${F}`;
+    g.fillText(`✅ 참석 ${gr.attend.length}   ⏸️ 보류 ${gr.hold.length}   ❌ 불참 ${gr.absent.length}   ❓ ${gr.none.length}`, 44, 440);
+  } else if (kind === 'all') {
+    const ms = d.ms.slice(0, 4);
+    ms.forEach((m, i) => {
+      const y = 150 + i * 80; const k = matchStatus(m); const st = MATCH_ST[k];
+      g.fillStyle = 'rgba(255,255,255,.045)'; g.beginPath(); g.roundRect(44, y, W - 88, 66, 14); g.fill();
+      g.fillStyle = st.c; g.beginPath(); g.roundRect(44, y + 10, 6, 46, 3); g.fill();
+      g.fillStyle = GOLDW; g.font = `800 26px ${F}`; g.fillText(`${settleDateLabelOf(m.date)} ${m.time || ''}`, 70, y + 43);
+      g.fillStyle = '#fff'; fit(`vs ${m.opponent || ''}`, 420, 30, 900); g.fillText(`vs ${m.opponent || ''}`, 330, y + 44);
+      g.textAlign = 'right'; g.fillStyle = st.c; g.font = `800 24px ${F}`; g.fillText(`${st.dot} ${st.t} · ✅${attendCounts(m).attend}`, W - 66, y + 43); g.textAlign = 'left';
+    });
+    if (d.ms.length > 4) { g.fillStyle = '#8b9099'; g.font = `700 24px ${F}`; g.fillText(`+ ${d.ms.length - 4}개 더`, 44, 478); }
+  } else if (kind === 'settle') {
+    const it = d.it; const c = settleCalc(it);
+    pill(it.closed ? '마감' : settleDueText(it) || '진행중', it.closed ? '#9ca3af' : '#f59e0b', W - 44, 46);
+    fit(it.title || '정산', W - 88, 50, 900); g.fillStyle = '#fff'; g.fillText(it.title || '정산', 44, 210);
+    g.fillStyle = GOLDW; g.font = `800 28px ${F}`; g.fillText(`1인 부담${it.mode === 'quarter' ? ' (전 쿼터 기준)' : ''}`, 44, 270);
+    g.fillStyle = '#fff'; g.font = `900 84px ${F}`; g.fillText(won(c.base), 44, 358);
+    g.fillStyle = '#9aa1aa'; g.font = `600 27px ${F}`;
+    g.fillText(`합계 ${won(c.total)} · ${c.n}명${it.due ? ' · ⏰ ' + settleDateLabelOf(it.due) + '까지' : ''}`, 44, 420);
+    const a = settleAcct(); if (a.num) { g.fillStyle = '#d1d5db'; g.font = `700 26px ${F}`; g.fillText(`🏦 ${acctText()}`, 44, 464); }
+  }
+  return new Promise(res => cv.toBlob(res, 'image/png'));
+}
+
+/* ==================== ⚡ 퀵 매치 — 4번 탭으로 경기 등록 + 투표 공지 ==================== */
+const QM_FORM = { 11: '4-3-3', 10: '4-4-1', 9: '3-3-2', 8: '3-3-1' };
+let _qm = null;
+function qmRecent() {
+  const ms = store.matches.slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  const opps = [], locs = {}, times = {};
+  ms.forEach((m, i) => {
+    const o = (m.opponent || '').trim();
+    if (o && o !== '상대 미정' && !opps.includes(o)) opps.push(o);
+    const l = (m.location || '').trim();
+    if (l) { if (!locs[l]) locs[l] = { n: 0, last: i, ha: m.homeAway || 'home' }; locs[l].n++; }
+    if (m.time) times[m.time] = (times[m.time] || 0) + 1;
+  });
+  const locList = Object.entries(locs).sort((a, b) => (b[1].n - a[1].n) || (a[1].last - b[1].last)).map(([name, v]) => ({ name, ha: v.ha }));
+  const timeTop = Object.entries(times).sort((a, b) => b[1] - a[1]).slice(0, 4).map(x => x[0]);
+  const last = ms[0] || null;
+  let size = 11, nq = 4;
+  if (last) {
+    const qs = matchQuarters(last);
+    if (qs.length) nq = qs.length;
+    const sq = qs[0] && store.squads.find(s => s.id === qs[0].squadId);
+    const len = sq && FORMATIONS[sq.formation] ? FORMATIONS[sq.formation].length : 0;
+    if (QM_FORM[len]) size = len;
+  }
+  return { opps: opps.slice(0, 6), locs: locList.slice(0, 6), times: timeTop, size, nq };
+}
+function qmDays() {
+  const out = []; const t = new Date(); t.setHours(0, 0, 0, 0);
+  const dow = ['일', '월', '화', '수', '목', '금', '토'];
+  const satOf = d => { const x = new Date(d); x.setDate(x.getDate() - (x.getDay() === 0 ? 1 : 0)); return x; };
+  let base = null;
+  for (let i = 0; i < 21 && out.length < 6; i++) {
+    const d = new Date(t); d.setDate(t.getDate() + i);
+    const wk = d.getDay(); if (wk !== 0 && wk !== 6) continue;
+    const s = satOf(d); if (!base) base = s;
+    const w = Math.round((s - base) / (7 * 86400000));
+    const tag = i === 0 ? '오늘' : i === 1 ? '내일' : (['이번 주', '다음 주', '다다음 주'][w] || '');
+    out.push({ ds: ymd(d), label: `${d.getMonth() + 1}/${d.getDate()} (${dow[wk]})`, tag, wk });
+  }
+  return out;
+}
+function openQuickMatch() {
+  if (!canManageMatches()) { toast('로그인이 필요해요'); return; }
+  const r = qmRecent();
+  let lastPref = {};
+  try { lastPref = JSON.parse(localStorage.getItem('efm_qm_last') || '{}') || {}; } catch (e) {}
+  const nq0 = lastPref.nq || r.nq, sz0 = lastPref.size || r.size;
+  _qm = { step: 1, date: '', time: '', opp: '', loc: '', ha: 'home', size: QM_FORM[sz0] ? sz0 : 11, nq: [2, 3, 4, 6].includes(nq0) ? nq0 : 4, status: 'tentative', me: !!myPlayer(), r };
+  renderQuickMatch();
+  document.getElementById('quickMatchModal').classList.add('show');
+}
+function closeQuickMatch() {
+  document.getElementById('quickMatchModal')?.classList.remove('show'); _qm = null;
+  if (_pendingRerender) rerenderCurrent();
+}
+function qmGo(step) { if (!_qm) return; _qm.step = step; renderQuickMatch(); }
+function qmPick(k, v) {
+  if (!_qm) return;
+  _qm[k] = v;
+  if (k === 'date' && v) _qm.step = 2;
+  else if (k === 'time') _qm.step = 3;
+  else if (k === 'opp') _qm.step = 4;
+  else if (k === 'loc') { const hit = _qm.r.locs.find(x => x.name === v); if (hit) _qm.ha = hit.ha; }
+  renderQuickMatch();
+}
+function qmOppNext() {
+  const v = (document.getElementById('qmOpp')?.value || '').trim();
+  if (!v) { toast('상대팀 이름을 넣거나 「상대 미정」을 눌러주세요'); return; }
+  qmPick('opp', v);
+}
+function qmSummary() {
+  const q = _qm; const dl = q.date ? settleDateLabelOf(q.date).replace(' ', '') : '';
+  const chip = (step, ico, v, ph) => `<button type="button" class="qm-sum${q.step === step ? ' cur' : ''}${v ? ' set' : ''}" onclick="qmGo(${step})">${ico} ${v ? escapeHtml(v) : `<span>${ph}</span>`}</button>`;
+  return `<div class="qm-sums">${chip(1, '📅', dl, '언제')}${chip(2, '⏰', q.step > 2 || q.time ? (q.time || '시간 미정') : '', '몇 시')}${chip(3, '🆚', q.opp, '상대')}${chip(4, '📍', q.loc, '장소')}</div>`;
+}
+function renderQuickMatch() {
+  const body = document.getElementById('quickMatchBody'); if (!body || !_qm) return;
+  const q = _qm, r = q.r;
+  const dots = [1, 2, 3, 4].map(i => `<i class="${i < q.step ? 'done' : i === q.step ? 'on' : ''}"></i>`).join('');
+  let main = '';
+  if (q.step === 1) {
+    const days = qmDays();
+    main = `<div class="qm-q">언제 해요?</div>
+      <div class="qm-grid">${days.map(d => {
+        const has = store.matches.filter(m => m.date === d.ds && matchStatus(m) !== 'cancelled');
+        return `<button type="button" class="qm-chip big${q.date === d.ds ? ' on' : ''}" onclick="qmPick('date','${d.ds}')"><small>${d.tag}</small>${d.label}${has.length ? `<em>경기 ${has.length}개 있음</em>` : ''}</button>`;
+      }).join('')}</div>
+      <label class="qm-direct"><span>📅 다른 날</span><input type="date" min="${ymd(new Date())}" value="${escapeHtml(q.date)}" onchange="qmPick('date',this.value)"></label>`;
+  } else if (q.step === 2) {
+    const defs = ['08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '21:00'];
+    const list = [...new Set([...r.times, ...defs])].slice(0, 8).sort();
+    main = `<div class="qm-q">몇 시?</div>
+      <div class="qm-grid four">${list.map(t => `<button type="button" class="qm-chip${q.time === t ? ' on' : ''}${r.times.includes(t) ? ' fav' : ''}" onclick="qmPick('time','${t}')">${t}</button>`).join('')}</div>
+      <div class="qm-row"><label class="qm-direct"><span>⏰ 직접</span><input type="time" id="qmTime" step="600" value="${escapeHtml(q.time)}"></label><button type="button" class="qm-next" onclick="qmPick('time',document.getElementById('qmTime').value)">확인</button></div>
+      <button type="button" class="qm-skip" onclick="qmPick('time','')">시간 미정 · 나중에 정할게요</button>`;
+  } else if (q.step === 3) {
+    main = `<div class="qm-q">상대는?</div>
+      <div class="qm-row"><input class="qm-in" id="qmOpp" placeholder="상대팀 이름" value="${escapeHtml(q.opp)}" enterkeyhint="next" onkeydown="if(event.key==='Enter'){event.preventDefault();qmOppNext()}"><button type="button" class="qm-next" onclick="qmOppNext()">다음</button></div>
+      ${r.opps.length ? `<div class="qm-sub">최근 상대</div><div class="qm-flow">${r.opps.map(o => `<button type="button" class="qm-chip" onclick="qmPick('opp',this.dataset.v)" data-v="${escapeHtml(o)}">${escapeHtml(o)}</button>`).join('')}</div>` : ''}
+      <button type="button" class="qm-skip" onclick="qmPick('opp','상대 미정')">상대 미정 · 구하는 중</button>`;
+  } else {
+    const dup = store.matches.filter(m => m.date === q.date && matchStatus(m) !== 'cancelled' && (!q.time || !m.time || m.time === q.time));
+    const seg = (key, opts) => `<div class="qm-seg">${opts.map(([v, l]) => `<button type="button" class="${String(q[key]) === String(v) ? 'on' : ''}" onclick="_qm.${key}=${typeof v === 'number' ? v : `'${v}'`};renderQuickMatch()">${l}</button>`).join('')}</div>`;
+    main = `<div class="qm-q">어디서?</div>
+      <input class="qm-in" id="qmLoc" placeholder="구장 이름 (비워도 돼요)" value="${escapeHtml(q.loc)}" oninput="_qm.loc=this.value">
+      ${r.locs.length ? `<div class="qm-flow" style="margin-top:8px">${r.locs.map(l => `<button type="button" class="qm-chip${q.loc === l.name ? ' on' : ''}" onclick="qmPick('loc',this.dataset.v)" data-v="${escapeHtml(l.name)}">${escapeHtml(l.name)}</button>`).join('')}</div>` : ''}
+      <div class="qm-opts">
+        <div class="qm-opt"><span>홈/원정</span>${seg('ha', [['home', '🏠 홈'], ['away', '✈️ 원정']])}</div>
+        <div class="qm-opt"><span>인원</span>${seg('size', [[11, '11'], [10, '10'], [9, '9'], [8, '8']])}</div>
+        <div class="qm-opt"><span>쿼터</span>${seg('nq', [[2, '2Q'], [3, '3Q'], [4, '4Q'], [6, '6Q']])}</div>
+        <div class="qm-opt"><span>상태</span>${seg('status', [['tentative', '🟡 미확정'], ['confirmed', '🟢 확정']])}</div>
+        ${myPlayer() ? `<label class="qm-opt qm-me"><span>나도 참석</span><input type="checkbox" ${q.me ? 'checked' : ''} onchange="_qm.me=this.checked"></label>` : ''}
+      </div>
+      ${dup.length ? `<div class="qm-warn">⚠️ 같은 날 이미 ${dup.map(m => `${escapeHtml(m.time || '')} vs ${escapeHtml(m.opponent || '')}`).join(', ')} 경기가 있어요 · 다른 경기면 그대로 진행</div>` : ''}
+      <button type="button" class="qm-go" onclick="qmCreate(true)">⚡ 경기 올리고 투표 공지</button>
+      <button type="button" class="qm-skip" onclick="qmCreate(false)">일정에 등록만 하기</button>`;
+  }
+  body.innerHTML = `<div class="ud-head"><h3>⚡ 퀵 매치 <span class="qm-dots">${dots}</span></h3><button class="ud-x" onclick="closeQuickMatch()">✕</button></div>
+    ${qmSummary()}
+    <div class="qm-main">${main}</div>
+    ${q.step > 1 ? `<button type="button" class="qm-back" onclick="qmGo(${q.step - 1})">‹ 이전</button>` : ''}`;
+  if (q.step === 3) setTimeout(() => document.getElementById('qmOpp')?.focus(), 60);
+}
+function qmCreate(share) {
+  const q = _qm; if (!q) return;
+  const u = currentUser(); if (!u) { toast('로그인이 필요해요'); return; }
+  if (!q.date) { qmGo(1); return; }
+  if (!q.opp) { qmGo(3); return; }
+  const loc = (document.getElementById('qmLoc')?.value ?? q.loc ?? '').trim();
+  const dt = parseYmd(q.date);
+  const mmdd = String(dt.getMonth() + 1).padStart(2, '0') + String(dt.getDate()).padStart(2, '0');
+  const formation = QM_FORM[q.size] || '4-3-3';
+  const quarters = [];
+  for (let i = 1; i <= q.nq; i++) {
+    const squad = { id: uid(), name: `${mmdd} ${q.opp} ${i}쿼터`, formation, slots: [], assignments: {} };
+    ensureSquadSlots(squad);
+    store.squads.push(squad);
+    quarters.push({ label: `${i}쿼터`, squadId: squad.id });
+  }
+  const now = new Date().toISOString();
+  const m = {
+    id: uid(), color: nextMatchColor(), date: q.date, time: q.time || '', opponent: q.opp, homeAway: q.ha, location: loc,
+    quarters, squadId: quarters[0].squadId, scoreUs: null, scoreThem: null, notes: '',
+    attendance: {}, availQ: {}, records: {}, momVotes: {},
+    status: q.status, statusBy: u.displayName || u.username || '', statusAt: now, createdBy: u.displayName || u.username || '', createdAt: now,
+  };
+  const mp = myPlayer();
+  if (q.me && mp) m.attendance[mp.id] = 'attend';
+  store.matches.push(m);
+  try { localStorage.setItem('efm_qm_last', JSON.stringify({ size: q.size, nq: q.nq })); } catch (e) {}
+  saveState(); markMatchSeen(m.id); updateCalendarBadge();
+  document.getElementById('quickMatchModal')?.classList.remove('show'); _qm = null;
+  if (currentTab !== 'calendar') switchTab('calendar'); else renderCalendar();
+  toast(`⚡ ${settleDateLabelOf(m.date)} vs ${m.opponent} 등록 · 스쿼드 ${q.nq}개 (${formation})`, 3500);
+  if (share) setTimeout(() => openShareMatch(m.id), 350);
 }
 
 /* ==================== Org chart ==================== */
@@ -17618,13 +19015,13 @@ function bindEvents() {
   document.getElementById('bioEditSave')?.addEventListener('click', saveBioEdit);
   document.getElementById('bioModal')?.addEventListener('click', e => { if (e.target.id === 'bioModal') closePlayerBio(); });
   document.getElementById('bioEditModal')?.addEventListener('click', e => { if (e.target.id === 'bioEditModal') closeBioEdit(); });
-  document.getElementById('btnShareNextMatch')?.addEventListener('click', () => {
-    const today = ymd(new Date());
-    const next = store.matches.filter(m => m.date >= today)
-      .sort((a, b) => a.date.localeCompare(b.date) || (a.time || '').localeCompare(b.time || ''))[0];
-    if (!next) { toast('예정된 경기가 없어요'); return; }
-    openShareMatch(next.id);
-  });
+  document.getElementById('btnShareAll')?.addEventListener('click', openShareAll);
+  document.getElementById('btnVoteAll')?.addEventListener('click', () => openVoteAll());
+  document.getElementById('btnQuickMatch')?.addEventListener('click', () => { document.getElementById('navUtils')?.classList.remove('open'); openQuickMatch(); });
+  document.getElementById('btnQuickMatch2')?.addEventListener('click', openQuickMatch);
+  document.getElementById('quickMatchModal')?.addEventListener('click', e => { if (e.target.id === 'quickMatchModal') closeQuickMatch(); });
+  document.getElementById('voteAllModal')?.addEventListener('click', e => { if (e.target.id === 'voteAllModal') closeVoteAll(); });
+  document.getElementById('settleModal')?.addEventListener('click', e => { if (e.target.id === 'settleModal') closeSettleEditor(); });
   document.getElementById('btnProsAdd')?.addEventListener('click', openProsAdd);
   document.getElementById('prosAddSave')?.addEventListener('click', saveProsAdd);
   document.getElementById('prosAddCancel')?.addEventListener('click', () => document.getElementById('prosAddModal').classList.remove('show'));
@@ -17773,6 +19170,7 @@ function seedSampleData() {
 buildRolePicker();
 buildStatGrid();
 bindAuthEvents();
+kakaoBootInit();
 initBackend();
 
 if (USE_FIREBASE) {
@@ -17785,7 +19183,7 @@ if (USE_FIREBASE) {
       showBackendLoading(false);
       loadAuth();
       updateBackendStatusUI();
-      if (currentUser()) hideAuthGate(); else showAuthGate();
+      bootRoute();
       _booted = true;
     }
   }, 9000);
@@ -17808,7 +19206,7 @@ if (USE_FIREBASE) {
 } else {
   loadAuth();
   updateBackendStatusUI();
-  if (currentUser()) hideAuthGate(); else showAuthGate();
+  bootRoute();
 }
 
 function onRemoteData(fbTimeout) {
@@ -17819,7 +19217,7 @@ function onRemoteData(fbTimeout) {
     showBackendLoading(false);
     loadAuth(); // load session (currentUserId) from this device
     updateBackendStatusUI();
-    if (currentUser()) hideAuthGate(); else showAuthGate();
+    bootRoute();
   } else {
     // Live update pushed by another user — debounced & scroll-preserving.
     if (isLoggedIn() && !document.getElementById('authGate').classList.contains('show')) {
