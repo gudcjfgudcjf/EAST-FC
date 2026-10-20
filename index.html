@@ -6005,7 +6005,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 101;
+const APP_VERSION = 102;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -13597,9 +13597,13 @@ async function openSharePop(o) {
     let kk = null;
     const prep = (async () => {
       const K = await kakaoSdk();
-      let url = '';
-      try { url = await kakaoUpload(K, await o.kakao.image()); } catch (e) { console.warn('카톡 이미지 업로드 실패', e); }
-      return { K, url };
+      const imgs = {};
+      let blobs = {};
+      try { blobs = o.kakao.images ? await o.kakao.images() : { main: await o.kakao.image() }; } catch (e) { console.warn('카톡 이미지 생성 실패', e); }
+      for (const [k, bl] of Object.entries(blobs)) {
+        try { imgs[k] = await kakaoUpload(K, bl); } catch (e) { console.warn('카톡 이미지 업로드 실패', k, e); }
+      }
+      return { K, imgs };
     })();
     prep.then(v => { kk = v; }, () => {});
     kb.addEventListener('click', async () => {
@@ -13608,7 +13612,7 @@ async function openSharePop(o) {
         try { kk = await prep; } catch (e) { kb.innerHTML = t; toast(e.message || '카카오 연결 실패', 5000); return; }
         kb.innerHTML = t;
       }
-      try { kakaoSendCard(kk.K, o.kakao.card(), kk.url); }
+      try { kakaoSendCard(kk.K, o.kakao.card(), kk.imgs); }
       catch (e) { toast('카톡 공유 실패 · ' + (e.message || e), 6000); }
     });
   }
@@ -13681,15 +13685,22 @@ async function openShareMatch(matchId) {
     image: () => buildScheduleImage(m),
     fname: `EASTFC_일정_${(m.date || '').replace(/-/g, '')}_${(m.opponent || '').replace(/\s+/g, '_')}.png`,
     kakao: {
-      hint: '참석·불참 버튼 달림',
-      image: () => buildKakaoCard('match', { m, sub: '📅 경기 일정 · 참석 투표' }),
+      hint: '참석·보류·불참 다 눌러짐',
+      images: async () => ({ attend: await buildKakaoIcon('attend'), hold: await buildKakaoIcon('hold'), absent: await buildKakaoIcon('absent') }),
       card: () => {
-        const c = attendCounts(m); const st = MATCH_ST[matchStatus(m)];
+        const st = MATCH_ST[matchStatus(m)];
         const ha = m.homeAway === 'home' ? ' (홈)' : m.homeAway === 'away' ? ' (원정)' : '';
+        const base = `${APP_URL}?att=${m.id}&s=`;
         return {
-          title: `${dl} ${m.time || ''} · vs ${m.opponent || '상대팀'}`,
-          desc: `${m.location ? '📍 ' + m.location + ha + '\n' : ''}${st.dot} ${st.t} · ✅ 참석 ${c.attend}명 · 늦게 오면 몇 쿼터부터인지도 체크`,
-          buttons: [{ title: '✅ 참석', url: `${APP_URL}?att=${m.id}&s=attend` }, { title: '❌ 불참', url: `${APP_URL}?att=${m.id}&s=absent` }],
+          type: 'list',
+          title: `${st.dot} ${dl} ${m.time || ''} vs ${m.opponent || '상대팀'}${m.location ? ' · ' + m.location + ha : ''}`,
+          headerUrl: VOTE_URL,
+          items: [
+            { title: '✅ 참석', desc: matchQuarterCount(m) > 1 ? '늦게 오면 누른 뒤 몇 쿼터부터인지 체크' : '갈게요', url: base + 'attend', img: 'attend' },
+            { title: '⏸️ 보류', desc: '아직 모르겠어요', url: base + 'hold', img: 'hold' },
+            { title: '❌ 불참', desc: '이번엔 못 가요', url: base + 'absent', img: 'absent' },
+          ],
+          buttons: [{ title: '🗳️ 전체 경기 투표', url: VOTE_URL }],
         };
       },
     },
@@ -14526,14 +14537,42 @@ async function kakaoUpload(K, blob) {
   const r = await K.Share.uploadImage({ file: files });
   return (r && r.infos && r.infos.original && r.infos.original.url) || '';
 }
-function kakaoSendCard(K, c, imageUrl) {
+function kakaoSendCard(K, c, imgs) {
+  imgs = imgs || {};
   const link = u => ({ mobileWebUrl: u, webUrl: u });
-  const buttons = c.buttons.map(b => ({ title: b.title, link: link(b.url) }));
+  const buttons = (c.buttons || []).slice(0, 2).map(b => ({ title: b.title, link: link(b.url) }));
+  // 리스트형: 줄마다 링크가 달려서 버튼 2개 제한 없이 참석·보류·불참 3개를 다 붙일 수 있다
+  if (c.type === 'list') {
+    K.Share.sendDefault({
+      objectType: 'list', headerTitle: c.title, headerLink: link(c.headerUrl || c.items[0].url),
+      contents: c.items.slice(0, 3).map(it => Object.assign({ title: it.title, description: it.desc || '', link: link(it.url) },
+        imgs[it.img] ? { imageUrl: imgs[it.img], imageWidth: 200, imageHeight: 200 } : {})),
+      buttons,
+    });
+    return;
+  }
+  const imageUrl = imgs.main;
   if (imageUrl) {
     K.Share.sendDefault({ objectType: 'feed', content: { title: c.title, description: c.desc, imageUrl, imageWidth: 1000, imageHeight: 500, link: link(c.buttons[0].url) }, buttons });
   } else {
     K.Share.sendDefault({ objectType: 'text', text: (c.title + '\n' + c.desc).slice(0, 200), link: link(c.buttons[0].url), buttons });
   }
+}
+// 리스트 카드 줄마다 붙는 작은 아이콘 (참석·보류·불참)
+function buildKakaoIcon(kind) {
+  const S = 200; const cv = document.createElement('canvas'); cv.width = S; cv.height = S;
+  const g = cv.getContext('2d');
+  const C = { attend: ['#16a34a', '#22c55e', '참석'], hold: ['#d97706', '#f59e0b', '보류'], absent: ['#dc2626', '#ef4444', '불참'] }[kind];
+  const gr = g.createLinearGradient(0, 0, 0, S); gr.addColorStop(0, C[1]); gr.addColorStop(1, C[0]);
+  g.fillStyle = gr; g.beginPath(); g.roundRect(0, 0, S, S, 44); g.fill();
+  g.strokeStyle = '#fff'; g.lineWidth = 18; g.lineCap = 'round'; g.lineJoin = 'round'; g.fillStyle = '#fff';
+  g.beginPath();
+  if (kind === 'attend') { g.moveTo(52, 84); g.lineTo(88, 118); g.lineTo(150, 52); g.stroke(); }
+  else if (kind === 'hold') { g.fillRect(70, 44, 20, 80); g.fillRect(110, 44, 20, 80); }
+  else { g.moveTo(62, 46); g.lineTo(138, 122); g.moveTo(138, 46); g.lineTo(62, 122); g.stroke(); }
+  g.font = "900 40px 'Pretendard Variable','Noto Sans KR',sans-serif"; g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+  g.fillText(C[2], S / 2, 178);
+  return new Promise(res => cv.toBlob(res, 'image/png'));
 }
 // 카드용 가로 이미지 (1000×500 · 카톡 미리보기에 안 잘리게)
 async function buildKakaoCard(kind, d) {
