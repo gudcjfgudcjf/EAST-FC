@@ -4121,6 +4121,136 @@
   .tra-gap { color: #fdba74; font-weight: 900; }
 
   .bt-pack { margin-top: 8px; padding: 8px 10px; border-radius: 10px; background: rgba(255,255,255,.035); font-size: 11.6px; color: #a7b3bf; font-weight: 700; line-height: 1.5; } .bt-pack b { color: #e5e7eb; }
+  /* ============================================================
+     🔴 v110 심화 · 🎮 경기 시뮬 (빨강 · 정지 글로우만)
+     ============================================================ */
+  .tr-btn.red { background: linear-gradient(120deg,#fb7185,#e11d48); color: #fff !important; box-shadow: 0 6px 18px rgba(225,29,72,.3); }
+  .tr-mini3.four { grid-template-columns: repeat(4, 1fr); }
+  .tr-mini3 .r { border-color: rgba(251,113,133,.5); color: #fecdd3 !important; }
+  @media (max-width: 340px) { .tr-mini3.four { grid-template-columns: 1fr 1fr; } }
+  .tr-mbtn { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 9px; } .tr-mbtn .tr-btn { margin-top: 0; padding: 11px 6px; }
+  .dp-simc { width: 100%; display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 16px; text-align: left; background: #1a0f13; border: 1px solid rgba(251,113,133,.55); box-shadow: 0 0 14px rgba(225,29,72,.14); }
+  .dp-simc > span { font-size: 24px; } .dp-simc div { flex: 1; min-width: 0; } .dp-simc b { display: block; font-size: 14.5px; font-weight: 900; } .dp-simc small { display: block; font-size: 11.3px; color: #fecdd3; font-weight: 700; margin-top: 2px; line-height: 1.4; } .dp-simc i { font-style: normal; font-size: 18px; color: #fb7185; }
+  .dp-hrow { width: 100%; display: grid; grid-template-columns: 1fr auto; gap: 1px 10px; align-items: center; margin-top: 6px; padding: 9px 11px; border-radius: 12px; background: #101318; border: 1px solid rgba(255,255,255,.08); text-align: left; }
+  .dp-hrow b { font-size: 13px; font-weight: 900; } .dp-hrow small { grid-column: 1; font-size: 11px; color: #8a949e; font-weight: 700; }
+  .dp-hrow span { grid-row: 1 / span 2; grid-column: 2; font-size: 13px; font-weight: 900; padding: 4px 9px; border-radius: 9px; font-variant-numeric: tabular-nums; }
+  .dp-hrow span.hi { color: #bbf7d0; background: rgba(34,197,94,.14); } .dp-hrow span.mid { color: #fde68a; background: rgba(250,204,21,.12); } .dp-hrow span.lo { color: #fecdd3; background: rgba(225,29,72,.14); }
+  .dp-board { text-align: center; padding: 9px 10px 8px; border-radius: 15px; background: #0d0f12; border: 1px solid rgba(255,255,255,.12); }
+  .dp-board .sc { display: flex; align-items: center; justify-content: center; gap: 12px; } .dp-board .sc b { font-size: 14px; font-weight: 900; max-width: 34%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dp-board .sc em { font-style: normal; font-size: 24px; font-weight: 900; font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+  .dp-board small { display: block; font-size: 11.5px; color: #fb7185; font-weight: 800; margin-top: 2px; }
+  .dp-cuts { display: flex; align-items: center; gap: 0; margin-top: 9px; } .dp-cuts > i { flex: 1; height: 1px; background: rgba(255,255,255,.15); min-width: 8px; }
+  .dp-cuts span { flex: none; font-size: 11.5px; font-weight: 900; padding: 4px 9px; border-radius: 10px; border: 1px solid rgba(255,255,255,.14); color: #9aa4ae; white-space: nowrap; }
+  .dp-cuts span.now { border-color: #fb7185; color: #fff; background: rgba(225,29,72,.16); } .dp-cuts span.ok { border-color: rgba(74,222,128,.55); color: #bbf7d0; } .dp-cuts span.no { border-color: rgba(248,113,113,.55); color: #fecaca; }
+  .dp-simdots { display: flex; gap: 4px; margin-top: 9px; justify-content: center; flex-wrap: wrap; }
+  .dp-simdots span { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; font-size: 12px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); color: #9aa4ae; }
+  .dp-simdots span.qs { margin-left: 8px; } .dp-simdots span.now { border-color: #fb7185; color: #fb7185; } .dp-simdots span.goal { background: rgba(34,197,94,.18); border-color: rgba(74,222,128,.5); } .dp-simdots span.conceded { background: rgba(225,29,72,.18); border-color: rgba(251,113,133,.5); } .dp-simdots span.save { color: #bbf7d0; }
+  .dp-stake { margin-top: 9px; font-size: 12px; font-weight: 900; padding: 6px 10px; border-radius: 10px; display: inline-block; }
+  .dp-stake.def { background: rgba(56,189,248,.1); color: #bae6fd; } .dp-stake.att { background: rgba(250,204,21,.1); color: #fde68a; }
+  .dp-time { display: flex; align-items: center; gap: 8px; margin: 8px 0 2px; } .dp-time > div { flex: 1; height: 8px; border-radius: 6px; background: rgba(255,255,255,.08); overflow: hidden; }
+  .dp-time > div i { display: block; height: 100%; width: 100%; border-radius: 6px; background: linear-gradient(90deg,#fb7185,#fbbf24); }
+  .dp-time b { flex: none; font-size: 12px; font-weight: 900; color: #fde68a; font-variant-numeric: tabular-nums; min-width: 34px; text-align: right; }
+  .dp-ev { margin-top: 8px; padding: 10px 12px; border-radius: 12px; font-size: 13px; font-weight: 900; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .dp-ev b { margin-left: auto; font-variant-numeric: tabular-nums; } .dp-ev.goal { background: rgba(34,197,94,.14); color: #bbf7d0; } .dp-ev.save { background: rgba(56,189,248,.12); color: #bae6fd; } .dp-ev.conceded { background: rgba(225,29,72,.16); color: #fecdd3; } .dp-ev.miss { background: rgba(255,255,255,.06); color: #cbd5e1; }
+  .dp-rh { display: flex; align-items: center; gap: 10px; padding: 13px 14px; border-radius: 16px; background: #1a0f13; border: 1px solid rgba(251,113,133,.5); }
+  .dp-rh > div { flex: 1; min-width: 0; } .dp-rh small { display: block; font-size: 11.5px; color: #fecdd3; font-weight: 800; } .dp-rh b { display: block; font-size: 17px; font-weight: 900; margin-top: 2px; }
+  .dp-rh em { font-style: normal; font-size: 34px; font-weight: 900; color: #fff; font-variant-numeric: tabular-nums; } .dp-rh em i { font-style: normal; font-size: 13px; margin-left: 2px; color: #fecdd3; }
+  .dp-row { display: flex; gap: 10px; align-items: flex-start; margin-top: 7px; padding: 10px 12px; border-radius: 13px; background: #101318; border: 1px solid rgba(255,255,255,.08); }
+  .dp-row > i { flex: none; min-width: 26px; height: 26px; padding: 0 5px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-weight: 900; font-size: 12.5px; }
+  .dp-row.ok > i { background: rgba(34,197,94,.2); color: #86efac; } .dp-row.no > i { background: rgba(225,29,72,.2); color: #fda4af; }
+  .dp-row b { display: block; font-size: 13px; font-weight: 900; line-height: 1.4; } .dp-row small { display: block; font-size: 11.3px; color: #8a949e; font-weight: 700; margin-top: 2px; line-height: 1.4; }
+  .dp-rule { margin-top: 12px; padding: 12px; border-radius: 15px; background: #101318; border: 1px solid rgba(255,255,255,.1); }
+  .dp-rule > b { font-size: 13px; font-weight: 900; } .dp-rule p { margin: 5px 0 0; font-size: 13.5px; font-weight: 900; color: #fde68a; line-height: 1.5; }
+  .dp-rule2 { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 9px; } .dp-rule2 > div { text-align: center; } .dp-rule2 span { display: block; font-size: 11.5px; font-weight: 900; margin-top: 4px; color: #e5e7eb; }
+  .dp-rs .trs { width: 100%; height: auto; display: block; border-radius: 10px; }
+  .dp-alt { margin-top: 9px; padding: 11px 12px; border-radius: 14px; background: rgba(250,204,21,.06); border: 1px solid rgba(250,204,21,.45); }
+  .dp-alt b { font-size: 12.5px; font-weight: 900; color: #fde68a; } .dp-alt p { margin: 4px 0 0; font-size: 12.5px; color: #e7e5e4; font-weight: 700; line-height: 1.55; }
+  .dp-final { text-align: center; padding: 16px 12px; border-radius: 18px; border: 1px solid; }
+  .dp-final.w { background: rgba(34,197,94,.08); border-color: rgba(74,222,128,.55); } .dp-final.l { background: rgba(225,29,72,.08); border-color: rgba(251,113,133,.55); } .dp-final.d { background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.2); }
+  .dp-final small { font-size: 11.5px; color: #a8a29e; font-weight: 800; } .dp-final .sc { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 6px; } .dp-final .sc b { font-size: 16px; font-weight: 900; max-width: 34%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dp-final .sc em { font-style: normal; font-size: 38px; font-weight: 900; font-variant-numeric: tabular-nums; }
+  .dp-final p { margin: 4px 0 0; font-size: 13.5px; font-weight: 900; } .dp-final span { display: inline-block; margin-top: 7px; font-size: 11.5px; font-weight: 800; color: #fde68a; }
+  /* 👟 사진 점 이름표 · 실측 입력 */
+  .bt-pt i { white-space: nowrap; }
+  .bt-pt.el i { left: -2px; transform: none; } .bt-pt.er i { left: auto; right: -2px; transform: none; } .bt-pt.eb i { top: auto; bottom: -20px; }
+  .bt-len { margin-top: 12px; padding: 11px 12px; border-radius: 14px; background: #101318; border: 1px solid rgba(255,255,255,.1); }
+  .bt-len > div { display: flex; align-items: center; gap: 8px; } .bt-len b { font-size: 13.5px; font-weight: 900; flex: 1; } .bt-len b small { font-size: 11px; color: #8a949e; font-weight: 800; margin-left: 4px; }
+  .bt-len input { width: 96px; padding: 9px 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,.18); background: #0b0d10; color: #fff; font-size: 16px; font-weight: 900; text-align: right; font-family: inherit; }
+  .bt-len input:focus { outline: none; border-color: #d9f950; } .bt-len span { font-size: 12px; font-weight: 800; color: #9aa4ae; }
+  .bt-gapline { margin-top: 8px; font-size: 12.5px; color: #e5e7eb; font-weight: 800; line-height: 1.5; } .bt-gapline b { color: #d9f99d; }
+  .bt-len .bt-link { margin-top: 6px; padding: 8px 0 2px; text-align: left; }
+  .bt-len p { margin: 7px 0 0; font-size: 11.5px; color: #8a949e; line-height: 1.5; font-weight: 700; }
+  .dp-cuts span u { text-decoration: none; display: inline-grid; place-items: center; width: 15px; height: 15px; border-radius: 50%; background: rgba(255,255,255,.12); font-size: 9.5px; margin-right: 4px; vertical-align: 1px; }
+  .dp-cuts span.now u { background: #fb7185; color: #fff; }
+  /* 플레이 화면은 시간 재는 동안 보기가 한 화면에 들어오게 */
+  .dp-play .dp-board { padding: 6px 10px; } .dp-play .dp-board .sc em { font-size: 20px; } .dp-play .dp-board small { font-size: 11px; }
+  .dp-play .tr-q { margin-top: 8px; }
+  .dp-play .tr-pitch { text-align: center; } .dp-play .tr-pitch .trs { max-height: 27vh; width: 100%; }
+  .dp-play .tr-opts .tr-o { padding-top: 10px; padding-bottom: 10px; }
+  @media (max-width: 820px) { body.dp-on .botnav { display: none !important; } body.dp-on #trainContent { padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)); } }
+  /* ============================================================
+     👟 v111 카드로 실측 · 카메라 테두리 · 돋보기
+     ============================================================ */
+  .bt-cmode { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 10px; }
+  .bt-cmode button { text-align: left; padding: 10px 11px; border-radius: 14px; background: #101318; border: 1px solid rgba(255,255,255,.12); color: #e5e7eb !important; font-family: inherit; }
+  .bt-cmode button b { display: block; font-size: 13.5px; font-weight: 900; } .bt-cmode button small { display: block; font-size: 11px; color: #9aa4ae; font-weight: 800; margin-top: 2px; }
+  .bt-cmode button.on { border-color: #d9f950; background: rgba(217,249,80,.08); box-shadow: inset 0 0 0 1px rgba(217,249,80,.4); } .bt-cmode button.on small { color: #d9f950; }
+  .bt-card-ok { margin-top: 10px; padding: 9px 11px; border-radius: 12px; background: rgba(251,146,60,.08); border: 1px solid rgba(251,146,60,.35); font-size: 12px; font-weight: 800; color: #fed7aa; line-height: 1.55; }
+  button.bt-camb { border: 0; width: 100%; font-family: inherit; cursor: pointer; }
+  .bt-crs-gap { height: 4px; }
+  .bt-crs { margin-top: 12px; padding: 11px 12px; border-radius: 15px; background: #101318; border: 1px solid rgba(217,249,80,.35); }
+  .bt-crh { font-size: 13px; font-weight: 900; margin-bottom: 4px; }
+  .bt-cr { display: grid; grid-template-columns: 1fr auto auto auto 28px; align-items: center; gap: 8px; padding: 6px 0; border-top: 1px solid rgba(255,255,255,.06); font-size: 12px; }
+  .bt-cr span { color: #cbd5e1; font-weight: 800; } .bt-cr b { font-size: 15px; font-weight: 900; font-variant-numeric: tabular-nums; } .bt-cr em { font-style: normal; color: #bef264; font-weight: 800; font-variant-numeric: tabular-nums; } .bt-cr small { color: #7c8792; font-weight: 700; }
+  .bt-cr button { width: 26px; height: 26px; border-radius: 8px; border: 1px solid rgba(255,255,255,.12); background: transparent; color: #9aa4ae !important; font-size: 12px; }
+  .bt-crt { margin-top: 6px; font-size: 11.5px; color: #9aa4ae; font-weight: 800; line-height: 1.5; }
+  .bt-crf { margin-top: 6px; font-size: 13px; font-weight: 800; color: #e5e7eb; line-height: 1.5; } .bt-crf b { color: #d9f950; font-weight: 900; font-variant-numeric: tabular-nums; }
+  .bt-loupe { position: absolute; z-index: 5; width: 108px; height: 108px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 6px 18px rgba(0,0,0,.6); background-repeat: no-repeat; pointer-events: none; display: none; }
+  .bt-loupe::before, .bt-loupe::after { content: ''; position: absolute; background: #ff2d75; }
+  .bt-loupe::before { left: 53px; top: 34px; width: 2px; height: 40px; } .bt-loupe::after { top: 53px; left: 34px; height: 2px; width: 40px; }
+  /* 카메라 */
+  body.bt-cm-on { overflow: hidden; }
+  .bt-cm { position: fixed; inset: 0; z-index: 9000; background: #050607; display: flex; flex-direction: column; align-items: center; padding: calc(env(safe-area-inset-top, 0px) + 6px) 10px calc(env(safe-area-inset-bottom, 0px) + 10px); }
+  .bt-cm-top { width: 100%; display: flex; align-items: center; gap: 10px; min-height: 44px; }
+  .bt-cm-top b { font-size: 14px; font-weight: 900; color: #fff; }
+  .bt-cm-x { width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,.2); background: #14171c; color: #fff !important; font-size: 17px; font-weight: 900; }
+  .bt-cm-box { position: relative; margin-top: 6px; border-radius: 14px; overflow: hidden; background: #000; max-width: 100%; }
+  .bt-cm-box video, .bt-cm-box svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .bt-cm-box video { object-fit: fill; }
+  .bt-cm-st { margin-top: 8px; padding: 9px 12px; border-radius: 12px; background: #14171c; color: #e5e7eb; font-size: 13px; font-weight: 900; text-align: center; max-width: 100%; line-height: 1.45; }
+  .bt-cm-st.ok { background: rgba(34,197,94,.18); color: #bbf7d0; }
+  .bt-cm-bot { margin-top: auto; padding-top: 8px; }
+  .bt-cm-sh { width: 66px; height: 66px; border-radius: 50%; border: 4px solid #fff; background: transparent; display: grid; place-items: center; }
+  .bt-cm-sh i { width: 50px; height: 50px; border-radius: 50%; background: #fff; display: block; }
+  .bt-seg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; image-rendering: auto; }
+  .bt-save2 { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 10px; }
+  .bt-save2 .bt-go { margin-top: 0; padding: 11px 8px; font-size: 14px; } .bt-save2 .bt-go small { display: block; font-size: 10.5px; font-weight: 800; opacity: .75; margin-top: 2px; }
+  .bt-save2 .bt-go.sub { background: #1b1f26 !important; color: #e5e7eb !important; border: 1px solid rgba(255,255,255,.16); box-shadow: none; }
+  .bt-save2 .bt-go:only-child { grid-column: 1 / -1; }
+  .bt-autob { display: flex; gap: 7px; margin-top: 8px; flex-wrap: wrap; } .bt-autob:empty { display: none; }
+  .bt-autob button { flex: 1; padding: 9px 8px; border-radius: 12px; border: 1px solid rgba(255,255,255,.14); background: #14171c; color: #cbd5e1 !important; font-size: 12.5px; font-weight: 800; font-family: inherit; }
+  .bt-shw { margin-top: 12px; text-align: center; } .bt-shw small { display: block; font-size: 10.5px; color: #8a949e; font-weight: 700; margin-top: 4px; line-height: 1.45; }
+  .bt-shape { width: 100%; max-width: 230px; height: auto; display: inline-block; background: #0b0d10; border-radius: 14px; }
+  .bt-rshape { display: grid; grid-template-columns: 120px 1fr; gap: 10px; align-items: center; margin-top: 10px; padding: 10px; border-radius: 15px; background: #101318; border: 1px solid rgba(103,232,249,.3); }
+  .bt-rshape .bt-shape { max-width: 120px; } .bt-rshape b { font-size: 14px; font-weight: 900; display: block; } .bt-rshape small { display: block; font-size: 11.5px; color: #9aa4ae; font-weight: 700; margin-top: 3px; line-height: 1.5; }
+  .bt-ph svg { overflow: hidden; }
+  .bt-pt.cc { width: 14px; height: 14px; margin: -7px 0 0 -7px; border-width: 2px; }
+  .bt-pt.cc i { top: -18px; }
+  .bt-shops { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 2px; }
+  .bt-shops .bt-shop { padding: 5px 8px; }
+  /* 💰 v112 예산 1만원 단위 */
+  .bt-bud2 { margin-top: 10px; padding: 10px 11px; border-radius: 14px; background: #101318; border: 1px solid rgba(253,224,71,.3); }
+  .bt-bud2h { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; } .bt-bud2h span { font-size: 12px; font-weight: 900; color: #9aa4ae; } .bt-bud2h b { font-size: 15px; font-weight: 900; color: #fde047; font-variant-numeric: tabular-nums; }
+  .bt-bud2r { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+  .bt-bud2r button { flex: none; width: 36px; height: 36px; border-radius: 11px; border: 1px solid rgba(255,255,255,.16); background: #1b1f26; color: #fff !important; font-size: 18px; font-weight: 900; }
+  .bt-bud2r input[type=range] { flex: 1; min-width: 0; accent-color: #fde047; height: 28px; }
+  .bt-bud2s { display: flex; justify-content: space-between; padding: 0 44px; font-size: 10px; font-weight: 800; color: #6b7480; }
+  .bt-bud2 small { display: block; margin-top: 6px; font-size: 11px; color: #9aa4ae; font-weight: 700; line-height: 1.45; }
+  .bt-tierl em.top { color: #fde047; } .bt-tierl em.pk { color: #67e8f9; }
+  button.bt-tr { width: 100%; background: none; border: 0; border-top: 1px solid rgba(255,255,255,.05); color: inherit !important; font-family: inherit; text-align: left; cursor: pointer; border-radius: 9px; }
+  button.bt-tr:first-of-type { border-top: 0; } button.bt-tr.off { opacity: .55; }
+  .bt-trec { font-style: normal; font-size: 10px; font-weight: 900; padding: 1px 6px; border-radius: 6px; background: rgba(217,249,80,.16); color: #d9f950; order: 3; } .bt-tr b { order: 5; } .bt-tr small { order: 10; }
+  .bt-trh { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 6px; } .bt-trback { margin-left: auto; padding: 4px 9px; border-radius: 9px; border: 1px solid rgba(103,232,249,.45); background: rgba(103,232,249,.08); color: #a5f3fc !important; font-size: 11px; font-weight: 900; font-family: inherit; } .bt-tnote { display: block; margin-top: 2px; font-size: 10.5px; color: #9aa4ae; font-weight: 700; line-height: 1.4; }
   /* iOS: 16px 미만 입력칸은 누르는 순간 화면이 확대된다 → 터치 기기에선 16px */
   @media (max-width: 820px) and (pointer: coarse) {
     input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]), select, textarea { font-size: 16px !important; }
@@ -5720,6 +5850,10 @@
   .hm-wn span { padding: 3px 8px; border-radius: 8px; background: rgba(255,255,255,.07); font-weight: 800; font-size: 12px; }
   .hm-wn em { font-style: normal; color: #8a949e; }
   .hm-whopop button { display: block; width: 100%; margin-top: 9px; padding: 8px; border-radius: 10px; border: 1px solid rgba(254,229,0,.45); background: rgba(254,229,0,.1); color: #fef08a; font-family: inherit; font-weight: 900; font-size: 12px; cursor: pointer; }
+  @media (max-width: 820px) {
+    .topnav { box-shadow: none !important; border-bottom: 1px solid rgba(157,192,216,.2) !important; }
+    html { background-image: none !important; }
+  }
 </style>
 </head>
 <body class="not-authed">
@@ -6885,7 +7019,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 109;
+const APP_VERSION = 112;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -10103,6 +10237,8 @@ const NEW_FEATURES = {
   home: 104,       // 🏠 첫 화면
   train: 107,      // 🧠 트레이닝 (뇌지컬 · 보완 · 극대화)
   boots: 108,      // 👟 축구화 (사이즈 · 발볼 · 발등 · TF/AG)
+  trainDeep: 110,  // 🔴 심화 · 🎮 경기 시뮬
+  bootsCard: 111,  // 💳 카드로 발 실측
   drawerMenu: 31,  // ☰ 왼쪽 서랍 메뉴
 };
 const ACK_KEY = 'efm_ack_feats';
@@ -15939,7 +16075,7 @@ function updateNavChrome() {
   if (dc) dc.classList.toggle('on', !!(cb && !cb.classList.contains('off')));
   const dh = document.getElementById('bnDotHome');
   if (dh) { let on = false; try { if (currentTab !== 'home') { const T = homeTodo(); on = !!(T.owe.n || T.unvoted.length); } } catch (e) {} dh.classList.toggle('on', on); }
-  try { updateTrainBadge(); } catch (e) {}
+  try { updateTrainBadge(); dpBodyFlag(); } catch (e) {}
   const ds = document.getElementById('bnDotSettle');
   if (ds) {
     let owe = false;
@@ -18135,11 +18271,13 @@ function renderTrain() {
   const el = document.getElementById('trainContent'); if (!el) return;
   if (!isLoggedIn()) { el.innerHTML = ''; return; }
   trMe();
+  if (_tr.view !== 'dq') dpClearTimer();
+  dpBodyFlag();
   let html = '';
   try {
     const v = _tr.view;
     html = v === 'quiz' ? trViewQuiz() : v === 'brief' ? trViewBrief() : v === 'kb' ? trViewKb() : v === 'fx' ? trViewFx() : v === 'rx' ? trViewRx()
-      : v === 'more' ? trViewMore() : v === 'wrong' ? trViewWrong() : v === 'stats' ? trViewStats() : v === 'pf' ? trViewPf() : trViewHome();
+      : v === 'more' ? trViewMore() : v === 'wrong' ? trViewWrong() : v === 'stats' ? trViewStats() : v === 'pf' ? trViewPf() : v === 'deep' ? dpViewMenu() : v === 'dq' ? dpViewPlay() : v === 'dr' ? dpViewSetResult() : v === 'de' ? dpViewEnd() : trViewHome();
   } catch (e) { console.error('트레이닝 화면 오류', e); _tr.view = 'home'; html = trViewHome(); }
   el.innerHTML = `<div class="tr-wrap">${html}</div>`;
   updateTrainBadge();
@@ -18199,7 +18337,7 @@ function trViewHome() {
       <div class="tr-mh"><span class="tr-dd">${dd === 0 ? 'D-DAY' : 'D-' + dd}</span><b>${TRX(settleDateLabelOf(m.date))} vs ${TRX(m.opponent || '상대팀')}</b></div>
       ${chips ? `<div class="tr-qrow" style="grid-template-columns:repeat(${Math.min(ctx.qs.length, 4)},1fr)">${chips}</div>` : ''}
       ${!anyLine ? `<div class="tr-note">라인업이 나오면 쿼터별 내 자리가 여기 떠요 · 지금은 내 포지션 기준으로 브리핑</div>` : ''}
-      <button type="button" class="tr-btn blue" onclick="trGo('brief',{bq:null})">📋 경기 전 브리핑 <small>내 자리 · 옆 선수 · 감독 지시 · 3문제</small></button>
+      <div class="tr-mbtn"><button type="button" class="tr-btn blue" onclick="trGo('brief',{bq:null})">📋 브리핑 <small>내 자리 · 옆 선수 · 감독 지시</small></button><button type="button" class="tr-btn red" onclick="dpStartSim()">🎮 경기 시뮬 <small>내 쿼터 자리로 · 심화</small></button></div>
     </div>`;
   }
   // 경기 후 체크
@@ -18224,10 +18362,11 @@ function trViewHome() {
       <button type="button" class="tr-bmc kb" onclick="trOpenKb('${kb.id}')">${trThumb(kb, 40)}<div><small>⚽ 오늘의 기본기</small><b>${TRX(kb.t)}</b></div></button>
       <button type="button" class="tr-bmc mt" onclick="trGo('kb',{kbTab:'mt',kbId:null})"><div><small>🧘 마인드 한 줄</small><b>${TRX(trMindLine())}</b></div></button>
     </div>
-    <div class="tr-mini3">
+    <div class="tr-mini3 four">
       <button type="button" onclick="trGo('more')">♾️ 더 풀기 <b>${unseen}</b></button>
-      <button type="button" class="a" onclick="trGo('wrong')">📕 오답 <b>${wrong}</b></button>
-      <button type="button" class="v" onclick="trGo('stats')">📈 내 기록${acc !== null ? ` <b>${acc}%</b>` : ''}</button>
+      <button type="button" class="r" onclick="trGo('deep')">🔴 심화</button>
+      <button type="button" class="a" onclick="trGo('wrong')">📕 오답 <b>${wrong + dpWrongSets().length}</b></button>
+      <button type="button" class="v" onclick="trGo('stats')">📈 기록${acc !== null ? ` <b>${acc}%</b>` : ''}</button>
     </div>
     <div class="tr-pil">🩹 보완 · 🚀 극대화 <small>고르면 나만의 코칭</small></div>
     <div class="tr-bm2">
@@ -18359,7 +18498,7 @@ function trViewMore() {
   const chip = (k, v, label, on) => `<button type="button" class="${on ? 'on' : ''}" onclick="trMoreSet('${k}', ${typeof v === 'number' ? v : `'${v}'`})">${label}</button>`;
   return `${trBack('♾️ 더 풀기 <small>골라서 원하는 만큼</small>', 'home')}
     <div class="tr-fl"><span>포지션</span><div class="tr-chips">${chip('g', 'mine', '내 포지션 전부', m.g === 'mine')}${TR_GROUP_ORDER.map(g => chip('g', g, (groups.includes(g) ? '★ ' : '') + TR_GROUPS[g].name, m.g === g)).join('')}${chip('g', 'all', '전 포지션 섞어서', m.g === 'all')}</div></div>
-    <div class="tr-fl"><span>난이도</span><div class="tr-chips">${chip('lv', 1, '🟢 기초', m.lv.includes(1))}${chip('lv', 2, '🟡 실전', m.lv.includes(2))}<button type="button" class="soon" onclick="toast('🔴 심화(연속 판단 · 경기 시뮬)는 다음 업데이트에 열려요')">🔴 심화 <i>곧</i></button></div></div>
+    <div class="tr-fl"><span>난이도</span><div class="tr-chips">${chip('lv', 1, '🟢 기초', m.lv.includes(1))}${chip('lv', 2, '🟡 실전', m.lv.includes(2))}<button type="button" onclick="trGo('deep')">🔴 심화 ›</button></div></div>
     <div class="tr-fl"><span>상황</span><div class="tr-chips">${chip('cat', 'all', '전체', m.cat === 'all')}${Object.keys(TR_CATS).map(c => chip('cat', c, TR_CATS[c].ico + ' ' + TR_CATS[c].name, m.cat === c)).join('')}</div></div>
     <div class="tr-fl"><span>경기 상황</span><div class="tr-chips">${chip('gs', 'any', '랜덤', m.gs === 'any')}${['lead', 'trail', 'q4', 'short'].map(g => chip('gs', g, TR_GS[g].name, m.gs === g)).join('')}</div></div>
     <div class="tr-fl"><span>문제 수</span><div class="tr-chips">${[5, 10, 20].map(n => chip('n', n, String(n), m.n === n)).join('')}${chip('n', 0, '♾️ 끝없이', m.n === 0)}</div></div>
@@ -18380,7 +18519,8 @@ function trViewWrong() {
   return `${trBack('📕 오답 노트', 'home')}
     ${list.length ? `<div class="tr-sum">틀린 문제 <b>${list.length}개</b> — 이틀 뒤부터 오늘의 1분·더 풀기에 다시 나와요. 맞히면 노트에서 빠져요.</div>${rows}
     <button type="button" class="tr-btn neo big" onclick="trStart('wrong', trWrongList().map(q=>q.id), '오답 다시 풀기')">지금 다시 풀기 (${list.length}) ›</button>`
-    : `<div class="tr-empty"><b>틀린 문제가 없어요 👍</b><small>틀리는 문제는 여기 모였다가 이틀 뒤 다시 나와요.</small></div>`}`;
+    : `<div class="tr-empty"><b>틀린 문제가 없어요 👍</b><small>틀리는 문제는 여기 모였다가 이틀 뒤 다시 나와요.</small></div>`}
+    ${dpWrongHtml()}`;
 }
 function trBar(label, a, cls) { const p = trAcc(a); return `<div class="tr-bar ${cls || ''}"><span>${label}</span><i><i style="width:${p || 0}%"></i></i><b>${p === null ? '–' : p + '%'}</b><small>${a ? a[0] : 0}문제</small></div>`; }
 function trViewStats() {
@@ -18397,7 +18537,8 @@ function trViewStats() {
     <div class="tr-sec">경기 상황별 <small>실전 문제</small></div>${['draw', 'lead', 'trail', 'q4', 'short'].map(g => trBar(TR_GS[g].name, r.gs[g], g === 'trail' || g === 'q4' ? 'warm' : '')).join('')}
     <div class="tr-sec">기본기 · 코칭</div>
     <div class="tr-mini3 st"><span>⚽ 기본기 <b>${kbSeen}/${kbAll.length}</b></span><span>🩹 보완 <b>${fxN}</b></span><span>🚀 극대화 <b>${mxN}</b></span></div>
-    ${chk.length ? `<div class="tr-sum">경기 후 체크 ${chk.length}번 중 <b>좋아짐 ${up}번</b></div>` : ''}`;
+    ${chk.length ? `<div class="tr-sum">경기 후 체크 ${chk.length}번 중 <b>좋아짐 ${up}번</b></div>` : ''}
+    ${dpStatsHtml()}`;
 }
 
 /* ===== 📋 경기 전 브리핑 ===== */
@@ -18819,6 +18960,7 @@ function trAnaHtml(data) {
       <div class="tra-card"><div class="tra-t cy">⚖️ 경기 상황별 판단 <small>실전 문제</small></div>
         ${bar('동점', gs.draw)}${bar('이기는 중', gs.lead)}${bar('지는 중', gs.trail, true)}${bar('4쿼터', gs.q4, true)}${bar('사람 부족', gs.short)}
         <div class="tra-t cy">📏 라인별</div>${lineBars.map(([k, a]) => bar(k, a)).join('')}
+        ${dpAnaHtml(recs)}
         <div class="tra-t vi">📈 주별 추세 <small>이번 주 ${active} / ${roster}명 참여</small></div>${spark}</div>
       <div class="tra-card wide"><div class="tra-t cy">🗺️ 포지션 지도 <small>⚽ 뛰는 · ❤️ 해보고 싶은 · ⭐ 잘 맞는다고 고른 · 🧭 포지션 찾기 1순위 · 👔 감독 평가</small></div>
         <div class="tra-pm">${TR_GROUP_ORDER.map(g => { const pl = recs.filter(o => o.groups.includes(g)), wa = recs.filter(o => o.want.includes(g)), fi = recs.filter(o => o.fit.includes(g)); return `<div class="tra-pmr"><b>${TR_GROUPS[g].ico} ${TR_GROUPS[g].name}</b><span>⚽ ${pl.length}</span><span class="w">❤️ ${wa.length}</span><span class="f">⭐ ${fi.length}</span><span class="p">🧭 ${recs.filter(o => o.pf && o.pf.top[0] === g).length}</span><span class="e">👔 ${Object.keys(store.posEval || {}).filter(pid => posEvalOf(pid).includes(g)).length}</span>${wa.length ? `<small>❤️ ${wa.slice(0, 5).map(o => H(o.name)).join(' · ')}${wa.length > 5 ? ' 외' : ''}</small>` : ''}</div>`; }).join('')}</div></div>
@@ -19022,8 +19164,10 @@ function btHWhy(f) {
   if (ph !== null) return '사진';
   return f.hq ? '질문만으로 (낮은 발등은 사진으로만 알 수 있어요)' : '';
 }
-function btBase(f) { f = f || btFoot(); if (!f.s) return null; return +f.s + ({ tight: 5, fit: 0, loose: -5 }[f.f] || 0); }
-function btReady(f) { f = f || btFoot(); return !!(f.s && f.f && btW(f) !== null && btH(f) !== null && f.surf); }
+function btBase(f) { f = f || btFoot(); if (f.len) return Math.ceil(+f.len / 5) * 5; if (!f.s) return null; return +f.s + ({ tight: 5, fit: 0, loose: -5 }[f.f] || 0); }
+function btSizeOk(f) { return !!((f.s && f.f) || f.len); }
+function btSetLen(v) { const n = Math.round(+v); if (!String(v).trim()) btSave({ len: null }); else if (!(n >= 200 && n <= 330)) { toast('200 ~ 330mm 사이로 넣어주세요'); return; } else btSave({ len: n }); renderBoots(); }
+function btReady(f) { f = f || btFoot(); return !!(btSizeOk(f) && btW(f) !== null && btH(f) !== null && f.surf); }
 function btFit(L, W, H) { return Math.min(L.w[W], L.h[H]); }
 // 라인별 추천 사이즈
 function btSize(L, base, W, H) {
@@ -19054,10 +19198,14 @@ function btTierPick(L, mode, bud) {
     const inb = c.filter(t => t.p !== null && btPMin(t.p) <= bud).sort((a, b) => a.r - b.r || pref(a, b));
     if (inb.length) return Object.assign({ fit: true }, inb[0]);
     const known = c.filter(t => t.p !== null).sort((a, b) => btPMin(a.p) - btPMin(b.p));
+    // 정가 모르는 더 아래 등급이 있으면 그쪽(예산 안일 수도) — 비싼 위 등급을 「예산 넘음」으로 보여주는 것보다 나음
+    const unk = c.filter(t => t.p === null && (!known[0] || t.r > known[0].r)).sort((a, b) => a.r - b.r || pref(a, b));
+    if (unk.length) return Object.assign({ fit: false, unk: true }, unk[0]);
     return Object.assign({ fit: false }, known[0] || c[0]);
   }
-  const s = c.slice().sort((a, b) => pref(a, b) || Math.abs(a.r - 2) - Math.abs(b.r - 2) || (a.p === null) - (b.p === null) || a.r - b.r);
-  return Object.assign({ fit: true }, s[0]);
+  // 상관없음 → 조기축구라도 그 바닥에서 제일 좋은 등급(정가 아는 것 먼저)
+  const s = c.slice().sort((a, b) => a.r - b.r || (a.p === null) - (b.p === null) || pref(a, b));
+  return Object.assign({ fit: true, top: true }, s[0]);
 }
 // 트레이닝 기록 → 우선순위
 function btPref() {
@@ -19093,7 +19241,7 @@ function btRank(f) {
     const size = btSize(L, base, W, H);
     let score = fit * 100 + sp * 4;
     if (!tier) score -= 150;
-    else if (!tier.fit) score -= 25;
+    else if (!tier.fit) score -= 60;   // 예산 넘으면 같은 핏 안에서 뒤로
     if (tier && tier.s === 'FGAG') score -= 8;
     return { L, fit, tier, size, score };
   });
@@ -19108,6 +19256,11 @@ function btGeom(pts, asp, kind) {
   const dx = P[1].x - P[0].x, dy = P[1].y - P[0].y, L = Math.hypot(dx, dy);
   if (L < 0.05) return { err: '발끝과 뒤꿈치가 너무 가까워요' };
   const u = { x: dx / L, y: dy / L }, n = { x: -u.y, y: u.x };
+  if (kind === 'len') {
+    if (P.length < 3) return { L };
+    const t = -((P[2].x - P[1].x) * u.x + (P[2].y - P[1].y) * u.y), r = t / L;
+    return { L, r, warn: r < 0.8 || r > 1.05 ? '점 위치가 이상해요 · ①깔창 앞끝 ②뒤꿈치 ③가장 긴 발가락 끝 순서로' : '' };
+  }
   if (kind === 'top') {
     if (P.length < 4) return { L };
     const w = Math.abs((P[3].x - P[2].x) * n.x + (P[3].y - P[2].y) * n.y);
@@ -19128,7 +19281,7 @@ function btGeom(pts, asp, kind) {
 const BT_PT_COL = ['#67e8f9', '#f9a8d4', '#bef264', '#fde047'];
 function btPtSvg(x, y, n, col, lx, ly) {
   return `<circle cx="${x}" cy="${y}" r="7.5" fill="${col}" stroke="#0b0d10" stroke-width="2"/><text x="${x}" y="${y + 3.6}" text-anchor="middle" font-size="10" font-weight="900" fill="#0b0d10">${n}</text>`
-    + (lx !== undefined ? `<text x="${lx}" y="${ly}" font-size="10" font-weight="800" fill="${col}" text-anchor="${lx < x ? 'end' : 'start'}">${['발끝', '뒤꿈치', '발볼 안쪽', '발볼 바깥'][n - 1]}</text>` : '');
+    + (lx !== undefined ? `<text x="${lx}" y="${ly}" font-size="10" font-weight="800" fill="${col}" text-anchor="${lx < x ? 'end' : 'start'}">${['발끝', '벽 선', '발볼 안쪽', '발볼 바깥'][n - 1]}</text>` : '');
 }
 // 위에서 본 오른발 (발끝 위)
 function btFootTopSvg(withPts) {
@@ -19136,7 +19289,7 @@ function btFootTopSvg(withPts) {
   const toes = [[40, 30, 11, 15], [58, 24, 6.5, 9], [71, 28, 6, 8], [82, 35, 5.5, 7], [91, 45, 5, 6]].map(t => `<ellipse cx="${t[0]}" cy="${t[1]}" rx="${t[2]}" ry="${t[3]}"/>`).join('');
   let pts = '';
   if (withPts) {
-    pts = `<line x1="44" y1="13" x2="60" y2="243" stroke="#67e8f9" stroke-width="1.6" stroke-dasharray="4 4"/>
+    pts = `<rect x="-30" y="244" width="180" height="12" fill="#3f4652"/><text x="146" y="253" text-anchor="end" font-size="9" font-weight="800" fill="#cbd5e1">벽</text><line x1="44" y1="13" x2="60" y2="243" stroke="#67e8f9" stroke-width="1.6" stroke-dasharray="4 4"/>
       <line x1="24" y1="94" x2="99" y2="100" stroke="#bef264" stroke-width="2"/>`
       + btPtSvg(44, 13, 1, BT_PT_COL[0], 60, 12) + btPtSvg(60, 243, 2, BT_PT_COL[1], 76, 247)
       + btPtSvg(24, 94, 3, BT_PT_COL[2], 12, 82) + btPtSvg(99, 100, 4, BT_PT_COL[3], 112, 118);
@@ -19243,10 +19396,13 @@ function btBootSvg(L, surfG) {
 // ---------- 👟 화면 ----------
 const BTX = s => escapeHtml(s);
 const BT_PH = {
-  top: { step: 2, title: '발볼 — 위에서 1장', need: 4,
-    lab: [['발끝', '가장 긴 발가락 끝'], ['뒤꿈치', '뒤꿈치 맨 끝'], ['발볼 안쪽', '엄지발가락 뿌리 옆, 제일 튀어나온 곳'], ['발볼 바깥', '새끼발가락 뿌리 옆, 제일 튀어나온 곳']],
-    tips: ['양말 벗고, 의자에 앉아 다리를 살짝 앞으로 — 뒤꿈치까지 보이게', '폰을 발 바로 위에서 바닥과 평행하게', '발 전체가 화면에 들어오게 · 바닥이 밝으면 점 찍기 쉬워요'] },
-  side: { step: 3, title: '발등 — 옆에서 1장', need: 3,
+  len: { step: 1, title: '깔창으로 발 길이', need: 3,
+    lab: [['깔창 앞끝', '깔창 맨 앞 끝'], ['벽 선 (뒤꿈치)', '깔창 뒤끝·뒤꿈치를 붙인 벽과 바닥이 만나는 선'], ['가장 긴 발가락 끝', '엄지나 둘째 중 더 긴 발가락 끝']],
+    tips: ['축구화에서 깔창을 빼서 뒤끝을 벽에 딱 붙여 놓아요', '맨발로 올라서서 뒤꿈치도 벽에 딱 붙여요 (체중 싣고)', '폰을 발 바로 위에서 바닥과 평행하게 — 깔창 앞끝과 벽 선이 다 보이게 (뒤꿈치는 가려도 OK)'] },
+  top: { step: 3, title: '발볼 — 비율만 (카드 없이)', need: 4,
+    lab: [['발끝', '가장 긴 발가락 끝'], ['벽 선 (뒤꿈치)', '발 뒤 벽과 바닥이 만나는 선 — 뒤꿈치가 다리에 가려도 OK'], ['발볼 안쪽', '엄지발가락 뿌리 옆, 제일 튀어나온 곳'], ['발볼 바깥', '새끼발가락 뿌리 옆, 제일 튀어나온 곳']],
+    tips: ['양말 벗고 뒤꿈치를 벽(문틀·가구 옆면도 OK)에 딱 붙이고 서요 — 체중 싣고', '폰을 발 바로 위에서 바닥과 평행하게 · 발끝과 벽 선이 다 보이게', '뒤꿈치가 다리에 가려도 괜찮아요 — ②번은 벽과 바닥이 만나는 선에'] },
+  side: { step: 2, title: '발등 — 옆에서 1장', need: 3,
     lab: [['발끝', '바닥에 닿는 발가락 끝'], ['뒤꿈치', '바닥에 닿는 뒤꿈치 끝'], ['발등 꼭대기', '노란 점선 위, 발등 맨 위']],
     tips: ['발 안쪽(엄지 쪽)에서 찍어요 · 체중 실어서 바닥에 평평하게', '폰을 바닥에 세워 두고 렌즈를 발등 높이쯤 · 30cm 떨어져서', '같이 온 사람이 찍어주면 제일 쉬워요'] },
 };
@@ -19257,7 +19413,9 @@ function btGo(v, opt) {
   renderBoots();
   const el = document.getElementById('bootsContent'); if (el) el.scrollTop = 0;
 }
-function renderBoots() {
+let _btR = false;
+function renderBoots() { if (_btR) { setTimeout(renderBoots, 0); return; } _btR = true; try { renderBoots0(); } finally { _btR = false; } }
+function renderBoots0() {
   const el = document.getElementById('bootsContent'); if (!el) return;
   if (!isLoggedIn()) { el.innerHTML = ''; return; }
   trMe();
@@ -19265,30 +19423,30 @@ function renderBoots() {
   try {
     let v = _bt.view;
     if (v === 'home') v = btReady() ? 'result' : 'start';
-    html = v === 'size' ? btViewSize() : v === 'top' ? btViewPhoto('top') : v === 'side' ? btViewPhoto('side') : v === 'surf' ? btViewSurf()
+    html = v === 'size' ? btViewSize() : v === 'len' ? btViewLen() : v === 'card' ? btViewCard() : v === 'top' ? btViewPhoto('top') : v === 'side' ? btViewPhoto('side') : v === 'surf' ? btViewSurf()
       : v === 'result' ? btViewResult() : v === 'guide' ? btViewGuide() : v === 'tiers' ? btViewTiers() : btViewStart();
   } catch (e) { console.error('축구화 화면 오류', e); _bt.view = 'home'; html = btViewStart(); }
   el.innerHTML = `<div class="bt-wrap">${html}</div>`;
-  if ((_bt.view === 'top' || _bt.view === 'side') && _bt.ph && _bt.ph[_bt.view] && _bt.ph[_bt.view].url) btBindPhoto();
+  if (btK(_bt.view) && _bt.ph && _bt.ph[_bt.view] && _bt.ph[_bt.view].url) btBindPhoto();
 }
 function btHead(step, title, back) {
   const dots = [1, 2, 3, 4].map(i => `<i class="${i < step ? 'done' : i === step ? 'on' : ''}"></i>`).join('');
   return `<div class="bt-top"><button type="button" class="bt-bk" onclick="${back}" aria-label="뒤로">‹</button><div class="bt-tt"><small>${step} / 4</small><b>${title}</b></div><div class="bt-dots">${dots}</div></div>`;
 }
 function btBackBar(title, back) { return `<div class="bt-top"><button type="button" class="bt-bk" onclick="${back}" aria-label="뒤로">‹</button><div class="bt-tt"><b>${title}</b></div></div>`; }
-function btNextStep() { const f = btFoot(); return !(f.s && f.f) ? 'size' : btW(f) === null ? 'top' : btH(f) === null ? 'side' : 'surf'; }
+function btNextStep() { const f = btFoot(); return !btSizeOk(f) ? 'size' : btH(f) === null ? 'side' : btW(f) === null ? 'card' : 'surf'; }
 
 /* ===== 시작 ===== */
 function btViewStart() {
   const f = btFoot(); const part = !!(f.s || f.wR || f.hR || f.wq || f.hq);
   return `<div class="bt-hero">
-      <div class="bt-hx"><small>👟 EAST FC 축구화 핏</small><b>내 발에 맞는<br>축구화 찾기</b><p>평소 사이즈 + 사진 2장 · 1분<br>꺼낼 물건 없이 비율로 재요</p></div>
+      <div class="bt-hx"><small>👟 EAST FC 축구화 핏</small><b>내 발에 맞는<br>축구화 찾기</b><p>평소 사이즈 + 사진 2장 · 2분<br>지갑 속 카드 한 장이 자가 돼요</p></div>
       <div class="bt-hf">${btBootSvg(BT_LINES[1], 'TF')}</div>
     </div>
     <ol class="bt-steps">
       <li><i>1</i><div><b>평소 사이즈</b><small>270 같은 숫자 + 길이가 꽉 · 딱 · 남음</small></div></li>
-      <li><i>2</i><div><b>위에서 1장 → 발볼</b><small>점 4개 찍으면 너비 ÷ 길이</small></div></li>
-      <li><i>3</i><div><b>옆에서 1장 → 발등</b><small>점 3개 + 「발등 아픈 적?」</small></div></li>
+      <li><i>2</i><div><b>옆에서 1장 → 발등</b><small>뒤꿈치까지 잘 보이는 옆모습 · 점 3개 + 「발등 아픈 적?」</small></div></li>
+      <li><i>3</i><div><b>카드랑 발 1장 → 길이·발볼 mm</b><small>카드 아랫선 = 뒤꿈치 · 누르는 점 3개</small></div></li>
       <li><i>4</i><div><b>바닥 TF · AG</b><small>우리 구장은 TF 추천</small></div></li>
     </ol>
     <button type="button" class="bt-go" onclick="btGo('${part ? btNextStep() : 'size'}')">${part ? '이어서 하기 ›' : '시작하기 ›'}</button>
@@ -19313,8 +19471,12 @@ function btViewSize() {
     <div class="tr-chips">${[['run', '운동화'], ['boot', '축구화']].map(o => `<button type="button" class="${f.k === o[0] ? 'on' : ''}" onclick="btSet('k','${o[0]}')">${o[1]}</button>`).join('')}</div>
     <div class="bt-q"><b>길이는 어때?</b><small>엄지발가락 앞 여유</small></div>
     <div class="bt-feel">${feel.map(o => `<button type="button" class="${f.f === o[0] ? 'on' : ''}" onclick="btSet('f','${o[0]}')">${btToeSvg(o[3])}<b>${o[1]}</b><small>${o[2]}</small></button>`).join('')}</div>
-    ${base ? `<div class="bt-calc">축구화 기본 사이즈 <b>${base}</b><small>${f.f === 'tight' ? '꽉 끼니까 5mm 크게' : f.f === 'loose' ? '남으니까 5mm 작게' : '딱 맞으니까 그대로'}${f.k === 'run' ? ' · 운동화 기준이면 보통 같은 사이즈' : ''} · 라인마다 ±5 는 결과에서</small></div>` : ''}
-    <button type="button" class="bt-go" ${f.s && f.f ? '' : 'disabled'} onclick="btGo('top')">다음 — 발볼 ›</button>`;
+    <div class="bt-len"><div><b>📏 실측 발 길이 <small>선택</small></b><input type="number" inputmode="numeric" min="200" max="330" placeholder="예: 262" value="${f.len || ''}" onchange="btSetLen(this.value)"><span>mm</span></div>
+      <p>아이폰 기본 「측정」 앱이나 줄자로 — 서서 체중 싣고, 뒤꿈치 끝 ~ 가장 긴 발가락 끝. 넣으면 이걸 기준으로 계산해요 (측정 앱은 5~10mm 오차가 있을 수 있어요)</p>
+      <p>💳 3단계에서 카드로 길이·발볼을 mm 까지 재요 — 여기는 비워둬도 돼요</p>${f.len && f.lenSrc === 'card' ? `<p>💳 카드로 잰 길이예요 (${btCardRecs(f).length}번 기록)</p>` : ''}
+      <button type="button" class="bt-link" onclick="btGo('len')">👟 지금 신는 축구화랑 비교 — 깔창 위에 올라서서 재기 ›</button>${f.len && f.lenSrc === 'insole' ? `<p>깔창(${f.insS || '?'}${f.insL ? ` · 실측 ${f.insL}mm` : ''})으로 잰 길이예요 · ${f.insL ? '±3mm' : '±5mm'}</p>` : ''}</div>
+    ${base ? `<div class="bt-calc">축구화 기본 사이즈 <b>${base}</b><small>${f.len ? `실측 ${f.len}mm → 5mm 단위로 올림${f.s ? (base === +f.s ? ' · 평소 사이즈와 같아요' : base < +f.s ? ` · 평소 ${f.s} 신발이 ${+f.s - base}mm 큰 편` : ` · 평소 ${f.s} 신발이 ${base - +f.s}mm 작은 편`) : ''}` : `${f.f === 'tight' ? '꽉 끼니까 5mm 크게' : f.f === 'loose' ? '남으니까 5mm 작게' : '딱 맞으니까 그대로'}${f.k === 'run' ? ' · 운동화 기준이면 보통 같은 사이즈' : ''}`} · 라인마다 ±5 는 결과에서</small></div>` : ''}
+    <button type="button" class="bt-go" ${btSizeOk(f) ? '' : 'disabled'} onclick="btGo('side')">다음 — 옆모습(발등) ›</button>`;
 }
 
 /* ===== 2·3. 사진 ===== */
@@ -19324,17 +19486,18 @@ function btOnFile(kind, inp) {
   const st = btPhState(kind);
   if (st.url) { try { URL.revokeObjectURL(st.url); } catch (e) {} }
   st.url = URL.createObjectURL(file); st.pts = []; _bt.noPhoto = false;
+  if (kind === 'card') { Object.assign(st, { live: false, f35: null, ref: false, nw: 0, nh: 0 }); btExifF35(file).then(v => { st.f35 = v; if (_bt.view === 'card') btDrawPts(false); }); }
   renderBoots();
 }
-function btRetake(kind) { const st = btPhState(kind); if (st.url) { try { URL.revokeObjectURL(st.url); } catch (e) {} } st.url = null; st.pts = []; renderBoots(); }
-function btUndo(kind) { const st = btPhState(kind); st.pts.pop(); btDrawPts(false); }
+function btRetake(kind) { const st = btPhState(kind); if (st.url) { try { URL.revokeObjectURL(st.url); } catch (e) {} } st.url = null; st.pts = []; st.ref = false; st.live = false; st.seg = null; st.auto = false; renderBoots(); }
+function btUndo(kind) { const st = btPhState(kind); st.pts.pop(); if (kind === 'card') { if (st.pts.length < 4) st.ref = false; if (st.pts.length < 5) { st.seg = null; st.auto = false; } } btDrawPts(false); }
 function btPick(kind, v) { haptic(5); btSave(kind === 'top' ? { wp: v } : { hp: v }); renderBoots(); }
 function btNoPhoto(on) { _bt.noPhoto = on; renderBoots(); }
 function btViewPhoto(kind) {
   const K = BT_PH[kind]; const st = btPhState(kind); const f = btFoot();
-  const back = kind === 'top' ? "btGo('size')" : "btGo('top')";
-  const next = kind === 'top' ? `<button type="button" class="bt-go" ${btW(f) === null ? 'disabled' : ''} onclick="btGo('side')">다음 — 발등 ›</button>`
-    : `<button type="button" class="bt-go" ${btH(f) === null ? 'disabled' : ''} onclick="btGo('surf')">다음 — 바닥 ›</button>`;
+  const back = kind === 'side' ? "btGo('size')" : "btGo('card')";
+  const next = kind === 'top' ? `<button type="button" class="bt-go" ${btW(f) === null ? 'disabled' : ''} onclick="btGo('surf')">다음 — 바닥 ›</button>`
+    : `<button type="button" class="bt-go" ${btH(f) === null ? 'disabled' : ''} onclick="btGo('card')">다음 — 길이·발볼 (카드) ›</button>`;
   const prev = kind === 'top' ? (f.wR ? `지난번 사진: ${(+f.wR).toFixed(3)} · ${BT_W_NAME[btCls(+f.wR, BT_W_CUT)]}` : '') : (f.hR ? `지난번 사진: ${(+f.hR).toFixed(3)} · ${BT_H_NAME[btCls(+f.hR, BT_H_CUT)]}` : '');
   // 발등 보조 질문 (옆 사진과 같이)
   const hq = kind === 'side' ? `<div class="bt-q"><b>끈 꽉 묶은 신발에서 발등이 아픈 적 있어?</b><small>사진이 애매할 때 보정</small></div>
@@ -19363,22 +19526,23 @@ function btViewPhoto(kind) {
     <div class="bt-priv">🔒 사진은 저장 안 해요 · 이 화면에서만 써요</div>`;
 }
 function btBindPhoto() {
-  const kind = _bt.view; const st = btPhState(kind); const K = BT_PH[kind];
+  const kind = _bt.view; const st = btPhState(kind); const K = btK(kind);
   const box = document.getElementById('btPh'), img = document.getElementById('btImg'); if (!box || !img) return;
   const pos = e => { const r = img.getBoundingClientRect(); return { x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height, r }; };
   box.onpointerdown = e => {
     const p = pos(e); if (!p.r.width || p.x < 0 || p.x > 1 || p.y < 0 || p.y > 1) return;
-    let idx = -1, bd = 26;
+    let idx = -1, bd = st.pts.length < K.need ? 10 : 26;   // 다 찍기 전엔 새 점이 먼저 (가까운 점이 끌려가지 않게)
     st.pts.forEach((q, i) => { const d = Math.hypot((q.x - p.x) * p.r.width, (q.y - p.y) * p.r.height); if (d < bd) { bd = d; idx = i; } });
     if (idx < 0) { if (st.pts.length >= K.need) return; st.pts.push({ x: p.x, y: p.y }); idx = st.pts.length - 1; haptic(6); }
     _bt.drag = idx;
     try { box.setPointerCapture(e.pointerId); } catch (er) {}
     e.preventDefault();
-    btDrawPts(false);
+    btDrawPts(false); btLoupe(true, st.pts[idx]);
   };
-  box.onpointermove = e => { if (_bt.drag < 0) return; const p = pos(e); st.pts[_bt.drag] = { x: Math.max(0, Math.min(1, p.x)), y: Math.max(0, Math.min(1, p.y)) }; btDrawPts(false); };
-  box.onpointerup = box.onpointercancel = () => { if (_bt.drag < 0) return; _bt.drag = -1; btDrawPts(true); };
-  if (img.complete && img.naturalWidth) btDrawPts(false); else img.onload = () => btDrawPts(false);
+  box.onpointermove = e => { if (_bt.drag < 0) return; const p = pos(e); st.pts[_bt.drag] = { x: Math.max(0, Math.min(1, p.x)), y: Math.max(0, Math.min(1, p.y)) }; btDrawPts(false); btLoupe(true, st.pts[_bt.drag]); };
+  box.onpointerup = box.onpointercancel = () => { if (_bt.drag < 0) return; const was = _bt.drag; _bt.drag = -1; btLoupe(false); if (kind === 'card' && was < 4 && st.pts.length === 4 && !st.ref) { btCardSnap(true); return; } if (kind === 'card' && was === 4 && st.pts.length === 5 && !st.auto) { btFootAuto(false); return; } btDrawPts(true); };
+  const init = () => { if (kind === 'card') { st.nw = img.naturalWidth; st.nh = img.naturalHeight; if (st.pts.length >= 4 && !st.ref) { btCardSnap(true); return; } } btDrawPts(false); };
+  if (img.complete && img.naturalWidth) init(); else img.onload = init;
 }
 function btGauge(v, lo, hi, cut, names) {
   const pc = x => Math.max(0, Math.min(100, (x - lo) / (hi - lo) * 100));
@@ -19386,13 +19550,13 @@ function btGauge(v, lo, hi, cut, names) {
     <div class="lab"><span>${names[0]}</span><span>${names[1]}</span><span>${names[2]}</span></div></div>`;
 }
 function btDrawPts(final) {
-  const kind = _bt.view; if (kind !== 'top' && kind !== 'side') return;
-  const st = btPhState(kind); const K = BT_PH[kind];
+  const kind = _bt.view; if (!btK(kind)) return;
+  const st = btPhState(kind); const K = btK(kind); const COL = K.col || BT_PT_COL;
   const img = document.getElementById('btImg'), mk = document.getElementById('btMk'), sv = document.getElementById('btSvg'), info = document.getElementById('btPtInfo');
   if (!img) return;
   const r = img.getBoundingClientRect(); if (r.width) st.asp = r.height / r.width;
   const P = st.pts, A = st.asp;
-  if (mk) mk.innerHTML = P.map((p, i) => `<div class="bt-pt${_bt.drag === i ? ' dr' : ''}" style="left:${(p.x * 100).toFixed(2)}%;top:${(p.y * 100).toFixed(2)}%;--c:${BT_PT_COL[i]}"><i>${i + 1}</i></div>`).join('');
+  if (mk) mk.innerHTML = P.map((p, i) => `<div class="bt-pt${kind === 'card' && i < 4 ? ' cc' : ''}${_bt.drag === i ? ' dr' : ''}${p.x < 0.25 ? ' el' : p.x > 0.75 ? ' er' : ''}${p.y < 0.1 || P.some((q, j) => j !== i && Math.abs(q.x - p.x) < 0.25 && q.y < p.y && p.y - q.y < 0.08) ? ' eb' : ''}" style="left:${(p.x * 100).toFixed(2)}%;top:${(p.y * 100).toFixed(2)}%;--c:${COL[i]}">${K.lab[i][0] ? `<i>${kind === 'card' && i < 4 ? '' : (i + (kind === 'card' ? -3 : 1)) + ' '}${K.lab[i][0]}</i>` : ''}</div>`).join('');
   const ln = (a, b, c, dash) => `<line x1="${(a.x * 100).toFixed(2)}" y1="${(a.y * 100).toFixed(2)}" x2="${(b.x * 100).toFixed(2)}" y2="${(b.y * 100).toFixed(2)}" stroke="${c}" stroke-width="2.2" vector-effect="non-scaling-stroke"${dash ? ' stroke-dasharray="7 6"' : ''}/>`;
   let g = '';
   if (P.length >= 2) {
@@ -19405,16 +19569,20 @@ function btDrawPts(final) {
       g += ln(bk(M), bk({ x: M.x + n.x * L * 0.5, y: M.y + n.y * L * 0.5 }), '#fde047', true);
       if (P.length >= 3) { const X2 = { x: P[2].x, y: P[2].y * A }; const t = (X2.x - X0.x) * u.x + (X2.y - X0.y) * u.y; g += ln(P[2], bk({ x: X0.x + u.x * t, y: X0.y + u.y * t }), '#bef264'); }
     }
+    if (kind === 'len' && P.length >= 3) { const X0 = { x: P[0].x, y: P[0].y * A }, X1 = { x: P[1].x, y: P[1].y * A }, X2 = { x: P[2].x, y: P[2].y * A }; const dx = X0.x - X1.x, dy = X0.y - X1.y, L = Math.hypot(dx, dy) || 1, u = { x: dx / L, y: dy / L }; const t = (X2.x - X1.x) * u.x + (X2.y - X1.y) * u.y; g += ln(P[1], { x: X1.x + u.x * t, y: (X1.y + u.y * t) / A }, '#bef264'); }
     if (kind === 'top' && P.length >= 4) g += ln(P[2], P[3], '#bef264');
   }
+  if (kind === 'card') { btSegImg(st); g = btCardLines(st, P, ln); }
   if (sv) sv.innerHTML = g;
   let h = '';
+  if (kind === 'card') { h = btCardPtInfo(st, P, K); if (info) info.innerHTML = h; return; }
   if (P.length < K.need) {
     const i = P.length;
     h = `<div class="bt-ins"><span style="background:${BT_PT_COL[i]}">${i + 1}</span><div><b>${K.lab[i][0]}</b> 을 눌러요<small>${K.lab[i][1]}${i ? ' · 찍은 점은 끌어서 옮길 수 있어요' : ' · 사진을 두 손가락으로 키우지 말고 그대로 눌러요'}</small></div></div>`;
   } else {
     const gm = btGeom(P, A, kind);
     if (!gm || gm.err || !gm.r) h = `<div class="bt-warn">${(gm && gm.err) || '점을 다시 찍어주세요'}</div>`;
+    else if (kind === 'len') { h = btLenInfo(gm); if (final && !gm.warn) btSaveLen(gm.r); }
     else {
       const top = kind === 'top';
       const c = btCls(gm.r, top ? BT_W_CUT : BT_H_CUT), nm = top ? BT_W_NAME : BT_H_NAME;
@@ -19428,7 +19596,7 @@ function btDrawPts(final) {
 }
 function btRefreshNext() {
   const f = btFoot(); const b = document.querySelector('#bootsContent .bt-go'); if (!b) return;
-  b.disabled = _bt.view === 'top' ? btW(f) === null : btH(f) === null;
+  b.disabled = _bt.view === 'len' ? !(f.len && f.lenSrc === 'insole') : _bt.view === 'top' ? btW(f) === null : btH(f) === null;
 }
 
 /* ===== 4. 바닥 ===== */
@@ -19443,7 +19611,7 @@ function btSurfBlock() {
 }
 function btViewSurf() {
   const f = btFoot();
-  return `${btHead(4, '바닥 — TF · AG', "btGo('side')")}${btSurfBlock()}
+  return `${btHead(4, '바닥 — TF · AG', "btGo('top')")}${btSurfBlock()}
     <div class="bt-q"><b>어떤 바닥으로 볼까?</b></div>
     <div class="bt-surfc">${[['TF', 'TF', '추천 · 짧은 잔디'], ['AG', 'AG', '긴 인조잔디'], ['both', '둘 다', '같이 비교']].map(o => `<button type="button" class="${f.surf === o[0] ? 'on' : ''} ${o[0]}" onclick="btSet('surf','${o[0]}')"><b>${o[1]}</b><small>${o[2]}</small></button>`).join('')}</div>
     <button type="button" class="bt-go" ${f.surf ? '' : 'disabled'} onclick="btGo('result')">결과 보기 ›</button>
@@ -19460,14 +19628,25 @@ function btExclBlock() {
 function btToggle(id) { _bt.open[id] = !btIsOpen(id); renderBoots(); }
 function btIsOpen(id) { return _bt.open[id] !== undefined ? _bt.open[id] : false; }
 function btSetPri(a) { haptic(5); _bt.pri = a || null; renderBoots(); }
-function btSetBud(b) { haptic(5); _bt.bud = b; btSave({ bud: b || null }); renderBoots(); }
+function btSetBud(b) { haptic(5); b = Math.max(0, Math.round(+b || 0)); if (b && b < BT_BUD_MIN) b = BT_BUD_MIN; if (b > BT_BUD_MAX) b = 0; _bt.bud = b; btSave({ bud: b || null }); const el = document.getElementById('bootsContent'), y = el ? el.scrollTop : 0; renderBoots(); if (el) el.scrollTop = y; }
+const BT_BUD_MIN = 50000, BT_BUD_MAX = 340000;   // 만원 단위 · 34만 넘으면 = 상관없음
+function btBudLab(b) { return b ? `${Math.round(b / 10000)}만원 이하` : '상관없음 · 제일 좋은 등급'; }
+function btBudStep(d) { const cur = _bt.bud || (BT_BUD_MAX + 10000); let n = cur + d * 10000; if (n > BT_BUD_MAX) n = 0; else if (n < BT_BUD_MIN) n = BT_BUD_MIN; btSetBud(n); }
+function btBudSlide(v) { const b = +v > BT_BUD_MAX / 10000 ? 0 : +v * 10000; const el = document.getElementById('btBudV'); if (el) el.textContent = btBudLab(b); }
 function btSpec(L) {
   return `<div class="bt-spec">${BT_ATTR_ORDER.map(a => `<div><span>${BT_ATTR[a].n}</span><i>${[1, 2, 3].map(k => `<b class="${L.sp[a] >= k ? 'on' : ''}" style="--c:${BT_ATTR[a].col}"></b>`).join('')}</i></div>`).join('')}</div>`;
 }
-function btTierRows(L, mode, pick) {
-  return L.ti.map(t => {
-    const s = BT_SURF[t[1]]; const ok = btSurfOk(t[1], mode); const on = pick && pick.t === t[0] && pick.s === t[1];
-    return `<div class="bt-tr${on ? ' on' : ''}${ok ? '' : ' off'}"><span class="rk r${btTierRank(L.br, t[0])}">${BTX(BT_TIER_KO[t[0]] || t[0])}</span><span class="sf ${s.g}">${s.n}</span><b>${btPrice(t[2])}</b>${t[3] ? `<small>${BTX(t[3])}</small>` : ''}${s.warn ? `<small class="w">⚠ ${s.warn}</small>` : ''}</div>`;
+function btTierOf(L, i) { const z = L.ti[i]; return { t: z[0], s: z[1], p: z[2], m: z[3], r: btTierRank(L.br, z[0]), fit: !_bt.bud || (z[2] !== null && btPMin(z[2]) <= _bt.bud), picked: true }; }
+function btPickTier(id, i) {
+  haptic(5); _bt.tsel = _bt.tsel || {};
+  const L = BT_LINES.find(x => x.id === id), rec = L ? btTierPick(L, btFoot().surf || 'TF', _bt.bud) : null;
+  if (i < 0 || (rec && L.ti[i] && L.ti[i][0] === rec.t && L.ti[i][1] === rec.s)) delete _bt.tsel[id]; else _bt.tsel[id] = i;
+  _bt.open[id] = true; const el = document.getElementById('bootsContent'), y = el ? el.scrollTop : 0; renderBoots(); if (el) el.scrollTop = y;
+}
+function btTierRows(L, mode, pick, rec) {
+  return L.ti.map((t, i) => {
+    const s = BT_SURF[t[1]]; const ok = btSurfOk(t[1], mode); const on = pick && pick.t === t[0] && pick.s === t[1]; const isRec = rec && rec.t === t[0] && rec.s === t[1];
+    return `<button type="button" class="bt-tr${on ? ' on' : ''}${ok ? '' : ' off'}" onclick="btPickTier('${L.id}',${i})" aria-pressed="${on}"><span class="rk r${btTierRank(L.br, t[0])}">${BTX(BT_TIER_KO[t[0]] || t[0])}</span><span class="sf ${s.g}">${s.n}</span><b>${btPrice(t[2])}</b>${t[3] ? `<small>${BTX(t[3])}</small>` : ''}${isRec ? '<i class="bt-trec">추천</i>' : ''}${s.warn ? `<small class="w">⚠ ${s.warn}</small>` : ''}</button>`;
   }).join('');
 }
 function btShopUrl(L, t) {
@@ -19478,11 +19657,17 @@ function btShopUrl(L, t) {
   if (sf && q.indexOf(sf) < 0 && sf.indexOf('/') < 0) q += ' ' + sf;
   return 'https://search.shopping.naver.com/search/all?query=' + encodeURIComponent(q.trim());
 }
+const BT_BR_SITE = { Nike: 'nike.com/kr', adidas: 'adidas.co.kr', Puma: 'kr.puma.com', Mizuno: 'kor.mizuno.com' };
+function btShopQ(L, t) { return decodeURIComponent(btShopUrl(L, t).split('query=')[1] || ''); }
+function btImgUrl(L, t) { return 'https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(btShopQ(L, t)); }
+function btOffUrl(L, t) { return 'https://www.google.com/search?q=' + encodeURIComponent('site:' + (BT_BR_SITE[L.br] || '') + ' ' + btShopQ(L, t).replace(/^(나이키|아디다스|퓨마|미즈노)\s*/, '')); }
 function btCard(x, i, R) {
   const L = x.L, open = btIsOpen(L.id) || (_bt.open[L.id] === undefined && i === 0);
-  const t = x.tier; const A = BT_ATTR[L.tag];
+  const tsel = _bt.tsel ? _bt.tsel[L.id] : undefined; const tRec = x.tier;
+  const t = tsel !== undefined && L.ti[tsel] ? btTierOf(L, tsel) : tRec; const A = BT_ATTR[L.tag];
   const sg = t ? BT_SURF[t.s].g : (R.mode === 'AG' ? 'AG' : 'TF');
-  const tierTxt = t ? `${BTX(BT_TIER_KO[t.t] || t.t)} ${BT_SURF[t.s].n} · <b>${btPrice(t.p)}</b>${!t.fit && _bt.bud ? ' <em>예산 넘음</em>' : ''}` : `<em>${R.mode === 'AG' ? 'AG' : 'TF'} 모델 없음</em>`;
+  const hasEliteOther = t && t.top && btTierRank(L.br, t.t) > 1 && L.ti.some(z => btTierRank(L.br, z[0]) === 1 && !btSurfOk(z[1], R.mode));
+  const tierTxt = t ? `${BTX(BT_TIER_KO[t.t] || t.t)} ${BT_SURF[t.s].n} · <b>${btPrice(t.p)}</b>${!t.fit && _bt.bud ? (t.unk ? ' <em>예산 안일 수도 · 정가 확인</em>' : ' <em>예산 넘음</em>') : ''}${t.top && btTierRank(L.br, t.t) === 1 ? ' <em class="top">최상급</em>' : ''}${t.picked ? ` <em class="pk">내가 고름</em>${btSurfOk(t.s, R.mode) ? '' : ` <em>${BT_SURF[t.s].g} — 고른 바닥과 달라요</em>`}` : ''}${hasEliteOther && !t.picked ? `<small class="bt-tnote">${BT_SURF[t.s].g} 중엔 이게 최고 · 최상급은 ${L.ti.filter(z => btTierRank(L.br, z[0]) === 1).map(z => BT_SURF[z[1]].n).join('·')}만 — 바닥 「둘 다」면 같이 비교</small>` : ''}` : `<em>${R.mode === 'AG' ? 'AG' : 'TF'} 모델 없음</em>`;
   return `<div class="bt-card${open ? ' open' : ''}">
     <button type="button" class="bt-ch" onclick="_bt.open['${L.id}']=${open ? 'false' : 'true'};renderBoots()">
       <span class="bt-rk">${i + 1}</span>
@@ -19495,39 +19680,42 @@ function btCard(x, i, R) {
         <div class="bt-fit"><span class="f${x.fit}">${x.fit === 2 ? '✓ 잘 맞음' : '△ 팁 있음'}</span></div>
         <small class="bt-szw">${BTX(x.size.why)}</small>
         <div class="bt-tierl">${tierTxt}</div>
-        <a class="bt-shop" href="${btShopUrl(L, t)}" target="_blank" rel="noopener">📷 실물 사진 · 최저가 ›</a>
+        <div class="bt-shops"><a class="bt-shop" href="${btImgUrl(L, t)}" target="_blank" rel="noopener">📷 실물·색상</a><a class="bt-shop" href="${btOffUrl(L, t)}" target="_blank" rel="noopener">🏷️ 공식몰</a><a class="bt-shop" href="${btShopUrl(L, t)}" target="_blank" rel="noopener">💰 최저가</a></div>
       </div>
     </div>
     ${open ? `<div class="bt-more">
       ${btSpec(L)}
       <dl class="bt-dl"><dt>갑피</dt><dd>${BTX(L.up)}</dd><dt>무게감</dt><dd>${BTX(L.wt)} <small>(같은 TF 끼리 비교 · 참고)</small></dd><dt>이런 사람</dt><dd>${BTX(L.who)}</dd><dt>주의</dt><dd>${BTX(L.bad)}</dd></dl>
-      <div class="bt-trs"><div class="bt-trh">등급 · 가격 <small>${BT_SURVEY} 국내 공식몰 정가</small></div>${btTierRows(L, R.mode, t)}</div>
+      <div class="bt-trs"><div class="bt-trh">등급 · 가격 <small>${BT_SURVEY} 국내 공식몰 정가 · 눌러서 다른 등급 보기</small>${tsel !== undefined ? `<button type="button" class="bt-trback" onclick="btPickTier('${L.id}',-1)">↺ 추천 등급으로</button>` : ''}</div>${btTierRows(L, R.mode, t, tRec)}</div>
       ${L.vari ? `<div class="bt-vari">➕ ${BTX(L.vari)}</div>` : ''}
       <div class="bt-pack">🎨 <b>색(팩)만 다른 건 같은 신발</b> — 핏·성능·사이즈 그대로예요. 새 팩이 나오면 지난 팩이 할인되는 경우가 많고, 메시 같은 선수 시그니처는 같은 신발에 값만 조금 더 붙어요 (조사 때 F50 리그 TF 109,000원 · 메시 모델 119,000원). 지금 파는 색은 「실물 사진」에서.</div>
-      <div class="bt-imgnote">그림은 라인 특징만 그린 것 · 실물은 「실물 사진」에서 (네이버 쇼핑 검색)</div>
+      <div class="bt-imgnote">그림은 핏 비교용 (라인 특징만) · 실물과 지금 파는 모든 색상은 「📷 실물·색상」 · 정가·재고는 「🏷️ 공식몰」</div>
     </div>` : `<button type="button" class="bt-open" onclick="_bt.open['${L.id}']=true;renderBoots()">특화 · 갑피 · 등급별 가격 ▾</button>`}
   </div>`;
 }
 function btViewResult() {
   const f = btFoot(); if (_bt.bud === 0 && f.bud) _bt.bud = +f.bud;
   const R = btRank(f);
-  const wSrc = f.wp !== undefined ? '직접 고름' : f.wR ? `사진 ${(+f.wR).toFixed(3)}` : '질문';
+  const wSrc = f.wp !== undefined ? '직접 고름' : f.ws === 'card' && f.wmm ? '카드 실측' : f.wR ? `사진 ${(+f.wR).toFixed(3)}` : '질문';
   const hSrc = btHWhy(f) || '';
   const feel = { tight: '꽉 낌', fit: '딱 맞음', loose: '남음' }[f.f] || '';
   const sum = `<div class="bt-sum">
-      <button type="button" onclick="btGo('size')"><small>기본 사이즈</small><b>${R.base}</b><em>평소 ${f.s}<br>${feel}</em></button>
-      <button type="button" onclick="btGo('top')"><small>발볼</small><b>${BT_W_NAME[R.W]}</b><em>${BTX(wSrc)}</em></button>
+      <button type="button" onclick="btGo('size')"><small>기본 사이즈</small><b>${R.base}</b><em>${f.len ? `${f.lenSrc === 'card' ? '카드 ' : f.lenSrc === 'insole' ? '깔창 ' : ''}실측 ${f.len}mm` : `평소 ${f.s}<br>${feel}`}</em></button>
+      <button type="button" onclick="btGo('${f.ws === 'card' ? 'card' : 'top'}')"><small>발볼</small><b>${BT_W_NAME[R.W]}</b><em>${BTX(wSrc)}${f.wmm ? `<br>${f.wmm}mm` : f.len && f.wR ? `<br>약 ${Math.round(f.len * f.wR)}mm` : ''}</em></button>
       <button type="button" onclick="btGo('side')"><small>발등</small><b>${BT_H_NAME[R.H]}</b><em>${BTX(f.hR ? '사진 ' + (+f.hR).toFixed(3) : hSrc)}</em></button>
       <button type="button" onclick="btGo('surf')"><small>바닥</small><b>${f.surf === 'both' ? 'TF·AG' : f.surf}</b><em>${f.surf === 'TF' ? '우리 구장 추천' : f.surf === 'AG' ? '긴 잔디용' : '둘 다 비교'}</em></button>
     </div>`;
   const why = R.P.has ? `${BTX(R.P.why.join(' · '))}${R.P.top.length ? ` → <b>${R.P.top.map(a => BT_ATTR[a].n).join(' · ')}</b> 먼저` : ''}` : '트레이닝 탭에서 포지션 · 🚀 극대화를 고르면 순서가 내 플레이에 맞춰져요';
   const pri = `<div class="bt-ord"><div class="bt-why">📌 순서 기준: ${why}</div>
       <div class="tr-chips sm"><button type="button" class="${!_bt.pri ? 'on' : ''}" onclick="btSetPri(null)">자동</button>${BT_ATTR_ORDER.map(a => `<button type="button" class="${_bt.pri === a ? 'on' : ''}" onclick="btSetPri('${a}')">${BT_ATTR[a].ico} ${BT_ATTR[a].n}</button>`).join('')}</div>
-      <div class="bt-bud"><span>예산</span>${[[0, '상관없음'], [200000, '20만↓'], [150000, '15만↓'], [120000, '12만↓']].map(o => `<button type="button" class="${_bt.bud === o[0] ? 'on' : ''}" onclick="btSetBud(${o[0]})">${o[1]}</button>`).join('')}</div></div>`;
+      <div class="bt-bud2"><div class="bt-bud2h"><span>💰 예산</span><b id="btBudV">${btBudLab(_bt.bud)}</b></div>
+        <div class="bt-bud2r"><button type="button" onclick="btBudStep(-1)" aria-label="1만원 내리기">−</button><input type="range" min="${BT_BUD_MIN / 10000}" max="${BT_BUD_MAX / 10000 + 1}" step="1" value="${_bt.bud ? _bt.bud / 10000 : BT_BUD_MAX / 10000 + 1}" oninput="btBudSlide(this.value)" onchange="btSetBud(+this.value > ${BT_BUD_MAX / 10000} ? 0 : this.value * 10000)" aria-label="예산"><button type="button" onclick="btBudStep(1)" aria-label="1만원 올리기">+</button></div>
+        <div class="bt-bud2s"><span>5만</span><span>15만</span><span>25만</span><span>상관없음</span></div>
+        ${_bt.bud ? '' : '<small>상관없음이면 조기축구라도 그 바닥에서 제일 좋은 등급을 보여줘요 · 등급별 가격은 카드를 펼치면 다 나와요</small>'}</div></div>`;
   const cards = R.good.map((x, i) => btCard(x, i, R)).join('');
   const avoid = R.avoid.length ? `<div class="bt-sec">🙅 내 발엔 피할 라인</div><div class="bt-av">${R.avoid.map(x => `<div><b>${x.L.br} ${BTX(x.L.nm)}</b><small>${BTX(x.L.bad)}${x.L.w[R.W] === 0 ? ` · 발볼 ${BT_W_NAME[R.W]}` : ''}${x.L.h[R.H] === 0 ? ` · 발등 ${BT_H_NAME[R.H]}` : ''}</small></div>`).join('')}</div>` : '';
   return `<div class="bt-rhead"><b>👟 내 축구화</b><button type="button" onclick="btGo('size')">다시 재기</button></div>
-    ${sum}${pri}
+    ${sum}${btResultShape(f)}${pri}
     <div class="bt-sec">✅ 나한테 맞는 라인 <small>${R.good.length}개 · 눌러서 자세히</small></div>
     ${cards || '<div class="bt-note">조건에 맞는 라인이 없어요 · 예산이나 바닥을 바꿔보세요</div>'}
     ${avoid}
@@ -19918,6 +20106,1400 @@ function renderPosEval(fast) {
   if (fast && _posEvalData) { draw(_posEvalData); return; }
   el.innerHTML = '<div class="tra-load">불러오는 중…</div>';
   trAnaLoad().then(draw);
+}
+
+/* ==================== 🔴 심화 — 연속 판단 세트 (v110) ====================
+   한 장면이 2~3컷으로 이어진다. 컷마다 제한 시간 안에 판단. 스코어·쿼터가 정답을 바꾼다(alt).
+   TDA(id, 그룹, 제목, 경기 상황 {us, them, q, left, gs}, 컷[{k 짧은 이름, cat, q, sc, o:[[보기, 틀린 이유]], a, why}], 끝 {rule, ra:[그림, 글], rb:[그림, 글], alt}) */
+const TD = [];
+function TDA(id, g, t, st, cuts, end) { TD.push(Object.assign({ id, g: g.split(','), t, st, cuts }, end || {})); }
+function trDById(id) { return TD.find(d => d.id === id) || null; }
+
+/* ===== GK ===== */
+TDA('gk_d1', 'GK', '뒷공간 볼 → 1대1 → 역습 시작', { us: 0, them: 0, q: 2, left: '2쿼터 중반', gs: 'draw' }, [
+  { k: '나갈까', cat: 'def', q: '상대가 우리 CB 뒤로 길게 찔렀어. 상대 ST가 나보다 공에 조금 더 가까워. 나는?',
+    sc: 'v:d M:GK@50,93 U:CB@34,60#CB U:CB@66,58#CB2 O:ST@58,52 B@54,64 RO:58,52>55,62 A:50,90>51,76 AT:72,80:몇 걸음 나와 멈춤',
+    o: [['전력으로 달려가 슬라이딩', '상대가 먼저 터치하면 옆으로 툭 — 빈 골대'], ['몇 걸음 나가 각을 좁히고, 상대가 터치하는 순간 멈춰 선다', ''], ['골라인에 그대로 있는다', '골대가 다 열려 보여서 아무 데나 차도 들어가']], a: 1,
+    why: '내가 먼저 못 닿으면 나가서 각만 좁히고, 상대가 공을 만지는 순간엔 멈춰서 「세트」. 움직이는 중엔 반응이 늦어.' },
+  { k: '1대1', cat: 'def', q: '상대 ST의 첫 터치가 길었어. 공이 발에서 1m 넘게 멀어졌어. 지금은?',
+    sc: 'v:b M:GK@50,80 O:ST@54,46 B@52,60 RO:54,46>53,56 A:50,78>52,63 AT:70,64:지금 덮치기',
+    o: [['지금 몸을 던져 공을 덮친다', ''], ['계속 서서 슛을 기다린다', '공이 발에서 멀 때가 제일 좋은 기회 — 놓치면 다시 정확한 슛'], ['뒤로 물러나 골라인 쪽으로', '각이 다시 넓어져']], a: 0,
+    why: '1대1에서 먼저 눕지 않는 게 원칙이지만, 터치가 길어 공이 발에서 멀어진 순간만큼은 키퍼가 먼저 가는 타이밍이야.' },
+  { k: '역습', cat: 'tr', q: '공을 잡았어! 상대 선수 여럿이 아직 우리 진영에 있고, 반대쪽 풀백({RB})이 넓게 비어 있어.',
+    sc: 'v:d M:GK@50,84 O:@40,56 O:@58,50 O:@30,64 U:RB@90,58#RB U:CB@36,70#CB A:50,84>88,60 AT:74,72:빠르게 반대쪽',
+    o: [['천천히 시간 끌며 수비 정리', '상대가 다 올라와 있는 지금이 역습 기회 — 0:0 2쿼터라 서두를 이유가 있어'], ['빠르게 반대쪽 빈 풀백에게 굴리거나 던진다', ''], ['무조건 멀리 찬다', '공중볼은 50:50 — 기회를 버리는 셈']], a: 1,
+    why: '잡자마자 반대쪽 빈 사람 찾기 = 역습의 시작. 상대가 몰려 있던 반대쪽이 제일 비어 있어.' },
+], { rule: '먼저 닿으면 나가서 걷어내기 · 못 닿으면 각 좁히고 멈춰 서기', alt: '같은 3번 장면이 4쿼터 1:0 이기는 중이었다면 → 서두르지 말고 수비가 정리될 때까지 잡고 있어도 OK (손으로 6초 안에서)' });
+
+TDA('gk_d2', 'GK', '코너킥 → 펀칭 → 중거리', { us: 1, them: 0, q: 4, left: '남은 4분', gs: 'lead' }, [
+  { k: '코너', cat: 'sp', q: '상대 코너킥. 공이 골문 앞 6m 안으로 높게 오는데 사람이 너무 많아.',
+    sc: 'v:b M:GK@50,90 O:@42,72 O:@58,68 U:@48,64 U:@64,76 O:@36,82 B@4,30 P:4,30>50,72 A:51,76>22,48 AT:18,40:두 주먹 · 옆·멀리',
+    o: [['무리해서라도 잡는다', '놓치면 바로 앞에 상대 발 — 그대로 실점'], ['두 주먹으로 옆·멀리 쳐낸다', ''], ['골라인 지킨다', '골문 앞 혼전이 그대로 남아']], a: 1,
+    why: '애매하면 펀칭. 잡는 것보다 「위험 지역 밖으로」가 먼저. 가운데 말고 옆·멀리.' },
+  { k: '돌아오기', cat: 'sp', q: '쳐낸 공이 박스 밖으로 떨어졌고, 상대가 바로 중거리를 노려. 나는?',
+    sc: 'v:b M:GK@40,74 O:CM@30,32 B@30,36 U:@50,58 U:@62,60 A:40,74>50,88 AT:64,90:가운데로 · 세트',
+    o: [['공 쪽으로 다시 달려나간다', '박스 밖 공엔 손을 못 써 — 골문만 비어'], ['골문 가운데, 골라인 한두 걸음 앞으로 돌아와 멈춘다', ''], ['골라인 정중앙에 바짝 붙는다', '너무 뒤에 서면 각이 넓어져']], a: 1,
+    why: '펀칭 다음은 「제자리 + 세트」. 공과 골대 가운데를 잇는 선 위, 골라인 한두 걸음 앞.' },
+  { k: '강한 슛', cat: 'def', q: '낮고 강한 슛이 내 옆으로 와. 깨끗하게 잡기는 애매해.',
+    sc: 'v:b M:GK@50,88 O:CM@32,36 B@42,64 P:32,36>58,90 A:56,88>78,96 AT:80,86:골대 밖으로',
+    o: [['앞으로 쳐낸다', '앞에 떨어지면 리바운드 슛 — 4쿼터에 제일 아까운 실점'], ['옆으로, 골대 밖으로 쳐낸다', ''], ['몸으로 막아 앞에 떨군다', '튕긴 공을 상대가 먼저 차']], a: 1,
+    why: '못 잡을 슛은 「옆으로·골대 밖으로」. 코너킥 하나 더 주는 게 리바운드 실점보다 훨씬 낫다.' },
+], { rule: '애매하면 펀칭 → 바로 세트 → 강한 슛은 옆으로', alt: '키퍼 원칙은 스코어에 덜 흔들려요 — 0:0 1쿼터여도 같은 답' });
+
+TDA('gk_d3', 'GK', '골킥 압박 → 백패스 → 멀리', { us: 0, them: 0, q: 1, left: '1쿼터 초반', gs: 'draw' }, [
+  { k: '골킥', cat: 'bu', q: '골킥. 상대 셋이 우리 CB 둘과 볼란치 앞까지 올라와 압박해. 왼쪽 풀백({LB})은 넓게 비어 있어.',
+    sc: 'v:d M:GK@50,95 U:CB@34,86#CB U:CB@66,86#CB2 U:CDM@50,64#CDM U:LB@8,66#LB O:@36,78 O:@64,78 O:@52,58 A:50,93>11,68 AT:22,58:빈 풀백에게',
+    o: [['CB에게 짧게', '바로 앞에 압박 — 받자마자 뺏기면 골문 앞'], ['비어 있는 왼쪽 풀백에게 낮고 빠르게', ''], ['막혀 있어도 볼란치에게', '사이 패스가 끊기면 제일 위험한 곳에서 뺏겨']], a: 1,
+    why: '압박이 가운데에 몰리면 바깥이 비어. 빈 사람 → 짧게. 낮고 빠르게 줘야 상대가 못 따라와.' },
+  { k: '백패스', cat: 'bu', q: '풀백이 받자마자 압박받아서 나한테 다시 줬어. 상대 한 명이 왼쪽에서 달려와.',
+    sc: 'v:d M:GK@44,92 U:LB@10,70#LB O:@20,76 RO:20,76>34,88 B@36,90 U:CB@68,84#CB2 A:44,92>66,84 AT:70,74:압박 반대쪽으로',
+    o: [['첫 터치를 오른쪽으로 빼고 반대쪽 CB에게', ''], ['받자마자 같은 풀백에게 돌려준다', '압박이 그대로 따라붙은 쪽 — 또 뺏길 각'], ['드리블로 제쳐본다', '키퍼가 제쳐지면 빈 골대']], a: 0,
+    why: '압박은 공이 있던 쪽에서 와. 첫 터치를 압박 반대쪽으로 빼면 한 번에 풀려.' },
+  { k: '3m 앞', cat: 'bu', q: '이번엔 상대가 3m 앞까지 붙었고 줄 곳이 안 보여.',
+    sc: 'v:d M:GK@50,90 O:@50,80 RO:50,76>50,84 B@50,88 O:@32,80 O:@68,80 A:50,88>50,30 AT:62,40:멀리 · 고민 없이',
+    o: [['짧게 아무에게나', '막힌 패스는 골문 앞에서 끊겨'], ['멀리, 위험 지역 밖으로', ''], ['한 번 제치고 보기', '키퍼 실수는 곧 실점']], a: 1,
+    why: '키퍼 앞 3m까지 붙었으면 고민 없이 멀리. 빌드업은 빈 사람이 있을 때만.' },
+], { rule: '빈 사람 → 짧게 · 다 막혔으면 멀리 · 키퍼 앞 3m면 고민 없이 멀리', alt: '4쿼터 1:0 이기는 중이면 → 1번 컷부터 길게 차도 OK (위험 0이 먼저)' });
+
+/* ===== CB ===== */
+TDA('cb_d1', 'CB', '롱볼 → 세컨볼 → 라인', { us: 1, them: 0, q: 4, left: '남은 3분', gs: 'lead' }, [
+  { k: '헤딩', cat: 'def', q: '상대가 롱볼. 키 큰 ST와 공중볼 경합인데 내가 먼저 뜰 수 있어. 헤딩은 어디로?',
+    sc: 'v:d M:CB@46,64 O:ST@50,58 U:CB@70,66#CB2 U:CDM@40,42#CDM P:50,4>47,60 A:46,62>10,40 AT:16,32:옆·밖으로',
+    o: [['옆·바깥으로 멀리', ''], ['가운데 앞으로', '세컨볼을 상대가 잡으면 바로 슈팅 거리'], ['키퍼에게 백헤딩', '짧으면 그대로 실점 — 4쿼터 1:0에 최악']], a: 0,
+    why: '앞서고 있는 4쿼터의 롱볼 헤딩은 「옆·밖」. 가운데로 떨구면 세컨볼 싸움이 시작돼.' },
+  { k: '세컨볼', cat: 'def', q: '상대 CM이 세컨볼을 잡았는데 우리 볼란치({CDM})가 바로 붙었어. 우리 라인은 아직 박스 안이야. 이제 나는?',
+    sc: 'v:d M:CB@46,72 U:CB@66,72#CB2 U:CDM@46,40#CDM O:CM@50,34 B@52,38 O:ST@52,60 Z:20,46,60,18 T:50,52:벌어진 간격 A:46,72>46,62 AT:76,60:「올라가!」',
+    o: [['나도 튀어나가 CM 같이 압박', 'CB가 튀어나가면 뒤가 통째로 빈다'], ['「올라가!」 라인 2~3걸음 올리기', ''], ['박스 안에 그대로', '라인과 미드 사이가 벌어져 2선 슈팅 공간이 생겨']], a: 1,
+    why: '공 가진 선수에게 압박이 붙으면 앞으로 패스를 못 해. 그 순간 라인을 올려 간격을 좁힌다.' },
+  { k: '압박 풀림', cat: 'def', q: 'CM이 볼란치를 제치고 고개를 들었어 (압박 풀림). 이제는?',
+    sc: 'v:d M:CB@46,62 U:CB@66,62#CB2 U:CDM@42,34#CDM O:CM@52,40 B@54,44 RO:52,40>54,44 O:ST@50,54 T:66,30:고개 듦 A:46,62>46,72 AT:84,84:「내려!」',
+    o: [['그대로 유지', '고개 든 선수는 뒷공간으로 찔러 — 라인 뒤가 넓어'], ['「내려!」 뒤로 2~3걸음', ''], ['CM에게 튀어나간다', '나간 자리로 ST가 빠져']], a: 1,
+    why: '압박 없는 공 = 뒷공간 패스가 올 수 있는 공. 내려서 뒷공간부터 지우기.' },
+], { rule: '압박 있으면 올라가고, 없으면 내려간다',
+  ra: ['v:d U:CB@36,70 U:CB@64,70 U:CDM@48,40 O:@50,34 B@50,38 R:36,70>36,60 R:64,70>64,60', '압박 있음 → 올라가!'],
+  rb: ['v:d U:CB@36,62 U:CB@64,62 O:@50,40 B@50,44 R:36,62>36,72 R:64,62>64,72', '압박 없음 → 내려!'],
+  alt: '같은 1번 장면이 1쿼터 0:0이었다면 → 헤딩을 볼란치 발 앞에 떨궈도 OK (공을 지킬 수 있으면 지키기)' });
+
+TDA('cb_d2', 'CB', '등진 ST → 측면 돌파 → 크로스', { us: 0, them: 1, q: 2, left: '2쿼터 중반', gs: 'trail' }, [
+  { k: '등진 ST', cat: 'def', q: '상대 ST가 등지고 받으려 해. 나는 바로 뒤에 있어.',
+    sc: 'v:d M:CB@48,62 O:ST@48,46 B@44,16 P:44,16>48,42 U:CB@72,64#CB2 U:RB@88,54#RB A:48,60>48,51 AT:62,50:팔 거리',
+    o: [['받는 순간 태클', '등진 상태에서 발 넣으면 파울이거나 턴 당해'], ['바짝 붙어서 못 돌아서게', ''], ['물러나서 기다린다', '돌아설 공간을 줘']], a: 1,
+    why: '지고 있어도 수비 원칙은 같아. 등진 공격수는 돌아설 때가 제일 위험 — 붙어서 뒤로 패스하게.' },
+  { k: '커버', cat: 'def', q: 'ST가 측면으로 내줬고 상대 윙이 우리 풀백({RB})을 제쳤어. 짝 CB({CB2})는 가운데에 있어. 나는?',
+    sc: 'v:d M:CB@58,64 U:CB@36,70#CB2 U:RB@78,40#RB O:W@86,52 B@86,56 D:86,38>86,52 O:ST@44,54 A:58,64>76,70 AT:20,90:사선 커버 + 「가운데!」',
+    o: [['ST를 계속 따라간다', '윙이 그대로 박스 안까지 들어와'], ['사선으로 측면 커버 나가며 짝 CB에게 「가운데 맡아!」', ''], ['제자리에서 기다린다', '윙이 아무 방해 없이 크로스·슈팅']], a: 1,
+    why: '풀백이 뚫리면 가까운 CB가 사선으로 커버, 남은 CB가 가운데. 콜이 있어야 둘이 같은 사람을 안 쫓아.' },
+  { k: '크로스', cat: 'def', q: '윙이 크로스 자세를 잡았어. 나와의 거리는 2m.',
+    sc: 'v:d M:CB@72,64 O:W@84,72 B@85,76 U:CB@52,78#CB2 O:ST@38,68 A:72,64>79,70 AT:56,50:다리 뻗어 막기',
+    o: [['슬라이딩 태클', '한 번 접으면 끝 — 박스 안이면 PK'], ['다리 뻗어 크로스 길을 막고 몸은 골대 쪽', ''], ['돌아서서 박스로 뛴다', '크로스가 편하게 올라가']], a: 1,
+    why: '크로스는 「블록」. 넘어지지 않고 다리만 뻗어야 접는 동작에도 다시 따라갈 수 있어.' },
+], { rule: '한 명이 나가면 한 명은 가운데 · 크로스는 넘어지지 말고 다리 뻗어 블록', alt: '지고 있다고 수비가 서두르면 한 골 더 먹어요 — 이 세트는 스코어와 상관없이 같은 답' });
+
+TDA('cb_d3', 'CB', '압박 탈출 → 전진 드리블 → 끌어낸 뒤 패스', { us: 0, them: 0, q: 1, left: '1쿼터', gs: 'draw' }, [
+  { k: '첫 패스', cat: 'bu', q: '상대 ST가 짝 CB 쪽 길을 막으면서 곡선으로 나에게 와. 볼란치({CDM})는 비어 있어.',
+    sc: 'v:d M:CB@34,74 U:CB@66,74#CB2 U:CDM@46,52#CDM O:ST@52,62 RO:56,58>42,68 B@36,72 O:@60,44 A:34,74>45,55 AT:24,52:볼란치 발 앞',
+    o: [['짝 CB에게', 'ST가 그 길을 막으면서 오고 있어'], ['비어 있는 볼란치에게', ''], ['키퍼에게 백패스', '안전하지만 압박을 계속 받게 돼']], a: 1,
+    why: '압박 오는 방향의 반대 또는 앞이 비면 앞으로. 볼란치 발 앞에 정확히.' },
+  { k: '전진', cat: 'bu', q: '볼란치가 다시 나한테 줬어. 이번엔 앞이 텅 비었어 — 상대 2선은 다 위에 있어.',
+    sc: 'v:d M:CB@38,66 U:CB@66,72#CB2 U:CDM@52,54#CDM O:@40,26 O:@64,30 Z:26,36,30,22 B@40,62 A:38,64>38,46 AT:22,44:몰고 한 템포',
+    o: [['바로 길게 찬다', '공을 잃을 확률만 높아져'], ['직접 몰고 한 템포 전진', ''], ['옆 CB에게 다시', '좋은 기회를 그냥 넘겨']], a: 1,
+    why: '앞이 비면 CB가 몰고 나가는 게 제일 좋은 빌드업. 상대 한 명이 나올 때까지 몬다.' },
+  { k: '끌어낸 뒤', cat: 'bu', q: '몰고 올라갔더니 상대 CM이 나에게 나왔어. 그 뒤에 우리 2선({W})이 비어 있어.',
+    sc: 'v:m M:CB@38,74 O:CM@40,60 RO:44,50>40,58 B@38,70 U:W@24,42#W U:CDM@58,70#CDM O:@60,40 A:38,72>25,45 AT:6,24:나온 선수 뒤로',
+    o: [['계속 드리블로 제친다', 'CB가 뺏기면 바로 역습 — 뒤에 아무도 없어'], ['나온 선수 뒤 빈 2선에게', ''], ['뒤로 돌아간다', '애써 끌어낸 공간을 버려']], a: 1,
+    why: '드리블의 목적은 상대를 끌어내는 것. 한 명이 나오면 그 선수가 비운 자리로 바로 패스.' },
+], { rule: '앞이 비면 몰고 가서 끌어내고, 끌려나온 선수 뒤로 패스', alt: '4쿼터 1:0 이기는 중이면 → 2번 컷에서 무리한 전진 대신 안전하게 옆으로 돌려도 OK' });
+
+/* ===== FB ===== */
+TDA('fb_d1', 'FB', '윙 1대1 → 따라가기 → 먼 쪽 수비', { us: 1, them: 1, q: 3, left: '3쿼터', gs: 'draw' }, [
+  { k: '1대1', cat: 'def', q: '상대 윙이 나에게 드리블해 와. 나는 왼쪽 풀백이야 (터치라인이 내 왼쪽).',
+    sc: 'v:d M:LB@16,60 O:W@22,40 B@24,44 D:26,24>23,40 U:CB@40,70#CB T:8,30:터치라인 A:16,58>20,52 AT:42,52:안쪽 막고 바깥으로',
+    o: [['정면으로 마주 선다', '양쪽 길이 다 열려'], ['안쪽 발(오른발) 앞, 안쪽 막고 바깥으로 몰기', ''], ['바로 발을 넣는다', '제쳐지면 박스까지 무방비']], a: 1,
+    why: '측면은 안쪽(골대 쪽)부터 막기. 왼쪽 터치라인이면 오른발 앞 · 왼발 뒤 — 몸이 자연스럽게 바깥을 향해.' },
+  { k: '따라가기', cat: 'def', q: '윙이 바깥으로 치고 나갔어. 나는?',
+    sc: 'v:d M:LB@20,58 O:W@12,64 B@11,70 D:16,48>11,66 U:CB@44,72#CB A:20,58>15,70 AT:36,84:같이 뛰며 각 좁히기',
+    o: [['포기하고 박스로 돌아간다', '아무 방해 없는 크로스가 올라가'], ['같이 뛰며 몸을 붙여 크로스 각을 좁힌다', ''], ['뒤에서 태클', '파울 → 위험 지역 프리킥']], a: 1,
+    why: '바깥으로 몬 건 성공이야. 이제 같이 뛰며 크로스 각만 줄이면 터치라인이 수비를 도와줘.' },
+  { k: '먼 쪽', cat: 'def', q: '이번엔 공이 반대쪽 측면에 있고 크로스가 올라오려 해. 나(먼 쪽 풀백)는?',
+    sc: 'v:d M:LB@12,60 U:CB@38,74#CB U:CB@60,74#CB2 O:@84,58 B@86,62 O:ST@50,72 O:W@24,72 A:12,60>24,76 AT:28,44:안으로 좁혀 먼 포스트',
+    o: [['터치라인 쪽 그대로', '먼 포스트로 들어오는 선수가 무방비'], ['안으로 좁혀 먼 포스트 쪽 상대 마크', ''], ['공 쪽으로 따라간다', '내 쪽이 통째로 비어']], a: 1,
+    why: '반대쪽 공이면 먼 쪽 풀백은 사실상 세 번째 센터백. 먼 포스트를 지킨다.' },
+], { rule: '측면 1대1은 안쪽 먼저 · 반대쪽 공이면 안으로 좁히기', alt: '오른쪽 풀백이면 1번 컷에서 왼발 앞 · 오른발 뒤 (안쪽 발이 앞)' });
+
+TDA('fb_d2', 'FB', '오버래핑 → 크로스 선택 → 복귀', { us: 0, them: 1, q: 2, left: '2쿼터 후반', gs: 'trail' }, [
+  { k: '오버래핑', cat: 'bu', q: '우리 2선({W})이 측면에서 공을 잡고 안으로 접으려 해. 같은 쪽 볼란치({CDM})가 뒤에 남아 있어.',
+    sc: 'v:a M:LB@14,74 U:W@22,52#W B@24,50 U:CDM@42,78#CDM O:FB@26,40 O:@40,56 A:14,72>12,40 AT:10,30:바깥으로 겹쳐 뛰기',
+    o: [['제자리에서 기다린다', '지는 중 — 숫자를 더해야 뚫려'], ['바깥으로 겹쳐 뛴다 (오버래핑)', ''], ['안쪽으로 뛴다', '2선과 같은 길 — 서로 겹쳐']], a: 1,
+    why: '같은 쪽 볼란치가 남아 있으면 올라가도 돼. 2선이 안으로 접으면 바깥이 비니까 그 길로.' },
+  { k: '크로스', cat: 'bu', q: '공을 받아 엔드라인 근처까지 왔어. 박스 안엔 상대 키 큰 CB 둘, 우리 ST({ST})는 니어 쪽으로 뛰고, 2선({W2})이 페널티 지점 근처에 있어.',
+    sc: 'v:a M:LB@10,22 B@11,24 O:CB@46,10 O:CB@60,12 U:ST@32,16#ST U:W@50,32#W2 A:11,24>48,32 AT:70,40:낮게 컷백',
+    o: [['높게 띄운다', '키 큰 CB 둘이 다 걷어내'], ['페널티 지점 쪽으로 낮게 뒤로 (컷백)', ''], ['뒤로 돌려 다시 시작', '지고 있는데 좋은 자리를 버려']], a: 1,
+    why: '엔드라인까지 가면 수비는 골대 쪽을 보며 뒷걸음질. 뒤로 낮게 빼주는 컷백이 제일 위험한 크로스야.' },
+  { k: '복귀', cat: 'tr', q: '컷백이 막혀서 상대가 역습. 상대 윙이 내가 비운 측면으로 뛰기 시작했어.',
+    sc: 'v:m M:LB@12,28 O:W@20,52 RO:20,52>18,70 O:@44,48 B@44,52 U:CDM@40,66#CDM U:CB@40,84#CB A:12,28>16,62 AT:30,40:전력 복귀',
+    o: [['천천히 걸어 돌아간다', '내 자리가 통째로 비어'], ['가장 빠른 길로 전력 복귀 (윙 쫓기)', ''], ['그 자리에서 압박', '공과 거리가 멀어 소용없어']], a: 1,
+    why: '올라간 풀백의 의무는 복귀. 공보다 골대 쪽, 가장 빠른 길로.' },
+], { rule: '올라갈 땐 같은 쪽 볼란치가 남아 있을 때만 · 엔드라인까지 가면 낮게 컷백 · 뺏기면 제일 먼저 복귀', alt: '4쿼터 1:0 이기는 중이었다면 → 1번 컷에서 안 올라가고 자리 지키는 게 정답' });
+
+TDA('fb_d3', 'FB', '스로인 → 리턴 → 뺏겼을 때', { us: 0, them: 0, q: 1, left: '1쿼터', gs: 'draw' }, [
+  { k: '스로인', cat: 'sp', q: '우리 스로인을 내가 던져. 다들 서 있기만 하고 받을 사람이 안 보여.',
+    sc: 'v:m M:LB@5,52 U:W@16,40#W U:CDM@32,60#CDM O:@24,46 O:@28,32 A:7,50>15,43 AT:40,24:손짓 · 발 앞에',
+    o: [['멀리 아무 데나 던진다', '상대 공이 될 확률이 더 커'], ['가까운 2선에게 마중 나오라고 손짓하고 발 앞에', ''], ['그냥 기다린다', '상대가 다 자리 잡아']], a: 1,
+    why: '스로인은 짧고 정확하게. 받는 사람이 마중 나오며 받기 좋게 발 앞으로.' },
+  { k: '리턴', cat: 'sp', q: '던졌어. 이제 나는?',
+    sc: 'v:m M:LB@5,52 U:W@16,40#W B@17,43 O:@24,44 A:5,52>12,60 AT:32,70:라인 안으로 · 리턴 받기',
+    o: [['라인 밖에서 지켜본다', '한 명이 빠진 셈 — 2선이 혼자 고립'], ['바로 라인 안으로 들어와 리턴 받을 자리', ''], ['앞으로 뛰어나간다', '리턴 각이 없어져']], a: 1,
+    why: '던진 사람이 제일 자유로운 선수야. 바로 들어와서 다시 받아주기.' },
+  { k: '뺏김', cat: 'tr', q: '2선이 받다가 뺏겼어. 상대가 가운데로 치고 들어오려 해.',
+    sc: 'v:m M:LB@10,56 O:@20,46 B@22,48 D:20,46>34,56 U:CDM@36,66#CDM U:CB@40,84#CB A:10,56>26,58 AT:40,46:가운데 길 막으며 복귀',
+    o: [['측면 내 자리로만 돌아간다', '가운데가 뚫려'], ['가운데 길을 막는 쪽으로 붙는다', ''], ['뒤에서 태클', '제자리 파울은 위험 지역 프리킥']], a: 1,
+    why: '뺏기면 가장 위험한 길(가운데)부터 막고, 바깥으로 몰아.' },
+], { rule: '스로인은 짧게 · 던진 사람은 바로 다시 받을 자리 · 뺏기면 가운데부터', alt: '반대로 상대 스로인일 땐 → 받는 사람 바로 뒤에 붙기' });
+
+/* ===== CDM ===== */
+TDA('cdm_d1', 'CDM', '짝 볼란치 공격 가담 → 역습 → 지연', { us: 1, them: 0, q: 3, left: '3쿼터', gs: 'lead' }, [
+  { k: '남기', cat: 'tr', q: '짝 볼란치({CDM2})가 공격에 가담했어. 우리는 상대 진영에서 공을 돌리는 중. 나는?',
+    sc: 'v:m M:CDM@50,62 U:CDM@58,34#CDM2 U:CB@36,84#CB U:CB@64,84#CB2 O:@50,46 O:@30,40 B@70,22 A:50,62>50,66 AT:22,70:CB 앞 가운데',
+    o: [['나도 같이 올라간다', '뺏기는 순간 CB 둘만 남아'], ['CB 앞 가운데에 남는다', ''], ['측면으로 넓게 선다', '가운데가 뚫려']], a: 1,
+    why: '「한 명 가면 한 명 남는다」. 남은 볼란치가 역습 첫 패스를 끊는 사람이야.' },
+  { k: '지연', cat: 'tr', q: '공을 뺏겨 역습! 상대 2명이 몰고 와. 우리는 CB 둘 + 나.',
+    sc: 'v:m M:CDM@50,58 O:@48,40 B@48,44 D:48,26>48,40 O:@70,42 U:CB@36,80#CB U:CB@62,80#CB2 A:50,58>49,50 AT:24,54:앞에 서서 늦추기',
+    o: [['바로 태클', '제쳐지면 3대2가 2대2 — CB 앞이 텅'], ['공 가진 선수 앞에 서서 속도 늦추기', ''], ['CB 라인까지 내려간다', '공 가진 선수가 편하게 슈팅 거리까지']], a: 1,
+    why: '역습은 몇 초만 늦춰도 동료가 돌아와. 「지연」이 볼란치의 제일 큰 일.' },
+  { k: '같이', cat: 'def', q: '시간을 벌었고 짝 볼란치가 돌아왔어. 이제는?',
+    sc: 'v:m M:CDM@46,52 U:CDM@60,44#CDM2 O:@48,40 B@48,44 O:@72,42 U:CB@36,76#CB U:CB@62,76#CB2 A:46,52>46,46 AT:14,28:둘이 압박 · 패스길 막기',
+    o: [['계속 물러난다', '이미 숫자가 맞았어 — 이제 뺏을 차례'], ['짝은 공에 압박, 나는 옆 패스길 막기', ''], ['둘 다 공에 달려든다', '옆으로 한 번 주면 둘 다 제쳐져']], a: 1,
+    why: '숫자가 맞으면 한 명은 공, 한 명은 다음 패스길. 이게 볼란치 둘의 짝 압박이야.' },
+], { rule: '한 명 가면 한 명 남는다 · 역습 첫 몇 초는 지연 · 숫자 맞으면 둘이 짝 압박', alt: '0:1 지고 있는 4쿼터였다면 → 1번 컷에서 둘 다 올라가는 모험도 OK (감독 지시가 있으면)' });
+
+TDA('cdm_d2', 'CDM', '등 뒤 체크 → 원터치 → 세로 패스', { us: 0, them: 0, q: 2, left: '2쿼터', gs: 'draw' }, [
+  { k: '받기 전', cat: 'bu', q: 'CB({CB})가 나에게 패스하려 해. 어깨 너머로 보니 등 뒤에서 상대 CAM이 다가와.',
+    sc: 'v:m M:CDM@48,62 U:CB@36,84#CB B@36,80 P:36,80>47,64 O:CAM@50,52 RO:50,48>49,56 U:RB@86,64#RB A:48,62>84,62 AT:70,52:몸 열고 원터치',
+    o: [['등지고 받아서 버틴다', '압박에 갇혀 뒤로만 돌리게 돼'], ['몸을 열고 원터치로 반대쪽 풀백에게', ''], ['못 받은 척 피한다', 'CB가 줄 곳이 없어져']], a: 1,
+    why: '받기 전에 두 번 보기. 등 뒤에 사람이 있으면 원터치로 압박 반대쪽.' },
+  { k: '삼각형', cat: 'bu', q: '풀백({RB})이 받았는데 상대 윙이 바로 붙었어. 나는 어디로?',
+    sc: 'v:m M:CDM@60,62 U:RB@86,64#RB O:W@82,54 RO:80,48>84,58 U:W@80,34#W A:60,62>70,60 AT:58,50:비스듬히 · 받을 각',
+    o: [['그 자리에 서 있는다', '풀백 앞에 상대가 있어 패스길이 막혀'], ['풀백 옆 비스듬한 각도로 다시 받아줄 자리', ''], ['멀리 앞으로 뛴다', '가까운 도움이 없어져']], a: 1,
+    why: '공 가진 사람 주변에 삼각형을 만들어 줘야 압박이 풀려. 비스듬히, 패스길 보이게.' },
+  { k: '세로 패스', cat: 'bu', q: '다시 받았어. 앞에 CAM({CAM})이 상대 볼란치 사이에 비어 있어.',
+    sc: 'v:m M:CDM@64,58 U:CAM@52,34#CAM O:@40,40 O:@62,40 O:@76,52 U:RB@86,62#RB A:64,58>53,36 AT:30,30:선 사이로 세로 패스',
+    o: [['옆으로 안전하게', '좋은 공간을 그냥 넘겨'], ['선 사이 CAM에게 세로 패스', ''], ['직접 드리블', '볼란치가 뺏기면 바로 위험']], a: 1,
+    why: '볼란치의 진짜 일은 「선을 깨는 패스」. 비어 있는 10번이 보이면 바로.' },
+], { rule: '받기 전에 두 번 보기 · 등 뒤에 사람 있으면 원터치 · 선 사이가 비면 세로 패스', alt: '4쿼터 1:0 이기는 중이면 → 3번 컷에서 무리한 세로 패스보다 공 지키기도 정답' });
+
+TDA('cdm_d3', 'CDM', '코너 수비 → 세컨볼 → 역습 첫 패스', { us: 1, them: 1, q: 4, left: '남은 5분', gs: 'q4' }, [
+  { k: '코너', cat: 'sp', q: '상대 코너킥. 나는 어디에 있어야 할까?',
+    sc: 'v:b M:CDM@50,22 O:@42,66 O:@56,62 U:@48,70 U:@60,74 B@4,30 T:50,8:페널티 아크 AT:80,36:아크에서 세컨볼',
+    o: [['박스 안으로 들어가 헤딩 경합', '아크가 비면 걷어낸 공이 그대로 중거리'], ['페널티 아크에서 세컨볼 대비', ''], ['하프라인에서 역습 대기', '수비 숫자가 모자라']], a: 1,
+    why: '세트피스 땐 아크 = 볼란치 자리. 걷어낸 공은 대부분 거기로 떨어져.' },
+  { k: '세컨볼', cat: 'tr', q: '걷어낸 공이 나한테 왔어! 상대 선수들은 아직 박스 쪽에 몰려 있고, 우리 2선({W})이 측면으로 뛰기 시작해.',
+    sc: 'v:m M:CDM@50,76 B@50,72 O:@44,90 O:@58,88 U:W@14,52#W O:@30,62 A:50,72>16,54 AT:26,40:첫 패스는 앞으로',
+    o: [['바로 중거리 슛', '50m 넘는 거리 — 공만 넘겨줘'], ['첫 터치로 앞으로, 뛰어가는 2선에게', ''], ['뒤로 돌려 진정', '상대가 다 올라온 지금이 기회']], a: 1,
+    why: '뺏은 직후 첫 패스가 앞으로 가야 역습이 돼. 상대가 박스에 몰린 4쿼터 — 결승골 기회.' },
+  { k: '뒤따르기', cat: 'tr', q: '패스하고 나서 나는?',
+    sc: 'v:m M:CDM@50,70 U:W@18,40#W B@18,42 O:@40,50 O:@60,56 A:50,70>46,46 AT:66,40:뒤따라 숫자 더하기',
+    o: [['멈춰서 지켜본다', '2선 혼자 고립'], ['뒤따라 뛰어 숫자를 더한다', ''], ['바로 내 자리로 돌아간다', '역습에 숫자가 모자라']], a: 1,
+    why: '4쿼터 1:1 — 역습엔 숫자가 필요해. 단, 짝 볼란치가 남아 있는지 한 번 보고.' },
+], { rule: '세트피스 땐 아크 = 볼란치 자리 · 뺏으면 첫 패스는 앞으로', alt: '1:0 이기는 4쿼터라면 → 3번 컷에서 뒤따르지 말고 자리 지키기' });
+
+/* ===== CAM ===== */
+TDA('cam_d1', 'CAM', '선 사이에서 받기 → 돌기 → 스루패스', { us: 0, them: 0, q: 2, left: '2쿼터', gs: 'draw' }, [
+  { k: '자리', cat: 'bu', q: '우리 볼란치가 공을 잡았어. 상대 볼란치 둘 사이가 비어 있어. 나는?',
+    sc: 'v:m M:CAM@50,30 U:CDM@46,66#CDM B@46,62 O:@38,44 O:@62,44 O:CB@40,16 O:CB@60,16 U:ST@50,10#ST A:50,30>50,40 AT:76,36:두 선수 사이 · 「여기!」',
+    o: [['공 쪽으로 내려가서 받는다', '볼란치와 겹쳐 — 상대 선을 하나도 못 깨'], ['상대 볼란치 둘 사이, 패스길 보이는 곳에서 손으로 「여기!」', ''], ['최전방까지 올라간다', 'ST와 겹치고 받을 각이 없어']], a: 1,
+    why: '10번은 「선과 선 사이」에서 받아야 해. 손으로 어디로 줄지 알려주면 패스가 더 정확해.' },
+  { k: '돌기', cat: 'bu', q: '패스가 와. 받기 전에 어깨 너머로 보니 등 뒤가 비었어.',
+    sc: 'v:m M:CAM@50,40 U:CDM@46,66#CDM P:46,64>50,44 O:@36,46 O:@64,46 Z:36,14,28,20 B@49,46 A:50,40>50,30 AT:76,28:첫 터치로 돌기',
+    o: [['원터치로 볼란치에게 다시', '좋은 기회를 버려'], ['첫 터치로 앞으로 돌아선다', ''], ['멈춰서 발밑으로 받는다', '그 사이 상대가 붙어']], a: 1,
+    why: '등 뒤가 비었으면 첫 터치가 곧 돌기. 그래서 받기 전에 보는 게 중요해.' },
+  { k: '스루패스', cat: 'bu', q: '돌아섰어! ST({ST})가 상대 CB 둘 사이로 뛰기 시작해.',
+    sc: 'v:a M:CAM@50,52 B@50,48 U:ST@52,30#ST R:52,30>48,10 O:CB@40,24 O:CB@62,24 U:W@16,30#W A:50,48>47,12 AT:74,14:지금 · 뒷공간',
+    o: [['직접 드리블로 간다', 'CB 둘이 기다리는 쪽으로 들어가는 셈'], ['지금 CB 사이 뒷공간으로 스루패스', ''], ['측면 2선에게', 'ST의 침투를 놓쳐']], a: 1,
+    why: '침투는 타이밍 싸움. 뛰기 시작하는 순간 넣어야 오프사이드도, 커버도 안 걸려.' },
+], { rule: '선 사이에서 받기 · 등 뒤 비면 첫 터치로 돌기 · 침투 시작하는 순간 패스', alt: '4쿼터 1:0 이기는 중이면 → 3번 컷에서 무리한 스루패스 대신 공 지키며 시간 써도 OK' });
+
+TDA('cam_d2', 'CAM', '전방 압박 → 뺏기 → 슈팅', { us: 0, them: 1, q: 4, left: '남은 5분', gs: 'trail' }, [
+  { k: '압박', cat: 'def', q: '상대 CB가 볼란치에게 패스하려 해. 나는 ST({ST})와 같이 앞에 있어.',
+    sc: 'v:a M:CAM@54,46 U:ST@30,24#ST O:CB@38,12 B@40,15 O:CDM@56,30 O:CB@66,12 P:40,15>55,29 A:54,46>55,35 AT:80,44:볼란치 패스길',
+    o: [['CB에게 달려든다', 'ST와 겹치고 볼란치가 비어'], ['볼란치 쪽 패스길을 막으며 압박', ''], ['내려와서 기다린다', '지는 4쿼터 — 앞에서 뺏어야 해']], a: 1,
+    why: 'ST가 CB를 맡으면 10번은 볼란치. 둘이 역할을 나눠야 압박이 통해.' },
+  { k: '슈팅', cat: 'bu', q: '뺏었어! 박스 앞 20m, 앞에 수비 한 명, 슈팅 각이 보여. 지고 있는 4쿼터야.',
+    sc: 'v:a M:CAM@46,46 B@46,41 O:CB@60,30 O:GK@50,4 U:ST@30,26#ST A:46,41>58,4 AT:80,24:바로 때리기',
+    o: [['바로 낮게 중거리 슛', ''], ['ST에게 패스', '수비가 다시 정리될 시간을 줘'], ['한 명 더 제친다', '뺏긴 직후 상대가 바로 돌아와']], a: 0,
+    why: '뺏은 직후 5초가 제일 큰 기회. 지는 4쿼터에 각이 보이면 때린다 — 낮게, 구석으로.' },
+  { k: '리바운드', cat: 'bu', q: '슛이 키퍼 맞고 튀어나왔어.',
+    sc: 'v:a M:CAM@50,36 O:GK@46,8 B@40,18 O:CB@58,22 U:ST@36,24#ST A:50,36>41,20 AT:74,22:바로 쫓기',
+    o: [['머리 감싸고 아쉬워한다', '리바운드는 1초 싸움'], ['바로 튀어나온 공으로 쇄도', ''], ['뒤로 물러나 수비 준비', '지고 있는 4쿼터 — 공격이 먼저']], a: 1,
+    why: '슛 다음 동작은 「쇄도」. 골의 상당수가 리바운드에서 나와.' },
+], { rule: '뺏은 직후 5초가 제일 큰 기회 · 지는 4쿼터엔 각 보이면 때리기', alt: '1:0 이기는 중이었다면 → 2번 컷에서 무리한 슛 대신 공 지키기 · 측면으로 시간 쓰기' });
+
+TDA('cam_d3', 'CAM', '뺏긴 직후 → 복귀 → 다시 뺏으면', { us: 1, them: 0, q: 3, left: '3쿼터', gs: 'lead' }, [
+  { k: '5초', cat: 'tr', q: '내 패스가 끊겼어. 공 가진 상대가 바로 내 앞 3m.',
+    sc: 'v:m M:CAM@50,32 O:@50,48 B@50,51 U:CDM@40,68#CDM U:CDM@62,68#CDM2 A:50,32>50,43 AT:80,26:그 자리에서 5초 압박',
+    o: [['아쉬워하며 걷는다', '상대가 편하게 전진'], ['그 자리에서 바로 5초 압박', ''], ['바로 내 자리로 뛰어 내려간다', '제일 가까운 내가 빠지면 공이 자유로워']], a: 1,
+    why: '뺏긴 사람이 제일 가까워. 5초만 압박해도 상대는 뒤로 돌리거나 실수해.' },
+  { k: '복귀', cat: 'tr', q: '압박이 뚫렸어. 공은 우리 진영 가운데로 가고 있어.',
+    sc: 'v:m M:CAM@56,30 O:@48,56 B@48,58 D:50,44>48,56 U:CDM@40,70#CDM U:CDM@62,70#CDM2 A:56,30>52,58 AT:78,46:볼란치 앞 가운데 채우기',
+    o: [['그 자리에서 멈춘다', '볼란치 둘이 혼자 상대'], ['가운데로 내려와 볼란치 앞을 채운다', ''], ['측면으로 빠진다', '가운데가 계속 비어']], a: 1,
+    why: '5초 압박이 실패하면 바로 가운데로 복귀. 볼란치 앞을 채우는 것까지가 10번의 수비야.' },
+  { k: '다시 뺏으면', cat: 'tr', q: '우리 볼란치가 다시 뺏었어. 나는 어디로?',
+    sc: 'v:m M:CAM@58,60 U:CDM@42,72#CDM B@42,69 O:@38,52 O:@62,48 U:W@14,40#W U:W@88,40#W2 A:58,60>52,44 AT:74,28:선 사이로 다시',
+    o: [['볼란치 옆에 붙는다', '둘이 같은 줄 — 앞으로 갈 길이 없어'], ['다시 상대 선 사이로 올라가 받을 자리', ''], ['멀리 최전방으로', '받을 사람이 없어져']], a: 1,
+    why: '공을 되찾으면 10번은 다시 「선 사이」로. 수비와 공격 자리를 빠르게 바꾸는 게 핵심.' },
+], { rule: '뺏기면 5초 압박 → 실패하면 가운데 복귀 → 되찾으면 다시 선 사이', alt: '지고 있는 4쿼터라면 → 2번 컷에서도 내려오지 말고 앞에서 계속 압박해도 OK' });
+
+/* ===== WG (LAM · RAM) ===== */
+TDA('wg_d1', 'WG', '넓게 서기 → 1대1 → 크로스', { us: 0, them: 0, q: 2, left: '2쿼터', gs: 'draw' }, [
+  { k: '자리', cat: 'bu', q: '우리 CB가 뒤에서 공을 돌리고 있어. 나(왼쪽 2선)는 어디에?',
+    sc: 'v:m M:LAM@30,40 U:CB@40,84#CB B@40,80 U:CAM@50,40#CAM O:FB@24,30 O:@40,46 A:30,40>8,38 AT:20,24:터치라인 근처 넓게',
+    o: [['안쪽으로 좁혀 10번 옆', '10번과 겹치고 측면이 비어'], ['터치라인 근처로 넓게', ''], ['내려와서 CB 옆', '앞에 받을 사람이 줄어']], a: 1,
+    why: '넓게 설수록 상대 수비 간격이 벌어지고 가운데가 열려. 받기 전엔 넓게.' },
+  { k: '1대1', cat: 'bu', q: '공을 받았어. 상대 풀백이 안쪽 길을 막고 서 있어.',
+    sc: 'v:a M:LAM@10,50 B@12,48 O:FB@18,40 T:30,56:안쪽 막힘 A:12,48>8,26 AT:26,22:속도 바꿔 바깥으로',
+    o: [['막힌 안쪽으로 억지로', '수비가 기다리던 쪽'], ['속도를 바꿔 바깥으로 치고 나간다', ''], ['멈춰서 뒤로', '좋은 1대1 기회를 날려']], a: 1,
+    why: '수비가 막는 반대쪽으로. 천천히 → 갑자기 빠르게, 속도 변화가 제일 큰 무기.' },
+  { k: '크로스', cat: 'bu', q: '엔드라인 근처까지 왔어. ST({ST})는 니어로, 반대쪽 2선({W2})은 먼 포스트로 뛰어.',
+    sc: 'v:a M:LAM@10,20 B@11,22 O:CB@48,10 O:CB@62,12 U:ST@36,16#ST R:42,28>36,16 U:W@76,18#W2 R:82,30>74,16 A:11,22>36,17 AT:34,40:니어로 낮고 빠르게',
+    o: [['아무 데나 높게', '수비 머리에 다 걸려'], ['니어로 뛰는 ST에게 낮고 빠르게', ''], ['한 번 더 제친다', '수비가 다 돌아와']], a: 1,
+    why: '크로스는 「사람이 뛰는 곳」으로. 니어로 뛰는 선수에게 낮고 빠르게 — 먼 포스트는 흘러나온 공.' },
+], { rule: '받기 전엔 넓게 · 수비가 막는 반대쪽으로 · 크로스는 뛰는 사람에게', alt: '4쿼터 1:0 이기는 중이면 → 2번 컷에서 무리한 돌파 대신 코너 플래그 쪽에서 공 지키기도 정답' });
+
+TDA('wg_d2', 'WG', '수비 복귀 → 먼 쪽 → 역습 출발', { us: 1, them: 0, q: 4, left: '남은 4분', gs: 'q4' }, [
+  { k: '복귀', cat: 'def', q: '상대 풀백이 오버래핑해 우리 풀백({FB})과 2대1이 되려 해. 나는?',
+    sc: 'v:d M:LAM@20,30 O:FB@12,40 RO:12,40>10,58 O:W@22,52 B@22,56 U:FB@18,64#FB A:20,30>12,52 AT:40,36:따라 내려와 2대2',
+    o: [['앞에서 기다린다', '우리 풀백 혼자 2명 상대'], ['오버래핑하는 상대 풀백을 따라 내려온다', ''], ['가운데로 간다', '측면이 2대1 그대로']], a: 1,
+    why: '2선 윙의 수비 1번 일: 상대 풀백 따라 내려오기. 4쿼터 1:0이면 더더욱.' },
+  { k: '먼 쪽', cat: 'def', q: '공이 반대쪽 측면으로 넘어갔고 크로스가 올라오려 해. 나는?',
+    sc: 'v:d M:LAM@16,48 O:FB@14,60 U:FB@24,72#FB O:@84,60 B@86,64 O:ST@48,72 A:16,48>16,58 AT:34,40:먼 쪽 상대 풀백 마크',
+    o: [['하프라인으로 올라가 역습 대기', '먼 쪽 풀백이 공짜로 박스에 들어와'], ['먼 쪽으로 들어오는 상대 풀백을 마크', ''], ['공 쪽으로 몰려간다', '내 쪽이 텅 비어']], a: 1,
+    why: '반대쪽 크로스 땐 먼 쪽에서 늦게 들어오는 선수가 제일 위험해. 그 선수가 내 담당.' },
+  { k: '역습', cat: 'tr', q: '우리 CB가 크로스를 걷어내 공이 하프라인 쪽으로 가. 나는?',
+    sc: 'v:m M:LAM@16,62 B@40,46 U:CAM@44,40#CAM O:@40,70 O:@60,70 A:16,62>12,40 AT:30,30:측면으로 뛰어 받기',
+    o: [['그 자리에서 숨 고르기', '역습 숫자가 모자라'], ['측면으로 뛰어나가 받을 자리', ''], ['가운데로 뛰어 10번과 겹친다', '넓이가 없어져']], a: 1,
+    why: '걷어내는 순간이 역습 시작. 2선 윙은 넓게, 앞으로. 단, 4쿼터 1:0이니 뺏기면 바로 복귀.' },
+], { rule: '수비 땐 상대 풀백 따라 내려오기 · 반대쪽 크로스는 먼 쪽 마크 · 걷어내면 넓게', alt: '0:1 지고 있다면 → 3번 컷에서 더 과감하게 뒷공간까지 뛰기' });
+
+TDA('wg_d3', 'WG', '반대쪽 크로스 → 먼 포스트 → 역압박', { us: 0, them: 0, q: 3, left: '3쿼터', gs: 'draw' }, [
+  { k: '먼 포스트', cat: 'bu', q: '반대쪽(왼쪽) 측면에서 크로스를 올리려 해. 나는 오른쪽 2선이야.',
+    sc: 'v:a M:RAM@86,44 U:W@10,24#W2 B@11,26 O:CB@46,12 O:CB@60,12 O:FB@76,24 U:ST@38,26#ST A:86,44>68,12 AT:70,52:박스 먼 포스트로',
+    o: [['측면 그대로 서 있는다', '크로스가 넘어와도 받을 사람이 없어'], ['박스 안 먼 포스트로 들어간다', ''], ['공 쪽으로 간다', 'ST와 같은 곳 — 수비 하나에 둘이 막혀']], a: 1,
+    why: '반대쪽 크로스 땐 먼 포스트. 공이 수비 머리를 넘는 순간 제일 비어 있는 곳이야.' },
+  { k: '마무리', cat: 'bu', q: '크로스가 수비 머리를 넘어 내 쪽으로 떨어져. 골대까지 8m, 키퍼는 니어 쪽에 있어.',
+    sc: 'v:a M:RAM@68,16 B@67,11 O:GK@44,4 O:CB@54,20 A:67,11>58,2 AT:80,40:낮게 · 먼 구석',
+    o: [['힘껏 높게 발리', '가까운 거리 발리는 대부분 뜬다'], ['머리·발로 낮게, 키퍼 반대쪽 구석', ''], ['한 번 잡고 생각한다', '수비가 돌아와']], a: 1,
+    why: '가까운 거리는 세기보다 방향. 낮게, 키퍼가 비운 반대쪽 구석으로.' },
+  { k: '역압박', cat: 'tr', q: '슛이 수비 맞고 나가지 않고 상대 CB가 걷어내려 해.',
+    sc: 'v:a M:RAM@68,14 O:CB@56,22 B@56,25 U:ST@38,20#ST U:CAM@50,44#CAM A:68,14>58,21 AT:80,40:바로 압박',
+    o: [['아쉬워하며 돌아간다', '상대가 편하게 역습'], ['바로 그 CB에게 압박', ''], ['측면 자리로 빠진다', '공이 자유로워']], a: 1,
+    why: '상대 진영에서 공을 잃으면 그 자리에서 바로 다시 뺏으러. 골대 가까울수록 다시 찬스.' },
+], { rule: '반대쪽 크로스 = 먼 포스트 · 가까우면 낮게 방향 · 잃으면 그 자리에서 압박', alt: '1:0 이기는 4쿼터라면 → 3번 컷에서 무리한 압박 대신 빠르게 내 자리로' });
+
+/* ===== ST ===== */
+TDA('st_d1', 'ST', '침투 타이밍 → 1대1 → 리바운드', { us: 0, them: 0, q: 2, left: '2쿼터', gs: 'draw' }, [
+  { k: '출발', cat: 'bu', q: 'CAM({CAM})이 공을 잡고 고개를 들었어. 나는 마지막 수비수와 일직선에 있어.',
+    sc: 'v:a M:ST@52,30 O:CB@42,30 O:CB@62,30 U:CAM@50,56#CAM B@50,52 Z:34,6,34,18 A:52,30>44,12 AT:72,14:지금 대각선 출발',
+    o: [['서서 발밑으로 달라고 한다', '두 CB 앞 — 받아도 돌 수가 없어'], ['지금 대각선으로 뒷공간 출발', ''], ['아까부터 미리 뛰어나가 있었다', '패스 순간 수비보다 앞 = 오프사이드']], a: 1,
+    why: '출발 신호는 「패스하는 사람이 고개 드는 순간」. 대각선으로 뛰면 오프사이드도 덜 걸려.' },
+  { k: '1대1', cat: 'bu', q: '공을 받았고 키퍼가 달려나와. 거리 12m.',
+    sc: 'v:a M:ST@46,26 B@46,22 O:GK@50,10 RO:50,6>48,14 A:46,22>58,1 AT:76,14:키퍼 오기 전 · 낮게 구석',
+    o: [['키퍼를 제치려 드리블', '키퍼가 먼저 몸을 던지면 끝'], ['키퍼가 오기 전에 낮게 구석으로', ''], ['멈춰서 기다린다', '수비가 따라와']], a: 1,
+    why: '키퍼가 나오는 중엔 낮은 구석이 제일 멀어. 망설이는 동안 각이 사라져.' },
+  { k: '리바운드', cat: 'bu', q: '슛이 키퍼 손 맞고 튕겼어.',
+    sc: 'v:a M:ST@50,24 O:GK@46,10 B@36,14 O:CB@60,26 A:50,24>38,15 AT:70,20:바로 쇄도',
+    o: [['아쉬워하며 머리 감싼다', '리바운드는 1초 싸움'], ['튕긴 공으로 바로 쇄도', ''], ['뒤로 물러난다', '골 넣을 기회를 버려']], a: 1,
+    why: '스트라이커는 슛 다음이 더 중요해. 키퍼가 쳐낸 공은 대부분 골대 앞에 떨어져.' },
+], { rule: '출발은 고개 드는 순간 · 마무리는 낮게 구석 · 슛 다음엔 쇄도', alt: '4쿼터 1:0 이기는 중이면 → 1번 컷에서 무리한 침투보다 공 지키며 시간 쓰기도 정답' });
+
+TDA('st_d2', 'ST', '등지고 받기 → 내주기 → 박스 침투', { us: 0, them: 1, q: 3, left: '3쿼터', gs: 'trail' }, [
+  { k: '자리', cat: 'bu', q: '우리 CB가 나를 보고 롱볼을 차려 해. 상대 CB가 내 등 뒤에 붙어 있어.',
+    sc: 'v:m M:ST@50,30 O:CB@50,22 U:CB@44,84#CB B@44,80 U:W@20,38#W U:CAM@50,48#CAM A:50,30>50,26 AT:80,40:몸으로 먼저 자리',
+    o: [['공 떨어지는 곳으로 뛰어간다', '수비가 먼저 자리 잡으면 헤딩 경합에서 져'], ['몸으로 수비를 먼저 막고 자리 잡기', ''], ['수비 앞으로 뛰어나간다', '뒤로 넘어가는 공은 수비 차지']], a: 1,
+    why: '롱볼은 공 오기 전 몸싸움이 반. 먼저 자리를 잡고 등으로 수비를 느껴.' },
+  { k: '내주기', cat: 'bu', q: '가슴으로 받았어. 2선({W})이 내 옆으로 올라와.',
+    sc: 'v:m M:ST@50,28 B@51,32 O:CB@50,20 U:W@34,36#W A:51,32>36,36 AT:22,62:원터치 내주기',
+    o: [['돌아서려 한다', '등 뒤 수비가 바로 뺏어'], ['원터치로 올라오는 2선에게 내준다', ''], ['계속 버틴다', '수비가 하나 더 붙어']], a: 1,
+    why: '등지고 받은 공은 「내주기」가 기본. 앞을 보고 뛰어오는 동료가 훨씬 좋은 자리.' },
+  { k: '침투', cat: 'bu', q: '내주고 나서 2선이 측면으로 치고 나가. 크로스가 올 거야. 나는?',
+    sc: 'v:a M:ST@50,40 U:W@20,24#W B@20,22 O:CB@44,16 O:CB@60,18 A:50,40>42,12 AT:72,24:박스 니어로',
+    o: [['그 자리에 서서 기다린다', '수비 앞에서 크로스를 기다리면 다 끊겨'], ['박스로 들어가 니어 포스트 쪽으로', ''], ['측면으로 따라간다', '박스가 텅 비어']], a: 1,
+    why: '내주고 끝이 아니라 바로 박스로. 지고 있는 3쿼터 — 숫자가 필요한 곳은 박스 안이야.' },
+], { rule: '롱볼은 먼저 몸 · 등지면 내주기 · 내줬으면 박스로', alt: '1:0 이기는 4쿼터라면 → 2번 컷에서 내주기 대신 버티며 파울 얻기·시간 쓰기도 정답' });
+
+TDA('st_d3', 'ST', '전방 압박 → 백패스 → 롱킥 대비', { us: 0, them: 0, q: 1, left: '1쿼터', gs: 'draw' }, [
+  { k: '곡선', cat: 'def', q: '상대 CB가 공을 잡았어. 오른쪽 CB에게 패스할 것 같아.',
+    sc: 'v:a M:ST@50,36 O:CB@38,16 B@40,19 O:CB@64,16 O:GK@50,4 U:CAM@50,52#CAM A:50,36>44,22 AT:80,44:곡선으로 · 오른쪽 길 막기',
+    o: [['CB에게 일직선으로 달려든다', '옆 패스 한 번에 제쳐져'], ['곡선으로 달려가 반대쪽 CB 패스길을 막는다', ''], ['멈춰서 지켜본다', '편하게 빌드업']], a: 1,
+    why: '압박 방향은 내가 정한다. 곡선으로 가면 한쪽 길을 등으로 막으면서 압박할 수 있어.' },
+  { k: '백패스', cat: 'def', q: 'CB가 키퍼에게 백패스했어.',
+    sc: 'v:a M:ST@42,22 O:CB@38,16 O:GK@50,6 B@46,10 O:CB@64,16 A:42,22>48,12 AT:80,40:키퍼 쪽 · 한쪽 막으며',
+    o: [['멈춘다', '키퍼가 편하게 다시 줘'], ['키퍼에게 달려가며 반대쪽 CB 쪽 길을 막는다', ''], ['백패스 받은 CB에게 계속', '공은 이미 키퍼에게']], a: 1,
+    why: '백패스는 압박 신호. 키퍼까지 따라가며 한쪽을 막으면 길게 찰 수밖에 없어.' },
+  { k: '롱킥', cat: 'def', q: '키퍼가 결국 길게 찼어. 나는?',
+    sc: 'v:m M:ST@50,20 B@50,10 P:50,4>50,50 U:CAM@48,50#CAM U:CDM@50,66#CDM A:50,20>50,40 AT:80,28:내려와 세컨볼 자리',
+    o: [['그 자리에서 쉰다', '세컨볼 싸움에 숫자가 모자라'], ['하프라인 쪽으로 내려와 세컨볼 자리', ''], ['키퍼에게 항의', '없어']], a: 1,
+    why: '압박으로 롱킥을 만들었으면 성공. 이제 떨어지는 공 주변에 숫자를 맞추는 게 다음 일.' },
+], { rule: '곡선으로 압박해 한쪽만 열기 · 백패스는 압박 신호 · 롱킥 나오면 세컨볼', alt: '4쿼터 1:0 이기는 중이면 → 전방 압박 대신 내려서서 버티기도 정답 (체력 아끼기)' });
+
+/* ===== ALL (팀 공통 · 멘탈) ===== */
+TDA('all_d1', 'ALL', '내 실수로 실점 → 다음 플레이 → 남은 시간', { us: 0, them: 1, q: 3, left: '3쿼터 초반', gs: 'trail' }, [
+  { k: '5초', cat: 'mt', q: '내 패스 미스가 그대로 실점이 됐어. 다음 5초, 나는?',
+    sc: 'v:d M:@44,58 O:@50,86 B@50,96 T:50,30:실점 직후',
+    o: [['고개 숙이고 사과만 한다', '실수는 이미 지나갔어 — 다음 플레이가 늦어'], ['박수 한 번 「다음!」 하고 내 자리로', ''], ['동료 탓을 한다', '팀 전체가 흔들려']], a: 1,
+    why: '실수는 5초까지만. 숨 → 박수 「다음!」 → 내 자리. 이 루틴이 다음 실수를 막아.' },
+  { k: '동료 실수', cat: 'mt', q: '킥오프 직후 이번엔 동료({CDM})가 패스 미스를 했어.',
+    sc: 'v:m M:@40,60 U:CDM@52,56#CDM O:@56,46 B@56,48 T:50,24:동료 실수',
+    o: [['「아 왜 그래」', '실수한 사람이 더 굳어져'], ['「괜찮아, 다음!」 하고 커버하러', ''], ['못 본 척한다', '팀 분위기가 조용해져']], a: 1,
+    why: '동료 실수엔 짧은 응원 + 내 몸으로 커버. 말 한마디가 다음 패스를 바꿔.' },
+  { k: '남은 시간', cat: 'mt', q: '0:1 지고 있고 3쿼터 반이 남았어. 마음이 급해져.',
+    sc: 'v:f M:@50,60 U:@40,40 U:@60,40 B@50,52 T:50,20:0:1 · 3쿼터',
+    o: [['한 번에 다 해결하려고 무리한다', '무리한 돌파·슈팅이 역습을 불러'], ['다음 5분만 — 내 역할 하나에 집중', ''], ['체념하고 대충 뛴다', '한 골은 언제든 나와']], a: 1,
+    why: '지고 있을 땐 「다음 5분」. 남은 시간 전체를 생각하면 급해지고, 급하면 실수해.' },
+], { rule: '실수는 5초까지만 · 동료 실수엔 「괜찮아, 다음!」 · 지고 있으면 다음 5분만', alt: '이기고 있을 땐 반대로 「마지막 5분이 제일 위험」 — 집중을 끝까지' });
+
+TDA('all_d2', 'ALL', '거친 파울 → 판정 → 프리킥 수비', { us: 1, them: 1, q: 4, left: '남은 6분', gs: 'q4' }, [
+  { k: '흥분', cat: 'mt', q: '상대가 거친 태클을 했고 우리 동료가 화가 나서 다가가.',
+    sc: 'v:m M:@44,52 U:@56,50 O:@60,46 T:50,24:거친 파울 직후',
+    o: [['같이 가서 따진다', '싸움 나면 둘 다 손해 — 경고·퇴장'], ['동료를 막고 「괜찮아, 경기하자」', ''], ['모른 척한다', '동료가 혼자 흥분해']], a: 1,
+    why: '4쿼터 1:1 — 흥분하는 팀이 진다. 말리는 사람이 팀을 지켜.' },
+  { k: '판정', cat: 'mt', q: '심판 판정이 아무리 봐도 이상해. 프리킥이 상대에게 주어졌어.',
+    sc: 'v:d M:@46,64 O:@50,50 B@50,48 T:50,24:판정 다툼',
+    o: [['계속 항의한다', '그 사이 상대가 빠르게 차'], ['한마디만 하고 10초 안에 수비 위치로', ''], ['화가 나서 경기를 대충 한다', '6분이 남았어']], a: 1,
+    why: '판정은 안 바뀌어. 10초 안에 끝내고 다음 플레이 — 빠른 프리킥 실점이 제일 아까워.' },
+  { k: '벽', cat: 'sp', q: '박스 앞 프리킥. 키퍼({GK})가 벽 숫자를 외쳐.',
+    sc: 'v:b M:@46,38 U:@40,38 U:@52,38 U:GK@54,90#GK O:@50,18 B@50,22 AT:76,34:키퍼 콜대로 · 뛰지 않기',
+    o: [['내 마음대로 벽에서 빠진다', '벽에 구멍 → 그대로 실점'], ['키퍼 콜대로 서고, 찰 때까지 돌아서지 않기', ''], ['찰 때 뒤로 돌아선다', '공이 벽 사이로 빠져']], a: 1,
+    why: '벽은 키퍼가 만든다. 콜대로 서고, 공이 지나갈 때까지 버티기.' },
+], { rule: '말리는 사람이 팀을 지킨다 · 판정은 10초 · 벽은 키퍼 콜', alt: '스코어와 상관없이 같은 답 — 멘탈 원칙은 늘 같아요' });
+
+/* ==================== 🔴 심화 엔진 · 🎮 경기 시뮬 (v110) ====================
+   · 심화: TD 세트(2~3컷) — 컷마다 제한 시간(기본 12초, 끌 수 있음). 점수 = 맞힌 컷 60 + 남은 시간 비율 40, 세트 평균
+   · 경기 시뮬: 다음 경기 내 쿼터별 자리로 장면(쿼터당 2개, 수비·공격 하나씩). 스코어에 따라 그때그때 경기 상황 문제(동점/이기는 중/지는 중/4쿼터)를 고름.
+     수비 장면 틀리면 실점, 공격 장면 맞히면 득점 → 내 판단으로 만든 경기 결과
+   · 기록: rec.dp[세트id] = { s 마지막 점수, b 최고, n 횟수, ok '101', d 날번호, t }, rec.sim[경기키] = { t, d, us, them, n, ok }
+     각 컷·장면은 정답률 통계(n·c·cat·lv3·gs·grp·wk)에도 들어감 */
+const DP_LIM = 12;
+function dpTimerOn() { try { return localStorage.getItem('efm_dp_timer') !== 'off'; } catch (e) { return true; } }
+function dpSetTimer(on) { haptic(5); try { localStorage.setItem('efm_dp_timer', on ? 'on' : 'off'); } catch (e) {} renderTrain(); }
+const _dpT = { key: null, t0: 0, to: 0, iv: 0 };
+function dpClearTimer() { clearTimeout(_dpT.to); clearInterval(_dpT.iv); _dpT.key = null; }
+function dpBodyFlag() { document.body.classList.toggle('dp-on', typeof currentTab !== 'undefined' && currentTab === 'train' && _tr.view === 'dq'); }
+function dpRecordCut(cat, gs, g, ok) {
+  const r = trMe(); if (!r) return;
+  trSet('n', (r.n || 0) + 1); if (ok) trSet('c', (r.c || 0) + 1);
+  trBump('cat/' + cat, ok); trBump('lv/3', ok);
+  if (gs) trBump('gs/' + gs, ok);
+  if (g && g !== 'ALL') trBump('grp/' + g, ok);
+  trBump('wk/' + trWeekKey(), ok);
+}
+function dpGroups(sel) {
+  const mine = trMyGroups();
+  return sel === 'mine' ? (mine.length ? mine : TR_GROUP_ORDER) : sel === 'all' ? TR_GROUP_ORDER.slice() : [sel];
+}
+function dpPool(sel) {
+  const gs = dpGroups(sel);
+  return TD.filter(d => d.g.includes('ALL') || d.g.some(g => gs.includes(g)));
+}
+function dpRank(list) {
+  const r = trMe() || trDefault(); const dp = r.dp || {}; const today = trDayNum();
+  const rank = d => { const x = dp[d.id]; if (!x) return 0; if (String(x.ok || '').indexOf('0') >= 0 && today - (+x.d || 0) >= 3) return 1; return 2 + (+x.s || 0) / 1000 + (today - (+x.d || 0) < 7 ? 1 : 0); };
+  return list.slice().sort((a, b) => rank(a) - rank(b) || Math.random() - .5);
+}
+function dpSetGroup(d) { if (!d.g.includes('ALL')) { const mine = trMyGroups(); return d.g.find(g => mine.includes(g)) || d.g[0]; } return trMyGroups()[0] || 'ALL'; }
+
+/* ----- 메뉴 ----- */
+function dpOpt() { if (!_tr.dpo) _tr.dpo = { g: 'mine', n: 3 }; return _tr.dpo; }
+function dpOptSet(k, v) { haptic(5); dpOpt()[k] = v; renderTrain(); }
+function dpViewMenu() {
+  const o = dpOpt(); const r = trMe() || trDefault(); const dp = r.dp || {};
+  const pool = dpPool(o.g); const tried = pool.filter(d => dp[d.id]);
+  const avg = tried.length ? Math.round(tried.reduce((s, d) => s + (+dp[d.id].s || 0), 0) / tried.length) : null;
+  const ctx = trCtx(); const m = ctx.m;
+  const mine = trMyGroups();
+  const chip = (k, v, label, on) => `<button type="button" class="${on ? 'on' : ''}" onclick="dpOptSet('${k}', ${typeof v === 'number' ? v : `'${v}'`})">${label}</button>`;
+  const recent = Object.keys(dp).map(id => Object.assign({ id }, dp[id])).filter(x => trDById(x.id)).sort((a, b) => (b.t || 0) - (a.t || 0)).slice(0, 5);
+  const sim = r.sim || {}; const lastSim = Object.keys(sim).map(k => sim[k]).filter(Boolean).sort((a, b) => (b.t || 0) - (a.t || 0))[0];
+  return `${trBack('🔴 심화 <small>경기처럼 이어지는 판단</small>', 'home')}
+    <button type="button" class="dp-simc" onclick="dpStartSim()"><span>🎮</span><div><b>경기 시뮬${m ? ` — ${TRX(settleDateLabelOf(m.date))} vs ${TRX(m.opponent || '상대팀')}` : ' — 연습 경기'}</b><small>${m ? '내 쿼터별 자리로 장면 이어서 · 내 판단이 스코어를 바꿔요' : '다음 경기가 잡히면 그 경기 내 자리로 바뀌어요'}${lastSim ? ` · 지난번 ${lastSim.us}:${lastSim.them}` : ''}</small></div><i>›</i></button>
+    <div class="tr-sec">🔴 연속 판단 세트 <small>한 장면이 2~3컷으로 이어져요</small></div>
+    <div class="tr-fl"><span>포지션</span><div class="tr-chips sm">${chip('g', 'mine', '내 포지션 전부', o.g === 'mine')}${TR_GROUP_ORDER.map(g => chip('g', g, (mine.includes(g) ? '★ ' : '') + TR_GROUPS[g].name, o.g === g)).join('')}${chip('g', 'all', '전 포지션', o.g === 'all')}</div></div>
+    <div class="tr-fl"><span>세트 수</span><div class="tr-chips">${[3, 5].map(n => chip('n', n, n + '세트', o.n === n)).join('')}${chip('n', 0, '♾️ 전부', o.n === 0)}</div></div>
+    <div class="tr-fl"><span>⏱ 시간</span><div class="tr-chips"><button type="button" class="${dpTimerOn() ? 'on' : ''}" onclick="dpSetTimer(true)">컷마다 ${DP_LIM}초</button><button type="button" class="${dpTimerOn() ? '' : 'on'}" onclick="dpSetTimer(false)">끄기 (천천히)</button></div></div>
+    <div class="tr-sum">세트 <b>${pool.length}개</b> (컷 ${pool.reduce((s, d) => s + d.cuts.length, 0)}개) · 해본 세트 <b>${tried.length}</b>${avg !== null ? ` · 평균 <b>${avg}점</b>` : ''}</div>
+    <button type="button" class="tr-btn red big" onclick="dpStartMenu()" ${pool.length ? '' : 'disabled'}>${o.n ? Math.min(o.n, pool.length) + '세트 시작 ›' : '전부 시작 ›'}</button>
+    ${recent.length ? `<div class="tr-sec">최근 기록</div>${recent.map(x => { const d = trDById(x.id); return `<button type="button" class="dp-hrow" onclick="dpStartSets(['${x.id}'],'다시 하기')"><b>${TRX(d.t)}</b><small>${TRX(trGName(d.g[0]))} · ${x.n || 1}번째${x.b ? ` · 최고 ${x.b}점` : ''}</small><span class="${(+x.s || 0) >= 80 ? 'hi' : (+x.s || 0) >= 50 ? 'mid' : 'lo'}">${x.s || 0}점</span></button>`; }).join('')}` : ''}`;
+}
+function dpStartMenu() { const o = dpOpt(); const list = dpRank(dpPool(o.g)); dpStartSets(list.slice(0, o.n || list.length).map(d => d.id), o.n ? '심화' : '심화 전부'); }
+function dpStartSets(ids, title) {
+  ids = ids.filter(trDById); if (!ids.length) { toast('이 조건에 맞는 세트가 없어요'); return; }
+  _tr.dp = { mode: 'deep', ids, si: 0, ci: 0, pk: [], res: [], title };
+  trGo('dq');
+}
+
+/* ----- 지금 컷 ----- */
+function dpCur() {
+  const D = _tr.dp; if (!D) return null;
+  if (D.mode === 'deep') {
+    const d = trDById(D.ids[D.si]); if (!d) return null;
+    const c = d.cuts[D.ci]; if (!c) return null;
+    const key = d.id + ':' + D.ci;
+    D.ord = D.ord || {};
+    if (!D.ord[key]) { const o = c.o.map((_, i) => i); for (let i = o.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [o[i], o[j]] = [o[j], o[i]]; } D.ord[key] = o; }
+    const ord = D.ord[key];
+    const q = Object.assign({}, c, { o: ord.map(i => c.o[i]), a: ord.indexOf(c.a) });
+    return { key, q, ord, g: dpSetGroup(d), cat: c.cat, gs: d.st.gs, st: d.st, d };
+  }
+  const sc = D.plan[D.idx]; if (!sc) return null;
+  if (!sc.qid) sc.qid = dpSimPick(D, sc);
+  const q = trQById(sc.qid); if (!q) return null;
+  const qn = D.plan.filter(x => x.qn === sc.qn).length;
+  return { key: 'sim:' + D.idx, q, g: sc.g, cat: q.cat, gs: sc.gs, st: { us: D.us, them: D.them, q: sc.qn, left: `장면 ${D.plan.filter(x => x.qn === sc.qn).indexOf(sc) + 1}/${qn}`, gs: sc.gs }, sc };
+}
+function dpStartTimer(cur) {
+  if (!dpTimerOn() || _dpT.key === cur.key) return;
+  dpClearTimer();
+  _dpT.key = cur.key; _dpT.t0 = Date.now();
+  _dpT.to = setTimeout(() => {
+    if (currentTab !== 'train' || _tr.view !== 'dq' || document.hidden) { dpClearTimer(); return; }
+    dpAnswer(-1);
+  }, DP_LIM * 1000);
+  _dpT.iv = setInterval(() => { const el = document.getElementById('dpSec'); if (!el) return; el.textContent = Math.max(0, Math.ceil(DP_LIM - (Date.now() - _dpT.t0) / 1000)) + '초'; }, 250);
+}
+function dpAnswer(i) {
+  const D = _tr.dp; const cur = dpCur(); if (!D || !cur) return;
+  const pkArr = D.mode === 'deep' ? D.pk : D.log;
+  if (D.mode === 'deep' ? D.pk[D.ci] : D.log[D.idx]) return;
+  const sec = dpTimerOn() && _dpT.key === cur.key ? Math.min(DP_LIM, (Date.now() - _dpT.t0) / 1000) : null;
+  dpClearTimer();
+  const ok = i === cur.q.a ? 1 : 0;
+  haptic(ok ? 10 : [12, 40, 12]);
+  const pts = ok ? Math.round(60 + 40 * (sec === null ? 1 : Math.max(0, DP_LIM - sec) / DP_LIM)) : 0;
+  if (D.mode === 'deep') {
+    D.pk[D.ci] = { p: i === -1 ? -1 : cur.ord[i], pd: i, ok, sec, pts };
+    dpRecordCut(cur.cat, cur.gs, cur.g, ok);
+  } else {
+    const ev = cur.sc.stake === 'def' ? (ok ? 'save' : 'conceded') : (ok ? 'goal' : 'miss');
+    if (ev === 'goal') D.us++; if (ev === 'conceded') D.them++;
+    D.log[D.idx] = { p: i, pd: i, ok, sec, pts, ev, qid: cur.q.id };
+    trRecordAnswer(cur.q, i, 'sim');
+  }
+  renderTrain();
+  setTimeout(() => { const r = document.getElementById('dpRes'); if (r) r.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 60);
+}
+function dpNext() {
+  const D = _tr.dp; if (!D) return;
+  if (D.mode === 'deep') {
+    const d = trDById(D.ids[D.si]);
+    if (D.ci + 1 < d.cuts.length) { D.ci++; trGo('dq'); return; }
+    dpFinishSet(); trGo('dr'); return;
+  }
+  if (D.idx + 1 < D.plan.length) { D.idx++; trGo('dq'); return; }
+  dpFinishSim(); trGo('de');
+}
+function dpFinishSet() {
+  const D = _tr.dp; const d = trDById(D.ids[D.si]); if (!d || D.res[D.si]) return;
+  const s = Math.round(D.pk.reduce((a, x) => a + (x ? x.pts : 0), 0) / d.cuts.length);
+  const okStr = d.cuts.map((_, i) => D.pk[i] && D.pk[i].ok ? '1' : '0').join('');
+  const prev = ((trMe() || {}).dp || {})[d.id] || {};
+  trSet('dp/' + d.id, { s, b: Math.max(s, +prev.b || 0), n: (+prev.n || 0) + 1, ok: okStr, d: trDayNum(), t: Date.now() });
+  D.res[D.si] = { id: d.id, s, ok: okStr, pk: D.pk.slice() };
+}
+function dpNextSet() { const D = _tr.dp; if (!D) return; if (D.si + 1 < D.ids.length) { D.si++; D.ci = 0; D.pk = []; trGo('dq'); } else trGo('de'); }
+
+/* ----- 플레이 화면 ----- */
+function dpBoard(st, g, extra) {
+  const ctx = trCtx(); const opp = (_tr.dp && _tr.dp.opp) || (ctx.m && ctx.m.opponent) || '상대';
+  return `<div class="dp-board"><div class="sc"><b>EAST</b><em>${st.us} : ${st.them}</em><b>${TRX(opp)}</b></div><small>${st.q}Q · ${TRX(st.left || '')} · 나는 ${TRX(trGName(g))}${extra || ''}</small></div>`;
+}
+function dpViewPlay() {
+  const D = _tr.dp; const cur = dpCur();
+  if (!D || !cur) { _tr.dp = null; return trViewHome(); }
+  const q = cur.q, g = cur.g;
+  const pick = D.mode === 'deep' ? D.pk[D.ci] : D.log[D.idx];
+  const done = !!pick;
+  let chips;
+  if (D.mode === 'deep') {
+    chips = `<div class="dp-cuts">${cur.d.cuts.map((c, i) => { const x = D.pk[i]; const cls = x ? (x.ok ? 'ok' : 'no') : i === D.ci ? 'now' : ''; return `<span class="${cls}"><u>${i + 1}</u>${i <= D.ci || x ? TRX(c.k) : '?'}${x ? (x.ok ? ' ✓' : ' ✕') : ''}</span>`; }).join('<i></i>')}</div>`;
+  } else {
+    chips = `<div class="dp-simdots">${D.plan.map((x, i) => { const l = D.log[i]; const ic = l ? (l.ev === 'goal' ? '⚽' : l.ev === 'conceded' ? '😣' : l.ok ? '✓' : '·') : i === D.idx ? '●' : ''; return `<span class="${l ? l.ev : i === D.idx ? 'now' : ''}${i > 0 && D.plan[i - 1].qn !== x.qn ? ' qs' : ''}" title="${x.qn}Q">${ic}</span>`; }).join('')}</div>`;
+  }
+  const stake = D.mode === 'sim' ? `<div class="dp-stake ${cur.sc.stake}">${cur.sc.stake === 'def' ? '🛡️ 수비 장면 — 틀리면 실점' : '⚔️ 공격 장면 — 맞히면 골'}</div>` : '';
+  const timer = !done && dpTimerOn() ? `<div class="dp-time"><div><i id="dpBar"></i></div><b id="dpSec">${DP_LIM}초</b></div>` : '';
+  const opts = q.o.map((o, i) => {
+    let cls = 'tr-o';
+    if (done) cls += i === q.a ? ' ok' : i === pick.pd ? ' no' : ' dim';
+    const ex = done && o[1] ? `<small>${TRX(trFill(o[1], g))}</small>` : '';
+    return `<button type="button" class="${cls}" ${done ? 'disabled' : `onclick="dpAnswer(${i})"`}><b>${'ABCD'[i]}</b><span>${TRX(trFill(o[0], g))}${ex}</span></button>`;
+  }).join('');
+  let res = '';
+  if (done) {
+    const head = pick.p === -1 ? '⏱ 시간 초과' : pick.ok ? '✅ 정답!' : '❌ 아쉬워 — 정답은 ' + 'ABCD'[q.a];
+    const ev = D.mode === 'sim' ? { goal: '⚽ 골! 그 판단이 골로 이어졌어', save: '🧤 막았다! 실점 위기 넘김', conceded: '😣 실점 — 그 판단으로 골을 먹었어', miss: '😮‍💨 기회를 놓쳤어' }[pick.ev] : '';
+    const lastCut = D.mode === 'deep' ? D.ci + 1 >= cur.d.cuts.length : D.idx + 1 >= D.plan.length;
+    res = `<div class="tr-res ${pick.ok ? 'ok' : 'no'}" id="dpRes"><b>${head}</b>${pick.sec !== null && pick.sec !== undefined && pick.p !== -1 ? `<small>${pick.sec.toFixed(1)}초 · +${pick.pts}점</small>` : ''}</div>
+      ${ev ? `<div class="dp-ev ${pick.ev}">${ev} <b>EAST ${D.us} : ${D.them}</b></div>` : ''}
+      <div class="tr-why"><span>왜?</span>${TRX(trFill(q.why, g))}</div>
+      ${q.tip ? `<div class="tr-tip"><span>⚽ 조기축구 꿀팁</span>${TRX(trFill(q.tip, g))}</div>` : ''}
+      <button type="button" class="tr-btn red" onclick="dpNext()">${lastCut ? (D.mode === 'deep' ? '세트 결과 ›' : '경기 결과 ›') : (D.mode === 'deep' ? '다음 컷 ›' : '다음 장면 ›')}</button>`;
+  }
+  const title = D.mode === 'deep' ? `🔴 ${TRX(cur.d.t)}` : '🎮 경기 시뮬';
+  document.body.classList.add('dp-on');
+  const html = `<div class="dp-play">${trBack(title + (D.mode === 'deep' ? ` <small>${D.si + 1} / ${D.ids.length}세트</small>` : ''), 'dpQuit()', `<button type="button" class="tr-x" onclick="dpQuit()">그만</button>`)}
+    ${dpBoard(cur.st, g)}
+    ${chips}${stake}
+    <div class="tr-q">${TRX(trFill(q.q, g))}</div>
+    ${q.sc ? `<div class="tr-pitch">${trSceneSvg(q.sc, { answer: done, name: trNameFn(g) })}</div>` : ''}
+    ${timer}
+    <div class="tr-opts">${opts}</div>
+    ${res}</div>`;
+  if (!done) setTimeout(() => {
+    if (_tr.view !== 'dq') return;
+    const c2 = dpCur(); if (!c2 || c2.key !== cur.key) return;
+    dpStartTimer(c2);
+    const bar = document.getElementById('dpBar'); if (!bar) return;
+    const left = Math.max(0, DP_LIM - (Date.now() - _dpT.t0) / 1000);
+    bar.style.transition = 'none'; bar.style.width = (left / DP_LIM * 100) + '%';
+    void bar.offsetWidth;
+    bar.style.transition = `width ${left}s linear`; bar.style.width = '0%';
+  }, 30);
+  return html;
+}
+function dpQuit() {
+  const D = _tr.dp; dpClearTimer();
+  if (D && D.mode === 'deep' && D.res.some(Boolean)) { D.ids = D.ids.slice(0, D.res.filter(Boolean).length); trGo('de'); return; }
+  if (D && D.mode === 'sim' && D.log.some(Boolean)) { D.plan = D.plan.slice(0, D.log.filter(Boolean).length); dpFinishSim(); trGo('de'); return; }
+  _tr.dp = null; trGo('home');
+}
+
+/* ----- 세트 결과 ----- */
+function dpRuleScene(sc) { return sc ? `<div class="dp-rs">${trSceneSvg(sc, { answer: true })}</div>` : ''; }
+function dpViewSetResult() {
+  const D = _tr.dp; if (!D || D.mode !== 'deep') return trViewHome();
+  const R = D.res[D.si]; const d = trDById(D.ids[D.si]); if (!R || !d) return trViewHome();
+  const g = dpSetGroup(d);
+  const okN = R.ok.split('').filter(x => x === '1').length;
+  const rows = d.cuts.map((c, i) => {
+    const x = R.pk[i] || {}; const ok = !!x.ok;
+    const right = c.o[c.a][0], mine = x.p === -1 ? '시간 초과' : c.o[x.p] ? c.o[x.p][0] : '';
+    return `<div class="dp-row ${ok ? 'ok' : 'no'}"><i>${ok ? '✓' : '✕'}</i><div><b>${i + 1}번 ${TRX(trFill(c.k, g))} → ${TRX(trFill(right, g))}</b><small>${ok ? '' : `내가 고른 답: ${TRX(trFill(mine, g))} · `}${x.sec !== null && x.sec !== undefined && x.p !== -1 ? x.sec.toFixed(1) + '초' : x.p === -1 ? DP_LIM + '초 지남' : '시간 없이'}</small></div></div>`;
+  }).join('');
+  const prev = R.s;
+  const more = D.si + 1 < D.ids.length;
+  return `${trBack('🔴 세트 결과', 'dpQuit()')}
+    <div class="dp-rh"><div><small>${d.st.q}Q ${d.st.us}:${d.st.them} · ${TRX(d.t)}</small><b>${d.cuts.length}컷 중 ${okN}개 정답</b></div><em>${prev}<i>점</i></em></div>
+    ${rows}
+    ${d.rule ? `<div class="dp-rule"><b>📏 오늘의 규칙</b><p>${TRX(d.rule)}</p>${d.ra || d.rb ? `<div class="dp-rule2">${d.ra ? `<div>${dpRuleScene(d.ra[0])}<span>${TRX(d.ra[1])}</span></div>` : ''}${d.rb ? `<div>${dpRuleScene(d.rb[0])}<span>${TRX(d.rb[1])}</span></div>` : ''}</div>` : ''}</div>` : ''}
+    ${d.alt ? `<div class="dp-alt"><b>⚖️ 상황이 바뀌면 정답도 바뀐다</b><p>${TRX(trFill(d.alt, g))}</p></div>` : ''}
+    ${okN < d.cuts.length ? `<div class="tr-note">📕 틀린 컷이 있는 세트는 오답 노트에 들어가요 · 3일 뒤 다시</div>` : ''}
+    <div class="tr-2btn"><button type="button" class="tr-btn red" onclick="dpNextSet()">${more ? '다음 세트 ›' : '전체 결과 ›'}</button><button type="button" class="tr-btn ghost" onclick="dpStartSets(['${d.id}'],'다시 하기')">이 세트 다시</button></div>`;
+}
+
+/* ----- 경기 시뮬 ----- */
+function dpStartSim() {
+  const ctx = trCtx(); const m = ctx.m; const groups = trMyGroups(); const g0 = groups[0] || 'CB';
+  let qs = (m && ctx.qs.length) ? ctx.qs : [1, 2, 3, 4].map(i => ({ label: i + '쿼터', mi: -1, group: null, sq: null }));
+  if (qs.length > 6) qs = qs.slice(0, 6);
+  const per = qs.length <= 2 ? 4 : qs.length === 3 ? 3 : 2;
+  const plan = [];
+  qs.forEach((q, qi) => {
+    const rest = q.sq && q.filled && q.mi < 0;
+    if (rest) { plan.push({ qn: qi + 1, ql: q.label || (qi + 1) + '쿼터', rest: true }); return; }
+    const g = q.group || g0;
+    for (let k = 0; k < per; k++) plan.push({ qn: qi + 1, ql: (q.label || (qi + 1) + '쿼터').replace('쿼터', 'Q'), g, stake: (k + qi) % 2 === 0 ? 'def' : 'att' });
+  });
+  const scenes = plan.filter(x => !x.rest);
+  if (!scenes.length) { toast('이번 경기엔 내 자리가 없어요 (전부 휴식) — 연습 경기로 할게요'); }
+  _tr.dp = { mode: 'sim', mid: m ? m.id : null, opp: m ? (m.opponent || '상대팀') : '연습 상대', plan: scenes.length ? scenes : [1, 2, 3, 4].flatMap(n => [{ qn: n, ql: n + 'Q', g: g0, stake: 'def' }, { qn: n, ql: n + 'Q', g: g0, stake: 'att' }]), rest: plan.filter(x => x.rest).map(x => x.ql), nq: qs.length, idx: 0, us: 0, them: 0, log: [], used: {} };
+  trGo('dq');
+}
+function dpSimPick(D, sc) {
+  const lastQ = sc.qn === D.nq;
+  const diff = D.us - D.them;
+  const state = lastQ ? 'q4' : diff > 0 ? 'lead' : diff < 0 ? 'trail' : 'draw';
+  sc.gs = state;
+  const cats = sc.stake === 'def' ? ['def', 'sp'] : ['bu', 'tr'];
+  const r = trMe() || trDefault();
+  const want = [state]; if (state === 'q4') want.push(diff > 0 ? 'lead' : diff < 0 ? 'trail' : 'draw');
+  const okGs = q => q.gs === '' || want.includes(q.gs);          // 스코어·쿼터와 어긋나는 상황 문제는 빼기
+  const fresh = q => { const a = r.ans[q.id]; return !a ? 0 : +a[0] === 0 ? 1 : 2; };
+  const score = q => (want.includes(q.gs) ? 0 : 10) + (q.g.includes(sc.g) ? 0 : 4) + fresh(q) * 3 + Math.random() * 2;
+  const tries = [
+    q => cats.includes(q.cat) && (q.g.includes(sc.g) || q.g.includes('ALL')) && okGs(q),
+    q => q.cat !== 'mt' && q.cat !== 'kb' && (q.g.includes(sc.g) || q.g.includes('ALL')) && okGs(q),
+    q => q.cat !== 'mt' && q.cat !== 'kb' && okGs(q),
+  ];
+  let pool = [];
+  for (const t of tries) { pool = TQ.filter(q => !D.used[q.id] && t(q)).sort((a, b) => score(a) - score(b)); if (pool.length) break; }
+  const q = pool[0]; if (!q) return null;
+  D.used[q.id] = 1;
+  if (q.gs && want.includes(q.gs)) sc.gs = q.gs;
+  return q.id;
+}
+function dpFinishSim() {
+  const D = _tr.dp; if (!D || D.saved) return;
+  const n = D.log.filter(Boolean).length, ok = D.log.filter(x => x && x.ok).length;
+  if (!n) return;
+  trSet('sim/' + (D.mid || 'practice'), { t: Date.now(), d: trToday(), us: D.us, them: D.them, n, ok });
+  D.saved = true;
+}
+
+/* ----- 전체 결과 (심화 여러 세트 · 시뮬) ----- */
+function dpViewEnd() {
+  const D = _tr.dp; if (!D) return trViewHome();
+  if (D.mode === 'sim') {
+    const n = D.log.filter(Boolean).length, ok = D.log.filter(x => x && x.ok).length;
+    const win = D.us > D.them ? '승리! 🎉' : D.us < D.them ? '패배 — 다음엔 뒤집자' : '무승부';
+    const fast = D.log.map((x, i) => Object.assign({ i }, x || {})).filter(x => x.ok && x.sec !== null && x.sec !== undefined).sort((a, b) => a.sec - b.sec)[0];
+    const rows = D.plan.map((sc, i) => { const l = D.log[i]; if (!l) return ''; const q = trQById(l.qid); const ev = { goal: '⚽ 골', save: '🧤 선방', conceded: '😣 실점', miss: '😮‍💨 놓침' }[l.ev]; return `<div class="dp-row ${l.ok ? 'ok' : 'no'}"><i>${sc.qn}Q</i><div><b>${ev} · ${TRX(trGName(sc.g))}</b><small>${q ? TRX(trFill(q.q, sc.g)).slice(0, 46) + '…' : ''}</small></div></div>`; }).join('');
+    return `${trBack('🎮 경기 결과', "_tr.dp=null;trGo('home')")}
+      <div class="dp-final ${D.us > D.them ? 'w' : D.us < D.them ? 'l' : 'd'}"><small>${D.mid ? '다음 경기 미리 뛰어보기' : '연습 경기'}</small><div class="sc"><b>EAST</b><em>${D.us} : ${D.them}</em><b>${TRX(D.opp)}</b></div><p>${win} · ${n}장면 중 ${ok}개 정답</p>${fast ? `<span>⚡ 제일 빠른 판단 ${fast.sec.toFixed(1)}초 (${D.plan[fast.i].qn}Q)</span>` : ''}</div>
+      ${D.rest && D.rest.length ? `<div class="tr-note">🪑 ${D.rest.map(TRX).join(' · ')}는 휴식이라 장면이 없어요</div>` : ''}
+      ${rows}
+      <div class="tr-note">틀린 장면은 오답 노트에 들어가요. 실제 경기 전에 한 번 더 해보면 쿼터별 내 자리가 머리에 남아요.</div>
+      <div class="tr-2btn"><button type="button" class="tr-btn red" onclick="dpStartSim()">🎮 한 번 더</button><button type="button" class="tr-btn ghost" onclick="_tr.dp=null;trGo('home')">트레이닝 홈</button></div>`;
+  }
+  const res = D.res.filter(Boolean);
+  const avg = res.length ? Math.round(res.reduce((s, x) => s + x.s, 0) / res.length) : 0;
+  const rows = res.map(x => { const d = trDById(x.id); return `<div class="dp-row ${x.ok.indexOf('0') < 0 ? 'ok' : 'no'}"><i>${x.s}</i><div><b>${TRX(d.t)}</b><small>${TRX(trGName(d.g[0]))} · ${x.ok.split('').map(c => c === '1' ? '✓' : '✕').join(' ')}</small></div></div>`; }).join('');
+  return `${trBack('🔴 심화 결과', "_tr.dp=null;trGo('home')")}
+    <div class="dp-rh"><div><small>${TRX(D.title || '심화')}</small><b>${res.length}세트 · 평균</b></div><em>${avg}<i>점</i></em></div>
+    ${rows}
+    <div class="tr-2btn"><button type="button" class="tr-btn red" onclick="trGo('deep')">🔴 더 하기</button><button type="button" class="tr-btn ghost" onclick="_tr.dp=null;trGo('home')">트레이닝 홈</button></div>`;
+}
+
+/* ----- 오답 · 기록 · 분석에 붙이기 ----- */
+function dpWrongSets() { const r = trMe() || trDefault(); const dp = r.dp || {}; const today = trDayNum(); return Object.keys(dp).filter(id => trDById(id) && String(dp[id].ok || '').indexOf('0') >= 0).map(id => ({ id, due: today - (+dp[id].d || 0) >= 3, left: 3 - (today - (+dp[id].d || 0)), s: +dp[id].s || 0 })); }
+function dpWrongHtml() {
+  const w = dpWrongSets(); if (!w.length) return '';
+  return `<div class="tr-sec">🔴 심화 — 틀린 컷이 있는 세트 <small>3일 뒤 다시</small></div>${w.map(x => { const d = trDById(x.id); return `<button type="button" class="dp-hrow" onclick="dpStartSets(['${x.id}'],'오답 다시')"><b>${TRX(d.t)}</b><small>${x.due ? '다시 볼 때' : x.left + '일 뒤'} · 지난번 ${x.s}점</small><span class="${x.due ? 'lo' : 'mid'}">다시 ›</span></button>`; }).join('')}`;
+}
+function dpStatsHtml() {
+  const r = trMe() || trDefault(); const dp = r.dp || {}; const ks = Object.keys(dp).filter(trDById);
+  const sim = r.sim || {}; const sims = Object.keys(sim).map(k => sim[k]).filter(Boolean);
+  if (!ks.length && !sims.length) return `<div class="tr-sec">🔴 심화 · 🎮 시뮬</div><div class="tr-sum">아직 안 해봤어요 · 트레이닝 홈의 🔴 심화에서 시작</div>`;
+  const avg = ks.length ? Math.round(ks.reduce((s, k) => s + (+dp[k].s || 0), 0) / ks.length) : 0;
+  const best = ks.length ? Math.max(...ks.map(k => +dp[k].b || +dp[k].s || 0)) : 0;
+  const last = sims.sort((a, b) => (b.t || 0) - (a.t || 0))[0];
+  return `<div class="tr-sec">🔴 심화 · 🎮 시뮬</div>
+    <div class="tr-mini3 st"><span>세트 <b>${ks.length}/${TD.length}</b></span><span>평균 <b>${avg}점</b></span><span>최고 <b>${best}점</b></span></div>
+    ${trBar('🔴 심화 컷 정답률', r.lv && r.lv[3])}
+    ${last ? `<div class="tr-sum">🎮 경기 시뮬 ${sims.length}번 · 지난번 <b>EAST ${last.us} : ${last.them}</b> (${last.ok}/${last.n} 정답)</div>` : ''}`;
+}
+function dpAnaHtml(recs) {
+  let sets = 0, sum = 0, sims = 0, w = 0, l = 0; const a = [0, 0];
+  recs.forEach(o => { const dp = o.r.dp || {}; Object.keys(dp).forEach(k => { if (dp[k]) { sets++; sum += +dp[k].s || 0; } }); const sm = o.r.sim || {}; Object.keys(sm).forEach(k => { const x = sm[k]; if (!x) return; sims++; if (x.us > x.them) w++; else if (x.us < x.them) l++; }); const v = o.r.lv && o.r.lv[3]; if (v) { a[0] += +v[0] || 0; a[1] += +v[1] || 0; } });
+  if (!sets && !sims) return '';
+  const p = a[0] ? Math.round(a[1] / a[0] * 100) : null;
+  return `<div class="tra-t or">🔴 심화 · 🎮 시뮬</div><div class="tra-bar"><span>심화 컷</span><i><i style="width:${p || 0}%"></i></i><b>${p === null ? '–' : p + '%'}</b></div><div class="tra-note">세트 ${sets}번 · 평균 ${sets ? Math.round(sum / sets) : 0}점 · 시뮬 ${sims}번 (${w}승 ${sims - w - l}무 ${l}패)</div>`;
+}
+
+
+/* ===== 👟 깔창으로 발 길이 (v110) — 깔창 길이 ≈ 사이즈 + 8mm 로 보고 발 길이 비율을 곱한다 ===== */
+const BT_INS_ADD = 8;
+function btInsoleSvg() {
+  const ins = 'M60 249 C40 249 29 235 29 212 C29 190 31 170 28 150 C25 128 18 108 17 86 C16 56 24 26 42 11 C52 3 70 1 82 7 C98 15 107 40 107 66 C107 100 99 124 96 148 C93 172 93 196 92 214 C91 236 80 249 60 249 Z';
+  const body = 'M60 242 C45 242 37 231 36 214 C35 196 37 178 34 160 C31 142 25 120 24 100 C23 82 25 66 31 54 C36 45 46 42 56 43 C68 44 80 47 90 54 C97 59 100 70 99 84 C98 104 93 124 90 144 C87 166 86 192 85 212 C84 232 76 242 60 242 Z';
+  const toes = [[40, 30, 11, 15], [58, 26, 6.5, 9], [71, 29, 6, 8], [82, 35, 5.5, 7], [91, 45, 5, 6]].map(t => `<ellipse cx="${t[0]}" cy="${t[1]}" rx="${t[2]}" ry="${t[3]}"/>`).join('');
+  return `<svg class="bt-foot" viewBox="-40 -8 200 270" role="img" aria-label="깔창 위에 발 올리고 점 찍는 자리"><rect x="-40" y="249" width="200" height="12" fill="#3f4652"/><text x="154" y="258" text-anchor="end" font-size="9" font-weight="800" fill="#cbd5e1">벽</text><path d="${ins}" fill="#3b3f47" stroke="#9ca3af" stroke-width="1.6" stroke-dasharray="5 4"/><g fill="#e8d5c4" stroke="#b9967c" stroke-width="1.5">${toes}<path d="${body}"/></g>
+    <line x1="61" y1="3" x2="60" y2="246" stroke="#67e8f9" stroke-width="1.5" stroke-dasharray="4 4"/>
+    ${btPtSvg(62, 3, 1, BT_PT_COL[0])}${btPtSvg(60, 249, 2, BT_PT_COL[1])}${btPtSvg(40, 15, 3, BT_PT_COL[2])}
+    <text x="78" y="6" font-size="10" font-weight="800" fill="${BT_PT_COL[0]}">깔창 앞끝</text><text x="76" y="243" font-size="10" font-weight="800" fill="${BT_PT_COL[1]}">벽 선</text><text x="24" y="16" text-anchor="end" font-size="10" font-weight="800" fill="${BT_PT_COL[2]}">발가락 끝</text>
+    <text x="112" y="130" font-size="9.5" font-weight="800" fill="#cbd5e1">깔창</text></svg>`;
+}
+function btInsL(f) { f = f || btFoot(); const ins = +(f.insS || f.s || 0); return f.insL ? +f.insL : ins ? ins + BT_INS_ADD : 0; }
+function btLenInfo(gm) {
+  const f = btFoot(); const ins = +(f.insS || f.s || 0); if (!ins && !f.insL) return '<div class="bt-warn">깔창 사이즈를 먼저 골라주세요</div>';
+  const insL = btInsL(f), foot = Math.round(gm.r * insL), gap = insL - foot;
+  const verdict = gap < 4 ? ['꽉 끼는 편', '다음 축구화는 5mm 크게'] : gap <= 12 ? ['딱 맞는 편', '같은 사이즈 그대로'] : ['남는 편', '다음 축구화는 5mm 작게도 OK'];
+  return `<div class="bt-meas"><div class="bt-mh"><span>이 축구화(${ins || '?'}) 대비</span><b>${gap >= 0 ? gap + 'mm 남음' : (-gap) + 'mm 넘침'}</b><em class="c1">${verdict[0]}</em></div>
+    <div class="bt-gapline">→ <b>${verdict[1]}</b> · 발 길이 약 ${foot}mm${f.insL ? ` (깔창 실측 ${insL}mm 기준)` : ` (깔창 ≈ ${ins}+${BT_INS_ADD}mm 가정 · ±5mm)`}</div>
+    ${gm.warn ? `<div class="bt-warn">${gm.warn}</div>` : `<small class="bt-ok">「이 축구화 대비 남는 정도」가 제일 믿을 만해요 · mm 는 ${f.insL ? '±3mm' : '±5mm'} 정도 오차 · 점은 끌어서 고칠 수 있어요</small>`}</div>`;
+}
+function btSaveLen(r) { const f = btFoot(); const ins = +(f.insS || f.s || 0); const insL = btInsL(f); if (!insL) return; const foot = Math.round(r * insL); if (foot < 200 || foot > 330) return; btSave({ len: foot, lenSrc: 'insole', insS: ins || null }); btRefreshNext(); }
+function btSetInsL(v) {
+  const n = Math.round(+v);
+  if (!String(v).trim()) btSave({ insL: null }); else if (!(n >= 200 && n <= 345)) { toast('200 ~ 345mm 사이로 넣어주세요'); return; } else btSave({ insL: n });
+  const st = btPhState('len'); if (st.pts.length >= 3) { const gm = btGeom(st.pts, st.asp, 'len'); if (gm && gm.r && !gm.warn) btSaveLen(gm.r); }
+  renderBoots();
+}
+function btViewLen() {
+  const st = btPhState('len'); const f = btFoot(); const K = BT_PH.len;
+  const sizes = []; for (let x = 230; x <= 300; x += 5) sizes.push(x);
+  const ins = +(f.insS || f.s || 0);
+  let body;
+  if (!ins) body = '<div class="bt-note">위에서 그 축구화 사이즈를 먼저 골라주세요</div>';
+  else if (st.url) body = `<div class="bt-phw"><div class="bt-ph" id="btPh"><img id="btImg" src="${st.url}" alt="깔창 위 발 사진" draggable="false"><svg id="btSvg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg><div id="btMk"></div></div></div>
+      <div class="bt-phb"><button type="button" onclick="btUndo('len')">↶ 점 하나 지우기</button><button type="button" onclick="btRetake('len')">📷 다시 찍기</button></div>
+      <div id="btPtInfo"></div>`;
+  else body = `<div class="bt-guide">${btInsoleSvg()}</div>
+      <ul class="bt-tips">${K.tips.map(t => `<li>${t}</li>`).join('')}</ul>
+      <div class="bt-cam"><label class="bt-camb">📷 카메라로 찍기<input type="file" accept="image/*" capture="environment" onchange="btOnFile('len',this)"></label><label class="bt-camb al">🖼️ 앨범에서<input type="file" accept="image/*" onchange="btOnFile('len',this)"></label></div>`;
+  return `${btBackBar('👟 깔창으로 발 길이 재기', "btGo('size')")}
+    <div class="bt-q"><b>그 축구화(깔창) 사이즈</b><small>깔창이나 신발 안쪽에 적힌 숫자</small></div>
+    <div class="bt-szg">${sizes.map(x => `<button type="button" class="${ins === x ? 'on' : ''}" onclick="btSave({insS:${x}});renderBoots()">${x}</button>`).join('')}</div>
+    <div class="bt-len"><div><b>깔창 실제 길이 <small>선택 · 자로 재면 더 정확</small></b><input type="number" inputmode="numeric" min="200" max="345" placeholder="${ins ? ins + BT_INS_ADD : ''}" value="${f.insL || ''}" onchange="btSetInsL(this.value)"><span>mm</span></div><p>비워두면 「사이즈 + ${BT_INS_ADD}mm」로 계산해요 — 깔창 길이는 브랜드·모델마다 몇 mm씩 달라요</p></div>
+    <div class="bt-q"><b>깔창 위에 올라서서 위에서 1장</b></div>
+    ${body}
+    <button type="button" class="bt-go" ${f.len && f.lenSrc === 'insole' ? '' : 'disabled'} onclick="btGo('size')">이 길이로 · 사이즈 단계로 ›</button>
+    <div class="bt-note">제일 믿을 만한 결과는 「이 축구화 대비 몇 mm 남는지」예요 — 지금 신는 축구화 사이즈를 기준으로 다음 사이즈를 정할 수 있어요. 깔창이 안 빠지는 신발이면 이 방법 대신 「측정」 앱이나 줄자를 써주세요. 신발 겉길이는 앞코 모양 때문에 모델마다 달라서 기준으로 쓰지 않아요.</div>
+    <div class="bt-priv">🔒 사진은 저장 안 해요 · 이 화면에서만 써요</div>`;
+}
+
+/* ===== 👟 v111 카드로 발 실측 — 바닥에 카드(85.6×53.98mm)를 자 대신 (사용자 아이디어: 카드 아랫선 = 뒤꿈치 선) =====
+   카드 짧은 변과 뒤꿈치를 벽(또는 세운 책·상자)에 같이 붙임 → 카드 아랫변이 곧 뒤꿈치 선 → 발끝 · 발볼 2점만 누르면 끝
+   카드와 발바닥이 같은 바닥면 → 사진 각도는 카드로 풀고(호모그래피 + 폰 자세), 바닥에서 뜬 발끝·발볼 높이만 보정 */
+const BT_CARD = { w: 85.6, h: 53.98 };          // ISO/IEC 7810 ID-1 (신용·체크·교통카드)
+// 바닥 위 높이(mm, 폰 쪽 +) — 발끝·발볼 가장 넓은 곳은 바닥에서 조금 떠 있음 (근사값 · 사람마다 ±5mm)
+const BT_HT = { toe: 10, ball: 15, heel: 25 };   // heel: 위에서 보이는 뒤꿈치 윤곽(제일 튀어나온 곳) 높이
+const BT_CAM_D = 500;                             // 카메라 테두리 크기를 정하는 목표 거리(mm)
+const BT_FPX = 0.78;                             // 실시간 카메라 초점거리 ≈ 긴 변 × 0.78 (1배 광각 · 근사)
+// 앉아서 찍어도 길이 보정은 안 함 — 처음엔 「덜 눌린 만큼」 더했는데 사용자 실측(271)과 비교하니 오히려 멀어짐 (v111)
+const BT_CK = { st: { step: 3, title: '발 길이·발볼 — 카드로', need: 7,
+  col: ['#fb923c', '#fb923c', '#fb923c', '#fb923c', '#67e8f9', '#bef264', '#fde047'],
+  lab: [['카드', '카드 모서리'], ['', ''], ['', ''], ['', ''], ['발끝', '가장 긴 발가락 끝 (엄지보다 둘째가 길면 둘째) — 누르면 발 모양을 따서 발볼까지 자동으로'], ['발볼 안쪽', '엄지발가락 뿌리 옆, 제일 튀어나온 곳'], ['발볼 바깥', '새끼발가락 뿌리 옆, 제일 튀어나온 곳']],
+  tips: ['뒤꿈치 뒤에 벽이나 두꺼운 책·상자를 세우고, 카드를 세로로 발 옆 2~3cm에 놓아 카드 아랫변도 같이 붙여요 → 카드 아랫선 = 뒤꿈치 선', '벽·책이 없으면 카드 아랫선을 뒤꿈치에 눈으로 맞춰도 돼요 — 「눈으로 맞춤」을 고르면 그만큼 자동으로 빼요', '발은 바닥에 디디고 다리를 살짝 비스듬히 — 발 전체가 보이게 (서서 체중 실으면 제일 정확)', '폰은 발 위에서 바닥과 평행하게 — 화면의 카드 테두리에 맞추면 자동으로 찍혀요'] } };
+// 뒤꿈치 맞춘 방법: 벽·책에 붙임(정확) / 눈으로 맞춤(위에서 보이는 윤곽은 바닥에서 2~3cm 위라 그만큼 길게 나옴 → 자동으로 뺌)
+function btCardAlign() { const a = _bt.calign || btFoot().calign; return a === 'wall' ? 'wall' : 'eye'; }
+function btCardMode() { return 'st'; }
+function btK(kind) { return kind === 'card' ? BT_CK[btCardMode()] : BT_PH[kind]; }
+
+/* ---------- 수학: 호모그래피 · 카드 모서리 순서 ---------- */
+function btSolve(A, b) {
+  const n = b.length; const M = A.map((r, i) => r.concat([b[i]]));
+  for (let c = 0; c < n; c++) {
+    let p = c; for (let r = c + 1; r < n; r++) if (Math.abs(M[r][c]) > Math.abs(M[p][c])) p = r;
+    if (Math.abs(M[p][c]) < 1e-12) return null;
+    if (p !== c) { const t = M[p]; M[p] = M[c]; M[c] = t; }
+    for (let r = c + 1; r < n; r++) { const k = M[r][c] / M[c][c]; for (let j = c; j <= n; j++) M[r][j] -= k * M[c][j]; }
+  }
+  const x = new Array(n).fill(0);
+  for (let r = n - 1; r >= 0; r--) { let s = M[r][n]; for (let j = r + 1; j < n; j++) s -= M[r][j] * x[j]; x[r] = s / M[r][r]; }
+  return x;
+}
+// src(사진 px) 4점 → dst(mm) 4점
+function btHomog(src, dst) {
+  const cx = src.reduce((s, p) => s + p.x, 0) / 4, cy = src.reduce((s, p) => s + p.y, 0) / 4;
+  const sc = Math.SQRT2 / (src.reduce((s, p) => s + Math.hypot(p.x - cx, p.y - cy), 0) / 4 || 1);
+  const A = [], b = [];
+  src.forEach((p, i) => {
+    const x = (p.x - cx) * sc, y = (p.y - cy) * sc, u = dst[i].x, v = dst[i].y;
+    A.push([x, y, 1, 0, 0, 0, -x * u, -y * u]); b.push(u);
+    A.push([0, 0, 0, x, y, 1, -x * v, -y * v]); b.push(v);
+  });
+  const h = btSolve(A, b); if (!h) return null;
+  return { h, cx, cy, sc };
+}
+function btHApply(H, p) {
+  const h = H.h, x = (p.x - H.cx) * H.sc, y = (p.y - H.cy) * H.sc;
+  const w = h[6] * x + h[7] * y + 1;
+  return { x: (h[0] * x + h[1] * y + h[2]) / w, y: (h[3] * x + h[4] * y + h[5]) / w };
+}
+function btHMat(H) {   // 정규화 풀어서 3×3 행렬로
+  const h = H.h, s = H.sc, a = [[h[0], h[1], h[2]], [h[3], h[4], h[5]], [h[6], h[7], 1]];
+  return a.map(r => [r[0] * s, r[1] * s, r[2] - r[0] * s * H.cx - r[1] * s * H.cy]);
+}
+// 카드 면(mm) → 사진 호모그래피로 폰 자세 구하기 → 높이 h(폰 쪽 +)인 점을 카드 면 위 좌표로 정확히 내리기
+function btPose(q, f, cx, cy) {
+  const Gh = btHomog(BT_CARD_MM, q); if (!Gh) return null;
+  const G = btHMat(Gh);
+  const kc = j => [(G[0][j] - cx * G[2][j]) / f, (G[1][j] - cy * G[2][j]) / f, G[2][j]];
+  const c1 = kc(0), c2 = kc(1), c3 = kc(2);
+  const nrm = v => Math.hypot(v[0], v[1], v[2]);
+  let lam = 2 / (nrm(c1) + nrm(c2)); if (c3[2] * lam < 0) lam = -lam;
+  let r1 = c1.map(x => x * lam), r2 = c2.map(x => x * lam); const t = c3.map(x => x * lam);
+  const n1 = nrm(r1); r1 = r1.map(x => x / n1);
+  const dt = r1[0] * r2[0] + r1[1] * r2[1] + r1[2] * r2[2]; r2 = r2.map((x, i) => x - dt * r1[i]); const n2 = nrm(r2); r2 = r2.map(x => x / n2);
+  const r3 = [r1[1] * r2[2] - r1[2] * r2[1], r1[2] * r2[0] - r1[0] * r2[2], r1[0] * r2[1] - r1[1] * r2[0]];
+  // R 의 열 = r1 r2 r3 · 카메라 중심(카드 좌표) = -Rᵀ t
+  const RT = v => [r1[0] * v[0] + r1[1] * v[1] + r1[2] * v[2], r2[0] * v[0] + r2[1] * v[1] + r2[2] * v[2], r3[0] * v[0] + r3[1] * v[1] + r3[2] * v[2]];
+  const Cw = RT(t).map(x => -x);
+  if (!isFinite(Cw[2]) || Math.abs(Cw[2]) < 50) return null;
+  const sg = Math.sign(Cw[2]);
+  return { D: Math.abs(Cw[2]), tiltDeg: Math.acos(Math.min(1, Math.abs(r3[2]))) * 180 / Math.PI,
+    R: [[r1[0], r2[0], r3[0]], [r1[1], r2[1], r3[1]], [r1[2], r2[2], r3[2]]], t,
+    lift: (p, h) => { const dw = RT([(p.x - cx) / f, (p.y - cy) / f, 1]); const s = ((h || 0) * sg - Cw[2]) / dw[2]; return { x: Cw[0] + s * dw[0], y: Cw[1] + s * dw[1] }; } };
+}
+// 초점거리를 안다고 보고 자세(회전 3 + 위치 3)만 다시 맞추기 — 카드가 작아서 생기는 흔들림이 절반쯤으로 줄어듦
+function btRod(w) { const th = Math.hypot(w[0], w[1], w[2]); if (th < 1e-12) return [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
+  const k = w.map(x => x / th), c = Math.cos(th), s = Math.sin(th), v = 1 - c;
+  return [[c + k[0] * k[0] * v, k[0] * k[1] * v - k[2] * s, k[0] * k[2] * v + k[1] * s], [k[1] * k[0] * v + k[2] * s, c + k[1] * k[1] * v, k[1] * k[2] * v - k[0] * s], [k[2] * k[0] * v - k[1] * s, k[2] * k[1] * v + k[0] * s, c + k[2] * k[2] * v]]; }
+function btRotVec(R) { const tr = R[0][0] + R[1][1] + R[2][2], th = Math.acos(Math.max(-1, Math.min(1, (tr - 1) / 2))); if (th < 1e-9) return [0, 0, 0];
+  return [R[2][1] - R[1][2], R[0][2] - R[2][0], R[1][0] - R[0][1]].map(x => x / (2 * Math.sin(th)) * th); }
+function btPoseLS(mmP, imP, f, cx, cy, R0, t0) {
+  let p = btRotVec(R0).concat(t0);
+  const res = q => { const R = btRod(q.slice(0, 3)), o = []; mmP.forEach((m, i) => { const P = [0, 1, 2].map(r => R[r][0] * m.x + R[r][1] * m.y + q[3 + r]); o.push(cx + f * P[0] / P[2] - imP[i].x, cy + f * P[1] / P[2] - imP[i].y); }); return o; };
+  for (let it = 0; it < 20; it++) {
+    const r0 = res(p), J = r0.map(() => new Array(6).fill(0));
+    for (let j = 0; j < 6; j++) { const h = j < 3 ? 1e-6 : 1e-3, q = p.slice(); q[j] += h; res(q).forEach((v, i) => { J[i][j] = (v - r0[i]) / h; }); }
+    const A = [0, 1, 2, 3, 4, 5].map(a => [0, 1, 2, 3, 4, 5].map(b => J.reduce((s, row) => s + row[a] * row[b], 0) + (a === b ? 1e-9 : 0)));
+    const d = btSolve(A, [0, 1, 2, 3, 4, 5].map(a => -J.reduce((s, row, i) => s + row[a] * r0[i], 0)));
+    if (!d || d.some(x => !isFinite(x))) return null; p = p.map((v, i) => v + d[i]); if (Math.hypot(...d) < 1e-9) break;
+  }
+  const R = btRod(p.slice(0, 3)), t = p.slice(3); if (!(t[2] > 0)) return null;
+  const n = [R[0][2], R[1][2], R[2][2]], nt = n[0] * t[0] + n[1] * t[1] + n[2] * t[2], sg = nt > 0 ? -1 : 1;
+  return { tiltDeg: Math.acos(Math.min(1, Math.abs(n[2]))) * 180 / Math.PI, D: Math.abs(nt),
+    lift: (pt, h) => { const d = [(pt.x - cx) / f, (pt.y - cy) / f, 1], s = (nt + sg * (h || 0)) / (n[0] * d[0] + n[1] * d[1] + n[2] * d[2]);
+      const q = d.map((x, i) => x * s - t[i]); return { x: R[0][0] * q[0] + R[1][0] * q[1] + R[2][0] * q[2], y: R[0][1] * q[0] + R[1][1] * q[1] + R[2][1] * q[2] }; } };
+}
+// 4점을 화면 시계 방향으로 · 첫 변이 긴 변(85.6)이 되게
+function btQuadOrder(P) {
+  const c = { x: P.reduce((s, p) => s + p.x, 0) / 4, y: P.reduce((s, p) => s + p.y, 0) / 4 };
+  const q = P.map(p => ({ p, a: Math.atan2(p.y - c.y, p.x - c.x) })).sort((a, b) => a.a - b.a).map(z => z.p);
+  const e = i => Math.hypot(q[(i + 1) % 4].x - q[i].x, q[(i + 1) % 4].y - q[i].y);
+  return e(0) + e(2) >= e(1) + e(3) ? q : [q[1], q[2], q[3], q[0]];
+}
+const BT_CARD_MM = [{ x: 0, y: 0 }, { x: BT_CARD.w, y: 0 }, { x: BT_CARD.w, y: BT_CARD.h }, { x: 0, y: BT_CARD.h }];
+
+/* ---------- 사진 픽셀 · 카드 테두리 자동 맞춤 (직선 맞추기 → 두 변이 만나는 곳 = 둥근 모서리 무시) ---------- */
+const _btPixC = new Map();
+function btPixFrom(src, w0, h0, key, maxSide) {
+  const ck = key ? key + '@' + (maxSide || 1600) : null;
+  if (ck && _btPixC.has(ck)) return _btPixC.get(ck);
+  if (!w0 || !h0) return null;
+  const sc = Math.min(1, (maxSide || 1600) / Math.max(w0, h0)), w = Math.max(1, Math.round(w0 * sc)), h = Math.max(1, Math.round(h0 * sc));
+  const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+  const cx = cv.getContext('2d', { willReadFrequently: true }); if (!cx) return null;
+  cx.drawImage(src, 0, 0, w, h);
+  let d; try { d = cx.getImageData(0, 0, w, h).data; } catch (e) { return null; }
+  const o = { key, d, w, h, sx: w / w0, sy: h / h0 };
+  if (ck) { if (_btPixC.size > 3) _btPixC.delete(_btPixC.keys().next().value); _btPixC.set(ck, o); }
+  return o;
+}
+function btPixAt(px, x, y, out) {   // 양선형 RGB
+  const w = px.w, h = px.h, d = px.d;
+  if (x < 0) x = 0; else if (x > w - 1.001) x = w - 1.001; if (y < 0) y = 0; else if (y > h - 1.001) y = h - 1.001;
+  const x0 = x | 0, y0 = y | 0, fx = x - x0, fy = y - y0, i = (y0 * w + x0) * 4, j = i + w * 4;
+  for (let c = 0; c < 3; c++) out[c] = (d[i + c] * (1 - fx) + d[i + 4 + c] * fx) * (1 - fy) + (d[j + c] * (1 - fx) + d[j + 4 + c] * fx) * fy;
+  return out;
+}
+let _btSeed = 1; const btRnd = () => (_btSeed = (_btSeed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff;
+// A→B 변 근처에서 제일 길게 이어지는 직선 경계 찾기 (RANSAC). ctr = 카드 가운데(바깥쪽 판단)
+function btEdgeFit(px, A, B, ctr, S, gmin) {
+  const dx = B.x - A.x, dy = B.y - A.y, len = Math.hypot(dx, dy); if (len < 10) return null;
+  const d = { x: dx / len, y: dy / len }; let n = { x: -d.y, y: d.x };
+  const mid = { x: (A.x + B.x) / 2, y: (A.y + B.y) / 2 };
+  if ((mid.x - ctr.x) * n.x + (mid.y - ctr.y) * n.y < 0) n = { x: -n.x, y: -n.y };
+  const N = 36, G = gmin || 42, cands = [], a1 = [0, 0, 0], a2 = [0, 0, 0], g = new Float32Array(2 * S + 1);
+  for (let k = 0; k < N; k++) {
+    const t = 0.14 + 0.72 * k / (N - 1), Q = { x: A.x + dx * t, y: A.y + dy * t };
+    let gm = 0;
+    for (let s = -S; s <= S; s++) {
+      btPixAt(px, Q.x + n.x * (s + 1.2), Q.y + n.y * (s + 1.2), a1); btPixAt(px, Q.x + n.x * (s - 1.2), Q.y + n.y * (s - 1.2), a2);
+      const v = Math.abs(a1[0] - a2[0]) + Math.abs(a1[1] - a2[1]) + Math.abs(a1[2] - a2[2]); g[s + S] = v; if (v > gm) gm = v;
+    }
+    if (gm < G) continue;
+    const loc = [];   // 바닥 무늬(점점이 박힌 결)도 경계처럼 보여서 — 샘플마다 센 것 3개만
+    for (let j = 1; j < 2 * S; j++) if (g[j] >= g[j - 1] && g[j] > g[j + 1] && g[j] >= Math.max(G, 0.45 * gm)) {
+      const den = g[j - 1] - 2 * g[j] + g[j + 1], off = den < 0 ? 0.5 * (g[j - 1] - g[j + 1]) / den : 0, s = j - S + off;
+      loc.push({ k, x: Q.x + n.x * s, y: Q.y + n.y * s, g: g[j], s });
+    }
+    loc.sort((a, b) => b.g - a.g).slice(0, 3).forEach(c => cands.push(c));
+  }
+  if (cands.length < N * 0.35) return null;
+  _btSeed = 7; let best = null; const cosT = Math.cos(9 * Math.PI / 180);
+  for (let it = 0; it < 360; it++) {
+    const p = cands[(btRnd() * cands.length) | 0], q = cands[(btRnd() * cands.length) | 0];
+    if (Math.abs(p.k - q.k) < N / 4) continue;
+    const lx = q.x - p.x, ly = q.y - p.y, ll = Math.hypot(lx, ly); if (ll < 1) continue;
+    if (Math.abs((lx * d.x + ly * d.y) / ll) < cosT) continue;
+    const a = -ly / ll, b = lx / ll, c = -(a * p.x + b * p.y);
+    const byK = new Map();
+    for (const z of cands) { const r = Math.abs(a * z.x + b * z.y + c); if (r < 1.6) { const pr = byK.get(z.k); if (!pr || r < pr.r) byK.set(z.k, { z, r }); } }
+    let score = 0; byK.forEach(v => { score += v.z.g; });          // 카드 테두리는 길고 + 진함 → 경사 세기 합으로
+    if (!best || score > best.score) best = { score, byK };
+  }
+  if (!best || best.byK.size < N * 0.45) return null;
+  const P = [...best.byK.values()].map(v => v.z);
+  const mx = P.reduce((s, p) => s + p.x, 0) / P.length, my = P.reduce((s, p) => s + p.y, 0) / P.length;
+  let sxx = 0, syy = 0, sxy = 0; P.forEach(p => { sxx += (p.x - mx) ** 2; syy += (p.y - my) ** 2; sxy += (p.x - mx) * (p.y - my); });
+  const th = 0.5 * Math.atan2(2 * sxy, sxx - syy), ux = Math.cos(th), uy = Math.sin(th);
+  const a = -uy, b = ux, c = -(a * mx + b * my);
+  const off = -(a * mid.x + b * mid.y + c) / ((a * n.x + b * n.y) || 1);   // 찍은 변에서 바깥쪽(+)으로 몇 px
+  return { a, b, c, n: P.length, N, off, ang: Math.acos(Math.min(1, Math.abs(ux * d.x + uy * d.y))) };
+}
+function btLineThrough(A, B) { const lx = B.x - A.x, ly = B.y - A.y, l = Math.hypot(lx, ly) || 1; const a = -ly / l, b = lx / l; return { a, b, c: -(a * A.x + b * A.y) }; }
+function btLineX(L1, L2) { const det = L1.a * L2.b - L2.a * L1.b; if (Math.abs(det) < 1e-9) return null; return { x: (L1.b * L2.c - L2.b * L1.c) / det, y: (L2.a * L1.c - L1.a * L2.c) / det }; }
+// P: 사진 px 4점(아무 순서) → 다듬은 모서리(시계 방향, 긴 변부터)
+// 1차: 넓게 찾기 → 2·3차: 찾은 모서리에서 좁게 다시 (처음 누른 위치와 상관없이 같은 답으로 모이게)
+function btCardRefine1(px, q, wide) {
+  const ctr = { x: q.reduce((s, p) => s + p.x, 0) / 4, y: q.reduce((s, p) => s + p.y, 0) / 4 };
+  const side = i => Math.hypot(q[(i + 1) % 4].x - q[i].x, q[(i + 1) % 4].y - q[i].y);
+  const minS = Math.min(side(0), side(1), side(2), side(3));
+  const fits = [0, 1, 2, 3].map(i => btEdgeFit(px, q[i], q[(i + 1) % 4], ctr, Math.round(wide ? Math.max(5, Math.min(40, side(i) * 0.12)) : Math.max(4, Math.min(10, side(i) * 0.035)))));
+  const L = fits.map((f, i) => f || btLineThrough(q[i], q[(i + 1) % 4]));
+  const R = [0, 1, 2, 3].map(i => btLineX(L[(i + 3) % 4], L[i]));
+  const tol = Math.max(8, minS * (wide ? 0.2 : 0.06));
+  const bad = R.some((r, i) => !r || !isFinite(r.x) || Math.hypot(r.x - q[i].x, r.y - q[i].y) > tol);
+  return { q: bad ? q : R, ok: bad ? 0 : fits.filter(Boolean).length, fits };
+}
+function btCardRefine(px, P) {
+  let q = btQuadOrder(P.map(p => ({ x: p.x * px.sx, y: p.y * px.sy })));
+  let r = btCardRefine1(px, q, true);
+  if (r.ok >= 3) for (let k = 0; k < 2; k++) { const r2 = btCardRefine1(px, r.q, false); if (r2.ok >= 3) r = r2; else break; }
+  return { pts: r.q.map(p => ({ x: p.x / px.sx, y: p.y / px.sy })), ok: r.ok, fits: r.fits };
+}
+
+/* ---------- 사진 EXIF 초점거리(35mm 환산) — 없으면 1배(26mm)로 가정 ---------- */
+function btExifF35(file) {
+  return new Promise(res => {
+    try { const rd = new FileReader(); rd.onload = () => { try { res(btExifParse(new DataView(rd.result))); } catch (e) { res(null); } }; rd.onerror = () => res(null); rd.readAsArrayBuffer(file.slice(0, 262144)); }
+    catch (e) { res(null); }
+  });
+}
+function btExifParse(v) {
+  if (v.byteLength < 12 || v.getUint16(0) !== 0xFFD8) return null;
+  let o = 2;
+  while (o + 10 < v.byteLength) {
+    const m = v.getUint16(o); if ((m & 0xFF00) !== 0xFF00) return null;
+    const len = v.getUint16(o + 2);
+    if (m === 0xFFE1 && v.getUint32(o + 4) === 0x45786966) {
+      const t = o + 10, le = v.getUint16(t) === 0x4949;
+      const u16 = p => v.getUint16(t + p, le), u32 = p => v.getUint32(t + p, le);
+      const find = (p, want) => { const n = u16(p); for (let i = 0; i < n; i++) { const e = p + 2 + i * 12; if (u16(e) === want) return e; } return -1; };
+      const ex = find(u32(4), 0x8769); if (ex < 0) return null;
+      const f = find(u32(ex + 8), 0xA405); if (f < 0) return null;
+      const val = u16(f + 8); return val > 5 && val < 400 ? val : null;
+    }
+    if (m === 0xFFDA) break;
+    o += 2 + len;
+  }
+  return null;
+}
+function btCardFpx(st) {
+  const L = Math.max(st.nw, st.nh), Dg = Math.hypot(st.nw, st.nh);
+  if (st.live) return L * BT_FPX;
+  return (st.f35 || 26) / 43.27 * Dg;
+}
+
+/* ---------- 계산 ---------- */
+function btCardGeom(st, mode) {
+  const K = BT_CK[mode]; const P = st.pts; if (P.length < 4 || !st.nw) return null;
+  const px = P.map(p => ({ x: p.x * st.nw, y: p.y * st.nh }));
+  const q = btQuadOrder(px.slice(0, 4));
+  const H = btHomog(q, BT_CARD_MM); if (!H) return { err: '카드 모서리를 다시 찍어주세요' };
+  const e = i => Math.hypot(q[(i + 1) % 4].x - q[i].x, q[(i + 1) % 4].y - q[i].y);
+  const s = ((e(0) + e(2)) / (2 * BT_CARD.w) + (e(1) + e(3)) / (2 * BT_CARD.h)) / 2;   // px / mm
+  const fpx = btCardFpx(st), cx = st.nw / 2, cy = st.nh / 2, pose = btPose(q, fpx, cx, cy);
+  const p6 = pose ? btPoseLS(BT_CARD_MM, q, fpx, cx, cy, pose.R, pose.t) : null;
+  const tiltDeg = p6 ? p6.tiltDeg : pose ? pose.tiltDeg : null;
+  // 폰이 평평하면(≤12°) 6자유도 자세가 훨씬 덜 흔들림 · 많이 기울면(≥25°) 렌즈 초점거리 추정 오차가 커져서 호모그래피 쪽으로
+  const wH = tiltDeg === null ? 1 : Math.max(0, Math.min(1, (tiltDeg - 12) / 13));
+  const D = p6 ? p6.D : pose ? pose.D : fpx / s;                                        // 폰 ~ 카드 면 거리(mm)
+  const C = btHApply(H, { x: cx, y: cy });
+  const mm = p => btHApply(H, p);
+  // dz: 카드 면보다 폰에서 먼 쪽 + → 높이(폰 쪽 +) = -dz
+  const cor = (p, dz) => {
+    const h = -(dz || 0);
+    const b = pose ? pose.lift(p, h) : (() => { const m = mm(p), k = 1 - h / D; return { x: C.x + (m.x - C.x) * k, y: C.y + (m.y - C.y) * k }; })();
+    if (!p6 || wH >= 1) return b; const a = p6.lift(p, h); return { x: a.x * (1 - wH) + b.x * wH, y: a.y * (1 - wH) + b.y * wH };
+  };
+  const tilt = Math.max(e(0) / e(2), e(2) / e(0), e(1) / e(3), e(3) / e(1));
+  const frac = Math.max(e(0), e(1)) / Math.max(st.nw, st.nh);
+  const out = { D, s, tilt, frac, q, need: K.need, tiltDeg };
+  if (px.length < 5) return out;
+  // 뒤꿈치 선 = 카드 네 변 중 발끝에서 제일 먼 변 (카드 아랫변을 뒤꿈치에 맞춰 놓으니까)
+  const T0 = mm(px[4]), T = cor(px[4], -BT_HT.toe);
+  const ed = [{ k: 'y', v: 0, i: 0 }, { k: 'x', v: BT_CARD.w, i: 1 }, { k: 'y', v: BT_CARD.h, i: 2 }, { k: 'x', v: 0, i: 3 }];
+  const far = ed.map(e => Object.assign({ d: Math.abs(T[e.k] - e.v) }, e)).sort((a, b) => b.d - a.d)[0];
+  out.heel = far; out.Lraw = Math.abs(T0[far.k] - far.v); out.L0 = far.d; out.eye = 0;
+  if (btCardAlign() === 'eye') {
+    // 눈으로 맞춘 선 위의 보이는 뒤꿈치(높이 25mm) → 바닥으로 내리면 실제 뒤꿈치는 폰 바로 아래 쪽으로 조금 앞
+    const Fm = far.k === 'x' ? { x: far.v, y: T.y } : { x: T.x, y: far.v };
+    const Fi = btHApply(btHomog(BT_CARD_MM, q), Fm), Fh = cor(Fi, -BT_HT.heel);
+    const sh = (Fh[far.k] - far.v) * Math.sign(T[far.k] - far.v);       // + 면 발끝 쪽으로 이동 → 길이 줄어듦
+    if (sh > 0 && sh < 25) { out.eye = sh; out.L0 = far.d - sh; }
+  }
+  out.L = out.L0;
+  if (px.length >= 7) { const B1 = cor(px[5], -BT_HT.ball), B2 = cor(px[6], -BT_HT.ball), o = far.k === 'y' ? 'x' : 'y'; out.W0 = Math.abs(B2[o] - B1[o]); out.W = out.W0; }
+  if (out.L !== undefined && (out.L < 190 || out.L > 340)) out.err = `길이가 ${Math.round(out.L)}mm 로 나와요 — 점 위치를 확인해주세요`;
+  if (out.W !== undefined) { out.r = out.W / out.L; if (out.r < 0.3 || out.r > 0.5) out.warn = '발볼 두 점을 다시 확인해주세요 (가장 넓은 곳 양 끝)'; }
+  return out;
+}
+function btCardWarns(gm, mode, st) {
+  const w = []; const f = btFoot();
+  if (st && st.ref === 'fail') w.push('카드 테두리를 자동으로 못 찾았어요 — 모서리 점을 끌어서 카드 꼭짓점에 맞춰주세요');
+  if (gm.tiltDeg !== null && gm.tiltDeg !== undefined ? gm.tiltDeg > 40 : gm.tilt > 1.25) w.push('폰이 많이 기울었어요 — 바닥과 평행하게, 발 바로 위에서 찍으면 더 정확해요');
+  if (gm.frac < 0.06) w.push('카드가 너무 작게 찍혔어요 — 조금 더 가까이서');
+  if (gm.L !== undefined && f.s) {
+    const d = Math.round(gm.L - +f.s);
+    if (d < -18) w.push(`평소 신발(${f.s})보다 ${-d}mm 작게 나왔어요 — 카드 아랫선이 뒤꿈치보다 앞에 있거나, 카드가 발보다 높은 곳(매트·책 위)에 있으면 작게 나와요`);
+    else if (d > 10) w.push(`평소 신발(${f.s})보다 ${d}mm 크게 나왔어요 — 카드 아랫선이 뒤꿈치보다 뒤에 있거나 발끝 점이 발 바깥에 찍혔는지 확인해주세요`);
+  }
+  return w;
+}
+
+/* ---------- 측정 기록 (여러 번 · 양발 → 평균, 더 긴 발 기준) ---------- */
+function btCardRecs(f) { f = f || btFoot(); return Array.isArray(f.cm) ? f.cm.filter(r => r && r.L) : []; }
+function btCardSum(recs) {
+  const by = {}; recs.forEach(r => { (by[r.s] = by[r.s] || []).push(r); });
+  const sides = Object.keys(by).map(s => {
+    const a = by[s], L = a.reduce((x, r) => x + r.L, 0) / a.length, Ws = a.filter(r => r.W), W = Ws.length ? Ws.reduce((x, r) => x + r.W, 0) / Ws.length : null;
+    return { s, n: a.length, L, W, spread: a.length > 1 ? Math.max(...a.map(r => r.L)) - Math.min(...a.map(r => r.L)) : 0 };
+  }).sort((a, b) => b.L - a.L);
+  return { sides, top: sides[0] || null };
+}
+function btCardApply() {
+  const f = btFoot(); const recs = btCardRecs(f); const S = btCardSum(recs).top;
+  if (!S) { const p = { cm: null }; if (f.lenSrc === 'card') Object.assign(p, { len: null, lenSrc: null, wmm: null }); if (f.ws === 'card') Object.assign(p, { wR: null, ws: null }); btSave(p); return; }
+  const len = Math.round(S.L), p = { len, lenSrc: 'card', cm: recs };
+  if (S.W) Object.assign(p, { wmm: Math.round(S.W), wR: +(S.W / S.L).toFixed(3), ws: 'card', wp: null });
+  btSave(p);
+}
+function btCardSaveRec(withW) {
+  const st = btPhState('card'); const mode = btCardMode(); const gm = btCardGeom(st, mode);
+  if (!gm || gm.err || gm.L === undefined) { toast('점을 다 찍어주세요'); return; }
+  if (withW && !gm.W) { toast('발볼 두 점을 찍어주세요'); return; }
+  haptic(10);
+  const recs = btCardRecs().slice(-7);
+  const r = { m: mode, a: btCardAlign(), s: _bt.cside || 'R', L: Math.round(gm.L * 10) / 10, W: withW ? Math.round(gm.W * 10) / 10 : null, t: Date.now() };
+  if (withW && st.seg) { const o = btShapeFromSeg(st.seg, Math.round(gm.L), Math.round(gm.W)); if (o) r.o = o; }
+  recs.push(r);
+  btSave({ cm: recs }); btCardApply();
+  if (st.url) { try { URL.revokeObjectURL(st.url); } catch (e) {} }
+  Object.assign(st, { url: null, pts: [], ref: false, live: false, seg: null, auto: false });
+  toast(withW ? `저장했어요 · 길이 ${Math.round(gm.L)} · 발볼 ${Math.round(gm.W)}mm` : `길이 ${Math.round(gm.L)}mm 저장 — 발볼은 위에서 똑바로 한 장 더`);
+  renderBoots();
+}
+function btCardDel(i) { const recs = btCardRecs(); recs.splice(i, 1); btSave({ cm: recs.length ? recs : null }); btCardApply(); renderBoots(); }
+function btCardSet(k, v) { haptic(5); if (k === 'align') { _bt.calign = v; btSave({ calign: v }); } else _bt.cside = v; renderBoots(); }
+
+/* ---------- 실시간 카메라 · 카드 테두리 맞추면 자동 촬영 ---------- */
+const _btCam = { s: null, v: null, iv: 0, hit: 0, g: null, busy: false };
+function btCamGuide(vw, vh, mode) {
+  const long = Math.max(vw, vh), mpp = BT_CAM_D / (long * BT_FPX);    // mm / px (목표 거리에서)
+  const P = mm => mm / mpp;
+  const Lf = P(265), Wf = P(100);
+  let fx = vw * 0.42; const top = vh / 2 - Lf / 2, heel = top + Lf;
+  const cw = P(BT_CARD.h), ch = P(BT_CARD.w); let cx = fx + Wf / 2 + P(25) + cw / 2;      // 카드 세로 · 아랫변 = 뒤꿈치 선
+  if (cx + cw / 2 > vw * 0.97) { const dx = cx + cw / 2 - vw * 0.97; cx -= dx; fx -= dx; }
+  const c = { x: cx - cw / 2, y: heel - ch, w: cw, h: ch };
+  return { mpp, c, foot: { x: fx, top, L: Lf, W: Wf }, wall: heel, rx: P(3.18),
+    corners: [{ x: c.x, y: c.y }, { x: c.x + c.w, y: c.y }, { x: c.x + c.w, y: c.y + c.h }, { x: c.x, y: c.y + c.h }] };
+}
+function btCamOverlay(G, vw, vh, mode, okSides, all) {
+  const c = G.c, F = G.foot, k = F.L / 229;     // 발 그림(229 단위 길이) → px
+  const tx = F.x - 60 * k, ty = F.top - 13 * k;
+  const body = 'M60 242 C45 242 37 231 36 214 C35 196 37 178 34 160 C31 142 25 120 24 100 C23 82 25 66 31 54 C36 45 46 42 56 43 C68 44 80 47 90 54 C97 59 100 70 99 84 C98 104 93 124 90 144 C87 166 86 192 85 212 C84 232 76 242 60 242 Z';
+  const toes = [[40, 30, 11, 15], [58, 24, 6.5, 9], [71, 28, 6, 8], [82, 35, 5.5, 7], [91, 45, 5, 6]].map(t => `<ellipse cx="${t[0]}" cy="${t[1]}" rx="${t[2]}" ry="${t[3]}"/>`).join('');
+  const sw = Math.max(2, vw / 260);
+  const sideCol = i => (okSides && okSides[i]) ? '#4ade80' : 'rgba(255,255,255,.9)';
+  const sides = G.corners.map((p, i) => { const q = G.corners[(i + 1) % 4]; return `<line x1="${p.x}" y1="${p.y}" x2="${q.x}" y2="${q.y}" stroke="${sideCol(i)}" stroke-width="${sw * 1.6}" stroke-dasharray="${all ? 'none' : `${sw * 5} ${sw * 3}`}" stroke-linecap="round"/>`; }).join('');
+  return `<g transform="translate(${tx} ${ty}) scale(${k})" fill="rgba(232,213,196,.18)" stroke="rgba(255,255,255,.55)" stroke-width="${1.4 / k * sw}" stroke-dasharray="${4 / k * sw} ${4 / k * sw}">${toes}<path d="${body}"/></g>
+    ${G.wall !== null ? `<line x1="0" y1="${G.wall}" x2="${vw}" y2="${G.wall}" stroke="#f9a8d4" stroke-width="${sw * 1.4}" stroke-dasharray="${sw * 6} ${sw * 4}"/><text x="${vw - sw * 6}" y="${G.wall + sw * 14}" text-anchor="end" font-size="${sw * 11}" font-weight="900" fill="#f9a8d4">뒤꿈치 선 (벽·책)</text>` : ''}
+    <rect x="${c.x}" y="${c.y}" width="${c.w}" height="${c.h}" rx="${G.rx}" fill="${all ? 'rgba(74,222,128,.16)' : 'rgba(251,146,60,.10)'}" stroke="none"/>${sides}
+    <text x="${c.x + c.w / 2}" y="${c.y + c.h / 2 + sw * 4}" text-anchor="middle" font-size="${sw * 11}" font-weight="900" fill="#fff" opacity=".9">카드</text>`;
+}
+async function btCamOpen() {
+  const mode = btCardMode();
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { toast('이 브라우저에선 카메라를 바로 못 켜요 — 「사진·앨범」으로 찍어주세요'); return; }
+  btCamClose();
+  const wrap = document.createElement('div'); wrap.id = 'btCam'; wrap.className = 'bt-cm';
+  wrap.innerHTML = `<div class="bt-cm-top"><button type="button" class="bt-cm-x" onclick="btCamClose()" aria-label="닫기">✕</button><b>💳 카드 아랫선 = 뒤꿈치 선</b></div>
+    <div class="bt-cm-box" id="btCmBox"><video id="btCmV" playsinline muted autoplay></video><svg id="btCmSvg" preserveAspectRatio="none"></svg></div>
+    <div class="bt-cm-st" id="btCmSt">카메라 켜는 중…</div>
+    <div class="bt-cm-bot"><button type="button" class="bt-cm-sh" onclick="btCamShot(false)" aria-label="찍기"><i></i></button></div>`;
+  document.body.appendChild(wrap); document.body.classList.add('bt-cm-on');
+  let s;
+  try { s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1440 } }, audio: false }); }
+  catch (e) { btCamClose(); toast(e && e.name === 'NotAllowedError' ? '카메라 권한이 꺼져 있어요 — 설정에서 허용하거나 「사진·앨범」으로 찍어주세요' : '카메라를 못 켰어요 — 「사진·앨범」으로 찍어주세요'); return; }
+  if (!document.getElementById('btCam')) { s.getTracks().forEach(t => t.stop()); return; }
+  _btCam.s = s; const v = document.getElementById('btCmV'); _btCam.v = v; v.srcObject = s;
+  try { await v.play(); } catch (e) {}
+  const ready = () => {
+    const vw = v.videoWidth, vh = v.videoHeight; if (!vw) return false;
+    const box = document.getElementById('btCmBox'), sv = document.getElementById('btCmSvg'); if (!box) return true;
+    const maxH = Math.max(240, window.innerHeight - 190), w = Math.min(box.parentNode.clientWidth, maxH * vw / vh);
+    box.style.width = w + 'px'; box.style.height = (w * vh / vw) + 'px';
+    sv.setAttribute('viewBox', `0 0 ${vw} ${vh}`);
+    _btCam.g = btCamGuide(vw, vh, mode); _btCam.hit = 0;
+    sv.innerHTML = btCamOverlay(_btCam.g, vw, vh, mode, null, false);
+    btCamMsg('바닥의 카드를 점선 테두리에 맞춰요 — 발은 그림 자리에 · 맞으면 자동으로 찍혀요');
+    return true;
+  };
+  if (!ready()) v.addEventListener('loadedmetadata', ready, { once: true });
+  _btCam.iv = setInterval(() => btCamTick(mode), 160);
+}
+function btCamMsg(t, ok) { const el = document.getElementById('btCmSt'); if (el) { el.textContent = t; el.classList.toggle('ok', !!ok); } }
+function btCamTick(mode) {
+  const v = _btCam.v, G = _btCam.g; if (!v || !G || !v.videoWidth || _btCam.busy) return;
+  const vw = v.videoWidth, vh = v.videoHeight;
+  const px = btPixFrom(v, vw, vh, null, 640); if (!px) return;
+  const C = G.corners.map(p => ({ x: p.x * px.sx, y: p.y * px.sy }));
+  const ctr = { x: (C[0].x + C[2].x) / 2, y: (C[0].y + C[2].y) / 2 };
+  const ok = [], offs = [];
+  C.forEach((p, i) => {
+    const q = C[(i + 1) % 4], len = Math.hypot(q.x - p.x, q.y - p.y);
+    const S = Math.round(Math.max(5, len * 0.16));
+    const f = btEdgeFit(px, p, q, ctr, S, 36);
+    const good = !!f && f.ang < 8 * Math.PI / 180 && Math.abs(f.off) < S * 0.85;
+    ok.push(good); if (good) offs.push(f.off / len);
+  });
+  const all = ok.every(Boolean);
+  const sv = document.getElementById('btCmSvg'); if (sv) sv.innerHTML = btCamOverlay(G, vw, vh, mode, ok, all);
+  if (all) {
+    _btCam.hit++;
+    btCamMsg(_btCam.hit >= 3 ? '맞았어요 — 그대로!' : '거의 다 왔어요 — 그대로…', true);
+    if (_btCam.hit >= 4) btCamShot(true);
+  } else {
+    _btCam.hit = 0;
+    const m = offs.length >= 2 ? offs.reduce((a, b) => a + b, 0) / offs.length : 0;
+    const n = ok.filter(Boolean).length;
+    btCamMsg(n >= 2 && m > 0.05 ? '카드가 테두리보다 커요 — 폰을 조금 멀리' : n >= 2 && m < -0.05 ? '카드가 테두리보다 작아요 — 폰을 조금 가까이' : n ? `테두리 ${n}/4 맞음 — 조금만 더` : '바닥의 카드를 점선 테두리에 맞춰요');
+  }
+}
+function btCamShot(auto) {
+  const v = _btCam.v, G = _btCam.g; if (!v || !v.videoWidth || _btCam.busy) return;
+  _btCam.busy = true; haptic(auto ? 20 : 10);
+  const vw = v.videoWidth, vh = v.videoHeight;
+  const cv = document.createElement('canvas'); cv.width = vw; cv.height = vh; cv.getContext('2d').drawImage(v, 0, 0, vw, vh);
+  const mode = btCardMode();
+  const done = blob => {
+    btCamClose();
+    if (!blob) { toast('사진을 못 만들었어요 — 다시 해주세요'); return; }
+    const st = btPhState('card'); if (st.url) { try { URL.revokeObjectURL(st.url); } catch (e) {} }
+    Object.assign(st, { url: URL.createObjectURL(blob), pts: G.corners.map(p => ({ x: p.x / vw, y: p.y / vh })), nw: vw, nh: vh, live: true, f35: null, ref: false, mode });
+    _bt.view = 'card'; renderBoots();
+  };
+  if (cv.toBlob) cv.toBlob(done, 'image/jpeg', 0.92); else done(null);
+}
+function btCamClose() {
+  clearInterval(_btCam.iv); _btCam.iv = 0;
+  if (_btCam.s) { try { _btCam.s.getTracks().forEach(t => t.stop()); } catch (e) {} }
+  Object.assign(_btCam, { s: null, v: null, g: null, hit: 0, busy: false });
+  const el = document.getElementById('btCam'); if (el) el.remove();
+  document.body.classList.remove('bt-cm-on');
+}
+document.addEventListener('visibilitychange', () => { if (document.hidden && _btCam.s) btCamClose(); });
+
+/* ---------- 화면: 3단계 카드 ---------- */
+function btCardGuideSvg(mode) {
+  const body = 'M60 242 C45 242 37 231 36 214 C35 196 37 178 34 160 C31 142 25 120 24 100 C23 82 25 66 31 54 C36 45 46 42 56 43 C68 44 80 47 90 54 C97 59 100 70 99 84 C98 104 93 124 90 144 C87 166 86 192 85 212 C84 232 76 242 60 242 Z';
+  const toes = [[40, 30, 11, 15], [58, 24, 6.5, 9], [71, 28, 6, 8], [82, 35, 5.5, 7], [91, 45, 5, 6]].map(t => `<ellipse cx="${t[0]}" cy="${t[1]}" rx="${t[2]}" ry="${t[3]}"/>`).join('');
+  const C = BT_CK.st.col; const pt = (x, y, n, i) => btPtSvg(x, y, n, C[i]);
+  const lab = (x, y, t, i, anc) => `<text x="${x}" y="${y}" font-size="10" font-weight="800" fill="${C[i]}" text-anchor="${anc || 'start'}">${t}</text>`;
+  return `<svg class="bt-foot" viewBox="-30 0 200 266" role="img" aria-label="뒤꿈치와 카드 아랫변을 벽(책)에 같이 붙이기"><rect x="-30" y="243" width="200" height="16" fill="#3f4652"/><text x="166" y="255" text-anchor="end" font-size="9" font-weight="800" fill="#cbd5e1">벽 · 세운 책</text>
+    <g fill="#e8d5c4" stroke="#b9967c" stroke-width="1.5">${toes}<path d="${body}"/></g>
+    <rect x="112" y="157" width="36" height="86" rx="3" fill="#2563eb" stroke="#fb923c" stroke-width="2"/><text x="130" y="203" text-anchor="middle" font-size="9" font-weight="900" fill="#fff">카드</text>
+    <line x1="-30" y1="243" x2="170" y2="243" stroke="#f9a8d4" stroke-width="2"/><text x="-26" y="238" font-size="9.5" font-weight="900" fill="#f9a8d4">카드 아랫선 = 뒤꿈치 선</text>
+    <line x1="44" y1="13" x2="44" y2="243" stroke="#67e8f9" stroke-width="1.5" stroke-dasharray="4 4"/><line x1="24" y1="100" x2="99" y2="100" stroke="#bef264" stroke-width="2"/>
+    ${pt(44, 13, 1, 4)}${lab(56, 16, '발끝 → 발 모양 자동', 4)}${pt(24, 100, 2, 5)}${pt(99, 100, 3, 6)}${lab(14, 88, '발볼', 5, 'end')}
+    ${[[112, 157], [148, 157], [148, 243], [112, 243]].map(c => `<circle cx="${c[0]}" cy="${c[1]}" r="4.5" fill="none" stroke="#fb923c" stroke-width="2"/>`).join('')}${lab(169, 150, '카드 모서리 자동', 0, 'end')}</svg>`;
+}
+function btCardRecHtml(f) {
+  const recs = btCardRecs(f); if (!recs.length) return '';
+  const S = btCardSum(recs); const sn = { R: '오른발', L: '왼발' }, mn = { wall: '벽·책', eye: '눈으로' };
+  const d = t => { const x = new Date(t); return `${x.getMonth() + 1}/${x.getDate()}`; };
+  const rows = recs.map((r, i) => `<div class="bt-cr"><span>${sn[r.s] || ''} · ${mn[r.a] || ''}</span><b>${Math.round(r.L)}</b><em>${r.W ? `발볼 ${Math.round(r.W)}` : ''}</em><small>${d(r.t)}</small><button type="button" onclick="btCardDel(${i})" aria-label="지우기">✕</button></div>`).join('');
+  const sum = S.sides.map(x => `${sn[x.s]} ${Math.round(x.L)}mm${x.n > 1 ? ` (${x.n}번 평균 · 차이 ${Math.round(x.spread)}mm)` : ''}`).join(' · ');
+  const T = S.top; const warn = S.sides.some(x => x.n > 1 && x.spread > 6) ? '<div class="bt-warn">두 번 잰 값 차이가 6mm 넘어요 — 한 번 더 재면 평균이 더 정확해져요</div>' : '';
+  const one = S.sides.length === 1 && T.n === 1 ? '<small class="bt-ok">한 번 더 재서 평균 내면 더 정확해요 · 양발 다 재면 더 긴 발 기준</small>' : '';
+  const so = recs.slice().reverse().find(r => r.o && r.s === T.s) || recs.slice().reverse().find(r => r.o);
+  const shape = so ? `<div class="bt-shw">${btShapeSvg(so.o, Math.round(so.L), Math.round(so.W), `👣 ${sn[so.s]} 모양`)}<small>앞쪽은 사진에서 딴 모양 · 뒤꿈치 쪽은 다리에 가려서 표준 모양으로 채웠어요 · 칸 하나 1cm</small></div>` : '';
+  const noW = !recs.some(r => r.W) ? '<div class="bt-warn">발볼이 아직 없어요 — 카드는 그대로 두고 위에서 똑바로 한 장 더 찍어주세요</div>' : '';
+  return `<div class="bt-crs"><div class="bt-crh">📏 잰 기록</div>${rows}
+    <div class="bt-crt">${sum}</div>
+    <div class="bt-crf">${S.sides.length > 1 ? '더 긴 발 기준 → ' : ''}발 길이 <b>${Math.round(T.L)}mm</b>${T.W ? ` · 발볼 <b>${Math.round(T.W)}mm</b>` : ''} → 축구화 기본 <b>${Math.ceil(Math.round(T.L) / 5) * 5}</b></div>${warn}${noW}${one}${shape}</div>`;
+}
+function btCardInfo(gm, mode, st) {
+  if (!gm) return '';
+  if (gm.err) return `<div class="bt-warn">${gm.err}</div>`;
+  const ws = btCardWarns(gm, mode, st);
+  if (gm.L === undefined) return ws.length ? `<div class="bt-warn">${ws.join('<br>')}</div>` : '';
+  const c = gm.r ? btCls(gm.r, BT_W_CUT) : null;
+  const tp = gm.L0 + (gm.eye || 0) - gm.Lraw;
+  const parts = `사진 그대로 ${Math.round(gm.Lraw)} · 발가락이 바닥에서 뜬 만큼 ${tp >= 0 ? '+' : ''}${Math.round(tp)}${gm.eye ? ` · 눈으로 맞춘 뒤꿈치 −${Math.round(gm.eye)}` : ''}`;
+  return `<div class="bt-meas"><div class="bt-mh"><span>발 길이${gm.W ? ' · 발볼' : ''}</span><b>${Math.round(gm.L)}mm</b>${gm.W ? `<em class="c${c}">발볼 ${Math.round(gm.W)}mm · ${BT_W_NAME[c]}</em>` : ''}</div>
+    <small class="bt-ok">${parts}${st && st.live ? '' : st && st.f35 ? ` · 렌즈 ${st.f35}mm` : ' · 렌즈 1배로 가정'} · 폰 거리 약 ${Math.round(gm.D / 10)}cm</small>
+    ${gm.W ? btGauge(gm.r, 0.33, 0.45, BT_W_CUT, BT_W_NAME) : '<small class="bt-ok">발볼 두 점도 찍으면 발볼 mm 까지 나와요</small>'}
+    ${gm.warn ? `<div class="bt-warn">${gm.warn}</div>` : ''}${ws.length ? `<div class="bt-warn">${ws.join('<br>')}</div>` : ''}
+    <div class="bt-save2"><button type="button" class="bt-go sub" onclick="btCardSaveRec(false)">📏 길이만 저장<small>비스듬히 찍었으면</small></button>${gm.W ? `<button type="button" class="bt-go" onclick="btCardSaveRec(true)">👣 길이·발볼 저장<small>위에서 똑바로 찍었으면</small></button>` : ''}</div>
+    <small class="bt-ok">${{ R: '오른발', L: '왼발' }[_bt.cside || 'R']} 기록으로 저장돼요</small></div>`;
+}
+function btCardSnap(silent) {
+  const st = btPhState('card'); const img = document.getElementById('btImg'); if (!img || st.pts.length < 4) return;
+  const px = btPixFrom(img, img.naturalWidth, img.naturalHeight, st.url, 1600); if (!px) return;
+  const R = btCardRefine(px, st.pts.slice(0, 4).map(p => ({ x: p.x * img.naturalWidth, y: p.y * img.naturalHeight })));
+  st.pts.splice(0, 4, ...R.pts.map(p => ({ x: p.x / img.naturalWidth, y: p.y / img.naturalHeight })));
+  st.ref = R.ok >= 3 ? 'ok' : 'fail';
+  if (!silent) toast(R.ok >= 3 ? `카드 테두리 맞췄어요 (${R.ok}/4 변)` : '카드 테두리를 자동으로 못 찾았어요 — 점을 끌어서 맞춰주세요');
+  btDrawPts(false);
+}
+function btViewCard() {
+  const f = btFoot(); const mode = btCardMode(); const K = BT_CK[mode]; const st = btPhState('card'); const side = _bt.cside || 'R';
+  const al = btCardAlign();
+  const aligns = `<div class="bt-q"><b>뒤꿈치랑 카드 아랫선은?</b><small>${al === 'eye' ? '보이는 윤곽은 바닥보다 위라 그만큼 자동으로 빼요' : '제일 정확해요'}</small></div><div class="tr-chips">${[['wall', '🧱 벽·책에 같이 붙임'], ['eye', '👀 눈으로 맞춤']].map(o => `<button type="button" class="${al === o[0] ? 'on' : ''}" onclick="btCardSet('align','${o[0]}')">${o[1]}</button>`).join('')}</div>`;
+  const sides = `<div class="bt-q"><b>어느 발?</b><small>양발 다 재면 더 긴 발 기준</small></div><div class="tr-chips">${[['R', '오른발'], ['L', '왼발']].map(o => `<button type="button" class="${side === o[0] ? 'on' : ''}" onclick="btCardSet('side','${o[0]}')">${o[1]}</button>`).join('')}</div>`;
+  let body;
+  if (st.url) {
+    body = `<div class="bt-phw"><div class="bt-ph" id="btPh"><img id="btImg" src="${st.url}" alt="카드와 발 사진" draggable="false"><svg id="btSvg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg><div id="btMk"></div></div></div>
+      <div class="bt-phb"><button type="button" onclick="btUndo('card')">↶ 점 하나 지우기</button><button type="button" onclick="btRetake('card')">📷 다시 찍기</button></div>
+      <div class="bt-autob">${st.pts.length >= 4 ? `<button type="button" onclick="btCardSnap(false)">🔧 카드 테두리 다시 맞추기</button>` : ''}${st.pts.length >= 5 ? `<button type="button" onclick="btFootAuto(false)">✨ 발 모양 다시 따기</button>` : ''}</div>
+      <div id="btPtInfo"></div>`;
+  } else {
+    body = `<div class="bt-guide">${btCardGuideSvg(mode)}</div>
+      <ul class="bt-tips">${K.tips.map(t => `<li>${t}</li>`).join('')}</ul>
+      <div class="bt-card-ok">💳 신용·체크·교통카드처럼 지갑에 넣는 보통 카드 (85.6×54mm) — 명함은 크기가 달라서 안 돼요<br>✨ 발끝만 누르면 발 모양을 따서 발볼까지 자동으로 찾아요 (카드 모서리·뒤꿈치 선도 자동)<br>📐 길이는 비스듬해도 OK · 👣 발볼은 위에서 똑바로 찍은 사진으로</div>
+      <div class="bt-cam"><button type="button" class="bt-camb" onclick="btCamOpen()">📷 카메라로 카드 맞추기</button><label class="bt-camb al">🖼️ 사진·앨범<input type="file" accept="image/*" onchange="btOnFile('card',this)"></label></div>
+      ${btCardRecs(f).length ? `<div class="bt-crs-gap"></div>` : ''}${btCardRecHtml(f)}
+      <button type="button" class="bt-link" onclick="btGo('top')">카드가 없으면 — 비율만 재기 (발볼)</button>`;
+  }
+  const next = `<button type="button" class="bt-go" ${btW(f) === null ? 'disabled' : ''} onclick="btGo('surf')">다음 — 바닥 ›</button>`;
+  return `${btHead(3, K.title, "btGo('side')")}${aligns}${sides}${body}${st.url ? '' : next}
+    <div class="bt-priv">🔒 사진은 저장 안 해요 · 이 화면에서만 써요 · 길이·발볼 mm 만 내 기록에</div>`;
+}
+/* ---------- 점 찍을 때 돋보기 (손가락에 가려도 정확히) ---------- */
+function btLoupe(show, p) {
+  const box = document.getElementById('btPh'), img = document.getElementById('btImg'); if (!box || !img) return;
+  let L = document.getElementById('btLoupe');
+  if (!show) { if (L) L.style.display = 'none'; return; }
+  if (!L) { L = document.createElement('div'); L.id = 'btLoupe'; L.className = 'bt-loupe'; box.appendChild(L); }
+  const W = img.clientWidth, H = img.clientHeight, Z = 3, R = 54, x = p.x * W, y = p.y * H;
+  L.style.display = 'block';
+  L.style.backgroundImage = `url("${img.src}")`;
+  L.style.backgroundSize = `${W * Z}px ${H * Z}px`;
+  L.style.backgroundPosition = `${R - x * Z}px ${R - y * Z}px`;
+  let top = y - 2 * R - 34; if (top < -6) top = y + 34;
+  L.style.left = Math.max(-6, Math.min(W - 2 * R + 6, x - R)) + 'px'; L.style.top = top + 'px';
+}
+
+/* ---------- 👣 발 모양 따기(누끼) — 발끝 한 번 누르면 피부색으로 발 영역을 따서 발끝·발볼을 자동으로 ----------
+   바닥이 피부색과 다르면(회색·검정·흰 대리석 등) 잘 잡힘 · 나무 바닥처럼 비슷하면 틀릴 수 있어서 점은 언제든 끌어서 고침 */
+function btFootSeg(st, img) {
+  const P = st.pts; if (P.length < 5 || !st.nw) return null;
+  const px = btPixFrom(img, st.nw, st.nh, st.url, 720); if (!px) return null;
+  const q = btQuadOrder(P.slice(0, 4).map(p => ({ x: p.x * st.nw, y: p.y * st.nh })));
+  const Hm = btHomog(q, BT_CARD_MM), Gm = btHomog(BT_CARD_MM, q); if (!Hm || !Gm) return null;
+  const toMM = (x, y) => btHApply(Hm, { x: x / px.sx, y: y / px.sy });
+  const toPx = m => { const p = btHApply(Gm, m); return { x: p.x * px.sx, y: p.y * px.sy }; };
+  const T = btHApply(Hm, { x: P[4].x * st.nw, y: P[4].y * st.nh });
+  const ed = [{ k: 'y', v: 0 }, { k: 'x', v: BT_CARD.w }, { k: 'y', v: BT_CARD.h }, { k: 'x', v: 0 }];
+  const far = ed.map(e => Object.assign({ d: Math.abs(T[e.k] - e.v) }, e)).sort((a, b) => b.d - a.d)[0];
+  const sg = Math.sign(T[far.k] - far.v) || 1, o = far.k === 'x' ? 'y' : 'x';
+  const A = m => (m[far.k] - far.v) * sg, B = m => m[o];                 // A: 뒤꿈치 선에서 발끝 쪽 거리 · B: 옆으로
+  // 씨앗: 발끝에서 뒤꿈치 쪽으로 12mm
+  const sm = Object.assign({}, T); sm[far.k] -= 12 * sg; const S = toPx(sm);
+  const w = px.w, h = px.h, d = px.d;
+  const at = (x, y) => { const i = (y * w + x) * 4; return [d[i], d[i + 1], d[i + 2]]; };
+  let sr = 0, sgc = 0, sy = 0, n = 0;
+  for (let dy = -3; dy <= 3; dy++) for (let dx = -3; dx <= 3; dx++) { const x = Math.round(S.x) + dx, y = Math.round(S.y) + dy; if (x < 0 || y < 0 || x >= w || y >= h) continue; const c = at(x, y), su = c[0] + c[1] + c[2] + 1; sr += c[0] / su; sgc += c[1] / su; sy += su / 3; n++; }
+  if (!n) return null; sr /= n; sgc /= n; sy /= n;
+  if (sr < 0.355) return { err: '발끝 근처 색이 피부색 같지 않아요 — 발끝을 정확히 찍어주세요' };
+  const ok = i => { const su = d[i] + d[i + 1] + d[i + 2] + 1, Y = su / 3; return Math.abs(d[i] / su - sr) < 0.05 && Math.abs(d[i + 1] / su - sgc) < 0.04 && Y > sy * 0.42 && Y < sy * 1.7; };
+  const M = new Uint8Array(w * h), Q = new Int32Array(w * h); let qh = 0, qt = 0;
+  const s0 = Math.round(S.y) * w + Math.round(S.x); if (s0 < 0 || s0 >= w * h) return null;
+  M[s0] = 1; Q[qt++] = s0; let cnt = 0;
+  while (qh < qt) {
+    const k = Q[qh++]; cnt++; const x = k % w, y = (k / w) | 0;
+    const nb = [x > 0 ? k - 1 : -1, x < w - 1 ? k + 1 : -1, y > 0 ? k - w : -1, y < h - 1 ? k + w : -1];
+    for (const j of nb) if (j >= 0 && !M[j] && ok(j * 4)) { M[j] = 1; Q[qt++] = j; }
+  }
+  if (cnt < w * h * 0.004 || cnt > w * h * 0.7) return { err: '발 모양을 못 땄어요 — 바닥 색이 발이랑 비슷하면 점을 직접 찍어주세요' };
+  // 발끝(제일 먼 A) · 발볼(길이 55~82% 구간에서 옆으로 제일 넓은 양 끝)
+  let amax = -1e9, tip = null; const pts = [];
+  for (let y = 0; y < h; y += 1) for (let x = 0; x < w; x += 1) { if (!M[y * w + x]) continue; const m = toMM(x + 0.5, y + 0.5), a = A(m), b = B(m); if (a > -40 && a < 360) pts.push([a, b, x, y]); if (a > amax && a < 360) { amax = a; tip = [x, y]; } }
+  if (!tip || amax < 180 || amax > 340) return { err: '발 모양이 이상하게 잡혔어요 — 점을 직접 찍어주세요' };
+  let bmin = 1e9, bmax = -1e9, pmin = null, pmax = null;
+  pts.forEach(p => { if (p[0] < amax * 0.55 || p[0] > amax * 0.82) return; if (p[1] < bmin) { bmin = p[1]; pmin = p; } if (p[1] > bmax) { bmax = p[1]; pmax = p; } });
+  if (!pmin || bmax - bmin < 60 || bmax - bmin > 140) return { err: '발볼 쪽을 못 찾았어요 — 점을 직접 찍어주세요' };
+  // 윤곽(발 앞 절반은 사진에서, 뒤쪽은 표준 모양으로) — 위에서 본 모양 그림용
+  const bin = 4, rows = new Map();
+  pts.forEach(p => { if (p[0] < amax * 0.55) return; const r = Math.round(p[0] / bin); const v = rows.get(r); if (!v) rows.set(r, [p[1], p[1]]); else { if (p[1] < v[0]) v[0] = p[1]; if (p[1] > v[1]) v[1] = p[1]; } });
+  const keys = [...rows.keys()].sort((a, b) => a - b);
+  let front = keys.map(k => [k * bin, rows.get(k)[0], rows.get(k)[1]]);
+  // 발볼보다 뒤쪽은 발볼 폭을 못 넘게(정강이가 겹쳐 보이는 것 막기) + 3칸 평균으로 매끈하게
+  front = front.map(r => r[0] < amax * 0.6 ? [r[0], Math.max(r[1], bmin - 2), Math.min(r[2], bmax + 2)] : r);
+  front = front.map((r, i) => { const a = front[Math.max(0, i - 1)], c = front[Math.min(front.length - 1, i + 1)]; return [r[0], (a[1] + r[1] + c[1]) / 3, (a[2] + r[2] + c[2]) / 3]; });
+  return { M, w, h, tip: { x: tip[0] / w, y: tip[1] / h }, bA: { x: pmin[2] / w, y: pmin[3] / h }, bB: { x: pmax[2] / w, y: pmax[3] / h }, front, amax, bw: bmax - bmin, cnt };
+}
+// 반투명 누끼 그림 (사진 위에 얹기)
+function btSegOverlay(seg) {
+  const cv = document.createElement('canvas'); cv.width = seg.w; cv.height = seg.h; const cx = cv.getContext('2d'); if (!cx) return '';
+  const im = cx.createImageData(seg.w, seg.h); for (let i = 0; i < seg.M.length; i++) if (seg.M[i]) { im.data[i * 4] = 103; im.data[i * 4 + 1] = 232; im.data[i * 4 + 2] = 249; im.data[i * 4 + 3] = 92; }
+  cx.putImageData(im, 0, 0); try { return cv.toDataURL('image/png'); } catch (e) { return ''; }
+}
+function btFootAuto(silent) {
+  const st = btPhState('card'); const img = document.getElementById('btImg'); if (!img || st.pts.length < 5) return;
+  const seg = btFootSeg(st, img);
+  if (!seg || seg.err) { st.seg = null; if (!silent && seg) toast(seg.err); btDrawPts(false); return; }
+  st.pts.splice(4, st.pts.length - 4, seg.tip, seg.bA, seg.bB); st.seg = { url: btSegOverlay(seg), front: seg.front, amax: seg.amax }; st.auto = true;
+  if (!silent) toast('발 모양을 따서 발끝·발볼을 찾았어요 — 어긋나면 점을 끌어서 고쳐요');
+  btDrawPts(false);
+}
+// 저장용 윤곽(mm · a: 뒤꿈치 0 → 발끝 L, b: 옆) — 앞쪽 절반은 따온 모양(최종 길이·발볼에 맞춰 늘임) · 뒤쪽은 표준 뒤꿈치(다리에 가려서)
+function btShapeFromSeg(sg, L, W) {
+  if (!sg || !sg.front || sg.front.length < 8 || !L || !W) return null;
+  const fr = sg.front.filter(r => r[2] > r[1]); if (fr.length < 8) return null;
+  const n4 = Math.max(3, fr.length >> 2), mid = fr.slice(0, n4).reduce((s, r) => s + (r[1] + r[2]) / 2, 0) / n4;
+  const rawW = Math.max(...fr.map(r => r[2] - r[1])), ka = L / sg.amax, kb = W / rawW;
+  const F = fr.map(r => [r[0] * ka, (r[1] - mid) * kb, (r[2] - mid) * kb]);
+  const a0 = F[0][0], bl0 = F[0][1], br0 = F[0][2], hh = W * 0.33, out = [];
+  for (let i = 0; i <= 8; i++) { const ph = Math.PI / 2 * i / 8; out.push([hh - hh * Math.cos(ph), hh * Math.sin(ph)]); }
+  for (let i = 1; i < 8; i++) { const t = i / 8; out.push([hh + (a0 - hh) * t, hh + (br0 - hh) * t]); }
+  F.forEach(r => out.push([r[0], r[2]]));
+  F.slice().reverse().forEach(r => out.push([r[0], r[1]]));
+  for (let i = 7; i >= 1; i--) { const t = i / 8; out.push([hh + (a0 - hh) * t, -hh + (bl0 + hh) * t]); }
+  for (let i = 8; i >= 1; i--) { const ph = Math.PI / 2 * i / 8; out.push([hh - hh * Math.cos(ph), -hh * Math.sin(ph)]); }
+  return out.map(p => [Math.round(p[0]), Math.round(p[1])]);
+}
+function btShapeSvg(o, L, W, label) {
+  if (!o || o.length < 10) return '';
+  const pad = 26, sc = 0.9, Wv = 150 * sc + pad * 2, Hv = (L + 10) * sc + pad * 2;
+  const X = b => pad + (75 + b) * sc, Y = a => pad + (L + 5 - a) * sc;
+  let grid = ''; for (let a = 0; a <= L + 5; a += 10) grid += `<line x1="${pad}" y1="${Y(a)}" x2="${Wv - pad}" y2="${Y(a)}" stroke="rgba(255,255,255,${a % 50 ? .05 : .12})"/>`;
+  for (let b = -70; b <= 70; b += 10) grid += `<line x1="${X(b)}" y1="${Y(L + 5)}" x2="${X(b)}" y2="${Y(0)}" stroke="rgba(255,255,255,${b % 50 ? .05 : .12})"/>`;
+  const poly = o.map(p => `${X(p[1]).toFixed(1)},${Y(p[0]).toFixed(1)}`).join(' ');
+  const ballA = L * 0.7;
+  return `<svg class="bt-shape" viewBox="0 0 ${Wv.toFixed(0)} ${Hv.toFixed(0)}" role="img" aria-label="내 발 모양 ${L}mm · 발볼 ${W}mm">${grid}
+    <polygon points="${poly}" fill="rgba(103,232,249,.18)" stroke="#67e8f9" stroke-width="1.6" stroke-linejoin="round"/>
+    <line x1="${X(0)}" y1="${Y(L)}" x2="${X(0)}" y2="${Y(0)}" stroke="#fb923c" stroke-width="1" stroke-dasharray="3 3"/>
+    <line x1="${Wv - pad + 6}" y1="${Y(L)}" x2="${Wv - pad + 6}" y2="${Y(0)}" stroke="#fde047" stroke-width="1.4"/><text x="${Wv - pad + 2}" y="${(Y(L) + Y(0)) / 2}" font-size="11" font-weight="900" fill="#fde047" text-anchor="end" transform="rotate(-90 ${Wv - pad + 2} ${(Y(L) + Y(0)) / 2})">${L}mm</text>
+    <line x1="${X(-W / 2)}" y1="${Y(ballA)}" x2="${X(W / 2)}" y2="${Y(ballA)}" stroke="#bef264" stroke-width="1.4"/><text x="${X(0)}" y="${Y(ballA) - 5}" font-size="11" font-weight="900" fill="#bef264" text-anchor="middle">${W}mm</text>
+    <line x1="${pad}" y1="${Y(0)}" x2="${Wv - pad}" y2="${Y(0)}" stroke="#f9a8d4" stroke-width="1.4"/>
+    ${label ? `<text x="${pad}" y="${pad - 9}" font-size="11" font-weight="900" fill="#e5e7eb">${label}</text>` : ''}</svg>`;
+}
+
+/* 카드 모드 그리기: 카드 테두리 · 뒤꿈치 선(카드 아랫변 연장) · 발끝 수직선 · 발볼 */
+function btCardLines(st, P, ln) {
+  if (P.length < 4 || !st.nw) return '';
+  const nw = st.nw, nh = st.nh, px = P.map(p => ({ x: p.x * nw, y: p.y * nh }));
+  const q = btQuadOrder(px.slice(0, 4)), G = btHomog(BT_CARD_MM, q); if (!G) return '';
+  const toN = m => { const p = btHApply(G, m); return { x: p.x / nw, y: p.y / nh }; };
+  let g = `<polygon points="${q.map(p => `${(p.x / nw * 100).toFixed(2)},${(p.y / nh * 100).toFixed(2)}`).join(' ')}" fill="rgba(251,146,60,.16)" stroke="#fb923c" stroke-width="2" vector-effect="non-scaling-stroke"/>`;
+  const gm = btCardGeom(st, btCardMode());
+  if (gm && gm.heel) {
+    const e = gm.heel, a = e.k === 'x' ? { x: e.v, y: -60 } : { x: -320, y: e.v }, b = e.k === 'x' ? { x: e.v, y: 120 } : { x: 160, y: e.v };
+    // 뒤꿈치 선: 발 쪽으로 넉넉히 늘려서
+    const span = e.k === 'x' ? [{ x: e.v, y: -260 }, { x: e.v, y: 320 }] : [{ x: -320, y: e.v }, { x: 400, y: e.v }];
+    g += ln(toN(span[0]), toN(span[1]), '#f9a8d4', true);
+    const T = btHApply(btHomog(q, BT_CARD_MM), px[4]);
+    const foot = e.k === 'x' ? { x: e.v, y: T.y } : { x: T.x, y: e.v };
+    g += ln(P[4], toN(foot), '#67e8f9', true);
+  }
+  if (P.length >= 7) g += ln(P[5], P[6], '#bef264');
+  return g;
+}
+function btSegImg(st) {
+  const box = document.getElementById('btPh'); if (!box) return; let im = document.getElementById('btSegImg');
+  if (!st.seg || !st.seg.url) { if (im) im.remove(); return; }
+  if (!im) { im = document.createElement('img'); im.id = 'btSegImg'; im.className = 'bt-seg'; im.alt = ''; box.insertBefore(im, document.getElementById('btSvg')); }
+  if (im.getAttribute('src') !== st.seg.url) im.src = st.seg.url;
+}
+function btResultShape(f) {
+  const recs = btCardRecs(f); const so = recs.slice().reverse().find(r => r.o); if (!so) return '';
+  const r = so.W / so.L, c = btCls(r, BT_W_CUT);
+  return `<button type="button" class="bt-rshape" onclick="btGo('card')">${btShapeSvg(so.o, Math.round(so.L), Math.round(so.W), '')}<div><b>👣 내 발 모양</b><small>길이 ${Math.round(so.L)}mm · 발볼 ${Math.round(so.W)}mm<br>발볼 ÷ 길이 ${r.toFixed(2)} → ${BT_W_NAME[c]}<br>카드로 잰 값 · 누르면 다시 재기</small></div></button>`;
+}
+function btCardPtInfo(st, P, K) {
+  const mode = btCardMode();
+  if (P.length < 4) {
+    return `<div class="bt-ins"><span style="background:#fb923c">${P.length + 1}</span><div><b>카드 모서리 4개</b> 를 눌러요 (${P.length}/4)<small>아무 순서로 · 둥근 모서리는 두 변이 만나는 곳쯤 — 4개 찍으면 앱이 테두리에 딱 맞춰요</small></div></div>`;
+  }
+  if (P.length < K.need) {
+    const i = P.length, gm = btCardGeom(st, mode);
+    const pre = gm && gm.L !== undefined && !gm.err ? `<div class="bt-meas"><div class="bt-mh"><span>발 길이</span><b>${Math.round(gm.L)}mm</b></div><small class="bt-ok">발볼 두 점까지 찍으면 저장할 수 있어요</small></div>` : '';
+    const ref = st.ref === 'ok' ? '<small class="bt-ok">✅ 카드 테두리 자동으로 맞췄어요 · 주황 테두리가 카드랑 어긋나면 모서리를 끌어서 고쳐요</small>' : '';
+    return `${ref}<div class="bt-ins"><span style="background:${K.col[i]}">${i - 3}</span><div><b>${K.lab[i][0]}</b> 을 눌러요<small>${K.lab[i][1]} · 누르고 있으면 돋보기가 떠요 · 찍은 점은 끌어서 옮길 수 있어요</small></div></div>${pre}`;
+  }
+  return btCardInfo(btCardGeom(st, mode), mode, st);
 }
 
 /* ==================== Org chart ==================== */
