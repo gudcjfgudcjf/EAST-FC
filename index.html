@@ -4268,6 +4268,14 @@
   /* 📏 v115 사진 위 mm · 1cm 격자 */
   .bt-mmlab { position: absolute; transform: translate(-50%, -50%); padding: 3px 8px; line-height: 1.25; border-radius: 8px; font-size: 12px; font-weight: 900; white-space: nowrap; pointer-events: none; font-variant-numeric: tabular-nums; box-shadow: 0 1px 4px rgba(0,0,0,.6); z-index: 2; }
   .bt-mmlab.len { background: #67e8f9; color: #062a33; } .bt-mmlab.w { background: #bef264; color: #1a2e05; transform: translate(-50%, 75%); }
+  /* 👟 v117 그 밖의 국내 TF */
+  .bt-oths { display: grid; gap: 6px; margin-top: 8px; }
+  .bt-oth { display: grid; grid-template-columns: 1fr auto auto; gap: 2px 8px; align-items: center; padding: 9px 11px; border-radius: 12px; background: #15181d; border: 1px solid #262b33; color: #e5e7eb !important; text-decoration: none; }
+  .bt-oth span small { display: block; font-size: 10.5px; color: #94a3b8; font-weight: 800; } .bt-oth span b { font-size: 13px; font-weight: 900; }
+  .bt-oth em { font-style: normal; font-size: 10.5px; font-weight: 900; color: #93c5fd; background: #172033; border-radius: 6px; padding: 1px 6px; }
+  .bt-oth i { font-style: normal; font-size: 12.5px; font-weight: 900; font-variant-numeric: tabular-nums; color: #fde68a; white-space: nowrap; }
+  .bt-oth .m { grid-column: 1 / -1; font-size: 11px; color: #9aa4b2; font-weight: 700; }
+  @media (max-width: 340px) { .bt-oth { grid-template-columns: 1fr auto; } .bt-oth i { grid-column: 1 / -1; } }
   /* iOS: 16px 미만 입력칸은 누르는 순간 화면이 확대된다 → 터치 기기에선 16px */
   @media (max-width: 820px) and (pointer: coarse) {
     input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]), select, textarea { font-size: 16px !important; }
@@ -7036,7 +7044,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 116;
+const APP_VERSION = 117;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -19024,7 +19032,7 @@ function migrateUpcoming4231() {
    바닥은 TF · AG 만(우리 구장 규정). 가격은 2026-10 각 브랜드 한국 공식몰 정가 조사 · 참고용.
    기록: 트레이닝 기록(east_fc/train/{키}/foot)에 같이 자동 저장 — 사진은 저장하지 않음. */
 const BT_SURVEY = '2026년 10월';
-const BT_BR_KO = { Nike: '나이키', adidas: '아디다스', Puma: '퓨마', Mizuno: '미즈노' };
+const BT_BR_KO = { Nike: '나이키', adidas: '아디다스', Puma: '퓨마', Mizuno: '미즈노', ASICS: '아식스', 'New Balance': '뉴발란스', 'Under Armour': '언더아머', Umbro: '엄브로', Joma: '조마', Kelme: '켈미', Diadora: '디아도라' };
 // 특화 5가지
 const BT_ATTR = {
   spd: { n: '스피드', ico: '⚡', col: '#facc15' },
@@ -19050,68 +19058,117 @@ const BT_TIERS = {
   Puma: ['Ultimate', 'Pro', 'Match', 'Play'],
   Mizuno: ['Japan · Elite', 'Pro', 'Select', 'Club'],
 };
-const BT_TIER_KO = { Elite: '엘리트', Pro: '프로', Academy: '아카데미', Club: '클럽', League: '리그', Ultimate: '얼티밋', Match: '매치', Play: '플레이', 'Japan · Elite': '재팬 · 엘리트', Select: '셀렉트' };
-function btTierRank(br, tier) { const a = BT_TIERS[br] || []; const i = a.indexOf(tier); if (i >= 0) return i + 1; if (br === 'Mizuno' && (tier === 'Japan' || tier === 'Elite')) return 1; return 3; }
+const BT_TIER_KO = { Elite: '엘리트', Pro: '프로', Academy: '아카데미', Club: '클럽', League: '리그', Ultimate: '얼티밋', Match: '매치', Play: '플레이', 'Japan · Elite': '재팬 · 엘리트', Japan: '재팬', Select: '셀렉트', SW: '슈퍼와이드', Team: '팀' };
+function btTierRank(br, tier) { const a = BT_TIERS[br] || []; const i = a.indexOf(tier); if (i >= 0) return i + 1; if (br === 'Mizuno' && (tier === 'Japan' || tier === 'Elite')) return 1; if (tier === 'SW' || tier === 'Team' || (br === 'ASICS' && tier === 'Pro')) return 2; return 3; }
 // 등급 단계별 차이 (브랜드 공통 경향 · 참고)
 const BT_LEVELS = [
-  { r: 1, n: '최상급', up: '제일 얇고 가벼운 갑피 · 공 잡는 코팅/특수 소재 · 프로 선수용과 같은 급', sole: '거의 FG · AG 위주', tf: '조사 때 국내 공식몰에선 TF 를 못 찾았어요(AG 만)', one: '30만 원대 · 얇은 갑피가 짧고 거친 인조잔디에서 빨리 상해요 → 우리 구장엔 비추천' },
-  { r: 2, n: '2등급', up: '최상급 다음 소재 · 그립 코팅이 빠지거나 줄어듦 · 터치감은 좋음', sole: 'TF 중 제일 좋은 쿠션·마감', tf: 'TF 최고 등급', one: '15~19만 원 · 주 1회 이상 꾸준히 차면 제일 추천' },
-  { r: 3, n: '3등급', up: '합성 갑피(조금 두껍고 단단) · 대신 튼튼함', sole: 'TF 많음 · 쿠션 무난', tf: 'TF 종류 제일 많음', one: '10~14만 원 · 처음 사거나 1년에 한 켤레 바꾸면 이걸로' },
-  { r: 4, n: '입문', up: '기본 합성 · 딱딱하고 무거운 편', sole: '쿠션 적음', tf: 'TF 있음 · 할인 많음', one: '5~8만 원대(할인가) · 풋살 겸용·입문용, 매주 차면 금방 아쉬움' },
+  { r: 1, n: '최상급', up: '제일 얇고 가벼운 갑피 · 공 잡는 코팅/특수 소재 · 프로 선수용과 같은 급', sole: '거의 FG · AG 위주', tf: '국내 TF 계열은 미즈노 알파 3 엘리트 AS 정도 · 나머지는 AG', one: '23~34만 원 · 얇은 갑피가 짧고 거친 인조잔디에서 빨리 상해요 → 우리 구장엔 비추천' },
+  { r: 2, n: '2등급', up: '최상급 다음 소재 · 그립 코팅이 빠지거나 줄어듦 · 터치감은 좋음', sole: 'TF 중 제일 좋은 쿠션·마감', tf: 'TF 최고 등급', one: '15~20만 원 · 주 1회 이상 꾸준히 차면 제일 추천' },
+  { r: 3, n: '3등급', up: '합성 갑피(조금 두껍고 단단) · 대신 튼튼함', sole: 'TF 많음 · 쿠션 무난', tf: 'TF 종류 제일 많음', one: '10~13만 원 · 처음 사거나 1년에 한 켤레 바꾸면 이걸로' },
+  { r: 4, n: '입문', up: '기본 합성 · 딱딱하고 무거운 편', sole: '쿠션 적음', tf: 'TF 있음 · 할인 많음', one: '정가 7~9만 원 · 할인 많음 · 풋살 겸용·입문용, 매주 차면 금방 아쉬움' },
 ];
 /* 라인 데이터
    w / h : 발볼(좁음·보통·넓음) · 발등(낮음·보통·높음) 별로 2 잘 맞음 / 1 팁 필요 / 0 피하기
-   sz    : 'snug' 작게 나옴(넓은 발·높은 발등이면 반 치수 크게) · 'std' 정사이즈 · 'lea' 가죽(늘어남)
-   ti    : [등급, 바닥, 정가(숫자 또는 [최소,최대] 또는 null), 메모]  — TF·AG 계열만, 그 밖의 바닥은 ex 에 */
+   sz    : 'snug' 좁게 감쌈(넓은 발·높은 발등이면 반 치수 크게) · 'small' 작게 나옴(늘 반 치수 크게) · 'std' 정사이즈 · 'lea' 가죽(늘어남)
+   ti    : [등급, 바닥, 정가(숫자 또는 [최소,최대] 또는 null), 메모, 검색 이름(선택)]  — TF·AG 계열만, 그 밖의 바닥은 ex 에
+   가격: 2026-10-22 조사 · 공식몰 정가, 공식몰에 없으면 사커붐·무신사 소비자가(메모에 표시) */
 const BT_LINES = [
+  // ---- Nike ----
   { id: 'merc', sh: 'speed', c: ['#f97316', '#1f2937'], br: 'Nike', nm: '머큐리얼 베이퍼 17', en: 'Mercurial Vapor 17', tag: 'spd', sp: { spd: 3, tch: 1, kick: 1, cmf: 1, stb: 1 },
-    up: '얇은 합성 · 발에 착 붙는 좁은 모양', wt: '가벼움', w: [2, 2, 0], h: [2, 1, 0], sz: 'snug',
-    who: '뒷공간 뛰는 ST·윙 · 발이 좁거나 보통인 사람', bad: '발볼 넓거나 발등 높으면 앞·발등이 조여요',
-    ti: [['Elite', 'AG', 329000], ['Pro', 'TF', 169000], ['Pro', 'AG', 199000], ['Academy', 'TF', 109000], ['Club', 'TF', null, '할인가 68,500원 본 적 있음(SK스토아)']],
-    vari: '발목 감싸는 하이탑: 슈퍼플라이 11 아카데미 TF 119,000원' },
+    up: '엘리트 Atomknit · 프로 Flyknit · 아카데미 NikeSkin 메쉬 — 얇고 발에 착 붙는 좁은 모양', wt: '가벼움(머큐리얼 중 제일 가벼움)', w: [2, 2, 0], h: [2, 1, 0], sz: 'snug',
+    who: '뒷공간 뛰는 ST·윙 · 발이 좁거나 보통인 사람', bad: '공식은 정사이즈지만 발볼 넓으면 반 치수 올려도 낀다는 후기 — 발볼 넓거나 발등 높으면 비추천',
+    ti: [['Elite', 'AG', [329000, 339000], '339,000 = 특별 컬러'], ['Pro', 'TF', 169000], ['Pro', 'AG', 199000], ['Academy', 'TF', 109000], ['Academy', 'AG', 109000, '사커붐 소비자가 · 품절']],
+    vari: '클럽 등급은 국내 공식몰에 주니어(55,000원)만 · 슈퍼플라이 11(같은 머큐리얼) — 이번 세대 엘리트·프로는 로우탑, 아카데미만 하이탑 · 국내 TF·AG 는 엘리트 AG 359,000원(사커붐)뿐이고 아카데미는 MG 라 제외' },
   { id: 'phan', sh: 'grip', c: ['#22d3ee', '#0f172a'], br: 'Nike', nm: '팬텀 6 로우', en: 'Phantom 6 Low', tag: 'tch', sp: { spd: 1, tch: 3, kick: 2, cmf: 2, stb: 2 },
-    up: '공이 붙는 그립 질감 합성 · 끈이 옆으로 비껴 있어 킥 면이 넓음', wt: '보통', w: [1, 2, 2], h: [1, 2, 2], sz: 'std',
-    who: '패스·터치 많은 미드필더 · 앞볼이 조금 넓은 사람', bad: '발이 아주 좁으면 앞이 남을 수 있어요',
-    ti: [['Elite', 'AG', [329000, 339000]], ['Pro', 'TF', [169000, 189000]], ['Pro', 'AG', 199000], ['Academy', 'TF', [109000, 119000]]],
-    vari: '하이탑: 팬텀 6 하이 아카데미 TF 119,000원' },
-  { id: 'tiem', sh: 'leather', c: ['#e7e5e4', '#111827'], br: 'Nike', nm: '티엠포 마에스트로', en: 'Tiempo Maestro', tag: 'cmf', sp: { spd: 1, tch: 2, kick: 2, cmf: 3, stb: 2 },
-    up: '가죽 느낌 갑피(상위 Techleather · 아카데미 Flytouch) · 신을수록 발에 맞음', wt: '보통', w: [1, 2, 2], h: [2, 2, 1], sz: 'lea',
-    who: '오래 편하게 신고 싶은 사람 · 수비수 · 볼란치', bad: '아주 좁은 발은 헐렁할 수 있어요',
-    ti: [['Elite', 'AG', 309000], ['Academy', 'TF', 119000], ['Club', 'TF', null, '주니어 65,000원 · 성인 정가 확인 필요']] },
+    up: '공이 붙는 Gripknit(엘리트 전체 · 프로 일부) · 아카데미 메쉬 · 끈이 옆으로 비껴 킥 면이 넓음', wt: '보통', w: [1, 2, 2], h: [1, 2, 2], sz: 'std',
+    who: '패스·터치·탈압박 많은 미드필더 · 앞볼이 조금 넓은 사람(나이키 중 넓은 편)', bad: '사이즈 평이 갈려요(정사이즈 / 조금 길다 / 작다) — 꼭 신어보기 · 발이 아주 좁으면 앞이 남아요',
+    ti: [['Elite', 'AG', [329000, 339000], '339,000 = 홀란드(EH)·특별 컬러'], ['Pro', 'TF', [169000, 189000], '189,000 = 홀란드(EH) 에디션'], ['Pro', 'AG', [199000, 219000], '219,000 = 홀란드(EH) · 사커붐'], ['Academy', 'TF', [109000, 119000], '119,000 = 홀란드(EH)']],
+    ex: '아카데미 MG 109,000원 — MG 라 제외',
+    vari: '하이탑(다이내믹 핏 칼라 · 처음엔 신기 불편): 팬텀 6 하이 아카데미 TF 119,000원 · 엘리트 AG 359,000원(사커붐 · 품절)' },
+  { id: 'tiem', sh: 'leather', c: ['#e7e5e4', '#111827'], br: 'Nike', nm: '티엠포 마에스트로 · 리게라', en: 'Tiempo Maestro / Ligera', tag: 'cmf', sp: { spd: 1, tch: 2, kick: 2, cmf: 3, stb: 2 },
+    up: '가죽 느낌 TechLeather(엘리트 · 리게라 프로 같은 소재) · 아카데미 FlyTouch · 신을수록 발에 맞음', wt: '보통', w: [1, 2, 2], h: [2, 2, 1], sz: 'std',
+    who: '오래 편하게 신고 싶은 사람 · 빌드업 센터백 · 볼란치 · 미드풋·뒤꿈치 넓은 발', bad: '앞코가 낮고 뾰족해서 발등 높거나 발가락 긴 발은 앞이 눌릴 수 있어요',
+    ti: [['Elite', 'AG', [309000, 319000], '마에스트로 엘리트'], ['Pro', 'TF', 159000, '이름은 「리게라 프로」', '티엠포 리게라 프로 TF'], ['Pro', 'AG', 169000, '리게라 프로', '티엠포 리게라 프로 AG'], ['Academy', 'TF', 119000, '마에스트로 아카데미']],
+    ex: '마에스트로 아카데미 MG 119,000 · HG 109,000원 — MG·HG 라 제외 · 티엠포 스트리트가토는 실내(IC)용',
+    vari: '클럽 등급은 국내 공식몰에 주니어(65,000원)만 · 이전 세대 레전드 10 은 재고 할인만' },
+  // ---- adidas ----
   { id: 'f50', sh: 'speed', c: ['#facc15', '#111827'], br: 'adidas', nm: 'F50', en: 'F50', tag: 'spd', sp: { spd: 3, tch: 1, kick: 1, cmf: 1, stb: 1 },
-    up: '얇은 합성 · 가볍고 좁게 감싸는 스피드형', wt: '가벼움', w: [2, 2, 0], h: [2, 1, 0], sz: 'snug',
-    who: '빠른 윙·ST · 발 좁은 사람', bad: '작게 나와요 · 발볼 넓으면 새끼발가락 쪽이 아파요',
-    ti: [['League', 'TF', 109000, '메시 모델 리그 TF 119,000원']] },
-  { id: 'pred', sh: 'tongue', c: ['#ef4444', '#111827'], br: 'adidas', nm: '프레데터', en: 'Predator (접는 텅)', tag: 'kick', sp: { spd: 1, tch: 2, kick: 3, cmf: 2, stb: 3 },
-    up: '고무 돌기 그립 갑피(감아 차기·킥 회전) · 접어 내리는 텅 · 단단한 구조', wt: '보통~묵직', w: [2, 2, 1], h: [2, 2, 1], sz: 'std',
-    who: '킥·롱패스 많은 볼란치·풀백·CB · 단단하게 잡아주는 걸 좋아하는 사람', bad: '구조가 단단해서 넓은 발은 반 치수 크게',
-    ti: [['Pro', 'TF', 169000], ['League', 'TF', null, '키즈 89,000원 · 성인 정가 확인 필요']] },
+    up: '엘리트 얇은 Haloskin+ · 리그 나일론/PU · 클럽 PU — 가볍고 좁게 감싸는 스피드형', wt: '제일 가벼움(TF 200~257g)', w: [2, 2, 0], h: [2, 1, 0], sz: 'std',
+    who: '빠른 윙·ST · 발 좁은 사람', bad: '발볼 넓으면 새끼발가락 쪽이 아파요 — 사이즈를 올려도 길이만 늘어나요',
+    ti: [['Elite', 'AG', 319000], ['Pro', 'TF', 169000, '끈 없는(레이스리스) 프로 TF 도 같은 값'], ['League', 'TF', [109000, 119000], '119,000 = 메시 리그 TF(아디다스 앱) · 레이스리스도 109,000'], ['Club', 'TF', 69000, '공식몰 품절 · 할인 많음']],
+    ex: '메시 엘리트는 FG 만(329,000원) — 제외' },
+  { id: 'pred', sh: 'tongue', c: ['#ef4444', '#111827'], br: 'adidas', nm: '프레데터', en: 'Predator 26', tag: 'kick', sp: { spd: 1, tch: 2, kick: 3, cmf: 2, stb: 3 },
+    up: '고무 돌기 그립 갑피(감아 차기·킥 회전) · 엘리트 Nanostrike+ · 프로 Nanostrike · 리그 두꺼운 합성 · 26 세대 프로·리그 TF 는 접는 텅(FT)', wt: '보통(프로 TF 249g)', w: [1, 2, 2], h: [2, 2, 1], sz: 'std',
+    who: '킥·롱패스 많은 볼란치·풀백·CB · 세트피스 키커', bad: '앞코가 여유 있어 발 좁으면 헐렁해요(반 치수 작게 바꾼 후기 있음)',
+    ti: [['Elite', 'AG', 329000, '접는 텅(FT)'], ['Pro', 'TF', 169000, '접는 텅(FT) · 249g'], ['League', 'TF', [109000, 129000], '129,000 = 접는 텅(FT) 버전 · 공식몰 품절'], ['Club', 'TF', 69000, '공식몰 품절 · 지난 컬러']] },
   { id: 'copa', sh: 'leather', c: ['#60a5fa', '#f8fafc'], br: 'adidas', nm: '코파 퓨어 4', en: 'Copa Pure IV', tag: 'cmf', sp: { spd: 1, tch: 2, kick: 1, cmf: 3, stb: 2 },
-    up: '부드러운 가죽 느낌 · 앞볼에 여유', wt: '보통', w: [1, 2, 2], h: [2, 2, 1], sz: 'std',
-    who: '편한 착화감 · 앞볼 넓은 사람', bad: '아주 좁은 발은 앞이 남아요',
-    ti: [['Pro', 'TF', 149000], ['League', 'TF', null, '정가 확인 필요']] },
+    up: '프로 = 소가죽(길들이는 데 30~45분) · 리그·클럽 = 합성 · 앞볼에 여유', wt: '묵직한 편(프로 TF 281g)', w: [1, 2, 2], h: [2, 2, 1], sz: 'lea',
+    who: '볼 터치·편한 착화감 · 플레이메이커 · 앞볼 넓은 사람', bad: '아주 좁은 발은 앞이 남아요 · 가벼운 걸 원하면 비추천',
+    ti: [['Pro', 'TF', 149000, '소가죽'], ['League', 'TF', 99000, '공식몰 품절 · 할인가 69,300원'], ['Club', 'TF', 69000, '공식몰 품절']],
+    ex: '엘리트는 FG 만 — 제외',
+    vari: '같은 가죽 계열: 코파 아이콘 2 프로 TF 159,000원(소가죽 · 공식몰 품절 · 반 치수 크게 권장)' },
+  { id: 'mund', sh: 'leather', c: ['#111827', '#f8fafc'], br: 'adidas', nm: '문디알 팀', en: 'Mundial Team', tag: 'cmf', sp: { spd: 1, tch: 2, kick: 1, cmf: 3, stb: 2 },
+    up: '천연가죽 클래식 · EVA 중창 · 앞코 넉넉', wt: '보통~묵직(가죽)', w: [1, 2, 2], h: [2, 2, 2], sz: 'lea',
+    who: '오래된 클래식 가죽 착화감 · 발볼 넓은 사람 · 조기축구 스테디셀러', bad: '요즘 경량화와는 거리 · 발 좁으면 헐렁',
+    ti: [['Team', 'TF', 179000, '천연가죽 · 공식몰 품절 · 할인가 107,400원 본 적 있음']] },
+  // ---- Puma ----
   { id: 'futr', sh: 'knit', c: ['#a78bfa', '#f472b6'], br: 'Puma', nm: '퓨처 9', en: 'Future 9', tag: 'tch', sp: { spd: 2, tch: 3, kick: 1, cmf: 2, stb: 1 },
-    up: '늘어나는 니트 · 발 모양에 맞게 감김(넓은 중간발도 OK)', wt: '가벼움~보통', w: [1, 2, 2], h: [1, 2, 2], sz: 'std',
-    who: '드리블·방향 전환 많은 CAM·윙 · 발볼·발등 있는 사람', bad: '발이 아주 좁고 낮으면 헐렁할 수 있어요',
-    ti: [['Match', 'TT', 139000, '할인가 83,400~111,200원'], ['Pro', 'Cage', 169000], ['Pro', 'FGAG', 189000]],
+    up: '얼티밋 FUZIONFIT 니트 · 프로 두 겹 합성 · 매치 메쉬(제일 넉넉 — 넓은 발에 좋음)', wt: '보통', w: [1, 2, 2], h: [1, 2, 2], sz: 'std',
+    who: '드리블·방향 전환 많은 CAM·인사이드 윙 · 발볼·발등 있는 사람', bad: '조금 길게 나와요 — 사이즈 내리지 말고 정사이즈 · 아주 좁고 낮은 발은 헐렁',
+    ti: [['Ultimate', 'AG', 319000, '사커붐 소비자가 · 지난 컬러(할인 14~21만 원)'], ['Pro', 'Cage', 169000], ['Pro', 'FGAG', 189000], ['Match', 'TT', [109000, 139000], '109,000 = 26 가을 새 컬러 · 139,000 = 이전 컬러(할인 많음)'], ['Match', 'FGAG', 109000], ['Play', 'TT', 89000, '사커붐 소비자가']],
     ex: '얼티밋 MG 319,000원 — MG 라 제외' },
-  { id: 'ultr', sh: 'speed', c: ['#f472b6', '#e5e7eb'], br: 'Puma', nm: '울트라 니트로 7', en: 'Ultra Nitro 7', tag: 'spd', sp: { spd: 3, tch: 1, kick: 1, cmf: 1, stb: 1 },
-    up: '아주 얇은 합성 · 제일 좁고 가벼운 편', wt: '아주 가벼움', w: [2, 1, 0], h: [2, 1, 0], sz: 'snug',
-    who: '순간 스피드형 · 발 좁고 낮은 사람', bad: '넓은 발·높은 발등엔 비추천',
-    ti: [['Match', 'TT', 109000], ['Pro', 'Cage', 159000]],
-    ex: '프로 FG 189,000원 · 얼티밋 MG 299,000원 — FG·MG 라 제외' },
+  { id: 'ultr', sh: 'speed', c: ['#f472b6', '#e5e7eb'], br: 'Puma', nm: '울트라 나이트로 7', en: 'Ultra 7 Nitro', tag: 'spd', sp: { spd: 3, tch: 1, kick: 1, cmf: 1, stb: 1 },
+    up: '얼티밋 ULTRAWEAVE · 매치 메쉬 — 퓨마에서 제일 좁고 가벼움', wt: '아주 가벼움', w: [2, 1, 0], h: [2, 1, 0], sz: 'snug',
+    who: '순간 스피드형 · 발 좁고 낮은 사람', bad: '조금 짧게 나와요(정사이즈는 꽉, 여유 있게는 반 치수 크게) · 넓은 발·높은 발등 비추천',
+    ti: [['Ultimate', 'AG', 299000, '사커붐 소비자가'], ['Pro', 'Cage', 159000], ['Match', 'TT', 109000, '26 가을 컬러부터 109,000'], ['Match', 'FGAG', 109000, '사커붐 소비자가']],
+    ex: '프로 FG 189,000원 · 얼티밋 MG 299,000원 — FG·MG 라 제외',
+    vari: '이전 세대 울트라 6 도 아직 팔아요: 매치 TT 129,000 · 프로 케이지 159,000원(할인 많음)' },
   { id: 'king', sh: 'leather', c: ['#111827', '#f5f5f4'], br: 'Puma', nm: '킹 20', en: 'King 20', tag: 'cmf', sp: { spd: 1, tch: 2, kick: 2, cmf: 3, stb: 2 },
-    up: '부드러운 클래식 갑피 · 넓은 발에 제일 편한 편', wt: '보통', w: [1, 2, 2], h: [2, 2, 2], sz: 'std',
-    who: '발볼 넓은 사람 · 편하게 오래 신기', bad: '발이 아주 좁으면 헐렁',
-    ti: [['Pro', 'FGAG', 159000], ['Match', 'TT', null, '국내 정가 확인 필요']] },
-  { id: 'more', sh: 'leather', c: ['#f8fafc', '#2563eb'], br: 'Mizuno', nm: '모렐리아 2 프로 AS', en: 'Morelia II Pro AS', tag: 'tch', sp: { spd: 1, tch: 3, kick: 2, cmf: 3, stb: 2 },
-    up: '가죽 · 신을수록 발에 맞게 늘어남 · 터치감 좋음', wt: '보통', w: [1, 2, 2], h: [2, 2, 2], sz: 'lea',
-    who: '가죽 터치 좋아하는 사람 · 넓은 발', bad: '비 오는 날·젖으면 늘어나고 무거워짐',
-    ti: [['Pro', 'AS', 179000, '할인가 143,200원'], ['Japan · Elite', 'AG', null, '모렐리아 네오 5 베타 엘리트 AG — 정가 확인 필요']] },
-  { id: 'mona', sh: 'wide', c: ['#1d4ed8', '#e5e7eb'], br: 'Mizuno', nm: '모나르시다 네오 3 셀렉트 AS', en: 'Monarcida Neo III Select AS', tag: 'cmf', sp: { spd: 1, tch: 2, kick: 1, cmf: 3, stb: 2 },
-    up: '넓은 발 전용 모양(와이드)', wt: '보통', w: [0, 1, 2], h: [1, 2, 2], sz: 'std',
-    who: '발볼이 아주 넓어서 다른 축구화가 다 아픈 사람', bad: '좁은 발엔 헐렁해요',
-    ti: [['Select', 'AS', null, '국내 정가 확인 필요']] },
+    up: '얼티밋 TOTALTOUCH+ · 프로 TOTALTOUCH — 부드럽고 쿠션 많음', wt: '묵직한 편(쿠션)', w: [1, 2, 2], h: [2, 2, 2], sz: 'small',
+    who: '발볼 넓거나 평발 · 수비수·볼란치 · 편하게 오래', bad: '작게 나와요(반 치수 크게) · 가벼운 걸 원하면 비추천',
+    ti: [['Ultimate', 'FGAG', 269000], ['Pro', 'FGAG', 159000], ['Pro', 'Cage', 159000, '사커붐 소비자가 · 지난 컬러']],
+    vari: '가죽 클래식: 킹 탑 TT(캥거루 가죽) 189,000원(사커붐 · 출처마다 값이 달라요)' },
+  // ---- Mizuno ----
+  { id: 'more', sh: 'leather', c: ['#f8fafc', '#2563eb'], br: 'Mizuno', nm: '모렐리아 2', en: 'Morelia II', tag: 'tch', sp: { spd: 1, tch: 3, kick: 2, cmf: 3, stb: 2 },
+    up: '캥거루 가죽(재팬 전체 · 프로는 앞쪽) · 신을수록 발에 맞게 늘어남', wt: '보통(약 250g)', w: [1, 2, 2], h: [2, 2, 2], sz: 'lea',
+    who: '가죽 터치 좋아하는 사람 · 표준~넓은 발', bad: '비 오는 날·젖으면 늘어나고 무거워짐',
+    ti: [['Japan', 'AG', 299000, '할인가 209,300원'], ['Elite', 'AG', 229000, '할인가 183,200원'], ['Pro', 'AS', 179000, '할인가 143,200원'], ['Pro', 'AG', 179000, '사커붐 소비자가']] },
+  { id: 'mneo', sh: 'leather', c: ['#fbbf24', '#111827'], br: 'Mizuno', nm: '모렐리아 네오 5', en: 'Morelia Neo V', tag: 'tch', sp: { spd: 2, tch: 3, kick: 1, cmf: 2, stb: 1 },
+    up: '가벼운 가죽(앞쪽) · β(베타)는 더 가벼운 상위판(프로 β 는 가죽+니트)', wt: '가벼움', w: [2, 2, 1], h: [2, 2, 1], sz: 'lea',
+    who: '가벼운 가죽 축구화 · 발 좁거나 보통 · 터치형 공격수', bad: '넓은 발은 앞이 조일 수 있어요',
+    ti: [['Elite', 'AG', [249000, 279000], '279,000 = β(베타)'], ['Pro', 'AS', [179000, 199000], '199,000 = β 프로(가죽+니트)']],
+    vari: '이전 세대 네오 4: 프로 AS·AG 169,000~179,000원(할인 많음)' },
+  { id: 'alph', sh: 'speed', c: ['#38bdf8', '#0f172a'], br: 'Mizuno', nm: '알파 3', en: 'Alpha III', tag: 'spd', sp: { spd: 3, tch: 1, kick: 1, cmf: 1, stb: 1 },
+    up: '가벼운 스피드형 · 상위는 캥거루+마이크로파이버 · 셀렉트는 합성 · 일본 브랜드라 표준 폭', wt: '가벼움', w: [2, 2, 1], h: [2, 2, 1], sz: 'std',
+    who: '빠른 윙·ST 인데 나이키·아디다스 스피드화가 좁았던 사람', bad: '아주 넓은 발은 반 치수 크게',
+    ti: [['Elite', 'AG', 239000, '공식몰 품절'], ['Elite', 'AS', 209000, '공식몰 품절 · 국내 TF 계열 최상급'], ['Select', 'AS', 119000, '공식몰 품절 · 할인가 71,400원'], ['Select', 'AG', 119000, '할인가 71,400원']],
+    vari: '이전 세대 알파 2 도 있어요: 엘리트 AS 209,000 · 셀렉트 AS 119,000원' },
+  { id: 'mona', sh: 'wide', c: ['#1d4ed8', '#e5e7eb'], br: 'Mizuno', nm: '모나르시다 네오 3', en: 'Monarcida Neo III', tag: 'cmf', sp: { spd: 1, tch: 2, kick: 1, cmf: 3, stb: 2 },
+    up: '넓은 발 전용(셀렉트 와이드 2E · 편한 핏) · 합성 가죽', wt: '보통', w: [0, 1, 2], h: [1, 2, 2], sz: 'std',
+    who: '발볼이 아주 넓어서 다른 축구화가 다 아픈 사람 · 가성비', bad: '좁은 발엔 헐렁해요',
+    ti: [['SW', 'AS', 159000, '슈퍼 와이드 · 할인가 95,400~127,200원'], ['Select', 'AS', 99000, '할인가 79,200원'], ['Select', 'AG', 99000, '할인가 59,400원']],
+    ex: '와이드 엘리트 209,000 · SW KL 179,000원 — 밑창 표기 없음(FG) 이라 제외' },
+  // ---- ASICS ----
+  { id: 'dsl', sh: 'leather', c: ['#e5e7eb', '#1e3a8a'], br: 'ASICS', nm: 'DS 라이트', en: 'DS Light', tag: 'cmf', sp: { spd: 1, tch: 2, kick: 1, cmf: 3, stb: 2 },
+    up: '부드러운 인조가죽 · EVA 쿠션 · 와이드 모델 따로 있음', wt: '가벼움~보통', w: [1, 2, 2], h: [1, 2, 2], sz: 'std',
+    who: '발볼 넓은 사람 · 편한 착화감', bad: '국내 공식몰 가격이 안 보이고 파는 곳이 적어요 — 매장·공식몰에서 확인',
+    ti: [['Pro', 'AG', null, '인조가죽 · 일시 품절'], ['Club', 'TF', null, '공식몰 가격 안 보임 · 최저가 약 11만 6천원(다나와)'], ['Club', 'AG', null, '공식몰에 있음 · 가격은 공식몰에서']],
+    vari: '와이드(3E 로 파는 곳 있음) 클럽 TF·AG — 병행수입 7~9만 원대' },
+];
+// 순위엔 안 넣은 국내 TF·AG (핏 자료 부족 · 입문·풋살 겸용) — [브랜드, 이름, 바닥, 정가, 메모]
+const BT_OTHERS = [
+  ['adidas', '고레토 9', 'TF', 59000, '입문용 · 공식몰'],
+  ['Puma', '비토리아 2 · 아타칸토 2 · 클래시코', 'TT', 64000, '입문용 · 사커붐'],
+  ['Mizuno', '모렐리아 살라 클럽', 'TF', 99000, '풋살·인조잔디 겸용 · 할인가 78,990원(무신사)'],
+  ['Mizuno', '모나르시다 네오 살라 클럽 · 프로', 'TF', [109000, 119000], '풋살·인조잔디 겸용'],
+  ['Mizuno', '모렐리아 살라 재팬', 'TF', 219000, '풋살용 최상급'],
+  ['New Balance', '퓨론 V8 팀', 'TF', null, '2E · 정가 확인 필요(최저가 약 11만 원대)'],
+  ['New Balance', '442 팀 와이드', 'TF', null, '가죽 클래식 · 병행수입 위주'],
+  ['Under Armour', '섀도우 셀렉트 4 · 클럽 4', 'TF', [99000, 129000], '언더아머코리아(무신사)'],
+  ['Umbro', '리벤지 프리미엄', 'TF', 149000, '데상트코리아(무신사)'],
+  ['Joma', '리가 5', 'TF', 149000, '할인가 81,950원(무신사)'],
+  ['Kelme', '트로페오(캥거루 가죽)', 'FG/AG', 209000, '할인가 104,900원(무신사)'],
+  ['Diadora', '피치치 7', 'TF', 79000, '할인가 3만 원대(무신사)'],
 ];
 // 포지션 그룹별 기본 우선순위 (트레이닝 기록 없을 때)
 const BT_GROUP_PREF = {
@@ -19192,9 +19249,11 @@ function btSize(L, base, W, H) {
   if (L.sz === 'snug') {
     if (W >= 1 || H >= 1) { d = 5; why = '작게 나오는 라인 · 반 치수(5mm) 크게'; }
     else why = '정사이즈 · 두 사이즈 사이면 크게';
+  } else if (L.sz === 'small') {
+    d = 5; why = '작게 나오는 라인 · 반 치수(5mm) 크게';
   } else if (L.sz === 'lea') {
     why = '정사이즈 · 가죽이라 신으면 조금 늘어나요';
-  } else if (L.id === 'pred' && W === 2) { d = 5; why = '구조가 단단해서 넓은 발은 반 치수 크게'; }
+  }
   else if (W === 2 && H === 2 && L.w[2] < 2) { d = 5; why = '발볼·발등 둘 다 있어서 반 치수 크게'; }
   return { mm: Math.max(220, Math.min(310, base + d)), d, why };
 }
@@ -19208,7 +19267,7 @@ function btTierName(br, t) { return `${t}`; }
 function btSurfOk(s, mode) { const g = (BT_SURF[s] || {}).g; return mode === 'both' ? !!g : g === mode; }
 // 라인 안에서 추천 등급 (바닥 · 예산)
 function btTierPick(L, mode, bud) {
-  const c = L.ti.map(t => ({ t: t[0], s: t[1], p: t[2], m: t[3], r: btTierRank(L.br, t[0]) })).filter(t => btSurfOk(t.s, mode));
+  const c = L.ti.map(t => ({ t: t[0], s: t[1], p: t[2], m: t[3], q: t[4], r: btTierRank(L.br, t[0]) })).filter(t => btSurfOk(t.s, mode));
   if (!c.length) return null;
   const pref = (a, b) => (a.s === 'FGAG') - (b.s === 'FGAG') || (BT_SURF[a.s].g === 'TF' ? 0 : 1) - (BT_SURF[b.s].g === 'TF' ? 0 : 1);
   if (bud > 0) {
@@ -19651,7 +19710,7 @@ function btBudSlide(v) { const b = +v > BT_BUD_MAX / 10000 ? 0 : +v * 10000; con
 function btSpec(L) {
   return `<div class="bt-spec">${BT_ATTR_ORDER.map(a => `<div><span>${BT_ATTR[a].n}</span><i>${[1, 2, 3].map(k => `<b class="${L.sp[a] >= k ? 'on' : ''}" style="--c:${BT_ATTR[a].col}"></b>`).join('')}</i></div>`).join('')}</div>`;
 }
-function btTierOf(L, i) { const z = L.ti[i]; return { t: z[0], s: z[1], p: z[2], m: z[3], r: btTierRank(L.br, z[0]), fit: !_bt.bud || (z[2] !== null && btPMin(z[2]) <= _bt.bud), picked: true }; }
+function btTierOf(L, i) { const z = L.ti[i]; return { t: z[0], s: z[1], p: z[2], m: z[3], q: z[4], r: btTierRank(L.br, z[0]), fit: !_bt.bud || (z[2] !== null && btPMin(z[2]) <= _bt.bud), picked: true }; }
 function btPickTier(id, i) {
   haptic(5); _bt.tsel = _bt.tsel || {};
   const L = BT_LINES.find(x => x.id === id), rec = L ? btTierPick(L, btFoot().surf || 'TF', _bt.bud) : null;
@@ -19667,15 +19726,16 @@ function btTierRows(L, mode, pick, rec) {
 function btShopUrl(L, t) {
   const tk = t ? (BT_TIER_KO[t.t] || t.t).replace('재팬 · ', '') : '';
   const sf = t ? BT_SURF[t.s].n.replace('케이지', '') : '';
-  let q = `${BT_BR_KO[L.br] || L.br} ${L.nm}`;
+  if (t && t.q) return 'https://search.shopping.naver.com/search/all?query=' + encodeURIComponent(`${BT_BR_KO[L.br] || L.br} ${t.q}`);
+  let q = `${BT_BR_KO[L.br] || L.br} ${L.nm.replace(/ · .*$/, '')}`;
   if (tk && q.indexOf(tk) < 0) q += ' ' + tk;
   if (sf && q.indexOf(sf) < 0 && sf.indexOf('/') < 0) q += ' ' + sf;
   return 'https://search.shopping.naver.com/search/all?query=' + encodeURIComponent(q.trim());
 }
-const BT_BR_SITE = { Nike: 'nike.com/kr', adidas: 'adidas.co.kr', Puma: 'kr.puma.com', Mizuno: 'kor.mizuno.com' };
+const BT_BR_SITE = { Nike: 'nike.com/kr', adidas: 'adidas.co.kr', Puma: 'kr.puma.com', Mizuno: 'kor.mizuno.com', ASICS: 'asics.co.kr' };
 function btShopQ(L, t) { return decodeURIComponent(btShopUrl(L, t).split('query=')[1] || ''); }
 function btImgUrl(L, t) { return 'https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(btShopQ(L, t)); }
-function btOffUrl(L, t) { return 'https://www.google.com/search?q=' + encodeURIComponent('site:' + (BT_BR_SITE[L.br] || '') + ' ' + btShopQ(L, t).replace(/^(나이키|아디다스|퓨마|미즈노)\s*/, '')); }
+function btOffUrl(L, t) { return 'https://www.google.com/search?q=' + encodeURIComponent('site:' + (BT_BR_SITE[L.br] || '') + ' ' + btShopQ(L, t).replace(/^(나이키|아디다스|퓨마|미즈노|아식스)\s*/, '')); }
 function btCard(x, i, R) {
   const L = x.L, open = btIsOpen(L.id) || (_bt.open[L.id] === undefined && i === 0);
   const tsel = _bt.tsel ? _bt.tsel[L.id] : undefined; const tRec = x.tier;
@@ -19734,12 +19794,18 @@ function btViewResult() {
     <div class="bt-sec">✅ 나한테 맞는 라인 <small>${R.good.length}개 · 눌러서 자세히</small></div>
     ${cards || '<div class="bt-note">조건에 맞는 라인이 없어요 · 예산이나 바닥을 바꿔보세요</div>'}
     ${avoid}
+    ${btOthersBlock()}
     <div class="bt-sec">💰 등급별 가격 · 차이 <small>${BT_SURVEY} 조사</small></div>${btTierBlock(R.mode)}
     <div class="bt-sec">🟩 TF · AG 고르는 법</div>${btSurfBlock()}
     ${btExclBlock()}
-    <div class="bt-src">가격: 나이키 · 아디다스 · 퓨마 · 미즈노 한국 공식몰 정가 (${BT_SURVEY} 조사 · 할인·재고는 수시로 바뀜) · 특화·핏: 브랜드 설명과 해외 리뷰 종합 · 발볼·발등 사진 측정은 참고용 — 매장에서 꼭 신어보고 사세요</div>`;
+    <div class="bt-src">가격: 각 브랜드 한국 공식몰 정가 · 공식몰에 없는 건 축구 전문몰(사커붐)·무신사 소비자가 (${BT_SURVEY} 조사 · 할인·재고는 수시로 바뀜 · 「품절」은 조사 때 공식몰 기준) · 특화·핏: 브랜드 설명과 해외 리뷰 종합 · 발볼·발등 사진 측정은 참고용 — 매장에서 꼭 신어보고 사세요</div>`;
 }
 
+/* ===== 그 밖의 국내 TF (순위 밖) ===== */
+function btOthersBlock() {
+  const rows = BT_OTHERS.map(o => `<a class="bt-oth" href="https://search.shopping.naver.com/search/all?query=${encodeURIComponent((BT_BR_KO[o[0]] || o[0]) + ' ' + o[1].split(' · ')[0] + ' ' + o[2])}" target="_blank" rel="noopener"><span><small>${BTX(o[0])}</small><b>${BTX(o[1])}</b></span><em>${BTX(o[2])}</em><i>${btPrice(o[3])}</i><small class="m">${BTX(o[4])}</small></a>`).join('');
+  return `<div class="bt-sec">🗂️ 그 밖에 국내에서 파는 TF <small>핏 자료가 부족해 순위엔 안 넣음 · 눌러서 최저가</small></div><div class="bt-oths">${rows}</div>`;
+}
 /* ===== 등급 비교 ===== */
 function btTierBlock(mode) {
   mode = mode || 'both';
@@ -19747,7 +19813,7 @@ function btTierBlock(mode) {
   return `<div class="bt-lv">${BT_LEVELS.map(lv => {
     const tf = [], ag = [];
     BT_LINES.forEach(L => L.ti.forEach(t => { if (btTierRank(L.br, t[0]) !== lv.r || t[2] === null) return; const ps = Array.isArray(t[2]) ? t[2] : [t[2]]; (BT_SURF[t[1]].g === 'TF' ? tf : ag).push(...ps); }));
-    const names = Object.keys(BT_TIERS).map(b => `<span>${b} <b>${BTX(BT_TIER_KO[BT_TIERS[b][lv.r - 1]] || BT_TIERS[b][lv.r - 1])}</b></span>`).join('');
+    const names = Object.keys(BT_TIERS).filter(b => BT_TIERS[b][lv.r - 1]).map(b => `<span>${b} <b>${BTX(BT_TIER_KO[BT_TIERS[b][lv.r - 1]] || BT_TIERS[b][lv.r - 1])}</b></span>`).join('');
     return `<div class="bt-lvc r${lv.r}">
       <div class="bt-lvh"><i>${lv.r}</i><b>${lv.n}</b>${lv.r === 2 ? '<em>조기축구 추천</em>' : ''}</div>
       <div class="bt-lvn">${names}</div>
