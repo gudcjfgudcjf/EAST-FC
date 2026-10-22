@@ -4222,6 +4222,7 @@
   .bt-cm-bot { margin-top: auto; padding-top: 8px; }
   .bt-cm-sh { width: 66px; height: 66px; border-radius: 50%; border: 4px solid #fff; background: transparent; display: grid; place-items: center; }
   .bt-cm-sh i { width: 50px; height: 50px; border-radius: 50%; background: #fff; display: block; }
+  .bt-cm-sh:disabled { opacity: .3; } .bt-cm-sh:not(:disabled) { border-color: #4ade80; } .bt-cm-sh:not(:disabled) i { background: #4ade80; }
   .bt-seg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; image-rendering: auto; }
   .bt-save2 { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 10px; }
   .bt-save2 .bt-go { margin-top: 0; padding: 11px 8px; font-size: 14px; } .bt-save2 .bt-go small { display: block; font-size: 10.5px; font-weight: 800; opacity: .75; margin-top: 2px; }
@@ -4264,6 +4265,9 @@
     background: #14200a; border: 1px solid rgba(217,249,80,.55); color: #fff !important; }
   .bt-cardcta > span { font-size: 26px; } .bt-cardcta div { flex: 1; min-width: 0; } .bt-cardcta b { display: block; font-size: 15px; font-weight: 900; color: #ecfccb; }
   .bt-cardcta small { display: block; font-size: 12px; color: #bef264; font-weight: 800; margin-top: 2px; } .bt-cardcta i { font-style: normal; font-size: 20px; color: #d9f950; }
+  /* 📏 v115 사진 위 mm · 1cm 격자 */
+  .bt-mmlab { position: absolute; transform: translate(-50%, -50%); padding: 3px 8px; line-height: 1.25; border-radius: 8px; font-size: 12px; font-weight: 900; white-space: nowrap; pointer-events: none; font-variant-numeric: tabular-nums; box-shadow: 0 1px 4px rgba(0,0,0,.6); z-index: 2; }
+  .bt-mmlab.len { background: #67e8f9; color: #062a33; } .bt-mmlab.w { background: #bef264; color: #1a2e05; transform: translate(-50%, 75%); }
   /* iOS: 16px 미만 입력칸은 누르는 순간 화면이 확대된다 → 터치 기기에선 16px */
   @media (max-width: 820px) and (pointer: coarse) {
     input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]), select, textarea { font-size: 16px !important; }
@@ -7032,7 +7036,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 114;
+const APP_VERSION = 116;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -19432,6 +19436,7 @@ function renderBoots0() {
   const el = document.getElementById('bootsContent'); if (!el) return;
   if (!isLoggedIn()) { el.innerHTML = ''; return; }
   trMe();
+  try { const f0 = btFoot(); if (Array.isArray(f0.cm) && f0.cm.length && f0.cmv !== 116) { btCardApply(); btSave({ cmv: 116 }); } } catch (e) {}
   let html = '';
   try {
     let v = _bt.view;
@@ -19457,9 +19462,9 @@ function btViewStart() {
       <div class="bt-hf">${btBootSvg(BT_LINES[1], 'TF')}</div>
     </div>
     <ol class="bt-steps">
-      <li><i>1</i><div><b>💳 카드로 발 길이</b><small>카드 아랫선 = 뒤꿈치 · 발끝만 누르면 끝 (카드 없으면 평소 사이즈)</small></div></li>
+      <li><i>1</i><div><b>💳 카드로 발 길이</b><small>뒤꿈치 뒤에 책·벽 · 두 번 재서 5mm 안으로 맞으면 확정 (카드 없으면 평소 사이즈)</small></div></li>
       <li><i>2</i><div><b>옆에서 1장 → 발등</b><small>뒤꿈치까지 잘 보이는 옆모습 · 점 3개 + 「발등 아픈 적?」</small></div></li>
-      <li><i>3</i><div><b>💳 발볼 — 위에서 똑바로 1장</b><small>카드는 그대로 · 1단계에서 같이 쟀으면 건너뛰어요</small></div></li>
+      <li><i>3</i><div><b>💳 발볼 — 발등 위에서 1장</b><small>카드는 그대로 · 1단계에서 같이 쟀으면 건너뛰어요</small></div></li>
       <li><i>4</i><div><b>바닥 TF · AG</b><small>우리 구장은 TF 추천</small></div></li>
     </ol>
     <button type="button" class="bt-go" onclick="btGo('${part ? btNextStep() : 'card'}')">${part ? '이어서 하기 ›' : '시작하기 ›'}</button>
@@ -19550,7 +19555,7 @@ function btBindPhoto() {
     btDrawPts(false); btLoupe(true, st.pts[idx]);
   };
   box.onpointermove = e => { if (_bt.drag < 0) return; const p = pos(e); st.pts[_bt.drag] = { x: Math.max(0, Math.min(1, p.x)), y: Math.max(0, Math.min(1, p.y)) }; btDrawPts(false); btLoupe(true, st.pts[_bt.drag]); };
-  box.onpointerup = box.onpointercancel = () => { if (_bt.drag < 0) return; const was = _bt.drag; _bt.drag = -1; btLoupe(false); if (kind === 'card' && was < 4 && st.pts.length === 4 && !st.ref) { btCardSnap(true); return; } if (kind === 'card' && was === 4 && st.pts.length === 5 && !st.auto) { btFootAuto(false); return; } btDrawPts(true); };
+  box.onpointerup = box.onpointercancel = () => { if (_bt.drag < 0) return; const was = _bt.drag; _bt.drag = -1; btLoupe(false); if (kind === 'card' && was < 4 && st.pts.length === 4 && !st.ref) { btCardSnap(true); return; } if (kind === 'card' && !st.auto) { const trig = btCardPur() === 'w' ? 5 : btCardK().need; if (st.pts.length === trig && was === trig - 1) { btFootAuto(false); return; } } btDrawPts(true); };
   const init = () => { if (kind === 'card') { st.nw = img.naturalWidth; st.nh = img.naturalHeight; if (st.pts.length >= 4 && !st.ref) { btCardSnap(true); return; } } btDrawPts(false); };
   if (img.complete && img.naturalWidth) init(); else img.onload = init;
 }
@@ -19582,10 +19587,10 @@ function btDrawPts(final) {
     if (kind === 'len' && P.length >= 3) { const X0 = { x: P[0].x, y: P[0].y * A }, X1 = { x: P[1].x, y: P[1].y * A }, X2 = { x: P[2].x, y: P[2].y * A }; const dx = X0.x - X1.x, dy = X0.y - X1.y, L = Math.hypot(dx, dy) || 1, u = { x: dx / L, y: dy / L }; const t = (X2.x - X1.x) * u.x + (X2.y - X1.y) * u.y; g += ln(P[1], { x: X1.x + u.x * t, y: (X1.y + u.y * t) / A }, '#bef264'); }
     if (kind === 'top' && P.length >= 4) g += ln(P[2], P[3], '#bef264');
   }
-  if (kind === 'card') { btSegImg(st); g = btCardLines(st, P, ln); }
+  if (kind === 'card') { btSegImg(st); g = btCardGrid(st, P) + btCardLines(st, P, ln); }
   if (sv) sv.innerHTML = g;
   let h = '';
-  if (kind === 'card') { h = btCardPtInfo(st, P, K); if (info) info.innerHTML = h; return; }
+  if (kind === 'card') { if (mk) mk.insertAdjacentHTML('beforeend', btCardLabels(st, P)); h = btCardPtInfo(st, P, K); if (info) info.innerHTML = h; return; }
   if (P.length < K.need) {
     const i = P.length;
     h = `<div class="bt-ins"><span style="background:${BT_PT_COL[i]}">${i + 1}</span><div><b>${K.lab[i][0]}</b> 을 눌러요<small>${K.lab[i][1]}${i ? ' · 찍은 점은 끌어서 옮길 수 있어요' : ' · 사진을 두 손가락으로 키우지 말고 그대로 눌러요'}</small></div></div>`;
@@ -20872,13 +20877,23 @@ function btCardAlign() { const a = _bt.calign || btFoot().calign; return a === '
 function btCardMode() { return 'st'; }
 function btCardPur() { const f = btFoot(); return _bt.cpur === 'len' || _bt.cpur === 'w' ? _bt.cpur : (!btSizeOk(f) || btH(f) === null ? 'len' : 'w'); }
 function btGoCard(p) { btGo('card', { cpur: p }); }
+// 길이 사진 = 뒤꿈치 뒤에 책·벽 → 그 밑선(바닥 높이)이 뒤꿈치 선. 발바닥 다 붙이고 서서 · 뒤꿈치는 발목에 가려도 됨.
+// (v116 검토: 옆에서 비스듬히 찍어 뒤꿈치 끝을 누르면 둥근 뒤꿈치 옆면이 끝처럼 보여 5~15mm 짧게 나옴 — 사용자 사진 255 vs 271 → 안 씀)
+const BT_LEN_AGREE = 5;     // 같은 발 두 번이 이 안(mm)으로 맞아야 길이 확정
+function btCardHm() { return 'book'; }
 function btCardK() {
-  const len = btCardPur() === 'len', K = Object.assign({}, BT_CK.st);
-  K.need = len ? 5 : 7;
-  K.lab = BT_CK.st.lab.map((l, i) => i === 4 ? (len ? ['발끝', '가장 긴 발가락 끝 (엄지보다 둘째가 길면 둘째)'] : ['발끝', '발끝을 누르면 발 모양을 따서 발볼 양 끝을 자동으로 찾아요']) : l);
-  K.tips = len
-    ? ['카드를 세로로 발 옆 2~3cm에 놓고, 카드 아랫변을 뒤꿈치 선에 맞춰요 — 벽이나 세운 책에 같이 붙이면 제일 정확', '다리는 비스듬히 해도 돼요 — 길이만 재는 사진이에요 (발볼은 3단계에서)', '폰은 카드 바로 위 40cm쯤, 바닥과 평행하게(오른쪽 위 수평계 초록) — 테두리에 딱 맞으면 자동으로 찍혀요', '찍고 나서 발끝 하나만 누르면 끝 (카드 모서리·뒤꿈치 선은 자동)']
-    : ['카드는 그대로 두고, 다리를 세워서 발등 바로 위에서 똑바로 찍어요', '발에 체중을 싣고(서서 재면 제일 정확) 발가락은 편하게 펴요', '발끝을 누르면 발 모양을 따서 발볼 양 끝을 자동으로 찾아요 — 어긋나면 끌어서 고쳐요'];
+  const pur = btCardPur(), K = Object.assign({}, BT_CK.st), card = BT_CK.st.lab.slice(0, 4), cc = BT_CK.st.col.slice(0, 4);
+  if (pur === 'len') {
+    K.need = 7;
+    K.lab = card.concat([['발끝', '가장 긴 발가락 끝 — 다 찍으면 발 모양을 따서 자동으로 다시 맞춰요'], ['책 밑선', '뒤꿈치 뒤에 세운 책(벽)이 바닥과 만나는 선 — 발 왼쪽 아무 데나'], ['책 밑선', '같은 선 — 발 오른쪽 아무 데나']]);
+    K.col = cc.concat(['#67e8f9', '#f9a8d4', '#f9a8d4']);
+    K.tips = ['<b>발바닥을 바닥에 다 붙이고 서서</b>(체중 실으면 제일 정확) 뒤꿈치를 세운 책·상자·벽에 딱 붙여요 — 책은 발과 직각으로', '뒤꿈치는 발목에 가려 안 보여도 돼요 — 책이 바닥과 만나는 밑선이 뒤꿈치 선 (발 양옆에서 한 번씩 누르기)', '카드는 발 옆 바닥에 납작하게 — 책에 안 맞춰도 돼요', '폰은 카드 위 40cm쯤 — <b>15°까지는 기울어도 OK</b> (카드로 원근을 계산해요) · 테두리가 초록색일 때만 찍혀요', '<b>두 번 재서 5mm 안으로 맞으면 확정</b> — 두 번째는 발을 한 번 떼었다 다시 놓고'];
+  } else {
+    K.need = 7;
+    K.lab = card.concat([['발끝', '발끝을 누르면 발 모양을 따서 발볼 양 끝을 자동으로 찾아요'], BT_CK.st.lab[5], BT_CK.st.lab[6]]);
+    K.col = BT_CK.st.col;
+    K.tips = ['카드를 <b>발이랑 나란하게</b>(긴 변이 발 방향) 발 옆 바닥에 — 발볼은 발 방향에 직각으로 재요', '발등 위에서 — 15°까지는 기울어도 OK · 서서 체중 실으면 제일 정확', '발끝을 누르면 발 모양을 따서 발볼 양 끝을 자동으로 찾아요 — 어긋나면 끌어서'];
+  }
   return K;
 }
 function btK(kind) { return kind === 'card' ? btCardK() : BT_PH[kind]; }
@@ -21093,7 +21108,7 @@ function btCardFpx(st) {
 
 /* ---------- 계산 ---------- */
 function btCardGeom(st, mode) {
-  const K = BT_CK[mode]; const P = st.pts; if (P.length < 4 || !st.nw) return null;
+  const K = btCardK(); const P = st.pts; if (P.length < 4 || !st.nw) return null;
   const px = P.map(p => ({ x: p.x * st.nw, y: p.y * st.nh }));
   const q = btQuadOrder(px.slice(0, 4));
   const H = btHomog(q, BT_CARD_MM); if (!H) return { err: '카드 모서리를 다시 찍어주세요' };
@@ -21102,126 +21117,151 @@ function btCardGeom(st, mode) {
   const fpx = btCardFpx(st), cx = st.nw / 2, cy = st.nh / 2, pose = btPose(q, fpx, cx, cy);
   const p6 = pose ? btPoseLS(BT_CARD_MM, q, fpx, cx, cy, pose.R, pose.t) : null;
   const tiltDeg = p6 ? p6.tiltDeg : pose ? pose.tiltDeg : null;
-  // 폰이 평평하면(≤12°) 6자유도 자세가 훨씬 덜 흔들림 · 많이 기울면(≥25°) 렌즈 초점거리 추정 오차가 커져서 호모그래피 쪽으로
   const wH = tiltDeg === null ? 1 : Math.max(0, Math.min(1, (tiltDeg - 12) / 13));
-  const D = p6 ? p6.D : pose ? pose.D : fpx / s;                                        // 폰 ~ 카드 면 거리(mm)
+  const D = p6 ? p6.D : pose ? pose.D : fpx / s;
   const C = btHApply(H, { x: cx, y: cy });
   const mm = p => btHApply(H, p);
-  // dz: 카드 면보다 폰에서 먼 쪽 + → 높이(폰 쪽 +) = -dz
-  const cor = (p, dz) => {
-    const h = -(dz || 0);
+  // h: 바닥(카드 면)에서 폰 쪽으로 뜬 높이(mm) → 그 점을 바닥으로 내린 위치
+  const up = (p, h) => {
     const b = pose ? pose.lift(p, h) : (() => { const m = mm(p), k = 1 - h / D; return { x: C.x + (m.x - C.x) * k, y: C.y + (m.y - C.y) * k }; })();
     if (!p6 || wH >= 1) return b; const a = p6.lift(p, h); return { x: a.x * (1 - wH) + b.x * wH, y: a.y * (1 - wH) + b.y * wH };
   };
   const tilt = Math.max(e(0) / e(2), e(2) / e(0), e(1) / e(3), e(3) / e(1));
   const frac = Math.max(e(0), e(1)) / Math.max(st.nw, st.nh);
-  const out = { D, s, tilt, frac, q, need: K.need, tiltDeg };
+  const pur = btCardPur(), hm = btCardHm();
+  const out = { D, s, tilt, frac, q, need: K.need, tiltDeg, pur, hm };
+  if (tiltDeg !== null && tiltDeg > 25) out.err = `폰이 ${Math.round(tiltDeg)}° 기울어서 찍혔어요 — 15° 안으로 다시 찍어주세요 (많이 기울면 발끝·발볼 끝이 잘못 보여요)`;
   if (px.length < 5) return out;
-  // 뒤꿈치 선 = 카드 네 변 중 발끝에서 제일 먼 변 (카드 아랫변을 뒤꿈치에 맞춰 놓으니까)
-  const T0 = mm(px[4]), T = cor(px[4], -BT_HT.toe);
-  const ed = [{ k: 'y', v: 0, i: 0 }, { k: 'x', v: BT_CARD.w, i: 1 }, { k: 'y', v: BT_CARD.h, i: 2 }, { k: 'x', v: 0, i: 3 }];
-  const far = ed.map(e => Object.assign({ d: Math.abs(T[e.k] - e.v) }, e)).sort((a, b) => b.d - a.d)[0];
-  out.heel = far; out.Lraw = Math.abs(T0[far.k] - far.v); out.L0 = far.d; out.eye = 0;
-  if (btCardAlign() === 'eye') {
-    // 눈으로 맞춘 선 위의 보이는 뒤꿈치(높이 25mm) → 바닥으로 내리면 실제 뒤꿈치는 폰 바로 아래 쪽으로 조금 앞
-    const Fm = far.k === 'x' ? { x: far.v, y: T.y } : { x: T.x, y: far.v };
-    const Fi = btHApply(btHomog(BT_CARD_MM, q), Fm), Fh = cor(Fi, -BT_HT.heel);
-    const sh = (Fh[far.k] - far.v) * Math.sign(T[far.k] - far.v);       // + 면 발끝 쪽으로 이동 → 길이 줄어듦
-    if (sh > 0 && sh < 25) { out.eye = sh; out.L0 = far.d - sh; }
+  const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+  const T0 = mm(px[4]), T = up(px[4], BT_HT.toe);
+  if (out.err) return out;
+  if (pur === 'len') {
+    if (px.length < 7) return out;
+    // 책 밑선(바닥 높이) = 뒤꿈치 선 · 길이 = 발끝에서 그 선까지 직각 거리
+    const W1 = mm(px[5]), W2 = mm(px[6]), wl = dist(W1, W2);
+    if (wl < 15) return Object.assign(out, { err: '책 밑선 두 점이 너무 가까워요 — 발 왼쪽·오른쪽으로 떨어뜨려 찍어주세요' });
+    const w = { x: (W2.x - W1.x) / wl, y: (W2.y - W1.y) / wl }, perp = p => Math.abs((p.x - W1.x) * w.y - (p.y - W1.y) * w.x);
+    out.wline = [W1, W2]; out.Lraw = perp(T0); out.L0 = out.L = perp(T);
+  } else if (px.length >= 7) {
+    // 발볼: 카드 긴 변(= 발 방향)에 직각으로
+    const B1 = up(px[5], BT_HT.ball), B2 = up(px[6], BT_HT.ball);
+    out.W0 = out.W = Math.abs(B2.y - B1.y); out.Wd = dist(B1, B2);
+    const Lk = +btFoot().len || 0; if (Lk) out.r = out.W / Lk;
+    if (out.W < 60 || out.W > 140) out.err = `발볼이 ${Math.round(out.W)}mm 로 나와요 — 카드를 발이랑 나란하게 놓았는지, 점 위치를 확인해주세요`;
+    else if (out.Wd > out.W * 1.25) out.warn = '카드가 발이랑 나란하지 않은 것 같아요 — 카드 긴 변을 발 방향으로 놓으면 정확해요';
   }
-  out.L = out.L0;
-  if (px.length >= 7) { const B1 = cor(px[5], -BT_HT.ball), B2 = cor(px[6], -BT_HT.ball), o = far.k === 'y' ? 'x' : 'y'; out.W0 = Math.abs(B2[o] - B1[o]); out.W = out.W0; }
   if (out.L !== undefined && (out.L < 190 || out.L > 340)) out.err = `길이가 ${Math.round(out.L)}mm 로 나와요 — 점 위치를 확인해주세요`;
-  if (out.W !== undefined) { out.r = out.W / out.L; if (out.r < 0.3 || out.r > 0.5) out.warn = '발볼 두 점을 다시 확인해주세요 (가장 넓은 곳 양 끝)'; }
   return out;
 }
 function btCardWarns(gm, mode, st) {
   const w = []; const f = btFoot();
   if (st && st.ref === 'fail') w.push('카드 테두리를 자동으로 못 찾았어요 — 모서리 점을 끌어서 카드 꼭짓점에 맞춰주세요');
-  if (gm.tiltDeg !== null && gm.tiltDeg !== undefined ? gm.tiltDeg > 12 : gm.tilt > 1.06) w.push(`폰이 ${gm.tiltDeg ? Math.round(gm.tiltDeg) + '° ' : ''}기울어서 찍혔어요 — 바닥과 평행하게, 카드 바로 위에서 다시 찍으면 더 정확해요`);
+  if (gm.tiltDeg !== null && gm.tiltDeg !== undefined ? gm.tiltDeg > 15 : gm.tilt > 1.07) w.push(`폰이 ${gm.tiltDeg ? Math.round(gm.tiltDeg) + '° ' : ''}기울어서 찍혔어요 — 15° 안으로 다시 찍으면 더 정확해요`);
   if (gm.frac < 0.06) w.push('카드가 너무 작게 찍혔어요 — 조금 더 가까이서');
   if (gm.L !== undefined && f.s) {
     const d = Math.round(gm.L - +f.s);
-    if (d < -18) w.push(`평소 신발(${f.s})보다 ${-d}mm 작게 나왔어요 — 카드 아랫선이 뒤꿈치보다 앞에 있거나, 카드가 발보다 높은 곳(매트·책 위)에 있으면 작게 나와요`);
-    else if (d > 10) w.push(`평소 신발(${f.s})보다 ${d}mm 크게 나왔어요 — 카드 아랫선이 뒤꿈치보다 뒤에 있거나 발끝 점이 발 바깥에 찍혔는지 확인해주세요`);
+    if (d < -18) w.push(`평소 신발(${f.s})보다 ${-d}mm 작게 나왔어요 — 책이 뒤꿈치에서 떨어져 있지 않은지(딱 붙여야 해요), 카드가 발보다 높은 곳(매트·책 위)에 있으면 작게 나와요`);
+    else if (d > 10) w.push(`평소 신발(${f.s})보다 ${d}mm 크게 나왔어요 — 발이 바닥에서 들렸거나 점이 발 바깥에 찍혔는지 확인해주세요`);
   }
   return w;
 }
 
 /* ---------- 측정 기록 (여러 번 · 양발 → 평균, 더 긴 발 기준) ---------- */
-function btCardRecs(f) { f = f || btFoot(); return Array.isArray(f.cm) ? f.cm.filter(r => r && r.L) : []; }
+function btCardRecs(f) { f = f || btFoot(); return Array.isArray(f.cm) ? f.cm.filter(r => r && (r.L || r.W)) : []; }
+// 같은 발 길이들 중 5mm 안에 드는 제일 큰 묶음 → 2개 이상 · 과반이면 확정(그 평균) · 아니면 마지막 잰 값(확인 전)
+function btLenCluster(Ls) {
+  if (!Ls.length) return null;
+  const a = Ls.slice().sort((x, y) => x - y); let best = null;
+  for (let i = 0; i < a.length; i++) {
+    let j = i; while (j + 1 < a.length && a[j + 1] - a[i] <= BT_LEN_AGREE) j++;
+    const n = j - i + 1, sp = a[j] - a[i];
+    if (!best || n > best.n || (n === best.n && sp < best.sp)) best = { n, sp, v: a.slice(i, j + 1) };
+  }
+  const ok = best.n >= 2 && best.n > Ls.length - best.n;   // 두 개 이상 · 과반이 5mm 안에 모여야 (둘로 갈리면 한 번 더)
+  return { ok, n: best.n, sp: best.sp, L: ok ? best.v.reduce((x, y) => x + y, 0) / best.n : Ls[Ls.length - 1] };
+}
 function btCardSum(recs) {
   const by = {}; recs.forEach(r => { (by[r.s] = by[r.s] || []).push(r); });
+  const avg = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : null;
   const sides = Object.keys(by).map(s => {
-    const a = by[s], L = a.reduce((x, r) => x + r.L, 0) / a.length, Ws = a.filter(r => r.W), W = Ws.length ? Ws.reduce((x, r) => x + r.W, 0) / Ws.length : null;
-    return { s, n: a.length, L, W, spread: a.length > 1 ? Math.max(...a.map(r => r.L)) - Math.min(...a.map(r => r.L)) : 0 };
-  }).sort((a, b) => b.L - a.L);
+    const a = by[s], Ls = a.filter(r => r.L).map(r => r.L), Ws = a.filter(r => r.W).map(r => r.W), c = btLenCluster(Ls);
+    return { s, Ls, n: Ls.length, nW: Ws.length, L: c ? c.L : null, ok: !!(c && c.ok), agree: c && c.ok ? c.n : 0, spread: c ? c.sp : 0, W: avg(Ws) };
+  }).sort((a, b) => (b.L || 0) - (a.L || 0));
   return { sides, top: sides[0] || null };
 }
 function btCardApply() {
-  const f = btFoot(); const recs = btCardRecs(f); const S = btCardSum(recs).top;
-  if (!S) { const p = { cm: null }; if (f.lenSrc === 'card') Object.assign(p, { len: null, lenSrc: null, wmm: null }); if (f.ws === 'card') Object.assign(p, { wR: null, ws: null }); btSave(p); return; }
-  const len = Math.round(S.L), p = { len, lenSrc: 'card', cm: recs };
-  if (S.W) Object.assign(p, { wmm: Math.round(S.W), wR: +(S.W / S.L).toFixed(3), ws: 'card', wp: null });
+  const f = btFoot(); const recs = btCardRecs(f); const S = btCardSum(recs); const T = S.top;
+  if (!T) { const p = { cm: null, lenPend: null }; if (f.lenSrc === 'card') Object.assign(p, { len: null, lenSrc: null }); if (f.ws === 'card') Object.assign(p, { wR: null, ws: null, wmm: null }); btSave(p); return; }
+  const p = { cm: recs };
+  // 더 긴 발(확인 전이면 마지막 잰 값)이 확정돼야 길이로 씀 — 확정 전엔 lenPend 로만 보여줌
+  if (T.L && T.ok) Object.assign(p, { len: Math.round(T.L), lenSrc: 'card', lenPend: null });
+  else { p.lenPend = T.L ? Math.round(T.L) : null; if (f.lenSrc === 'card') Object.assign(p, { len: null, lenSrc: null }); }
+  const Wsrc = T.W ? T : S.sides.filter(x => x.W).sort((a, b) => b.W - a.W)[0];
+  if (Wsrc && Wsrc.W) { const Lb = T.L || +f.len || (f.s ? +f.s : 265); Object.assign(p, { wmm: Math.round(Wsrc.W), wR: +(Wsrc.W / Lb).toFixed(3), ws: 'card', wp: null }); }
   btSave(p);
 }
 function btCardSaveRec(withW) {
   const st = btPhState('card'); const mode = btCardMode(); const gm = btCardGeom(st, mode);
-  if (!gm || gm.err || gm.L === undefined) { toast('점을 다 찍어주세요'); return; }
-  if (btCardPur() === 'len') withW = false;
-  if (withW && !gm.W) { toast('발볼 두 점을 찍어주세요'); return; }
+  const w = btCardPur() === 'w';
+  if (!gm || gm.err || (w ? gm.W === undefined : gm.L === undefined)) { toast('점을 다 찍어주세요'); return; }
   haptic(10);
   const recs = btCardRecs().slice(-7);
-  const r = { m: mode, a: btCardAlign(), s: _bt.cside || 'R', L: Math.round(gm.L * 10) / 10, W: withW ? Math.round(gm.W * 10) / 10 : null, t: Date.now() };
-  if (withW && st.seg) { const o = btShapeFromSeg(st.seg, Math.round(gm.L), Math.round(gm.W)); if (o) r.o = o; }
+  const r = { m: mode, h: w ? null : btCardHm(), s: _bt.cside || 'R', L: w ? null : Math.round(gm.L * 10) / 10, W: w ? Math.round(gm.W * 10) / 10 : null, t: Date.now() };
+  if (w && st.seg) { const Lk = +btFoot().len || 260; const o = btShapeFromSeg(st.seg, Lk, Math.round(gm.W)); if (o) r.o = o; r.oL = Lk; }
   recs.push(r);
   btSave({ cm: recs }); btCardApply();
   if (st.url) { try { URL.revokeObjectURL(st.url); } catch (e) {} }
   Object.assign(st, { url: null, pts: [], ref: false, live: false, seg: null, auto: false });
-  toast(withW ? `발볼 ${Math.round(gm.W)}mm 저장했어요` : `발 길이 ${Math.round(gm.L)}mm 저장했어요`);
+  const me = w ? null : btCardSum(btCardRecs()).sides.find(x => x.s === r.s);
+  toast(w ? `발볼 ${Math.round(gm.W)}mm 저장했어요` : me && me.ok ? `✅ 발 길이 ${Math.round(me.L)}mm 확정 (${me.agree}번 · 차이 ${Math.round(me.spread)}mm)` : me && me.n > 1 ? `${Math.round(gm.L)}mm — 잰 값들이 5mm 안으로 안 모여요 · 한 번 더 재주세요` : `${Math.round(gm.L)}mm 저장 — 한 번 더 재면 확정돼요`);
   renderBoots();
 }
 function btCardDel(i) { const recs = btCardRecs(); recs.splice(i, 1); btSave({ cm: recs.length ? recs : null }); btCardApply(); renderBoots(); }
-function btCardSet(k, v) { haptic(5); if (k === 'align') { _bt.calign = v; btSave({ calign: v }); } else _bt.cside = v; renderBoots(); }
+function btCardSet(k, v) { haptic(5); if (k === 'hm') { _bt.chm = v; btSave({ chm: v }); const st = btPhState('card'); if (st.pts.length > 4) { st.pts = st.pts.slice(0, 4); st.auto = false; st.seg = null; } } else if (k === 'align') { _bt.calign = v; btSave({ calign: v }); } else _bt.cside = v; renderBoots(); }
 
 /* ---------- 실시간 카메라 · 카드 테두리 맞추면 자동 촬영 ---------- */
 const _btCam = { s: null, v: null, iv: 0, hit: 0, g: null, busy: false };
 function btCamGuide(vw, vh, mode) {
+  const L = (_bt.cside || 'R') === 'L', line = btCardPur() === 'len';
   const long = Math.max(vw, vh), mpp = BT_CAM_D / (long * BT_FPX);    // mm / px (목표 거리에서)
   const P = mm => mm / mpp;
   const Lf = P(265), Wf = P(100);
-  let fx = vw * 0.42; const top = vh / 2 - Lf / 2, heel = top + Lf;
-  const cw = P(BT_CARD.h), ch = P(BT_CARD.w); let cx = fx + Wf / 2 + P(25) + cw / 2;      // 카드 세로 · 아랫변 = 뒤꿈치 선
+  let fx = vw * (L ? 0.42 : 0.58); const top = vh / 2 - Lf / 2, heel = top + Lf;
+  const cw = P(BT_CARD.h), ch = P(BT_CARD.w);
+  // 카드: 발 안쪽(오른발이면 왼쪽, 왼발이면 오른쪽) 옆 · 세로 · 뒤꿈치 쪽
+  let cx = L ? fx + Wf / 2 + P(25) + cw / 2 : fx - Wf / 2 - P(25) - cw / 2;
   if (cx + cw / 2 > vw * 0.97) { const dx = cx + cw / 2 - vw * 0.97; cx -= dx; fx -= dx; }
-  const c = { x: cx - cw / 2, y: heel - ch, w: cw, h: ch };
-  return { mpp, c, foot: { x: fx, top, L: Lf, W: Wf }, wall: heel, rx: P(3.18),
+  if (cx - cw / 2 < vw * 0.03) { const dx = vw * 0.03 - (cx - cw / 2); cx += dx; fx += dx; }
+  const c = { x: cx - cw / 2, y: heel - P(45) - ch, w: cw, h: ch };   // 책 밑선에서 4.5cm 떨어지게 — 밑선 누를 때 카드 모서리를 잘못 잡지 않게
+  return { mpp, c, foot: { x: fx, top, L: Lf, W: Wf, mirror: L, rot: 0 }, wall: line ? heel : null, rx: P(3.18),
     corners: [{ x: c.x, y: c.y }, { x: c.x + c.w, y: c.y }, { x: c.x + c.w, y: c.y + c.h }, { x: c.x, y: c.y + c.h }] };
 }
 function btCamOverlay(G, vw, vh, mode, okSides, all, Q) {
   const c = G.c, F = G.foot, k = F.L / 229;     // 발 그림(229 단위 길이) → px
-  const tx = F.x - 60 * k, ty = F.top - 13 * k;
+  const fcx = F.x, fcy = F.top + F.L / 2;
   const body = 'M60 242 C45 242 37 231 36 214 C35 196 37 178 34 160 C31 142 25 120 24 100 C23 82 25 66 31 54 C36 45 46 42 56 43 C68 44 80 47 90 54 C97 59 100 70 99 84 C98 104 93 124 90 144 C87 166 86 192 85 212 C84 232 76 242 60 242 Z';
   const toes = [[40, 30, 11, 15], [58, 24, 6.5, 9], [71, 28, 6, 8], [82, 35, 5.5, 7], [91, 45, 5, 6]].map(t => `<ellipse cx="${t[0]}" cy="${t[1]}" rx="${t[2]}" ry="${t[3]}"/>`).join('');
   const sw = Math.max(2, vw / 260);
   const sideCol = i => (okSides && okSides[i]) ? '#4ade80' : 'rgba(255,255,255,.9)';
   const sides = G.corners.map((p, i) => { const q = G.corners[(i + 1) % 4]; return `<line x1="${p.x}" y1="${p.y}" x2="${q.x}" y2="${q.y}" stroke="${sideCol(i)}" stroke-width="${sw * 1.6}" stroke-dasharray="${all ? 'none' : `${sw * 5} ${sw * 3}`}" stroke-linecap="round"/>`; }).join('');
-  return `<g transform="translate(${tx} ${ty}) scale(${k})" fill="rgba(232,213,196,.18)" stroke="rgba(255,255,255,.55)" stroke-width="${1.4 / k * sw}" stroke-dasharray="${4 / k * sw} ${4 / k * sw}">${toes}<path d="${body}"/></g>
+  return `<g transform="translate(${fcx} ${fcy}) rotate(${F.rot || 0})${F.mirror ? ' scale(-1 1)' : ''} translate(${-60 * k} ${-128 * k}) scale(${k})" fill="rgba(232,213,196,.18)" stroke="rgba(255,255,255,.55)" stroke-width="${1.4 / k * sw}" stroke-dasharray="${4 / k * sw} ${4 / k * sw}">${toes}<path d="${body}"/></g>
+    ${F.rot ? `<text x="${fcx}" y="${F.top - sw * 6}" text-anchor="middle" font-size="${sw * 10}" font-weight="900" fill="rgba(255,255,255,.8)">발은 비스듬해도 OK</text>` : ''}
     ${G.wall !== null ? `<line x1="0" y1="${G.wall}" x2="${vw}" y2="${G.wall}" stroke="#f9a8d4" stroke-width="${sw * 1.4}" stroke-dasharray="${sw * 6} ${sw * 4}"/><text x="${vw - sw * 6}" y="${G.wall + sw * 14}" text-anchor="end" font-size="${sw * 11}" font-weight="900" fill="#f9a8d4">뒤꿈치 선 (벽·책)</text>` : ''}
     <rect x="${c.x}" y="${c.y}" width="${c.w}" height="${c.h}" rx="${G.rx}" fill="${all ? 'rgba(74,222,128,.16)' : 'rgba(251,146,60,.10)'}" stroke="none"/>${sides}
     <text x="${c.x + c.w / 2}" y="${c.y + c.h / 2 + sw * 4}" text-anchor="middle" font-size="${sw * 11}" font-weight="900" fill="#fff" opacity=".9">카드</text>
-    ${Q ? `<polygon points="${Q.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')}" fill="none" stroke="${all ? '#4ade80' : '#fb923c'}" stroke-width="${sw * 1.2}"/>` : ''}`;
+    ${Q ? btCamGrid(Q, G, sw) : ''}${Q ? `<polygon points="${Q.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')}" fill="none" stroke="${all ? '#4ade80' : '#fb923c'}" stroke-width="${sw * 1.2}"/>` : ''}`;
 }
 async function btCamOpen() {
   const mode = btCardMode();
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { toast('이 브라우저에선 카메라를 바로 못 켜요 — 「사진·앨범」으로 찍어주세요'); return; }
   btCamClose();
   const wrap = document.createElement('div'); wrap.id = 'btCam'; wrap.className = 'bt-cm';
-  wrap.innerHTML = `<div class="bt-cm-top"><button type="button" class="bt-cm-x" onclick="btCamClose()" aria-label="닫기">✕</button><b>💳 카드 아랫선 = 뒤꿈치 선</b></div>
+  wrap.innerHTML = `<div class="bt-cm-top"><button type="button" class="bt-cm-x" onclick="btCamClose()" aria-label="닫기">✕</button><b>${btCardPur() === 'w' ? '👣 발볼 — 카드는 발이랑 나란하게' : '📐 발 길이 — 뒤꿈치 뒤에 책·벽'}</b></div>
     <div class="bt-cm-box" id="btCmBox"><video id="btCmV" playsinline muted autoplay></video><svg id="btCmSvg" preserveAspectRatio="none"></svg>
       <div class="bt-cm-zoom"><canvas id="btCmZoom" width="220" height="280"></canvas><small>카드 확대</small></div>
       <div class="bt-cm-lev" id="btCmLev"><i></i><b>수평</b></div></div>
     <div class="bt-cm-st" id="btCmSt">카메라 켜는 중…</div>
-    <div class="bt-cm-bot"><button type="button" class="bt-cm-sh" onclick="btCamShot(false)" aria-label="찍기"><i></i></button></div>`;
+    <div class="bt-cm-bot"><button type="button" class="bt-cm-sh" onclick="btCamShot(false)" aria-label="찍기 (테두리가 초록색일 때만)" disabled><i></i></button></div>`;
   document.body.appendChild(wrap); document.body.classList.add('bt-cm-on');
   btLevStart();   // 아이폰은 이 버튼을 누른 순간에 기울기 센서 허락을 받아야 해서 카메라보다 먼저
   let s;
@@ -21238,7 +21278,7 @@ async function btCamOpen() {
     sv.setAttribute('viewBox', `0 0 ${vw} ${vh}`);
     _btCam.g = btCamGuide(vw, vh, mode); _btCam.hit = 0;
     sv.innerHTML = btCamOverlay(_btCam.g, vw, vh, mode, null, false);
-    btCamMsg('바닥의 카드를 점선 테두리에 맞춰요 — 발은 그림 자리에 · 맞으면 자동으로 찍혀요');
+    btCamMsg('카드를 점선 테두리에 맞춰요 — 초록색이 되면 자동으로 찍혀요 (15°까지 기울어도 OK)');
     return true;
   };
   if (!ready()) v.addEventListener('loadedmetadata', ready, { once: true });
@@ -21256,7 +21296,7 @@ function btLevStart() {
 }
 function btLevStop() { if (_btLev.h) window.removeEventListener('deviceorientation', _btLev.h); Object.assign(_btLev, { on: false, b: null, g: null, h: null }); }
 function btLevTilt() { if (_btLev.b === null || _btLev.g === null) return null; const b = _btLev.b * Math.PI / 180, g = _btLev.g * Math.PI / 180; return Math.acos(Math.max(-1, Math.min(1, Math.cos(b) * Math.cos(g)))) * 180 / Math.PI; }
-const BT_CAM_TILT = 5;   // 폰 기울기 5° 넘으면 안 찍음
+const BT_CAM_TILT = 15;  // 폰 기울기 15°까지 OK — 카드 네 모서리로 원근을 계산하니까 (v116 · 바닥 점은 기울기와 상관없이 정확)
 // 네 변 안쪽·바깥쪽 밝기 차이 — 카드는 네 변 모두 같은 쪽으로(안이 더 밝거나 더 어둡게) 또렷해야 함
 function btQuadContrast(px, Q) {
   const ctr = { x: Q.reduce((a, p) => a + p.x, 0) / 4, y: Q.reduce((a, p) => a + p.y, 0) / 4 }, o = [0, 0, 0], out = [];
@@ -21287,23 +21327,24 @@ function btCamTick(mode) {
   else {
     const e = i => Math.hypot(Q[(i + 1) % 4].x - Q[i].x, Q[(i + 1) % 4].y - Q[i].y);
     const L1 = (e(0) + e(2)) / 2, L2 = (e(1) + e(3)) / 2, gL1 = Math.hypot(C[1].x - C[0].x, C[1].y - C[0].y), gL2 = Math.hypot(C[2].x - C[1].x, C[2].y - C[1].y);
-    const asp = Math.max(L1, L2) / Math.min(L1, L2), skew = Math.max(Math.abs(e(0) - e(2)) / L1, Math.abs(e(1) - e(3)) / L2);
+    const rk = btQuadRect(Q, px.w, px.h), skew = Math.max(Math.abs(e(0) - e(2)) / L1, Math.abs(e(1) - e(3)) / L2);
     const scale = (L1 / gL1 + L2 / gL2) / 2, shift = Math.max(...Q.map((p, i) => Math.hypot(p.x - C[i].x, p.y - C[i].y))) / Math.min(gL1, gL2);
     const con = btQuadContrast(px, Q), sameSign = con.every(c => c > 0) || con.every(c => c < 0), minCon = Math.min(...con.map(Math.abs));
     const mv = _btCam.prev ? Math.max(...Q.map((p, i) => Math.hypot(p.x - _btCam.prev[i].x, p.y - _btCam.prev[i].y))) / px.w : 1;
     _btCam.prev = Q;
     if (!sameSign || minCon < 14) why = '카드 테두리가 또렷하지 않아요 — 그림자 없이 밝은 곳에서';
-    else if (Math.abs(asp - BT_CARD.w / BT_CARD.h) > 0.07) why = '카드가 아닌 선을 잡았어요 — 카드를 점선 안에 딱 맞춰요';
-    else if (tilt !== null && tilt > BT_CAM_TILT) why = `폰을 바닥과 평행하게 — 지금 ${Math.round(tilt)}° 기울었어요`;
-    else if (skew > 0.025) why = '카드가 사다리꼴로 보여요 — 폰을 바닥과 평행하게, 카드 바로 위에서';
-    else if (scale > 1.07) why = '카드가 테두리보다 커요 — 폰을 조금 멀리';
-    else if (scale < 0.93) why = '카드가 테두리보다 작아요 — 폰을 조금 가까이';
+    else if (!rk || Math.abs(rk.r - 1) > 0.06 || Math.abs(rk.c) > 0.06) why = '카드가 아닌 선을 잡았어요 — 카드를 점선 안에 딱 맞춰요';
+    else if (tilt !== null && tilt > BT_CAM_TILT) why = `폰을 조금 더 눕혀요 — 지금 ${Math.round(tilt)}° (${BT_CAM_TILT}°까지 OK)`;
+    else if (tilt === null && skew > 0.06) why = '카드가 많이 사다리꼴이에요 — 폰을 바닥과 조금 더 평행하게';
+    else if (scale > 1.08) why = '카드가 테두리보다 커요 — 폰을 조금 멀리';
+    else if (scale < 0.92) why = '카드가 테두리보다 작아요 — 폰을 조금 가까이';
     else if (shift > 0.12) why = '카드를 점선 테두리에 딱 맞춰요';
     else if (mv > 0.006) why = '좋아요 — 흔들리지 않게 그대로…';
     else good = true;
   }
   if (!Q) _btCam.prev = null;
-  _btCam.hit = good ? _btCam.hit + 1 : 0;
+  _btCam.hit = good ? _btCam.hit + 1 : 0; _btCam.good = good;
+  const shb = document.querySelector('.bt-cm-sh'); if (shb) shb.disabled = !good;   // 초록색일 때만 셔터 (사용자: 잘못 잰 걸로 축구화 살 순 없어)
   const sv = document.getElementById('btCmSvg'); if (sv) sv.innerHTML = btCamOverlay(G, vw, vh, mode, fits.map(Boolean), good, Q ? Q.map(p => ({ x: p.x / px.sx, y: p.y / px.sy })) : null);
   btCamLevUi(tilt); btCamZoom(v, G, Q ? Q.map(p => ({ x: p.x / px.sx, y: p.y / px.sy })) : null, good);
   if (good) { btCamMsg(_btCam.hit >= 3 ? '맞았어요 — 그대로!' : '맞았어요 — 그대로…', true); if (_btCam.hit >= 5) btCamShot(true); }
@@ -21313,8 +21354,8 @@ function btCamLevUi(t) {
   const el = document.getElementById('btCmLev'); if (!el) return;
   if (t === null) { el.style.display = 'none'; return; }
   el.style.display = ''; const i = el.querySelector('i'), b = el.querySelector('b');
-  const dx = Math.max(-1, Math.min(1, (_btLev.g || 0) / 15)), dy = Math.max(-1, Math.min(1, (_btLev.b || 0) / 15));
-  i.style.transform = `translate(${dx * 15}px, ${dy * 15}px)`; el.classList.toggle('ok', t <= BT_CAM_TILT); b.textContent = t <= BT_CAM_TILT ? '수평 OK' : Math.round(t) + '°';
+  const dx = Math.max(-1, Math.min(1, (_btLev.g || 0) / 20)), dy = Math.max(-1, Math.min(1, (_btLev.b || 0) / 20));
+  i.style.transform = `translate(${dx * 15}px, ${dy * 15}px)`; el.classList.toggle('ok', t <= BT_CAM_TILT); b.textContent = t <= BT_CAM_TILT ? `${Math.round(t)}° OK` : `${Math.round(t)}° · ${BT_CAM_TILT}°까지`;
 }
 function btCamZoom(v, G, Q, good) {
   const zc = document.getElementById('btCmZoom'); if (!zc) return; const g = zc.getContext('2d'); if (!g) return;
@@ -21325,6 +21366,7 @@ function btCamZoom(v, G, Q, good) {
 }
 function btCamShot(auto) {
   const v = _btCam.v, G = _btCam.g; if (!v || !v.videoWidth || _btCam.busy) return;
+  if (!_btCam.good) { btCamMsg('테두리가 초록색일 때만 찍혀요 — 카드를 점선 테두리에 맞춰요'); haptic(5); return; }
   _btCam.busy = true; haptic(auto ? 20 : 10);
   _btCam.prevFull = _btCam.prev && auto ? (() => { const px = btPixFrom(v, v.videoWidth, v.videoHeight, null, 720); return px ? _btCam.prev.map(p => ({ x: p.x / px.sx, y: p.y / px.sy })) : null; })() : null;
   const vw = v.videoWidth, vh = v.videoHeight;
@@ -21342,7 +21384,7 @@ function btCamShot(auto) {
 function btCamClose() {
   clearInterval(_btCam.iv); _btCam.iv = 0;
   if (_btCam.s) { try { _btCam.s.getTracks().forEach(t => t.stop()); } catch (e) {} }
-  Object.assign(_btCam, { s: null, v: null, g: null, hit: 0, busy: false, prev: null });
+  Object.assign(_btCam, { s: null, v: null, g: null, hit: 0, busy: false, prev: null, good: false });
   btLevStop();
   const el = document.getElementById('btCam'); if (el) el.remove();
   document.body.classList.remove('bt-cm-on');
@@ -21350,48 +21392,64 @@ function btCamClose() {
 document.addEventListener('visibilitychange', () => { if (document.hidden && _btCam.s) btCamClose(); });
 
 /* ---------- 화면: 3단계 카드 ---------- */
-function btCardGuideSvg(mode, len) {
+function btCardGuideSvg(pur, hm, side) {
   const body = 'M60 242 C45 242 37 231 36 214 C35 196 37 178 34 160 C31 142 25 120 24 100 C23 82 25 66 31 54 C36 45 46 42 56 43 C68 44 80 47 90 54 C97 59 100 70 99 84 C98 104 93 124 90 144 C87 166 86 192 85 212 C84 232 76 242 60 242 Z';
   const toes = [[40, 30, 11, 15], [58, 24, 6.5, 9], [71, 28, 6, 8], [82, 35, 5.5, 7], [91, 45, 5, 6]].map(t => `<ellipse cx="${t[0]}" cy="${t[1]}" rx="${t[2]}" ry="${t[3]}"/>`).join('');
-  const C = BT_CK.st.col; const pt = (x, y, n, i) => btPtSvg(x, y, n, C[i]);
-  const lab = (x, y, t, i, anc) => `<text x="${x}" y="${y}" font-size="10" font-weight="800" fill="${C[i]}" text-anchor="${anc || 'start'}">${t}</text>`;
-  return `<svg class="bt-foot" viewBox="-30 0 200 266" role="img" aria-label="뒤꿈치와 카드 아랫변을 벽(책)에 같이 붙이기"><rect x="-30" y="243" width="200" height="16" fill="#3f4652"/><text x="166" y="255" text-anchor="end" font-size="9" font-weight="800" fill="#cbd5e1">벽 · 세운 책</text>
-    <g fill="#e8d5c4" stroke="#b9967c" stroke-width="1.5">${toes}<path d="${body}"/></g>
-    <rect x="112" y="157" width="36" height="86" rx="3" fill="#2563eb" stroke="#fb923c" stroke-width="2"/><text x="130" y="203" text-anchor="middle" font-size="9" font-weight="900" fill="#fff">카드</text>
-    <line x1="-30" y1="243" x2="170" y2="243" stroke="#f9a8d4" stroke-width="2"/><text x="-26" y="238" font-size="9.5" font-weight="900" fill="#f9a8d4">카드 아랫선 = 뒤꿈치 선</text>
-    <line x1="44" y1="13" x2="44" y2="243" stroke="#67e8f9" stroke-width="1.5" stroke-dasharray="4 4"/>${len ? '' : '<line x1="24" y1="100" x2="99" y2="100" stroke="#bef264" stroke-width="2"/>'}
-    ${pt(44, 13, 1, 4)}${lab(56, 16, len ? '발끝 하나만' : '발끝 → 발 모양 자동', 4)}${len ? '' : `${pt(24, 100, 2, 5)}${pt(99, 100, 3, 6)}${lab(14, 88, '발볼', 5, 'end')}`}
-    ${[[112, 157], [148, 157], [148, 243], [112, 243]].map(c => `<circle cx="${c[0]}" cy="${c[1]}" r="4.5" fill="none" stroke="#fb923c" stroke-width="2"/>`).join('')}${lab(169, 150, '카드 모서리 자동', 0, 'end')}</svg>`;
+  const L = side === 'L';        // 그림은 오른발(엄지가 왼쪽) — 왼발이면 좌우 뒤집기
+  const X = x => L ? 120 - x : x;
+  const C = BT_CK.st.col, pt = (x, y, n, col) => btPtSvg(X(x), y, n, col);
+  const lab = (x, y, t, col, anc) => `<text x="${X(x)}" y="${y}" font-size="10" font-weight="800" fill="${col}" text-anchor="${L ? (anc === 'end' ? 'start' : anc === 'start' || !anc ? 'end' : anc) : (anc || 'start')}">${t}</text>`;
+  const foot = `<g transform="${L ? 'translate(120 0) scale(-1 1)' : ''}" fill="#e8d5c4" stroke="#b9967c" stroke-width="1.5">${toes}<path d="${body}"/></g>`;
+  const card = (x, y, w, h) => `<rect x="${L ? 120 - x - w : x}" y="${y}" width="${w}" height="${h}" rx="3" fill="#2563eb" stroke="#fb923c" stroke-width="2"/><text x="${L ? 120 - x - w / 2 : x + w / 2}" y="${y + h / 2 + 3}" text-anchor="middle" font-size="9" font-weight="900" fill="#fff">카드</text>`;
+  const ball = pur === 'w' ? `<line x1="${X(24)}" y1="100" x2="${X(99)}" y2="100" stroke="#bef264" stroke-width="2"/>${pt(24, 100, 2, C[5])}${pt(99, 100, 3, C[6])}${lab(14, 88, '발볼', C[5], 'end')}` : '';
+  const wall = pur === 'len' ? `<rect x="-40" y="243" width="200" height="16" fill="#3f4652"/><text x="60" y="255" text-anchor="middle" font-size="9" font-weight="800" fill="#f9a8d4">책·벽 밑선 = 뒤꿈치 선</text><line x1="-40" y1="243" x2="160" y2="243" stroke="#f9a8d4" stroke-width="2" stroke-dasharray="5 4"/>${btPtSvg(-10, 243, 2, '#f9a8d4')}${btPtSvg(130, 243, 3, '#f9a8d4')}` : '';
+  return `<svg class="bt-foot" viewBox="-40 0 200 266" role="img" aria-label="${pur === 'w' ? '카드를 발이랑 나란하게, 발등 위에서' : '뒤꿈치 뒤에 책, 책 밑선 두 점과 발끝'}">${wall}${foot}
+    ${pur === 'w' ? card(112, 120, 36, 86) : card(-36, 124, 36, 86)}
+    <line x1="${X(44)}" y1="13" x2="${X(44)}" y2="243" stroke="#67e8f9" stroke-width="1.5" stroke-dasharray="4 4"/>
+    ${pt(44, 13, 1, C[4])}${lab(56, 16, pur === 'w' ? '발끝 → 발 모양 자동' : '발끝', C[4])}${ball}
+    ${pur === 'w' ? lab(150, 115, '발이랑 나란하게', C[0], 'end') : lab(-18, 117, '아무 데나', C[0], 'middle')}</svg>`;
 }
 function btCardRecHtml(f) {
   const recs = btCardRecs(f); if (!recs.length) return '';
-  const S = btCardSum(recs); const sn = { R: '오른발', L: '왼발' }, mn = { wall: '벽·책', eye: '눈으로' };
+  const S = btCardSum(recs); const sn = { R: '오른발', L: '왼발' };
   const d = t => { const x = new Date(t); return `${x.getMonth() + 1}/${x.getDate()}`; };
-  const rows = recs.map((r, i) => `<div class="bt-cr"><span>${sn[r.s] || ''} · ${r.W ? '👣 발볼' : '📐 길이'}</span><b>${Math.round(r.L)}</b><em>${r.W ? `발볼 ${Math.round(r.W)}` : ''}</em><small>${d(r.t)}</small><button type="button" onclick="btCardDel(${i})" aria-label="지우기">✕</button></div>`).join('');
-  const sum = S.sides.map(x => `${sn[x.s]} ${Math.round(x.L)}mm${x.n > 1 ? ` (${x.n}번 평균 · 차이 ${Math.round(x.spread)}mm)` : ''}`).join(' · ');
-  const T = S.top; const warn = S.sides.some(x => x.n > 1 && x.spread > 6) ? '<div class="bt-warn">두 번 잰 값 차이가 6mm 넘어요 — 한 번 더 재면 평균이 더 정확해져요</div>' : '';
-  const one = S.sides.length === 1 && T.n === 1 ? '<small class="bt-ok">한 번 더 재서 평균 내면 더 정확해요 · 양발 다 재면 더 긴 발 기준</small>' : '';
-  const so = recs.slice().reverse().find(r => r.o && r.s === T.s) || recs.slice().reverse().find(r => r.o);
-  const shape = so ? `<div class="bt-shw">${btShapeSvg(so.o, Math.round(so.L), Math.round(so.W), `👣 ${sn[so.s]} 모양`)}<small>앞쪽은 사진에서 딴 모양 · 뒤꿈치 쪽은 다리에 가려서 표준 모양으로 채웠어요 · 칸 하나 1cm</small></div>` : '';
-  const noW = !recs.some(r => r.W) ? '<div class="bt-note">👣 발볼은 3단계에서 — 카드는 그대로 두고 위에서 똑바로 한 장</div>' : '';
+  const rows = recs.map((r, i) => `<div class="bt-cr"><span>${sn[r.s] || ''} · ${r.W ? '👣 발볼' : '📐 길이'}</span><b>${Math.round(r.W || r.L)}</b><em>${r.W ? 'mm 발볼' : 'mm'}</em><small>${d(r.t)}</small><button type="button" onclick="btCardDel(${i})" aria-label="지우기">✕</button></div>`).join('');
+  const sum = S.sides.map(x => `${sn[x.s]}${x.L ? ` 길이 ${Math.round(x.L)}mm ${x.ok ? `✅ 확정(${x.agree}번 · 차이 ${Math.round(x.spread)})` : '· 확인 전'}` : ''}${x.W ? ` · 발볼 ${Math.round(x.W)}mm${x.nW > 1 ? `(${x.nW}번)` : ''}` : ''}`).join(' / ');
+  const T = S.top, Wv = T.W || (S.sides.find(x => x.W) || {}).W;
+  const warn = T.L && !T.ok ? `<div class="bt-warn">📏 ${sn[T.s]} 길이가 아직 확정 전이에요 — ${T.n > 1 ? '잰 값들이 5mm 넘게 달라요 · ' : ''}한 번 더 재서 5mm 안으로 맞으면 확정돼요 (잘못 잰 길이로 축구화를 고르지 않게)</div>` : '';
+  const noW = !Wv ? '<div class="bt-note">👣 발볼은 3단계에서 — 카드를 발이랑 나란하게 두고 발등 위에서 한 장</div>' : '';
+  const so = recs.slice().reverse().find(r => r.o);
+  const shape = so ? `<div class="bt-shw">${btShapeSvg(so.o, Math.round(T.L || so.oL || 260), Math.round(so.W), `👣 ${sn[so.s]} 모양`)}<small>앞쪽은 사진에서 딴 모양 · 뒤꿈치 쪽은 표준 모양으로 채웠어요 · 칸 하나 1cm</small></div>` : '';
   return `<div class="bt-crs"><div class="bt-crh">📏 잰 기록</div>${rows}
     <div class="bt-crt">${sum}</div>
-    <div class="bt-crf">${S.sides.length > 1 ? '더 긴 발 기준 → ' : ''}발 길이 <b>${Math.round(T.L)}mm</b>${T.W ? ` · 발볼 <b>${Math.round(T.W)}mm</b>` : ''} → 축구화 기본 <b>${Math.ceil(Math.round(T.L) / 5) * 5}</b></div>${warn}${noW}${one}${shape}</div>`;
+    ${T.L && T.ok ? `<div class="bt-crf">${S.sides.filter(x => x.L).length > 1 ? '더 긴 발 기준 → ' : ''}발 길이 <b>${Math.round(T.L)}mm</b>${Wv ? ` · 발볼 <b>${Math.round(Wv)}mm</b>` : ''} → 축구화 기본 <b>${Math.ceil(Math.round(T.L) / 5) * 5}</b></div>` : ''}${warn}${noW}${shape}</div>`;
 }
 function btCardInfo(gm, mode, st) {
   if (!gm) return '';
   if (gm.err) return `<div class="bt-warn">${gm.err}</div>`;
-  const ws = btCardWarns(gm, mode, st);
+  const ws = btCardWarns(gm, mode, st); const side = { R: '오른발', L: '왼발' }[_bt.cside || 'R'];
+  const lens = `${st && st.live ? '' : st && st.f35 ? ` · 렌즈 ${st.f35}mm` : ' · 렌즈 1배로 가정'} · 폰 거리 약 ${Math.round(gm.D / 10)}cm`;
+  if (gm.pur === 'w') {
+    if (gm.W === undefined) return ws.length ? `<div class="bt-warn">${ws.join('<br>')}</div>` : '';
+    const c = gm.r ? btCls(gm.r, BT_W_CUT) : null;
+    return `<div class="bt-meas"><div class="bt-mh"><span>발볼 (발 방향에 직각)</span><b>${Math.round(gm.W)}mm</b>${c !== null ? `<em class="c${c}">${BT_W_NAME[c]}</em>` : ''}</div>
+      <small class="bt-ok">${gm.r ? `발 길이 ${btFoot().len}mm 대비 ${gm.r.toFixed(3)} · ` : ''}발볼 끝이 바닥에서 뜬 만큼 보정${lens}</small>
+      ${gm.r ? btGauge(gm.r, 0.33, 0.45, BT_W_CUT, BT_W_NAME) : '<small class="bt-ok">1단계에서 발 길이를 재면 좁음·보통·넓음도 나와요</small>'}
+      ${gm.warn ? `<div class="bt-warn">${gm.warn}</div>` : ''}${ws.length ? `<div class="bt-warn">${ws.join('<br>')}</div>` : ''}
+      <div class="bt-save2"><button type="button" class="bt-go" onclick="btCardSaveRec(true)">👣 발볼 저장</button></div><small class="bt-ok">${side} 기록으로 저장돼요</small></div>`;
+  }
   if (gm.L === undefined) return ws.length ? `<div class="bt-warn">${ws.join('<br>')}</div>` : '';
-  const c = gm.r ? btCls(gm.r, BT_W_CUT) : null;
-  const tp = gm.L0 + (gm.eye || 0) - gm.Lraw;
-  const parts = `사진 그대로 ${Math.round(gm.Lraw)} · 발가락이 바닥에서 뜬 만큼 ${tp >= 0 ? '+' : ''}${Math.round(tp)}${gm.eye ? ` · 눈으로 맞춘 뒤꿈치 −${Math.round(gm.eye)}` : ''}`;
-  return `<div class="bt-meas"><div class="bt-mh"><span>발 길이${gm.W ? ' · 발볼' : ''}</span><b>${Math.round(gm.L)}mm</b>${gm.W ? `<em class="c${c}">발볼 ${Math.round(gm.W)}mm · ${BT_W_NAME[c]}</em>` : ''}</div>
-    <small class="bt-ok">${parts}${st && st.live ? '' : st && st.f35 ? ` · 렌즈 ${st.f35}mm` : ' · 렌즈 1배로 가정'} · 폰 거리 약 ${Math.round(gm.D / 10)}cm</small>
-    ${btCardPur() === 'len' ? '<small class="bt-ok">📐 길이 사진이에요 · 발볼은 3단계에서 위에서 똑바로 찍어서 재요</small>' : gm.W ? btGauge(gm.r, 0.33, 0.45, BT_W_CUT, BT_W_NAME) : ''}
+  const tp = gm.L0 - gm.Lraw;
+  const parts = `사진 그대로 ${Math.round(gm.Lraw)} · 발끝이 바닥에서 뜬 만큼 ${tp >= 0 ? '+' : ''}${Math.round(tp)}${gm.tiltDeg !== null ? ` · 폰 기울기 ${Math.round(gm.tiltDeg)}° 계산함` : ''}`;
+  const me = btCardSum(btCardRecs()).sides.find(x => x.s === (_bt.cside || 'R')), prev = me && me.Ls.length ? me.Ls.map(Math.round) : [];
+  const cmp = !prev.length ? '<small class="bt-ok">📏 저장하고 한 번 더 재면 확정돼요 (두 번이 5mm 안으로)</small>'
+    : prev.some(v => Math.abs(v - gm.L) <= BT_LEN_AGREE) ? `<small class="bt-ok">✅ 앞에 잰 ${prev.join('·')}mm 와 5mm 안 — 저장하면 확정돼요</small>`
+    : `<div class="bt-warn">앞에 잰 ${prev.join('·')}mm 와 5mm 넘게 달라요 — 저장하고 한 번 더 재면 맞는 두 개로 확정해요</div>`;
+  return `<div class="bt-meas"><div class="bt-mh"><span>발 길이</span><b>${Math.round(gm.L)}mm</b></div>
+    <small class="bt-ok">${parts}${lens}</small>${cmp}
+    <small class="bt-ok">📐 길이 사진이에요 · 발볼은 3단계에서 발등 위에서 찍어서 재요</small>
     ${gm.warn ? `<div class="bt-warn">${gm.warn}</div>` : ''}${ws.length ? `<div class="bt-warn">${ws.join('<br>')}</div>` : ''}
-    <div class="bt-save2">${btCardPur() === 'len' ? `<button type="button" class="bt-go" onclick="btCardSaveRec(false)">📏 발 길이 저장</button>` : gm.W ? `<button type="button" class="bt-go" onclick="btCardSaveRec(true)">👣 발볼 저장</button>` : ''}</div>
-    <small class="bt-ok">${{ R: '오른발', L: '왼발' }[_bt.cside || 'R']} 기록으로 저장돼요</small></div>`;
+    <div class="bt-save2"><button type="button" class="bt-go" onclick="btCardSaveRec(false)">📏 발 길이 저장</button></div><small class="bt-ok">${side} 기록으로 저장돼요</small></div>`;
 }
 function btCardSnap(silent) {
   const st = btPhState('card'); const img = document.getElementById('btImg'); if (!img || st.pts.length < 4) return;
@@ -21405,31 +21463,31 @@ function btCardSnap(silent) {
 function btViewCard() {
   const f = btFoot(); const mode = btCardMode(); const K = btCardK(); const st = btPhState('card'); const side = _bt.cside || 'R'; const pur = btCardPur();
   const al = btCardAlign();
-  const aligns = `<div class="bt-q"><b>뒤꿈치랑 카드 아랫선은?</b><small>${al === 'eye' ? '보이는 윤곽은 바닥보다 위라 그만큼 자동으로 빼요' : '제일 정확해요'}</small></div><div class="tr-chips">${[['wall', '🧱 벽·책에 같이 붙임'], ['eye', '👀 눈으로 맞춤']].map(o => `<button type="button" class="${al === o[0] ? 'on' : ''}" onclick="btCardSet('align','${o[0]}')">${o[1]}</button>`).join('')}</div>`;
+  const aligns = '';   // v116: 뒤꿈치는 책·벽 밑선 하나로 (고르는 칸 없음)
   const sides = `<div class="bt-q"><b>어느 발?</b><small>양발 다 재면 더 긴 발 기준</small></div><div class="tr-chips">${[['R', '오른발'], ['L', '왼발']].map(o => `<button type="button" class="${side === o[0] ? 'on' : ''}" onclick="btCardSet('side','${o[0]}')">${o[1]}</button>`).join('')}</div>`;
   let body;
   if (st.url) {
     body = `<div class="bt-phw"><div class="bt-ph" id="btPh"><img id="btImg" src="${st.url}" alt="카드와 발 사진" draggable="false"><svg id="btSvg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg><div id="btMk"></div></div></div>
       <div class="bt-phb"><button type="button" onclick="btUndo('card')">↶ 점 하나 지우기</button><button type="button" onclick="btRetake('card')">📷 다시 찍기</button></div>
-      <div class="bt-autob">${st.pts.length >= 4 ? `<button type="button" onclick="btCardSnap(false)">🔧 카드 테두리 다시 맞추기</button>` : ''}${st.pts.length >= 5 && pur === 'w' ? `<button type="button" onclick="btFootAuto(false)">✨ 발 모양 다시 따기</button>` : ''}</div>
+      <div class="bt-autob">${st.pts.length >= 4 ? `<button type="button" onclick="btCardSnap(false)">🔧 카드 테두리 다시 맞추기</button>` : ''}${st.pts.length >= 5 && pur === 'w' ? `<button type="button" onclick="btFootAuto(false)">✨ 발 모양 다시 따기</button>` : ''}${st.pts.length >= 5 ? `<button type="button" id="btGridB" onclick="btCardGridToggle()">${_bt.cgrid === false ? '📏 1cm 격자 켜기' : '📏 1cm 격자 끄기'}</button>` : ''}</div>
       <div id="btPtInfo"></div>`;
   } else {
-    body = `<div class="bt-guide">${btCardGuideSvg(mode, pur === 'len')}</div>
+    body = `<div class="bt-guide">${btCardGuideSvg(pur, btCardHm(), side)}</div>
       <ul class="bt-tips">${K.tips.map(t => `<li>${t}</li>`).join('')}</ul>
-      <div class="bt-card-ok">💳 신용·체크·교통카드처럼 지갑에 넣는 보통 카드 (85.6×54mm) — 명함은 크기가 달라서 안 돼요<br>${pur === 'len' ? '📐 이 사진은 <b>길이만</b> — 누르는 점은 발끝 하나 (카드 모서리·뒤꿈치 선은 자동)' : '👣 이 사진은 <b>발볼</b> — 발끝을 누르면 발 모양을 따서 양 끝을 자동으로'}</div>
+      <div class="bt-card-ok">💳 신용·체크·교통카드처럼 지갑에 넣는 보통 카드 (85.6×54mm) — 명함은 크기가 달라서 안 돼요<br>${pur === 'len' ? '📐 이 사진은 <b>길이만</b> — 누르는 점은 발끝 · 책 밑선 두 점 (카드 모서리는 자동 · 발끝은 발 모양 따서 다시 맞춤)' : '👣 이 사진은 <b>발볼</b> — 카드는 발이랑 나란하게 · 발끝을 누르면 발 모양을 따서 양 끝을 자동으로'}</div>
       <div class="bt-cam"><button type="button" class="bt-camb" onclick="btCamOpen()">📷 카메라로 카드 맞추기</button><label class="bt-camb al">🖼️ 사진·앨범<input type="file" accept="image/*" onchange="btOnFile('card',this)"></label></div>
       ${btCardRecs(f).length ? `<div class="bt-crs-gap"></div>` : ''}${btCardRecHtml(f)}
       ${btH(f) === null ? '' : `<button type="button" class="bt-link" onclick="btGo('top')">카드가 없으면 — 비율만 재기 (발볼)</button>`}`;
   }
-  const lenDone = f.lenSrc === 'card' || btSizeOk(f), wDone = btW(f) !== null;
+  const pend = !!f.lenPend && f.lenSrc !== 'card', lenDone = !pend && (f.lenSrc === 'card' || btSizeOk(f)), wDone = btW(f) !== null;
   let nx = null, wait = '';
-  if (pur === 'len') { if (lenDone) nx = btH(f) === null ? ["btGo('side')", '다음 — 옆모습(발등) ›'] : wDone ? ["btGo('surf')", '다음 — 바닥 ›'] : ["btGoCard('w')", '다음 — 발볼 (카드) ›']; else wait = '발 길이를 저장하면 다음으로'; }
+  if (pur === 'len') { if (lenDone) nx = btH(f) === null ? ["btGo('side')", '다음 — 옆모습(발등) ›'] : wDone ? ["btGo('surf')", '다음 — 바닥 ›'] : ["btGoCard('w')", '다음 — 발볼 (카드) ›']; else wait = pend ? `${f.lenPend}mm — 한 번 더 재서 5mm 안으로 맞으면 다음으로` : '발 길이를 두 번 재서 확정하면 다음으로'; }
   else { if (wDone) nx = ["btGo('surf')", '다음 — 바닥 ›']; else wait = '발볼을 저장하면 다음으로'; }
   const next = nx ? `<button type="button" class="bt-go" onclick="${nx[0]}">${nx[1]}</button>` : `<button type="button" class="bt-go" disabled>${wait}</button>`;
   const alt = pur === 'len'
     ? `<button type="button" class="bt-link" onclick="btGo('size')">카드가 없으면 — 평소 사이즈로 할게요 ›</button>`
     : `<button type="button" class="bt-link" onclick="btGoCard('len')">📐 발 길이 다시 재기 ›</button>`;
-  return `${pur === 'len' ? btHead(1, '발 길이 — 💳 카드로', "btGo('start')") : btHead(3, '발볼 — 💳 카드로 (위에서 똑바로)', "btGo('side')")}${pur === 'len' ? aligns : ''}${sides}${body}${st.url ? '' : next + alt}
+  return `${pur === 'len' ? btHead(1, '발 길이 — 💳 카드로', "btGo('start')") : btHead(3, '발볼 — 💳 카드로 (발등 위에서)', "btGo('side')")}${pur === 'len' ? aligns : ''}${sides}${body}${st.url ? '' : next + alt}
     <div class="bt-priv">🔒 사진은 저장 안 해요 · 이 화면에서만 써요 · 길이·발볼 mm 만 내 기록에</div>`;
 }
 /* ---------- 점 찍을 때 돋보기 (손가락에 가려도 정확히) ---------- */
@@ -21457,12 +21515,10 @@ function btFootSeg(st, img) {
   const toMM = (x, y) => btHApply(Hm, { x: x / px.sx, y: y / px.sy });
   const toPx = m => { const p = btHApply(Gm, m); return { x: p.x * px.sx, y: p.y * px.sy }; };
   const T = btHApply(Hm, { x: P[4].x * st.nw, y: P[4].y * st.nh });
-  const ed = [{ k: 'y', v: 0 }, { k: 'x', v: BT_CARD.w }, { k: 'y', v: BT_CARD.h }, { k: 'x', v: 0 }];
-  const far = ed.map(e => Object.assign({ d: Math.abs(T[e.k] - e.v) }, e)).sort((a, b) => b.d - a.d)[0];
-  const sg = Math.sign(T[far.k] - far.v) || 1, o = far.k === 'x' ? 'y' : 'x';
-  const A = m => (m[far.k] - far.v) * sg, B = m => m[o];                 // A: 뒤꿈치 선에서 발끝 쪽 거리 · B: 옆으로
+  const ax = btSegAxis(st, T, Hm), nx = { x: -ax.u.y, y: ax.u.x };
+  const A = m => (m.x - ax.O.x) * ax.u.x + (m.y - ax.O.y) * ax.u.y, B = m => (m.x - ax.O.x) * nx.x + (m.y - ax.O.y) * nx.y;   // A: 뒤꿈치 쪽에서 발끝 쪽 · B: 옆
   // 씨앗: 발끝에서 뒤꿈치 쪽으로 12mm
-  const sm = Object.assign({}, T); sm[far.k] -= 12 * sg; const S = toPx(sm);
+  const S = toPx({ x: T.x - ax.u.x * 12, y: T.y - ax.u.y * 12 });
   const w = px.w, h = px.h, d = px.d;
   const at = (x, y) => { const i = (y * w + x) * 4; return [d[i], d[i + 1], d[i + 2]]; };
   let sr = 0, sgc = 0, sy = 0, n = 0;
@@ -21507,7 +21563,7 @@ function btFootAuto(silent) {
   const len = btCardPur() === 'len';
   const seg = btFootSeg(st, img);
   if (!seg || seg.err) { st.seg = null; if (!silent && seg && !len) toast(seg.err); btDrawPts(false); return; }
-  if (len) st.pts.splice(4, st.pts.length - 4, seg.tip); else st.pts.splice(4, st.pts.length - 4, seg.tip, seg.bA, seg.bB);
+  if (len) st.pts[4] = seg.tip; else st.pts.splice(4, st.pts.length - 4, seg.tip, seg.bA, seg.bB);
   st.seg = { url: btSegOverlay(seg), front: seg.front, amax: seg.amax }; st.auto = true;
   if (!silent) toast(len ? '발 모양에서 발끝을 찾았어요 — 어긋나면 끌어서 고쳐요' : '발 모양을 따서 발끝·발볼을 찾았어요 — 어긋나면 점을 끌어서 고쳐요');
   btDrawPts(false);
@@ -21552,17 +21608,13 @@ function btCardLines(st, P, ln) {
   const q = btQuadOrder(px.slice(0, 4)), G = btHomog(BT_CARD_MM, q); if (!G) return '';
   const toN = m => { const p = btHApply(G, m); return { x: p.x / nw, y: p.y / nh }; };
   let g = `<polygon points="${q.map(p => `${(p.x / nw * 100).toFixed(2)},${(p.y / nh * 100).toFixed(2)}`).join(' ')}" fill="rgba(251,146,60,.16)" stroke="#fb923c" stroke-width="2" vector-effect="non-scaling-stroke"/>`;
-  const gm = btCardGeom(st, btCardMode());
-  if (gm && gm.heel) {
-    const e = gm.heel, a = e.k === 'x' ? { x: e.v, y: -60 } : { x: -320, y: e.v }, b = e.k === 'x' ? { x: e.v, y: 120 } : { x: 160, y: e.v };
-    // 뒤꿈치 선: 발 쪽으로 넉넉히 늘려서
-    const span = e.k === 'x' ? [{ x: e.v, y: -260 }, { x: e.v, y: 320 }] : [{ x: -320, y: e.v }, { x: 400, y: e.v }];
-    g += ln(toN(span[0]), toN(span[1]), '#f9a8d4', true);
-    const T = btHApply(btHomog(q, BT_CARD_MM), px[4]);
-    const foot = e.k === 'x' ? { x: e.v, y: T.y } : { x: T.x, y: e.v };
-    g += ln(P[4], toN(foot), '#67e8f9', true);
-  }
-  if (P.length >= 7) g += ln(P[5], P[6], '#bef264');
+  const pur = btCardPur();
+  if (pur === 'len' && P.length >= 7) {
+    const Hm = btHomog(q, BT_CARD_MM), W1 = btHApply(Hm, px[5]), W2 = btHApply(Hm, px[6]), l = Math.hypot(W2.x - W1.x, W2.y - W1.y) || 1, w = { x: (W2.x - W1.x) / l, y: (W2.y - W1.y) / l };
+    g += ln(toN({ x: W1.x - w.x * 150, y: W1.y - w.y * 150 }), toN({ x: W2.x + w.x * 150, y: W2.y + w.y * 150 }), '#f9a8d4', true);
+    const T = btHApply(Hm, px[4]), t = (T.x - W1.x) * w.x + (T.y - W1.y) * w.y;
+    g += ln(P[4], toN({ x: W1.x + w.x * t, y: W1.y + w.y * t }), '#67e8f9', true);
+  } else if (P.length >= 7) g += ln(P[5], P[6], '#bef264');
   return g;
 }
 function btSegImg(st) {
@@ -21573,8 +21625,8 @@ function btSegImg(st) {
 }
 function btResultShape(f) {
   const recs = btCardRecs(f); const so = recs.slice().reverse().find(r => r.o); if (!so) return '';
-  const r = so.W / so.L, c = btCls(r, BT_W_CUT);
-  return `<button type="button" class="bt-rshape" onclick="btGoCard('w')">${btShapeSvg(so.o, Math.round(so.L), Math.round(so.W), '')}<div><b>👣 내 발 모양</b><small>길이 ${Math.round(so.L)}mm · 발볼 ${Math.round(so.W)}mm<br>발볼 ÷ 길이 ${r.toFixed(2)} → ${BT_W_NAME[c]}<br>카드로 잰 값 · 누르면 다시 재기</small></div></button>`;
+  const Lx = +f.len || so.L || so.oL || 260, r = so.W / Lx, c = btCls(r, BT_W_CUT);
+  return `<button type="button" class="bt-rshape" onclick="btGoCard('w')">${btShapeSvg(so.o, Math.round(Lx), Math.round(so.W), '')}<div><b>👣 내 발 모양</b><small>길이 ${Math.round(Lx)}mm · 발볼 ${Math.round(so.W)}mm<br>발볼 ÷ 길이 ${r.toFixed(2)} → ${BT_W_NAME[c]}<br>카드로 잰 값 · 누르면 다시 재기</small></div></button>`;
 }
 function btCardPtInfo(st, P, K) {
   const mode = btCardMode();
@@ -21588,6 +21640,83 @@ function btCardPtInfo(st, P, K) {
     return `${ref}<div class="bt-ins"><span style="background:${K.col[i]}">${i - 3}</span><div><b>${K.lab[i][0]}</b> 을 눌러요<small>${K.lab[i][1]} · 누르고 있으면 돋보기가 떠요 · 찍은 점은 끌어서 옮길 수 있어요</small></div></div>${pre}`;
   }
   return btCardInfo(btCardGeom(st, mode), mode, st);
+}
+
+
+/* 카드 기준 1cm 격자 — 바닥(카드 면)에 깐 모눈을 사진 원근대로 그림 · 5cm 마다 진하게 */
+function btCardFrame(st, P) {
+  if (P.length < 5 || !st.nw) return null;
+  const nw = st.nw, nh = st.nh, px = P.map(p => ({ x: p.x * nw, y: p.y * nh }));
+  const q = btQuadOrder(px.slice(0, 4)), G = btHomog(BT_CARD_MM, q), Hm = btHomog(q, BT_CARD_MM); if (!G || !Hm) return null;
+  const toN = m => { const p = btHApply(G, m); return { x: p.x / nw, y: p.y / nh }; };
+  const T = btHApply(Hm, px[4]); const ax = btSegAxis(st, T, Hm); const n = { x: -ax.u.y, y: ax.u.x };
+  const at = (a, b) => ({ x: ax.O.x + ax.u.x * a + n.x * b, y: ax.O.y + ax.u.y * a + n.y * b });
+  const aT = (T.x - ax.O.x) * ax.u.x + (T.y - ax.O.y) * ax.u.y, bT = (T.x - ax.O.x) * n.x + (T.y - ax.O.y) * n.y;
+  return { toN, at, T, aT, bT, ax };
+}
+function btCardGrid(st, P) {
+  if (_bt.cgrid === false) return '';
+  const F = btCardFrame(st, P); if (!F) return '';
+  const Lm = Math.min(340, Math.max(200, F.aT + 25)), B = 80, b0 = F.bT;
+  const seg = (m1, m2, w, op) => { const a = F.toN(m1), b = F.toN(m2); if (![a.x, a.y, b.x, b.y].every(isFinite)) return ''; return `<line x1="${(a.x * 100).toFixed(2)}" y1="${(a.y * 100).toFixed(2)}" x2="${(b.x * 100).toFixed(2)}" y2="${(b.y * 100).toFixed(2)}" stroke="rgba(253,224,71,${op})" stroke-width="${w}" vector-effect="non-scaling-stroke"/>`; };
+  let g = '';
+  for (let a = 0; a <= Lm; a += 10) g += seg(F.at(a, b0 - B), F.at(a, b0 + B), a % 50 ? 0.6 : 1.1, a % 50 ? 0.22 : 0.45);
+  for (let b = -B; b <= B; b += 10) g += seg(F.at(0, b0 + b), F.at(Lm, b0 + b), b % 50 ? 0.6 : 1.1, b % 50 ? 0.22 : 0.45);
+  return g;
+}
+/* 사진 위 mm 이름표 — 길이(발끝 ↔ 뒤꿈치 선) · 발볼(두 점 사이) */
+function btCardLabels(st, P) {
+  const gm = btCardGeom(st, btCardMode()); if (!gm || gm.err) return '';
+  const lab = (p, t, cls) => `<div class="bt-mmlab ${cls}" style="left:${(p.x * 100).toFixed(2)}%;top:${(p.y * 100).toFixed(2)}%">${t}</div>`;
+  if (gm.pur === 'w') return P.length >= 7 && gm.W ? lab({ x: (P[5].x + P[6].x) / 2, y: (P[5].y + P[6].y) / 2 }, `↔ ${Math.round(gm.W)}mm`, 'w') : '';
+  if (gm.L === undefined) return '';
+  const F = btCardFrame(st, P); if (!F) return ''; const heel = F.toN(F.at(0, F.bT));
+  const toe = P[4];
+  return lab({ x: heel.x + (toe.x - heel.x) * 0.32, y: heel.y + (toe.y - heel.y) * 0.32 }, `↕ ${Math.round(gm.L)}mm`, 'len');
+}
+function btCardGridToggle() { _bt.cgrid = _bt.cgrid === false; btDrawPts(false); const b = document.getElementById('btGridB'); if (b) b.textContent = _bt.cgrid === false ? '📏 1cm 격자 켜기' : '📏 1cm 격자 끄기'; }
+
+// 발 방향 틀 (카드 mm 좌표): O = 뒤꿈치 쪽 기준점, u = 발끝 쪽 단위 방향
+function btSegAxis(st, T, Hm) {
+  const pur = btCardPur(), P = st.pts;
+  if (pur === 'len' && P.length >= 7) {
+    const W1 = btHApply(Hm, { x: P[5].x * st.nw, y: P[5].y * st.nh }), W2 = btHApply(Hm, { x: P[6].x * st.nw, y: P[6].y * st.nh });
+    const l = Math.hypot(W2.x - W1.x, W2.y - W1.y) || 1, w = { x: (W2.x - W1.x) / l, y: (W2.y - W1.y) / l };
+    const t = (T.x - W1.x) * w.x + (T.y - W1.y) * w.y, O = { x: W1.x + w.x * t, y: W1.y + w.y * t }, d = Math.hypot(T.x - O.x, T.y - O.y) || 1;
+    return { O, u: { x: (T.x - O.x) / d, y: (T.y - O.y) / d } };
+  }
+  if (pur === 'len') { const Lk = +btFoot().len || 260; return { O: { x: T.x, y: T.y + Lk }, u: { x: 0, y: -1 } }; }
+  // 발볼 사진: 카드 긴 변 = 발 방향 · 기준점은 발끝에서 아는 길이만큼 뒤
+  const sx = Math.sign(T.x - BT_CARD.w / 2) || 1, Lk = +btFoot().len || 260, u = { x: sx, y: 0 };
+  return { O: { x: T.x - sx * Lk, y: T.y }, u };
+}
+
+// 실시간: 잡힌 네 점이 진짜 카드(직사각형)인지 — 원근(기울기)을 빼고 본 가로·세로 비율(r≈1)과 직각(c≈0) · 15° 기울어도 맞게
+function btQuadRect(Q, w, h) {
+  const q = btQuadOrder(Q), H = btHomog(BT_CARD_MM, q); if (!H) return null;
+  const G = btHMat(H), f = BT_FPX * Math.max(w, h), cx = w / 2, cy = h / 2;
+  const col = j => [(G[0][j] - cx * G[2][j]) / f, (G[1][j] - cy * G[2][j]) / f, G[2][j]];
+  const a = col(0), b = col(1), na = Math.hypot(a[0], a[1], a[2]), nb = Math.hypot(b[0], b[1], b[2]);
+  if (!na || !nb) return null;
+  return { r: na / nb, c: (a[0] * b[0] + a[1] * b[1] + a[2] * b[2]) / (na * nb) };
+}
+
+// 실시간: 잡힌 카드에서 바닥 1cm 격자를 원근대로(기울이면 사다리꼴) — 카드부터 발 자리까지 · 5cm 마다 진하게
+function btCamGrid(Q, G, sw) {
+  const q = btQuadOrder(Q), Hm = btHomog(q, BT_CARD_MM), Gm = btHomog(BT_CARD_MM, q); if (!Hm || !Gm) return '';
+  const F = G.foot, box = [[F.x - F.W * 0.8, F.top - F.L * 0.06], [F.x + F.W * 0.8, F.top - F.L * 0.06], [F.x + F.W * 0.8, F.top + F.L * 1.08], [F.x - F.W * 0.8, F.top + F.L * 1.08]];
+  const ms = box.map(p => btHApply(Hm, { x: p[0], y: p[1] })).concat(BT_CARD_MM);
+  if (!ms.every(p => isFinite(p.x) && isFinite(p.y))) return '';
+  const x0 = Math.floor(Math.min(...ms.map(p => p.x)) / 10) * 10, x1 = Math.ceil(Math.max(...ms.map(p => p.x)) / 10) * 10;
+  const y0 = Math.floor(Math.min(...ms.map(p => p.y)) / 10) * 10, y1 = Math.ceil(Math.max(...ms.map(p => p.y)) / 10) * 10;
+  if (x1 - x0 > 700 || y1 - y0 > 700) return '';
+  const lim = 4 * Math.max(G.c.w, G.c.h) + 4000;
+  const seg = (a, b, k) => { const A = btHApply(Gm, a), B = btHApply(Gm, b); if (![A.x, A.y, B.x, B.y].every(v => isFinite(v) && Math.abs(v) < lim)) return '';
+    return `<line x1="${A.x.toFixed(1)}" y1="${A.y.toFixed(1)}" x2="${B.x.toFixed(1)}" y2="${B.y.toFixed(1)}" stroke="rgba(253,224,71,${k ? 0.55 : 0.24})" stroke-width="${(k ? 1.1 : 0.6) * sw}"/>`; };
+  let g = '';
+  for (let x = x0; x <= x1; x += 10) g += seg({ x, y: y0 }, { x, y: y1 }, x % 50 === 0);
+  for (let y = y0; y <= y1; y += 10) g += seg({ x: x0, y }, { x: x1, y }, y % 50 === 0);
+  return g;
 }
 
 /* ==================== Org chart ==================== */
