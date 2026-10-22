@@ -6281,7 +6281,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 105;
+const APP_VERSION = 106;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -6325,6 +6325,50 @@ function initBackend() {
     console.warn('Firebase 초기화 실패, 오프라인 모드로 전환:', e);
     USE_FIREBASE = false;
   }
+}
+
+
+/* ==================== 🔒 부분 저장 (v106) ====================
+   예전: 뭘 하나 바꿀 때마다 팀 데이터 전체(약 480KB)를 통째로 덮어씀
+     → 두 사람이 거의 동시에 투표하면 늦게 저장한 쪽이 먼저 저장한 표를 지워버림
+     → 표 하나에 모든 회원 폰이 480KB 를 다시 받음
+   지금: 서버에 마지막으로 받은 상태와 비교해서 「바뀐 칸만」 여러 경로 한 번에 update()
+     → 서로 다른 사람이 같은 경기에 동시에 투표해도 둘 다 남는다 (attendance/선수id 칸이 따로라서)
+   배열 모양이 서버와 다르거나(빈칸 있는 배열 ↔ 객체) 바뀐 칸이 너무 많으면 그 부분만 통째로 / 최악엔 예전처럼 전체 저장 */
+const _fbBase = { store: undefined, auth: undefined };
+// Firebase 는 빈 객체·빈 배열을 저장하지 않는다 → 속까지 다 비어 있으면 「없음」과 같다
+function fbIsEmpty(v) { return v === null || v === undefined || (typeof v === 'object' && Object.keys(v).every(k => fbIsEmpty(v[k]))); }
+function fbDiff(base, next, path, out, budget) {
+  if (fbIsEmpty(base) && fbIsEmpty(next)) return true;
+  const isObj = v => v !== null && typeof v === 'object';
+  if (isObj(base) && isObj(next)) {
+    // Firebase 는 배열도 「0,1,2… 키를 가진 객체」로 저장한다 → 배열/객체 모양이 달라도 칸 단위로 비교 (빈칸은 없는 칸)
+    const live = v => Object.keys(v).filter(k => v[k] !== null && v[k] !== undefined);
+    const keys = new Set(live(base).concat(live(next)));
+    for (const k of keys) {
+      if (!fbDiff(base[k], next[k], path ? path + '/' + k : k, out, budget)) return false;
+    }
+    return true;
+  }
+  if (!isObj(base) && !isObj(next)) {
+    const b = base === undefined ? null : base, n = next === undefined ? null : next;
+    if (b === n) return true;
+  } else if (JSON.stringify(base === undefined ? null : base) === JSON.stringify(next === undefined ? null : next)) return true;
+  if (!path) return false;                       // 최상위 통째 교체는 전체 저장으로
+  out[path] = fbIsEmpty(next) ? null : next;
+  return --budget.n >= 0;
+}
+function fbSmartSave(ref, key, obj) {
+  const next = fbClean(obj);
+  const base = _fbBase[key];
+  if (base === undefined || base === null) { ref.set(next); return 'set'; }
+  const out = {}; const budget = { n: 1500 };
+  if (!fbDiff(base, next, '', out, budget)) { ref.set(next); return 'set'; }
+  const n = Object.keys(out).length;
+  if (!n) return 0;
+  const p = ref.update(out);
+  if (p && p.catch) p.catch(e => { console.warn('부분 저장 실패 → 전체 저장', e); try { ref.set(next); } catch (_) {} });
+  return n;
 }
 
 // Deep-clone + strip undefined so Firebase.set() never rejects
@@ -6545,7 +6589,7 @@ async function sha256(text) {
 function saveAuth() {
   if (USE_FIREBASE && fbAuthRef) {
     _lastWriteAt = Date.now();
-    try { fbAuthRef.set(fbClean(authStore)); } catch(e) { console.warn(e); }
+    try { fbSmartSave(fbAuthRef, 'auth', authStore); } catch(e) { console.warn(e); try { fbAuthRef.set(fbClean(authStore)); } catch (_) {} }
     return;
   }
   try { localStorage.setItem(AUTH_KEY, JSON.stringify(authStore)); } catch(e) {}
@@ -11028,7 +11072,7 @@ let currentTab = 'squad';
 function saveState() {
   if (USE_FIREBASE && fbStoreRef) {
     _lastWriteAt = Date.now();
-    try { fbStoreRef.set(fbClean(store)); } catch(e) { console.warn(e); }
+    try { fbSmartSave(fbStoreRef, 'store', store); } catch(e) { console.warn(e); try { fbStoreRef.set(fbClean(store)); } catch (_) {} }
     return;
   }
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); }
@@ -19749,11 +19793,13 @@ if (USE_FIREBASE) {
     }
   }, 9000);
   fbAuthRef.on('value', snap => {
+    _fbBase.auth = snap.val();                 // 서버 원본(비교 기준) — 아래 normalize 는 새 복사본으로
     authStore = normalizeAuth(snap.val());
     _authLoaded = true;
     onRemoteData(fbTimeout);
   }, err => { console.warn('auth read 실패:', err); });
   fbStoreRef.on('value', snap => {
+    _fbBase.store = snap.val();
     store = normalizeStore(snap.val());
     _storeLoaded = true;
     onRemoteData(fbTimeout);
