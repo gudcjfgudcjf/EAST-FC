@@ -4062,6 +4062,65 @@
   .tra-pmr b { font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .tra-pmr span { font-weight: 900; text-align: right; font-variant-numeric: tabular-nums; color: #cfd6de; }
   .tra-pmr span.w { color: #f9a8d4; } .tra-pmr span.f { color: #fde047; }
   .tra-pmr small { grid-column: 1 / -1; font-size: 11px; color: #9aa4ae; font-weight: 700; }
+  /* ============================================================
+     🧭 v109 포지션 찾기 · 👔 감독 포지션 평가
+     ============================================================ */
+  .tr-pfc { width: 100%; margin-top: 9px; display: flex; align-items: center; gap: 10px; padding: 11px 12px; border-radius: 15px; text-align: left; background: #101318; border: 1px solid rgba(250,204,21,.45); }
+  .tr-pfc > span { font-size: 22px; } .tr-pfc div { flex: 1; min-width: 0; } .tr-pfc b { display: block; font-size: 14px; font-weight: 900; } .tr-pfc small { display: block; font-size: 11.3px; color: #cbd5e1; font-weight: 700; margin-top: 1px; } .tr-pfc i { font-style: normal; font-size: 18px; color: #fde047; }
+  .tr-pfc.on { border-color: rgba(250,204,21,.7); background: rgba(250,204,21,.06); } .tr-pfc.on b { color: #fef9c3; }
+  .tr-pflink { display: block; margin-top: 8px; padding: 8px 10px; border-radius: 10px; border: 1px dashed rgba(250,204,21,.55); background: rgba(250,204,21,.05); font-size: 12px; font-weight: 900; color: #fde68a !important; }
+  .pf-hero { padding: 14px; border-radius: 16px; background: #121318; border: 1px solid rgba(250,204,21,.4); }
+  .pf-hero > b { font-size: 18px; font-weight: 900; } .pf-hero p { margin: 6px 0 0; font-size: 13px; color: #cfd6de; line-height: 1.55; font-weight: 700; } .pf-hero p b { color: #fef9c3; }
+  .pf-hero ul { margin: 9px 0 0; padding-left: 17px; font-size: 12.3px; color: #a7b3bf; line-height: 1.65; font-weight: 700; }
+  .pf-hrow { width: 100%; display: grid; grid-template-columns: auto 1fr; gap: 1px 10px; margin-top: 6px; padding: 9px 11px; border-radius: 12px; background: #101318; border: 1px solid rgba(255,255,255,.08); text-align: left; }
+  .pf-hrow small { grid-row: span 2; align-self: center; font-size: 11px; color: #8a949e; font-weight: 800; } .pf-hrow b { font-size: 13.5px; font-weight: 900; } .pf-hrow span { font-size: 11.5px; color: #cbd5e1; font-weight: 700; }
+  .pf-prog { height: 6px; border-radius: 4px; background: rgba(255,255,255,.08); overflow: hidden; margin-bottom: 14px; } .pf-prog i { display: block; height: 100%; background: #facc15; border-radius: 4px; }
+  .pf-q > span { display: inline-block; font-size: 11px; font-weight: 900; color: #fde047; padding: 2px 8px; border-radius: 8px; background: rgba(250,204,21,.12); }
+  .pf-q > b { display: block; font-size: 18.5px; font-weight: 900; letter-spacing: -.02em; line-height: 1.35; margin-top: 7px; } .pf-q small { display: block; font-size: 12px; color: #9aa4ae; font-weight: 700; margin-top: 4px; }
+  .pf-ol { display: grid; gap: 7px; margin-top: 13px; }
+  .pf-ol button { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 14px 13px; border-radius: 14px; border: 1px solid rgba(255,255,255,.12); background: #121318; font-size: 14.5px; font-weight: 800; line-height: 1.4; }
+  .pf-ol button.on { border-color: #facc15; background: rgba(250,204,21,.1); color: #fef9c3 !important; box-shadow: 0 0 12px rgba(250,204,21,.14); }
+  .pf-ol.multi { grid-template-columns: 1fr 1fr; } .pf-ol.multi button { padding: 12px 10px; font-size: 13.3px; }
+  .pf-ol button > i { flex: none; width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid rgba(255,255,255,.3); display: grid; place-items: center; font-style: normal; font-size: 12px; font-weight: 900; }
+  .pf-ol button.on > i { background: #facc15; border-color: #facc15; color: #1a1300; }
+  .pf-res { padding: 16px 14px; border-radius: 18px; background: #14130d; border: 1px solid rgba(250,204,21,.55); text-align: center; }
+  .pf-res > small { font-size: 11px; color: #a8a29e; font-weight: 800; } .pf-res > b { display: block; font-size: 26px; font-weight: 900; letter-spacing: -.03em; color: #fef9c3; margin-top: 4px; }
+  .pf-res p { margin: 4px 0 0; font-size: 13px; color: #d6d3d1; font-weight: 700; }
+  .pf-trs { display: flex; justify-content: center; flex-wrap: wrap; gap: 5px; margin-top: 10px; } .pf-trs span { font-size: 11.5px; font-weight: 900; padding: 4px 9px; border-radius: 9px; background: rgba(250,204,21,.13); color: #fde68a; }
+  .pf-diff { margin-top: 8px; padding: 9px 11px; border-radius: 12px; background: rgba(34,211,238,.07); border: 1px solid rgba(34,211,238,.3); font-size: 12px; color: #cffafe; font-weight: 800; line-height: 1.5; }
+  .pf-rk { margin-top: 7px; padding: 10px 12px; border-radius: 13px; background: #101318; border: 1px solid rgba(255,255,255,.08); }
+  .pf-rk.r1 { border-color: rgba(250,204,21,.55); } .pf-rk .h { display: flex; align-items: center; gap: 8px; }
+  .pf-rk .h i { font-style: normal; width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; font-size: 12px; font-weight: 900; background: rgba(255,255,255,.08); } .pf-rk.r1 .h i { background: #facc15; color: #1a1300; }
+  .pf-rk .h b { flex: 1; font-size: 14.5px; font-weight: 900; } .pf-rk .h em { font-style: normal; font-size: 15px; font-weight: 900; font-variant-numeric: tabular-nums; color: #fef9c3; }
+  .pf-rk .bar { height: 6px; border-radius: 4px; background: rgba(255,255,255,.07); margin-top: 7px; overflow: hidden; } .pf-rk .bar i { display: block; height: 100%; background: #facc15; } .pf-rk.r2 .bar i { background: #a3a3a3; } .pf-rk.r3 .bar i { background: #6b7280; }
+  .pf-rk small { display: block; margin-top: 7px; font-size: 11.8px; color: #cbd5e1; line-height: 1.5; font-weight: 700; }
+  .pf-auto { margin-top: 8px; font-size: 12px; color: #fde68a; font-weight: 800; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; } .pf-auto b { color: #fef9c3; }
+  .pf-auto button { padding: 4px 9px; border-radius: 8px; border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.06); font-size: 11.5px; font-weight: 800; color: #e5e7eb; cursor: pointer; font-family: inherit; }
+  .pf-2c { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 12px; }
+  .pf-2c > div { padding: 10px; border-radius: 13px; background: #101318; border: 1px solid; display: flex; flex-wrap: wrap; gap: 5px; align-content: flex-start; }
+  .pf-2c > div b { flex-basis: 100%; font-size: 12.5px; font-weight: 900; } .pf-2c .st { border-color: rgba(132,204,22,.45); } .pf-2c .wk { border-color: rgba(251,146,60,.45); }
+  .pf-2c span { font-size: 11.5px; font-weight: 800; padding: 3px 8px; border-radius: 8px; background: rgba(255,255,255,.07); } .pf-2c em { font-style: normal; font-size: 11.5px; color: #7c8692; }
+  .pf-go { display: flex; align-items: center; gap: 6px; width: 100%; margin-top: 7px; padding: 12px; border-radius: 13px; border: 1px solid; background: #101318; font-size: 13.3px; font-weight: 900; text-align: left; }
+  .pf-go span { margin-left: auto; font-size: 11.5px; font-weight: 900; white-space: nowrap; }
+  .pf-go.mx { border-color: rgba(132,204,22,.5); } .pf-go.mx span { color: #bef264; } .pf-go.fx { border-color: rgba(251,146,60,.5); } .pf-go.fx span { color: #fdba74; }
+  .pf-go.bt { border-color: rgba(217,249,80,.45); color: #ecfccb !important; margin-top: 10px; }
+  /* 👔 감독 포지션 평가 */
+  .pe-sum { font-size: 12.5px; font-weight: 800; color: var(--text-2); margin-bottom: 10px; }
+  .pe-row { padding: 11px 12px; border-radius: 13px; background: var(--bg-2); border: 1px solid var(--border); margin-bottom: 8px; }
+  .pe-row.gap { border-color: rgba(251,146,60,.6); }
+  .pe-h { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; } .pe-h b { font-size: 14.5px; font-weight: 900; display: flex; align-items: center; gap: 6px; }
+  .pe-h b i { font-style: normal; font-size: 11px; font-weight: 900; padding: 1px 6px; border-radius: 6px; background: rgba(255,255,255,.08); color: var(--text-2); }
+  .pe-h em { font-style: normal; font-size: 11px; font-weight: 900; color: #fdba74; padding: 2px 8px; border-radius: 8px; background: rgba(251,146,60,.12); }
+  .pe-self { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; } .pe-self span { font-size: 11.3px; font-weight: 800; padding: 3px 8px; border-radius: 8px; background: rgba(255,255,255,.05); color: var(--text-2); }
+  .pe-self .pf { color: #fde68a; background: rgba(250,204,21,.08); } .pe-self .f { color: #fef08a; } .pe-self .w { color: #f9a8d4; } .pe-self .no { color: var(--text-4); }
+  .pe-ev { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; margin-top: 9px; } .pe-ev small { flex-basis: 100%; font-size: 11px; font-weight: 900; color: var(--text-3); }
+  .pe-ev button { padding: 6px 9px; border-radius: 9px; border: 1px solid var(--border-2); background: var(--bg-3); font-size: 12px; font-weight: 800; color: var(--text-2); cursor: pointer; font-family: inherit; }
+  .pe-ev button.on { border-color: #60a5fa; background: rgba(96,165,250,.16); color: #dbeafe; }
+  .tra-pmr { grid-template-columns: minmax(0, 1fr) repeat(5, 34px) !important; font-size: 12px !important; }
+  .tra-pmr span.p { color: #fde68a; } .tra-pmr span.e { color: #93c5fd; }
+  .tra-gap { color: #fdba74; font-weight: 900; }
+
+  .bt-pack { margin-top: 8px; padding: 8px 10px; border-radius: 10px; background: rgba(255,255,255,.035); font-size: 11.6px; color: #a7b3bf; font-weight: 700; line-height: 1.5; } .bt-pack b { color: #e5e7eb; }
   /* iOS: 16px 미만 입력칸은 누르는 순간 화면이 확대된다 → 터치 기기에선 16px */
   @media (max-width: 820px) and (pointer: coarse) {
     input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]), select, textarea { font-size: 16px !important; }
@@ -6751,6 +6810,7 @@
     <div class="priv-subtabs" id="mgrSubtabs">
       <button class="priv-subtab active" data-msub="board">📋 포메이션 보드</button>
       <button class="priv-subtab" data-msub="players">👤 선수 매니징</button>
+      <button class="priv-subtab" data-msub="poseval">🧭 포지션 평가</button>
       <button class="priv-subtab" data-msub="team">📣 팀 제언</button>
       <button class="priv-subtab" data-msub="scout">🔍 스카우팅 리포트</button>
     </div>
@@ -6770,6 +6830,11 @@
       </div>
       <div class="priv-panel" id="mgrPanel-scout">
         <div id="scoutContent"></div>
+      </div>
+      <div class="priv-panel" id="mgrPanel-poseval">
+        <div class="priv-hint">선수마다 <b>감독이 보는 잘 맞는 자리(👔)</b>를 골라두세요. 본인 진단(🧭 포지션 찾기 · ⭐ 잘 맞는 자리)과 하나도 안 겹치면 <b>⚠️ 생각 차이</b>로 표시돼요 — 면담할 때 쓰세요. 선수 화면엔 안 보여요.</div>
+        <input type="search" id="posEvalSearch" class="priv-search" placeholder="선수 이름/등번호 검색..." oninput="_posEvalQ=this.value;renderPosEval(true)" />
+        <div id="posEvalContent"></div>
       </div>
     </div>
   </div>
@@ -6820,7 +6885,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 108;
+const APP_VERSION = 109;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -7351,6 +7416,7 @@ function renderManagerPageSub() {
   if (_mgrPageSub === 'board') renderMgrBoard();
   else if (_mgrPageSub === 'team') renderMgrTeamNotes();
   else if (_mgrPageSub === 'scout') renderScout();
+  else if (_mgrPageSub === 'poseval') renderPosEval();
   else renderMgrPlayers();
 }
 
@@ -18073,7 +18139,7 @@ function renderTrain() {
   try {
     const v = _tr.view;
     html = v === 'quiz' ? trViewQuiz() : v === 'brief' ? trViewBrief() : v === 'kb' ? trViewKb() : v === 'fx' ? trViewFx() : v === 'rx' ? trViewRx()
-      : v === 'more' ? trViewMore() : v === 'wrong' ? trViewWrong() : v === 'stats' ? trViewStats() : trViewHome();
+      : v === 'more' ? trViewMore() : v === 'wrong' ? trViewWrong() : v === 'stats' ? trViewStats() : v === 'pf' ? trViewPf() : trViewHome();
   } catch (e) { console.error('트레이닝 화면 오류', e); _tr.view = 'home'; html = trViewHome(); }
   el.innerHTML = `<div class="tr-wrap">${html}</div>`;
   updateTrainBadge();
@@ -18113,6 +18179,7 @@ function trViewHome() {
       ${prow('pos', play, '⚽ 지금 뛰는 자리', '전부 골라요 · 처음 고른 게 주 포지션', '')}
       ${prow('posW', want, '❤️ 해보고 싶은 자리', '이 자리 문제 · 처방도 같이 나와요', 'w')}
       ${prow('posF', fit, '⭐ 나한테 잘 맞는 자리', '내 생각 · 감독 참고용', 'f')}
+      <button type="button" class="tr-pflink" onclick="pfStart()">🧭 잘 모르겠으면 12문제로 찾아보기 ›</button>
       ${trFitHint()}
       ${play.length ? `<button type="button" class="tr-mini-btn" onclick="trGo('home',{posEdit:false})">완료</button>` : '<div class="tr-note">⚽ 지금 뛰는 자리를 하나 이상 골라주세요</div>'}</div>`;
   } else {
@@ -18150,7 +18217,7 @@ function trViewHome() {
   const acc = trAcc([r.n, r.c]);
   const fxA = trActive('fx'), mxA = trActive('mx');
   const owner = isOwner() ? `<button type="button" class="tr-owner" onclick="openTrainAnalysis()"><span>📊</span><div><b>EAST FC 팀 분석</b><small>오너 전용 · 다른 회원 화면엔 안 보여요</small></div><i>›</i></button>` : '';
-  return `${pos}${match}${checks}
+  return `${pos}${trPfCard()}${match}${checks}
     <div class="tr-pil">🧠 뇌지컬</div>
     ${daily}
     <div class="tr-bm">
@@ -18675,8 +18742,8 @@ function trAnaHtml(data) {
     let name = '', groups = r.pos && r.pos.length ? r.pos : [];
     if (k.indexOf('u_') === 0) { const u = authStore.users.find(x => x.id === k.slice(2)); name = u ? (u.displayName || u.username) : '(탈퇴 계정)'; }
     else { const p = getPlayer(k); name = p ? p.name : '(선수 정보 없음)'; if (!groups.length && p) (p.positions || []).forEach(c => { const g = TR_ROLE_GROUP[c]; if (g && !groups.includes(g)) groups.push(g); }); }
-    return { k, r, name, groups: trArr(groups), want: trArr(r.posW), fit: trArr(r.posF) };
-  }).filter(o => o.r.n || Object.keys(o.r.fx).length || Object.keys(o.r.mx).length || Object.keys(o.r.kb).length || trArr(o.r.pos).length || o.want.length || o.fit.length);
+    return { k, r, name, groups: trArr(groups), want: trArr(r.posW), fit: trArr(r.posF), pf: pfLatestOf(r), ev: k.indexOf('u_') === 0 ? [] : posEvalOf(k) };
+  }).filter(o => o.r.n || Object.keys(o.r.fx).length || Object.keys(o.r.mx).length || Object.keys(o.r.kb).length || trArr(o.r.pos).length || o.want.length || o.fit.length || o.pf);
   const H = s => escapeHtml(s);
   if (!recs.length) return `<div class="tra-empty"><b>아직 쌓인 기록이 없어요</b><small>선수들이 트레이닝 탭에서 문제를 풀고, 보완·극대화를 고르는 순간부터 자동으로 여기 모여요. 고르다 멈춘 것까지 다 데이터로 들어와요.</small></div>`;
   const cat = {}, gs = {}, grp = {}, wk = {}; let N = 0, C = 0, fxN = 0, mxN = 0, partial = 0;
@@ -18738,7 +18805,7 @@ function trAnaHtml(data) {
   const rows = recs.slice().sort((a, b) => (b.r.n || 0) - (a.r.n || 0)).map(o => {
     const last = kind => { const es = Object.values(o.r[kind] || {}).filter(e => e && e.a).sort((a, b) => (b.t || 0) - (a.t || 0)); const e = es[0]; if (!e) return '—'; const it = trItem(kind, e.g, e.a); return it ? it.t + (e.end ? '' : ' (고르는 중)') : '—'; };
     const sk = o.r.sd && (trDayNum() - trDayNum(o.r.sd)) <= 1 ? o.r.sk : 0;
-    return `<div class="tra-pr"><b>${H(o.name)}<small>${o.groups.map(g => TR_GROUPS[g] ? TR_GROUPS[g].short : g).join('·') || '—'}${o.want.filter(g => !o.groups.includes(g)).length ? ' · ❤️' + o.want.filter(g => !o.groups.includes(g)).map(g => TR_GROUPS[g] ? TR_GROUPS[g].short : g).join('·') : ''} · ${o.r.n || 0}문제</small></b><span class="acc">${acc([o.r.n, o.r.c]) === null ? '—' : acc([o.r.n, o.r.c]) + '%'}</span><span class="sk">${sk ? '🔥' + sk : '–'}</span><div class="ch"><span class="fx">🩹 ${H(last('fx'))}</span><span class="mx">🚀 ${H(last('mx'))}</span></div></div>`;
+    return `<div class="tra-pr"><b>${H(o.name)}<small>${o.groups.map(g => TR_GROUPS[g] ? TR_GROUPS[g].short : g).join('·') || '—'}${o.want.filter(g => !o.groups.includes(g)).length ? ' · ❤️' + o.want.filter(g => !o.groups.includes(g)).map(g => TR_GROUPS[g] ? TR_GROUPS[g].short : g).join('·') : ''}${o.pf ? ' · 🧭 ' + H(o.pf.ty) : ''}${o.ev.length ? ' · 👔 ' + o.ev.map(g => TR_GROUPS[g] ? TR_GROUPS[g].short : g).join('·') : ''}${o.ev.length && (o.fit.length || o.pf) && !o.ev.some(g => o.fit.includes(g) || (o.pf && o.pf.top.slice(0, 2).includes(g))) ? ' <span class="tra-gap">⚠️ 생각 차이</span>' : ''} · ${o.r.n || 0}문제</small></b><span class="acc">${acc([o.r.n, o.r.c]) === null ? '—' : acc([o.r.n, o.r.c]) + '%'}</span><span class="sk">${sk ? '🔥' + sk : '–'}</span><div class="ch"><span class="fx">🩹 ${H(last('fx'))}</span><span class="mx">🚀 ${H(last('mx'))}</span></div></div>`;
   }).join('');
   const rec = Object.values(recent).sort((a, b) => b.n - a.n).slice(0, 3).map(x => { const it = trItem(x.kind, x.g, x.a); return it ? `<b class="${x.kind}">${x.kind === 'fx' ? '🩹' : '🚀'} ${H(it.t)} ${x.n}</b>` : ''; }).join('');
   return `<div class="tra">
@@ -18753,8 +18820,8 @@ function trAnaHtml(data) {
         ${bar('동점', gs.draw)}${bar('이기는 중', gs.lead)}${bar('지는 중', gs.trail, true)}${bar('4쿼터', gs.q4, true)}${bar('사람 부족', gs.short)}
         <div class="tra-t cy">📏 라인별</div>${lineBars.map(([k, a]) => bar(k, a)).join('')}
         <div class="tra-t vi">📈 주별 추세 <small>이번 주 ${active} / ${roster}명 참여</small></div>${spark}</div>
-      <div class="tra-card wide"><div class="tra-t cy">🗺️ 포지션 지도 <small>뛰는 자리 · ❤️ 해보고 싶은 · ⭐ 잘 맞는다고 고른</small></div>
-        <div class="tra-pm">${TR_GROUP_ORDER.map(g => { const pl = recs.filter(o => o.groups.includes(g)), wa = recs.filter(o => o.want.includes(g)), fi = recs.filter(o => o.fit.includes(g)); return `<div class="tra-pmr"><b>${TR_GROUPS[g].ico} ${TR_GROUPS[g].name}</b><span>⚽ ${pl.length}</span><span class="w">❤️ ${wa.length}</span><span class="f">⭐ ${fi.length}</span>${wa.length ? `<small>❤️ ${wa.slice(0, 5).map(o => H(o.name)).join(' · ')}${wa.length > 5 ? ' 외' : ''}</small>` : ''}</div>`; }).join('')}</div></div>
+      <div class="tra-card wide"><div class="tra-t cy">🗺️ 포지션 지도 <small>⚽ 뛰는 · ❤️ 해보고 싶은 · ⭐ 잘 맞는다고 고른 · 🧭 포지션 찾기 1순위 · 👔 감독 평가</small></div>
+        <div class="tra-pm">${TR_GROUP_ORDER.map(g => { const pl = recs.filter(o => o.groups.includes(g)), wa = recs.filter(o => o.want.includes(g)), fi = recs.filter(o => o.fit.includes(g)); return `<div class="tra-pmr"><b>${TR_GROUPS[g].ico} ${TR_GROUPS[g].name}</b><span>⚽ ${pl.length}</span><span class="w">❤️ ${wa.length}</span><span class="f">⭐ ${fi.length}</span><span class="p">🧭 ${recs.filter(o => o.pf && o.pf.top[0] === g).length}</span><span class="e">👔 ${Object.keys(store.posEval || {}).filter(pid => posEvalOf(pid).includes(g)).length}</span>${wa.length ? `<small>❤️ ${wa.slice(0, 5).map(o => H(o.name)).join(' · ')}${wa.length > 5 ? ' 외' : ''}</small>` : ''}</div>`; }).join('')}</div></div>
       <div class="tra-card wide"><div class="tra-t cy">👥 선수별 <small>문제 많이 푼 순</small></div>
         <div class="tra-tab"><div class="tra-ph"><b>선수 · 마지막으로 고른 보완 · 극대화</b><span>뇌지컬</span><span>연속</span></div>${rows}</div>
         <div class="tra-ins"><b>처방 뒤 경기 체크</b> 좋아짐 ${chk.up} · 그대로 ${chk.same} · 더 안 됨 ${chk.down}</div>
@@ -19008,9 +19075,11 @@ function btPref() {
     let it = null; try { it = trItem('mx', e.g, e.a); } catch (er) {}
     if (it && i < 2) why.push(`극대화 「${it.t}」`);
   });
+  let pfOn = false;
+  try { const pl = pfLast(); if (pl && pl.tr) { Object.keys(pl.tr).sort((a, b) => pl.tr[b] - pl.tr[a]).slice(0, 3).forEach((t, i) => { const a = PF_BOOT[t]; if (a) vec[a] += [2, 1.5, 1][i]; }); why.push(`🧭 ${pl.ty}`); pfOn = true; } } catch (e) {}
   if (_bt.pri && vec[_bt.pri] !== undefined) vec[_bt.pri] += 6;
   const top = BT_ATTR_ORDER.slice().sort((a, b) => vec[b] - vec[a]).filter(a => vec[a] > 0).slice(0, 2);
-  return { vec, why, top, has: gs.length > 0 || mx.length > 0 };
+  return { vec, why, top, has: gs.length > 0 || mx.length > 0 || pfOn };
 }
 // 결과 목록
 function btRank(f) {
@@ -19434,6 +19503,7 @@ function btCard(x, i, R) {
       <dl class="bt-dl"><dt>갑피</dt><dd>${BTX(L.up)}</dd><dt>무게감</dt><dd>${BTX(L.wt)} <small>(같은 TF 끼리 비교 · 참고)</small></dd><dt>이런 사람</dt><dd>${BTX(L.who)}</dd><dt>주의</dt><dd>${BTX(L.bad)}</dd></dl>
       <div class="bt-trs"><div class="bt-trh">등급 · 가격 <small>${BT_SURVEY} 국내 공식몰 정가</small></div>${btTierRows(L, R.mode, t)}</div>
       ${L.vari ? `<div class="bt-vari">➕ ${BTX(L.vari)}</div>` : ''}
+      <div class="bt-pack">🎨 <b>색(팩)만 다른 건 같은 신발</b> — 핏·성능·사이즈 그대로예요. 새 팩이 나오면 지난 팩이 할인되는 경우가 많고, 메시 같은 선수 시그니처는 같은 신발에 값만 조금 더 붙어요 (조사 때 F50 리그 TF 109,000원 · 메시 모델 119,000원). 지금 파는 색은 「실물 사진」에서.</div>
       <div class="bt-imgnote">그림은 라인 특징만 그린 것 · 실물은 「실물 사진」에서 (네이버 쇼핑 검색)</div>
     </div>` : `<button type="button" class="bt-open" onclick="_bt.open['${L.id}']=true;renderBoots()">특화 · 갑피 · 등급별 가격 ▾</button>`}
   </div>`;
@@ -19487,6 +19557,368 @@ function btTierBlock(mode) {
 }
 function btViewTiers() { return `${btBackBar('💰 등급별 가격 · 차이', "btGo('home')")}${btTierBlock('both')}<div class="bt-src">${BT_SURVEY} 국내 공식몰 정가 기준 · 할인은 수시로 바뀌어요</div>`; }
 function btViewGuide() { return `${btBackBar('🟩 TF · AG 고르는 법', "btGo('home')")}${btSurfBlock()}${btExclBlock()}`; }
+
+/* ==================== 🧭 포지션 찾기 (v109) ====================
+   성향 8 + 장점·단점·역할·키퍼 4 = 12문제(약 2분) → 잘 맞을 자리 1·2순위 + 유형 이름 + 장점·단점 → 극대화·보완 연결.
+   「+6문제 더 정확하게」 선택. 답은 고를 때마다 자동 저장(rec.pf.cur), 끝나면 rec.pf.h[시각] 에 결과 기록(다시 하면 변화 비교).
+   자기 진단이라 「잘 맞을 가능성」으로만 보여주고, 포지션별 문제 정답률이 쌓이면 살짝 보정. 감독 평가(store.posEval)와 비교는 감독/오너 화면. */
+const PF_TR = { spd: '스피드', tch: '볼 터치', kick: '킥', stb: '몸싸움·공중볼', eng: '활동량', vis: '시야·패스', calm: '침착·위치', lead: '리더·콜', agg: '적극 압박' };
+// 보기 = [글, 포지션 점수, 성향 점수, 이유(짧게) 또는 태그]
+const PF_Q = [
+  { id: 'q1', q: '공을 받을 때 나는 보통…', o: [
+    ['등지고 받아서 버티고 동료에게 내준다', { ST: 3, CAM: 1 }, { stb: 2, tch: 1 }, '등지고 버티며 연결'],
+    ['앞을 보고 받아서 바로 앞으로 패스한다', { CDM: 3, CAM: 2, CB: 1 }, { vis: 2, calm: 1 }, '앞을 보고 전진 패스'],
+    ['측면에서 받아 1대1로 제치러 간다', { WG: 3, FB: 1 }, { tch: 2, spd: 1 }, '측면 1대1 돌파'],
+    ['빈 공간으로 뛰어 들어가면서 받는다', { ST: 2, WG: 2 }, { spd: 2 }, '공간 침투']] },
+  { id: 'q2', q: '우리 공을 뺏겼다. 나는 제일 먼저…', o: [
+    ['바로 달려들어 다시 뺏으러 간다', { CDM: 2, ST: 1, CAM: 1, WG: 1 }, { agg: 2, eng: 1 }, '뺏기면 바로 압박'],
+    ['내 자리로 전력으로 돌아간다', { FB: 2, CB: 2, WG: 1 }, { eng: 1, calm: 1 }, '빠른 수비 복귀'],
+    ['가운데 길부터 막고 시간을 끈다', { CDM: 3, CB: 1 }, { calm: 2 }, '가운데부터 지연'],
+    ['뒤에서 위치 잡고 「붙어!」 하고 외친다', { GK: 2, CB: 2 }, { lead: 2, calm: 1 }, '뒤에서 지휘']] },
+  { id: 'q3', q: '경기 끝나고 제일 기분 좋은 순간은?', o: [
+    ['내가 골 넣었을 때', { ST: 3, WG: 1, CAM: 1 }, { kick: 1 }, '골이 제일 좋음'],
+    ['내 패스로 골이 났을 때', { CAM: 3, WG: 1, CDM: 1 }, { vis: 2 }, '어시스트가 제일 좋음'],
+    ['결정적인 걸 막아냈을 때', { CB: 2, GK: 2, FB: 1 }, { stb: 1, calm: 1 }, '막아낸 게 제일 좋음'],
+    ['끝까지 다 뛰고 이겼을 때', { CDM: 2, FB: 2 }, { eng: 2 }, '많이 뛰고 이긴 게 좋음']] },
+  { id: 'q4', q: '공을 잡았는데 앞이 텅 비었다', o: [
+    ['끝까지 몰고 치고 나간다', { WG: 2, FB: 1, ST: 1 }, { spd: 2, tch: 1 }, '빈 곳은 몰고 전진'],
+    ['뛰어드는 동료에게 찔러준다', { CAM: 3, CDM: 1 }, { vis: 2 }, '침투 패스'],
+    ['슈팅 각부터 본다', { ST: 2, CAM: 1 }, { kick: 2 }, '슈팅 먼저'],
+    ['무리 안 하고 옆에 주고 내 자리 지킨다', { CB: 2, CDM: 1 }, { calm: 2 }, '안전하게 연결']] },
+  { id: 'q5', q: '상대 키 큰 공격수가 롱볼을 받으려 한다', o: [
+    ['먼저 점프해서 머리로 따낸다', { CB: 3, ST: 1 }, { stb: 2, agg: 1 }, '공중볼 경합'],
+    ['떨어지는 공을 줍는 자리로 간다', { CDM: 2, FB: 1 }, { calm: 1, eng: 1 }, '세컨드볼 줍기'],
+    ['나와서 손으로 잡는다', { GK: 3 }, { lead: 1 }, '나와서 잡기'],
+    ['그 선수 옆 빈 공간을 막는다', { FB: 2, CB: 1 }, { calm: 1 }, '커버 위치']] },
+  { id: 'q6', q: '내가 제일 자신 있는 킥은?', o: [
+    ['짧고 정확한 패스', { CDM: 2, CAM: 1, CB: 1 }, { tch: 1, vis: 1 }, '짧은 패스가 정확'],
+    ['멀리 정확한 롱패스', { CDM: 2, CB: 1, GK: 1 }, { kick: 1, vis: 1 }, '롱패스'],
+    ['측면에서 올리는 크로스', { FB: 2, WG: 2 }, { kick: 1 }, '크로스'],
+    ['세게 때리는 슈팅', { ST: 2, CAM: 1 }, { kick: 2 }, '강한 슈팅']] },
+  { id: 'q7', q: '4쿼터 체력은?', o: [
+    ['끝까지 왕복할 수 있다', { FB: 2, CDM: 2, WG: 1 }, { eng: 2 }, '끝까지 왕복'],
+    ['짧게 폭발하고, 대신 쉬어야 한다', { ST: 2, WG: 1 }, { spd: 2 }, '순간 스피드형'],
+    ['많이 안 뛰어도 위치로 커버한다', { CB: 2, GK: 1 }, { calm: 2 }, '위치로 커버'],
+    ['체력보다 머리로 해결한다', { CAM: 2, CDM: 1 }, { vis: 2 }, '머리로 플레이']] },
+  { id: 'q8', q: '경기 중 나는…', o: [
+    ['콜·지시를 많이 한다', { CB: 2, GK: 2, CDM: 1 }, { lead: 3 }, '콜 많이 하는 리더'],
+    ['조용히 내 할 일을 한다', { CB: 1, FB: 1, CDM: 1 }, { calm: 2 }, '묵묵히 내 일'],
+    ['분위기를 띄운다', { WG: 1, ST: 1, CAM: 1 }, { eng: 1, lead: 1 }, '분위기 메이커'],
+    ['「줘!」 하고 공을 달라고 한다', { CAM: 2, ST: 1, WG: 1 }, { tch: 1, vis: 1 }, '공을 원하는 타입']] },
+  { id: 'q9', multi: 3, q: '내 장점은? (최대 3개)', o: [
+    ['스피드', { WG: 2, ST: 1, FB: 1 }, { spd: 2 }, 'spd'],
+    ['볼 터치 · 드리블', { WG: 2, CAM: 2 }, { tch: 2 }, 'tch'],
+    ['패스 · 시야', { CAM: 2, CDM: 2 }, { vis: 2 }, 'vis'],
+    ['킥력 · 슈팅', { ST: 2, CAM: 1 }, { kick: 2 }, 'kick'],
+    ['몸싸움 · 버티기', { ST: 1, CB: 2, CDM: 1 }, { stb: 2 }, 'duel'],
+    ['헤딩 · 점프', { CB: 2, ST: 1, GK: 1 }, { stb: 2 }, 'head'],
+    ['체력 · 활동량', { FB: 2, CDM: 2 }, { eng: 2 }, 'eng'],
+    ['반사신경 · 손', { GK: 3 }, {}, 'hands'],
+    ['위치 선정', { CB: 2, CDM: 1, GK: 1 }, { calm: 2 }, 'pos'],
+    ['침착함', { CB: 1, CDM: 2, GK: 1 }, { calm: 2 }, 'calm']] },
+  { id: 'q10', multi: 2, neg: true, q: '내 약점은? (최대 2개)', o: [
+    ['발이 느려요', { WG: -2, FB: -1, ST: -1 }, {}, 'slow'],
+    ['볼 터치가 불안해요', { CAM: -2, WG: -2, CDM: -1 }, {}, 'touch'],
+    ['몸싸움에서 밀려요', { CB: -2, ST: -1, CDM: -1 }, {}, 'duel'],
+    ['헤딩이 약해요', { CB: -2, ST: -1 }, {}, 'head'],
+    ['체력이 금방 떨어져요', { FB: -2, CDM: -1, WG: -1 }, {}, 'stamina'],
+    ['수비 가담이 귀찮아요', { CB: -2, FB: -2, CDM: -1 }, {}, 'nodef'],
+    ['패스 미스가 많아요', { CDM: -2, CB: -1, CAM: -1 }, {}, 'pass'],
+    ['슈팅 자신이 없어요', { ST: -2, CAM: -1 }, {}, 'shot']] },
+  { id: 'q11', q: '어떤 역할이 제일 끌려?', o: [
+    ['골을 넣는 사람', { ST: 3, WG: 1 }, {}, '골 넣는 역할이 끌림'],
+    ['경기를 만드는 사람', { CAM: 2, CDM: 2 }, { vis: 1 }, '경기를 만드는 역할이 끌림'],
+    ['뚫리지 않는 벽', { CB: 3, GK: 1, FB: 1 }, { stb: 1 }, '수비의 벽이 끌림'],
+    ['측면을 지배하는 사람', { WG: 2, FB: 2 }, { spd: 1 }, '측면 지배가 끌림']] },
+  { id: 'q12', q: '골키퍼, 해볼 생각 있어?', o: [
+    ['하고 싶어요', { GK: 4 }, {}, '골키퍼를 하고 싶음'],
+    ['급하면 할 수 있어요', { GK: 1 }, {}, '급하면 키퍼 가능'],
+    ['필드가 좋아요', { GK: -4 }, {}, '필드 선호']] },
+];
+const PF_QX = [
+  { id: 'x1', q: '상대가 드리블로 나한테 온다', o: [
+    ['바로 발 넣어서 뺏는다', { CDM: 2, CB: 1 }, { agg: 2 }, '적극 태클'],
+    ['같이 뛰면서 바깥으로 몬다', { FB: 3, CB: 1 }, { calm: 1 }, '바깥으로 몰기'],
+    ['동료 올 때까지 길만 막는다', { CDM: 2, CB: 2 }, { calm: 2 }, '길 막고 기다리기'],
+    ['수비는 솔직히 자신 없다', { ST: 1, WG: 1, CAM: 1, CB: -1, FB: -1 }, {}, '수비는 자신 없음']] },
+  { id: 'x2', q: '세트피스 때 나는…', o: [
+    ['내가 찬다(키커)', { CAM: 2, WG: 1 }, { kick: 2 }, '세트피스 키커'],
+    ['머리로 노린다', { CB: 2, ST: 2 }, { stb: 2 }, '세트피스 헤딩'],
+    ['흘러나온 공을 노린다', { CDM: 2, CAM: 1 }, { kick: 1 }, '흘러나온 공 노리기'],
+    ['뒤에 남아 역습을 막는다', { FB: 2, CB: 1 }, { calm: 1 }, '뒤에 남아 대비']] },
+  { id: 'x3', q: '더 편한 쪽은?', o: [
+    ['측면 (터치라인 근처)', { WG: 2, FB: 2 }, {}, '측면이 편함'],
+    ['가운데', { CAM: 1, CDM: 1, CB: 1, ST: 1 }, {}, '가운데가 편함'],
+    ['상관없어요', {}, {}, '']] },
+  { id: 'x4', q: '공이 없을 때 나는 주로…', o: [
+    ['수비 뒷공간 타이밍을 노린다', { ST: 3, WG: 1 }, { spd: 1 }, '뒷공간 타이밍'],
+    ['빈 공간으로 내려가 받아준다', { CAM: 2, CDM: 1 }, { vis: 1 }, '내려와서 받기'],
+    ['수비 라인을 맞춘다', { CB: 2, FB: 2 }, { lead: 1, calm: 1 }, '라인 맞추기'],
+    ['넓게 벌려 선다', { WG: 2, FB: 1 }, {}, '넓게 서기']] },
+  { id: 'x5', q: '1대1 수비, 자신 있어?', o: [
+    ['자신 있다', { CB: 2, FB: 2, CDM: 1 }, { stb: 1 }, '1대1 수비 자신'],
+    ['보통', {}, {}, ''],
+    ['자신 없다', { CB: -2, FB: -2 }, {}, '']] },
+  { id: 'x6', q: '높게 오는 크로스·롱볼 처리는?', o: [
+    ['자신 있다', { GK: 2, CB: 2 }, { stb: 1 }, '높은 공 처리 자신'],
+    ['보통', {}, {}, ''],
+    ['자신 없다', { GK: -2, CB: -1 }, {}, '']] },
+];
+const PF_TYPES = {
+  GK: [['lead', '지휘형 키퍼', '뒤에서 소리로 수비를 움직이는 키퍼'], ['kick', '빌드업 키퍼', '발로 공격을 시작하는 키퍼'], ['spd', '스위퍼 키퍼', '뒷공간까지 나와서 지우는 키퍼'], [null, '선방형 키퍼', '골문 앞 반사신경으로 막는 키퍼']],
+  CB: [['vis', '빌드업 센터백', '뒤에서 패스로 공격을 여는 센터백'], ['kick', '빌드업 센터백', '뒤에서 패스로 공격을 여는 센터백'], ['stb', '파이터 센터백', '경합·헤딩으로 버티는 센터백'], ['agg', '파이터 센터백', '경합·헤딩으로 버티는 센터백'], ['lead', '리더형 센터백', '라인을 지휘하는 센터백'], ['spd', '커버형 센터백', '빠른 발로 뒷공간을 지우는 센터백'], [null, '안정형 센터백', '침착하게 자리를 지키는 센터백']],
+  FB: [['spd', '오버래핑 풀백', '측면을 왕복하며 공격에 가담하는 풀백'], ['eng', '오버래핑 풀백', '측면을 왕복하며 공격에 가담하는 풀백'], ['kick', '크로스형 풀백', '측면에서 크로스로 기회를 만드는 풀백'], [null, '수비형 풀백', '1대1 수비로 측면을 닫는 풀백']],
+  CDM: [['agg', '박스투박스', '뺏고 뛰고 다시 뺏는 팀의 엔진'], ['eng', '박스투박스', '뺏고 뛰고 다시 뺏는 팀의 엔진'], ['vis', '딥라잉 플레이메이커', '뒤에서 경기 템포를 정하는 미드'], ['kick', '딥라잉 플레이메이커', '뒤에서 경기 템포를 정하는 미드'], [null, '앵커', '수비 앞 한 자리를 끝까지 지키는 미드']],
+  CAM: [['vis', '플레이메이커', '마지막 패스로 골을 만드는 10번'], ['tch', '드리블 10번', '볼을 끌고 수비를 끌어내는 10번'], ['kick', '중거리 10번', '박스 앞에서 직접 때리는 10번'], [null, '공간형 10번', '빈 공간을 찾아 연결하는 10번']],
+  WG: [['spd', '스피드 윙어', '뒷공간과 측면을 속도로 뚫는 윙어'], ['tch', '드리블 윙어', '1대1로 제치는 윙어'], ['kick', '인사이드 포워드', '안으로 접고 슈팅하는 윙어'], [null, '워크레이트 윙어', '공수 모두 뛰는 윙어']],
+  ST: [['spd', '뒷공간 스트라이커', '수비 뒤를 노리는 공격수'], ['stb', '타깃맨', '등지고 버티고 머리로 이기는 공격수'], ['vis', '연계형 공격수', '내려와 받고 동료를 살리는 공격수'], ['tch', '연계형 공격수', '내려와 받고 동료를 살리는 공격수'], ['kick', '피니셔', '박스 안에서 마무리하는 공격수'], [null, '압박형 공격수', '앞에서부터 압박하는 공격수']],
+};
+// 장점 태그·성향 → 그 자리 극대화 항목 / 약점 태그 → 그 자리 보완 항목
+const PF_MX = {
+  GK: { hands: 'gk_reflex', kick: 'gk_longkick', spd: 'gk_sweep', lead: 'gk_voice', pos: 'gk_reflex', calm: 'gk_reflex' },
+  CB: { head: 'cb_aerial', duel: 'cb_aerial', stb: 'cb_aerial', spd: 'cb_speed', vis: 'cb_pass', kick: 'cb_pass', calm: 'cb_pass', lead: 'cb_leader', pos: 'cb_leader' },
+  FB: { spd: 'fb_overlap', kick: 'fb_cross', duel: 'fb_1v1', pos: 'fb_1v1', eng: 'fb_engine', calm: 'fb_1v1' },
+  CDM: { duel: 'cdm_win', agg: 'cdm_win', pos: 'cdm_win', vis: 'cdm_long', kick: 'cdm_long', calm: 'cdm_calm', tch: 'cdm_calm', eng: 'cdm_engine' },
+  CAM: { vis: 'cam_key', calm: 'cam_key', tch: 'cam_drib', kick: 'cam_shot', pos: 'cam_space', spd: 'cam_space' },
+  WG: { spd: 'wg_pace', eng: 'wg_pace', tch: 'wg_drib', vis: 'wg_cross', kick: 'wg_cut' },
+  ST: { spd: 'st_speed', duel: 'st_power', head: 'st_power', stb: 'st_power', kick: 'st_finish', pos: 'st_finish', tch: 'st_link', vis: 'st_link' },
+};
+const PF_FX = {
+  GK: { duel: 'gk_high', head: 'gk_high', pass: 'gk_kick', touch: 'gk_ground', slow: 'gk_1v1', stamina: 'all_stamina', nodef: 'gk_voice', shot: 'gk_kick' },
+  CB: { slow: 'cb_behind', duel: 'cb_1v1', head: 'cb_header', pass: 'cb_pass', touch: 'cb_pass', nodef: 'cb_line', stamina: 'all_stamina', shot: 'cb_pass' },
+  FB: { slow: 'fb_beaten', duel: 'fb_beaten', stamina: 'fb_stamina', nodef: 'fb_back', pass: 'fb_cross', touch: 'fb_cross', head: 'fb_inside', shot: 'fb_cross' },
+  CDM: { touch: 'cdm_press', pass: 'cdm_safe', slow: 'cdm_counter', duel: 'cdm_foul', nodef: 'cdm_both', stamina: 'all_stamina', head: 'cdm_foul', shot: 'cdm_safe' },
+  CAM: { touch: 'cam_turn', duel: 'cam_turn', pass: 'cam_last', shot: 'cam_shoot', nodef: 'cam_def', slow: 'cam_drop', stamina: 'all_stamina', head: 'cam_turn' },
+  WG: { touch: 'wg_1v1', nodef: 'wg_back', stamina: 'wg_back', pass: 'wg_cross', slow: 'wg_static', shot: 'wg_box', duel: 'wg_1v1', head: 'wg_box' },
+  ST: { duel: 'st_hold', touch: 'st_hold', shot: 'st_miss', nodef: 'st_press', slow: 'st_alone', stamina: 'st_press', pass: 'st_alone', head: 'st_hold' },
+};
+// 성향 → 축구화 특화
+const PF_BOOT = { spd: 'spd', tch: 'tch', kick: 'kick', stb: 'stb', agg: 'stb', eng: 'cmf', vis: 'tch', calm: 'stb', lead: 'stb' };
+
+function pfLatestOf(r) { const h = r && r.pf && r.pf.h; if (!h || typeof h !== 'object') return null; return Object.values(h).filter(x => x && x.top).sort((a, b) => (b.t || 0) - (a.t || 0))[0] || null; }
+function pfRec() { const r = trMe(); return (r && r.pf && typeof r.pf === 'object') ? r.pf : {}; }
+function pfHist() { const h = pfRec().h || {}; return Object.keys(h).map(k => Object.assign({ k }, h[k])).filter(x => x && x.top).sort((a, b) => (b.t || 0) - (a.t || 0)); }
+function pfLast() { return pfHist()[0] || null; }
+function pfQs(ext) { return ext ? PF_Q.concat(PF_QX) : PF_Q; }
+function pfArr(v) { return Array.isArray(v) ? v : (v && typeof v === 'object') ? Object.values(v) : (v === undefined || v === null ? [] : [v]); }
+// 점수 계산 — 포지션별 「받을 수 있던 최대 점수」로 나눠서 %
+function pfScore(ans, ext) {
+  const qs = pfQs(ext), raw = {}, max = {}, tr = {}, why = {};
+  TR_GROUP_ORDER.forEach(g => { raw[g] = 0; max[g] = 0; why[g] = []; });
+  qs.forEach(q => {
+    TR_GROUP_ORDER.forEach(g => {
+      const ws = q.o.map(o => o[1][g] || 0).filter(w => w > 0).sort((a, b) => b - a);
+      max[g] += q.multi ? ws.slice(0, q.multi).reduce((s, w) => s + w, 0) : (ws[0] || 0);
+    });
+    const v = ans[q.id]; if (v === undefined || v === null) return;
+    pfArr(v).forEach(i => {
+      const o = q.o[+i]; if (!o) return;
+      Object.keys(o[1]).forEach(g => { raw[g] += o[1][g]; if (o[1][g] >= 2 && !q.multi) why[g].push(o[3]); if (o[1][g] >= 2 && q.multi && !q.neg) why[g].push('장점: ' + o[0]); });
+      Object.keys(o[2]).forEach(t => { tr[t] = (tr[t] || 0) + o[2][t]; });
+    });
+  });
+  const sc = {}, r = trMe();
+  TR_GROUP_ORDER.forEach(g => {
+    let p = max[g] ? raw[g] / max[g] * 100 : 0;
+    const x = r && r.grp && r.grp[g];
+    if (x && +x[0] >= 5) p += Math.max(-5, Math.min(8, (x[1] / x[0] * 100 - 60) / 4));
+    sc[g] = Math.max(0, Math.min(99, Math.round(p)));
+  });
+  const top = TR_GROUP_ORDER.slice().sort((a, b) => sc[b] - sc[a] || raw[b] - raw[a]).slice(0, 3);
+  const trTop = Object.keys(tr).sort((a, b) => tr[b] - tr[a]);
+  return { sc, top, tr, trTop, why };
+}
+function pfType(g, trTop) {
+  const list = PF_TYPES[g] || [];
+  for (const t of trTop) { const hit = list.find(x => x[0] === t); if (hit) return hit; }
+  return list[list.length - 1] || [null, TR_GROUPS[g] ? TR_GROUPS[g].name : g, ''];
+}
+function pfTags(ans, qid) { const q = PF_Q.find(x => x.id === qid); return pfArr(ans[qid]).map(i => q.o[+i] && q.o[+i][3]).filter(Boolean); }
+
+/* ----- 진행 · 저장 (고를 때마다) ----- */
+function pfStart(ext) {
+  haptic(6);
+  const cur = pfRec().cur;
+  if (ext === 'more') {   // 지난 결과에 +6문제
+    const last = pfLast(); if (!last) return;
+    trSet('pf/cur', { t: Date.now(), ext: 1, a: Object.assign({}, last.a || {}), base: last.k });
+    _tr.pf = { mode: 'q', i: PF_Q.length };
+  } else if (cur && cur.a && Object.keys(cur.a).length && ext !== 'new') {
+    const qs = pfQs(cur.ext); const i = qs.findIndex(q => cur.a[q.id] === undefined);
+    _tr.pf = { mode: 'q', i: i < 0 ? qs.length - 1 : i };
+  } else {
+    trSet('pf/cur', { t: Date.now(), ext: 0, a: {} });
+    _tr.pf = { mode: 'q', i: 0 };
+  }
+  trGo('pf');
+}
+function pfAns(i, v) {
+  haptic(5);
+  const cur = pfRec().cur || {}; const qs = pfQs(cur.ext); const q = qs[i]; if (!q) return;
+  if (q.multi) {
+    const a = pfArr(cur.a && cur.a[q.id]).map(Number); const k = a.indexOf(v);
+    if (k >= 0) a.splice(k, 1); else { if (a.length >= q.multi) { toast(`${q.multi}개까지 고를 수 있어요`); return; } a.push(v); }
+    trSet(`pf/cur/a/${q.id}`, a.length ? a : null);
+    renderTrain(); return;
+  }
+  trSet(`pf/cur/a/${q.id}`, v);
+  setTimeout(() => pfNext(i), 160);
+  renderTrain();
+}
+function pfNext(i) {
+  const cur = pfRec().cur || {}; const qs = pfQs(cur.ext);
+  if (i + 1 >= qs.length) { pfFinish(); return; }
+  _tr.pf = { mode: 'q', i: i + 1 }; renderTrain();
+  const el = document.getElementById('trainContent'); if (el) el.scrollTop = 0;
+}
+function pfPrev(i) { if (i <= 0) { trGo('pf', { pf: { mode: 'intro' } }); return; } _tr.pf = { mode: 'q', i: i - 1 }; renderTrain(); }
+function pfFinish() {
+  const cur = pfRec().cur || {}; const a = cur.a || {};
+  const S = pfScore(a, cur.ext); const ty = pfType(S.top[0], S.trTop);
+  const t = Date.now(), k = 'p' + t.toString(36);
+  const res = { t, d: trToday(), ext: cur.ext ? 1 : 0, base: cur.base || null, a, sc: S.sc, top: S.top, tr: S.tr, ty: ty[1], tyd: ty[2], st: pfTags(a, 'q9'), wk: pfTags(a, 'q10') };
+  // ⭐ 잘 맞는 자리에 자동 체크 (1순위 + 1순위와 8점 이내면 2순위)
+  const fit = trFitGroups().slice(), add = [];
+  S.top.slice(0, 2).forEach((g, j) => { if ((j === 0 || S.sc[g] >= S.sc[S.top[0]] - 8) && !fit.includes(g)) { fit.push(g); add.push(g); } });
+  if (add.length) trSet('posF', fit);
+  res.auto = add;
+  trSet(`pf/h/${k}`, res);
+  const h = pfRec().h || {}; const ks = Object.keys(h).sort((x, y) => (h[x].t || 0) - (h[y].t || 0)); while (ks.length > 10) trSet(`pf/h/${ks.shift()}`, null);
+  trSet('pf/cur', null);
+  trGo('pf', { pf: { mode: 'res', k } });
+}
+
+/* ----- 화면 ----- */
+function trPfCard() {
+  const last = pfLast(); const cur = pfRec().cur;
+  if (!last) {
+    const n = cur && cur.a ? Object.keys(cur.a).length : 0;
+    return `<button type="button" class="tr-pfc" onclick="${n ? 'pfStart()' : "trGo('pf',{pf:{mode:'intro'}})"}"><span>🧭</span><div><b>나한테 맞는 포지션 찾기</b><small>${n ? `${n} / 12 고르다 멈춤 · 이어서 하기` : '12문제 · 2분 · 성향 + 장점 · 단점'}</small></div><i>›</i></button>`;
+  }
+  return `<button type="button" class="tr-pfc on" onclick="trGo('pf',{pf:{mode:'res',k:'${last.k}'}})"><span>🧭</span><div><b>${TRX(last.ty)}</b><small>${last.top.slice(0, 2).map(g => `${TR_GROUPS[g].name} ${last.sc[g]}%`).join(' · ')}</small></div><i>›</i></button>`;
+}
+function trViewPf() {
+  const pf = _tr.pf || { mode: 'intro' };
+  if (pf.mode === 'q') return pfViewQ(pf.i || 0);
+  if (pf.mode === 'res') return pfViewRes(pf.k);
+  // 소개
+  const hist = pfHist(); const cur = pfRec().cur; const n = cur && cur.a ? Object.keys(cur.a).length : 0;
+  return `${trBack('🧭 포지션 찾기', 'home')}
+    <div class="pf-hero"><b>나한테 맞는 포지션</b><p>경기 장면 8개 + 장점 · 단점 · 끌리는 역할 · 키퍼 생각 = <b>12문제, 2분</b>. 정답은 없어요 — 평소 나답게 고르기.</p>
+      <ul><li>잘 맞을 자리 1 · 2순위와 이유</li><li>「빌드업 센터백」 같은 내 플레이 유형</li><li>장점 살리는 🚀 극대화 · 약점 채우는 🩹 보완 바로가기</li><li>결과는 ⭐ 잘 맞는 자리에 자동 체크</li></ul></div>
+    ${n ? `<button type="button" class="tr-btn neo big" onclick="pfStart()">이어서 하기 <small>${n}문제 골라둠</small></button><button type="button" class="tr-btn ghost" onclick="pfStart('new')">처음부터</button>` : `<button type="button" class="tr-btn neo big" onclick="pfStart('new')">시작하기 ›</button>`}
+    ${hist.length ? `<div class="tr-sec">📋 지난 결과</div>${hist.map(x => `<button type="button" class="pf-hrow" onclick="trGo('pf',{pf:{mode:'res',k:'${x.k}'}})"><small>${TRX(settleDateLabelOf(x.d))}${x.ext ? ' · 18문제' : ''}</small><b>${TRX(x.ty)}</b><span>${x.top.slice(0, 2).map(g => TR_GROUPS[g].name + ' ' + x.sc[g] + '%').join(' · ')}</span></button>`).join('')}` : ''}
+    <div class="tr-priv">🔒 자기 진단이에요 · 답과 결과는 자동 저장돼서 팀 분석에 쓰여요 · 다른 회원 화면엔 안 보여요</div>`;
+}
+function pfViewQ(i) {
+  const cur = pfRec().cur || { a: {} }; const qs = pfQs(cur.ext); const q = qs[i]; if (!q) return trViewPf.call(null, _tr.pf = { mode: 'intro' });
+  const a = cur.a || {}; const total = qs.length;
+  const sel = pfArr(a[q.id]).map(Number);
+  const step = i < 8 ? '장면' : i < 12 ? (q.id === 'q9' ? '장점' : q.id === 'q10' ? '약점' : '나') : '더 정확하게';
+  return `<div class="tr-back"><button type="button" onclick="pfPrev(${i})" aria-label="뒤로">‹</button><b>🧭 포지션 찾기 <small>${i + 1} / ${total}</small></b><button type="button" class="tr-x" onclick="trGo('home')">나중에</button></div>
+    <div class="pf-prog"><i style="width:${Math.round((i) / total * 100)}%"></i></div>
+    <div class="pf-q"><span>${step}</span><b>${TRX(q.q)}</b>${q.multi ? `<small>${q.neg ? '솔직하게 — 보완 처방에 쓰여요' : '고른 만큼 결과 이유에 나와요'}</small>` : ''}</div>
+    <div class="pf-ol${q.multi ? ' multi' : ''}">${q.o.map((o, j) => `<button type="button" class="${sel.includes(j) ? 'on' : ''}" onclick="pfAns(${i},${j})">${q.multi ? `<i>${sel.includes(j) ? '✓' : ''}</i>` : ''}<span>${TRX(o[0])}</span></button>`).join('')}</div>
+    ${q.multi ? `<button type="button" class="tr-btn neo big" onclick="pfNext(${i})">${sel.length ? `다음 › <small>${sel.length}개 골랐어요</small>` : (q.neg ? '딱히 없어요 · 다음 ›' : '다음 ›')}</button>` : ''}
+    <div class="tr-note">고를 때마다 자동 저장 — 중간에 나가도 이어서 할 수 있어요</div>`;
+}
+function pfViewRes(k) {
+  const h = pfRec().h || {}; const x = h[k] ? Object.assign({ k }, h[k]) : pfLast();
+  if (!x) return trViewPf.call(null, _tr.pf = { mode: 'intro' });
+  const g1 = x.top[0], g2 = x.top[1], g3 = x.top[2];
+  const S = pfScore(x.a || {}, x.ext);    // 이유 다시 계산 (저장된 답 기준)
+  const trTop = Object.keys(x.tr || {}).sort((a, b) => x.tr[b] - x.tr[a]).slice(0, 3);
+  const bar = (g, n) => `<div class="pf-rk r${n}"><div class="h"><i>${n}</i><b>${TR_GROUPS[g].ico} ${TR_GROUPS[g].name}</b><em>${x.sc[g]}%</em></div><div class="bar"><i style="width:${x.sc[g]}%"></i></div>${n < 3 && S.why[g].length ? `<small>${S.why[g].slice(0, 3).map(w => `「${TRX(w)}」`).join(' ')}</small>` : ''}</div>`;
+  // 이전 결과와 비교
+  const hist = pfHist(); const idx = hist.findIndex(y => y.k === x.k); const prev = idx >= 0 ? hist[idx + 1] : null;
+  let diff = '';
+  if (prev && x.base && prev.k === x.base) diff = `<div class="pf-diff">🎯 +6문제 반영 — ${TR_GROUPS[g1].name} ${prev.sc[g1] || 0}% → ${x.sc[g1]}%${prev.top[0] !== g1 ? ` (1순위가 ${TR_GROUPS[prev.top[0]].name} → ${TR_GROUPS[g1].name} 로 바뀜)` : ' · 1순위 그대로'}</div>`;
+  else if (prev) { const ch = TR_GROUP_ORDER.map(g => [g, (x.sc[g] || 0) - (prev.sc[g] || 0)]).filter(d => Math.abs(d[1]) >= 8).sort((a, b) => Math.abs(b[1]) - Math.abs(a[1])).slice(0, 3); diff = `<div class="pf-diff">📈 지난번(${TRX(settleDateLabelOf(prev.d))} · ${TRX(prev.ty)})보다 ${ch.length ? ch.map(d => `${TR_GROUPS[d[0]].name} ${d[1] > 0 ? '↑' : '↓'}${Math.abs(d[1])}`).join(' · ') : '크게 달라진 건 없어요'}</div>`; }
+  // 장점 → 극대화 / 약점 → 보완
+  const mxIds = []; (x.st || []).concat(trTop).forEach(t => { const id = (PF_MX[g1] || {})[t]; if (id && !mxIds.includes(id)) mxIds.push(id); });
+  const fxIds = []; (x.wk || []).forEach(t => { const id = (PF_FX[g1] || {})[t]; if (id && !fxIds.includes(id)) fxIds.push(id); });
+  const mxL = mxIds.slice(0, 2).map(id => { const it = trItem('mx', g1, id); return it ? `<button type="button" class="pf-go mx" onclick="pfOpenFx('max','${g1}','${id}')">🚀 ${TRX(it.t)} <span>극대화 ›</span></button>` : ''; }).join('');
+  const fxL = fxIds.slice(0, 2).map(id => { const gg = id.indexOf('all_') === 0 ? 'ALL' : g1; const it = trItem('fx', gg, id); return it ? `<button type="button" class="pf-go fx" onclick="pfOpenFx('fix','${gg}','${id}')">🩹 ${TRX(it.t)} <span>보완 ›</span></button>` : ''; }).join('');
+  const stN = (x.st || []).map(t => { const o = PF_Q[8].o.find(o2 => o2[3] === t); return o ? o[0] : t; });
+  const wkN = (x.wk || []).map(t => { const o = PF_Q[9].o.find(o2 => o2[3] === t); return o ? o[0] : t; });
+  const fit = trFitGroups();
+  return `${trBack('🧭 포지션 찾기', "trGo('pf',{pf:{mode:'intro'}})")}
+    <div class="pf-res">
+      <small>${TRX(settleDateLabelOf(x.d))} · 자기 진단${x.ext ? ' · 18문제' : ''}</small>
+      <b>${TRX(x.ty)}</b><p>${TRX(x.tyd || '')}</p>
+      <div class="pf-trs">${trTop.map(t => `<span>${PF_TR[t]}</span>`).join('')}</div>
+    </div>
+    ${diff}
+    <div class="tr-sec">잘 맞을 자리</div>
+    ${bar(g1, 1)}${bar(g2, 2)}${bar(g3, 3)}
+    ${x.auto && x.auto.length ? `<div class="pf-auto">⭐ 잘 맞는 자리에 추가했어요: <b>${x.auto.map(g => TR_GROUPS[g].name).join(' · ')}</b> ${x.auto.some(g => fit.includes(g)) ? `<button type="button" onclick="pfUndoFit('${x.k}')">빼기</button>` : ''}</div>` : ''}
+    <div class="pf-2c">
+      <div class="st"><b>💪 장점</b>${stN.length ? stN.map(n => `<span>${TRX(n)}</span>`).join('') : '<em>고른 장점 없음</em>'}</div>
+      <div class="wk"><b>🔧 단점</b>${wkN.length ? wkN.map(n => `<span>${TRX(n)}</span>`).join('') : '<em>고른 단점 없음</em>'}</div>
+    </div>
+    ${mxL || fxL ? `<div class="tr-sec">${TR_GROUPS[g1].name}로 뛸 때 바로 해볼 것</div>${mxL}${fxL}` : ''}
+    <button type="button" class="pf-go bt" onclick="switchTab('boots')">👟 이 플레이에 맞는 축구화 순서 보기 ›</button>
+    <div class="tr-2btn">
+      ${x.ext ? `<button type="button" class="tr-btn ghost" onclick="pfStart('new')">다시 하기</button>` : `<button type="button" class="tr-btn neo" onclick="pfStart('more')">+6문제 더 정확하게</button>`}
+      <button type="button" class="tr-btn ghost" onclick="${x.ext ? "trGo('home')" : "pfStart('new')"}">${x.ext ? '트레이닝 홈' : '다시 하기'}</button>
+    </div>
+    <div class="tr-note">스스로 고른 답으로 본 결과예요. 실제 경기 모습과 다를 수 있어요 — 감독 의견과 같이 보면 더 정확해요.${Object.keys(trMe().grp || {}).some(g => (trMe().grp[g] || [0])[0] >= 5) ? ' 포지션별 문제 정답률(5문제 이상)도 조금 반영했어요.' : ''}</div>`;
+}
+function pfOpenFx(mode, g, id) {
+  _tr.f = { mode, g, step: 0, eid: null };
+  _tr.view = 'fx';
+  trFxPick(0, id);
+}
+function pfUndoFit(k) {
+  const h = pfRec().h || {}; const x = h[k]; if (!x || !x.auto) return;
+  const left = trFitGroups().filter(g => !x.auto.includes(g)); trSet('posF', left.length ? left : null);
+  trSet(`pf/h/${k}/auto`, null);
+  toast('⭐ 잘 맞는 자리에서 뺐어요'); renderTrain();
+}
+
+/* ==================== 👔 감독이 보는 잘 맞는 자리 (감독 전용 페이지 · 오너 분석) ==================== */
+function posEvalOf(pid) { const e = store.posEval && store.posEval[pid]; return e && Array.isArray(e.g) ? e.g : (e && e.g ? Object.values(e.g) : []); }
+function posEvalToggle(pid, g) {
+  if (!canOpenManagerPage()) { toast('감독 · 오너만 바꿀 수 있어요'); return; }
+  haptic(5);
+  if (!store.posEval || typeof store.posEval !== 'object') store.posEval = {};
+  const cur = posEvalOf(pid).slice(); const i = cur.indexOf(g); if (i >= 0) cur.splice(i, 1); else cur.push(g);
+  const u = currentUser();
+  if (cur.length) store.posEval[pid] = { g: cur, by: u ? u.id : '', at: new Date().toISOString() }; else delete store.posEval[pid];
+  saveState();
+  if (document.getElementById('posEvalContent')) renderPosEval(true);
+  if (document.getElementById('trainAnaContent') && _ownerPageSub === 'analysis') renderTrainAnalysis();
+}
+let _posEvalData = null, _posEvalQ = '';
+function renderPosEval(fast) {
+  const el = document.getElementById('posEvalContent'); if (!el || !canOpenManagerPage()) return;
+  const draw = data => {
+    _posEvalData = data;
+    const q = (_posEvalQ || '').trim().toLowerCase();
+    const ps = store.players.filter(p => !isRetiredNow(p)).filter(p => !q || (p.name || '').toLowerCase().includes(q) || String(p.number || '') === q)
+      .sort((a, b) => (+a.number || 999) - (+b.number || 999));
+    let gap = 0;
+    const rows = ps.map(p => {
+      const r = data[p.id] ? trNorm(data[p.id]) : null;
+      const fit = r ? trArr(r.posF) : [], want = r ? trArr(r.posW) : [];
+      const pfH = pfLatestOf(r);
+      const self = new Set(fit.concat(pfH ? pfH.top.slice(0, 2) : []));
+      const ev = posEvalOf(p.id);
+      const mism = ev.length && self.size && !ev.some(g => self.has(g));
+      if (mism) gap++;
+      const prof = []; (p.positions || []).forEach(c => { const g = TR_ROLE_GROUP[c]; if (g && !prof.includes(g)) prof.push(g); });
+      return `<div class="pe-row${mism ? ' gap' : ''}">
+        <div class="pe-h"><b>${p.number ? `<i>${escapeHtml(String(p.number))}</i>` : ''}${escapeHtml(p.name)}</b>${mism ? '<em>⚠️ 생각 차이 · 면담 추천</em>' : ''}</div>
+        <div class="pe-self">${prof.length ? `<span>📋 ${prof.map(g => TR_GROUPS[g].short).join('·')}</span>` : ''}${pfH ? `<span class="pf">🧭 ${escapeHtml(pfH.ty)} · ${pfH.top.slice(0, 2).map(g => TR_GROUPS[g].name).join('·')}</span>` : ''}${fit.length ? `<span class="f">⭐ ${fit.map(g => TR_GROUPS[g].name).join('·')}</span>` : ''}${want.length ? `<span class="w">❤️ ${want.map(g => TR_GROUPS[g].name).join('·')}</span>` : ''}${!pfH && !fit.length && !want.length ? '<span class="no">본인 진단 아직 없음</span>' : ''}</div>
+        <div class="pe-ev"><small>👔 감독이 보는 자리</small>${TR_GROUP_ORDER.map(g => `<button type="button" class="${ev.includes(g) ? 'on' : ''}" onclick="posEvalToggle('${p.id}','${g}')">${TR_GROUPS[g].name}</button>`).join('')}</div>
+      </div>`;
+    }).join('');
+    el.innerHTML = `<div class="pe-sum">선수 ${ps.length}명 · 👔 평가 ${ps.filter(p => posEvalOf(p.id).length).length}명 · ⚠️ 생각 차이 ${gap}명</div>${rows || '<div class="tra-note">선수가 없어요</div>'}`;
+  };
+  if (fast && _posEvalData) { draw(_posEvalData); return; }
+  el.innerHTML = '<div class="tra-load">불러오는 중…</div>';
+  trAnaLoad().then(draw);
+}
 
 /* ==================== Org chart ==================== */
 function renderOrg() {
