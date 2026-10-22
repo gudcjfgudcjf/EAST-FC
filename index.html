@@ -3881,6 +3881,187 @@
   .hm-tile.neo { background: linear-gradient(150deg, #0891b2, #6d28d9 80%); border-color: rgba(103,232,249,.6); color: #fff; box-shadow: 0 8px 20px rgba(109,40,217,.38), 0 0 0 1px rgba(103,232,249,.25) inset; }
   .hm-tile.neo .hm-ti { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.25); }
   .hm-tile.neo small { color: #cffafe; }
+  /* ============================================================
+     👟 v108 축구화 탭 — 볼트(형광 연두) · 잔디
+     ============================================================ */
+  #bootsContent { height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 14px 14px 44px; }
+  .bt-wrap { max-width: 680px; margin: 0 auto; color: var(--text); --bv: #d9f950; --bv2: #a3e635; }
+  .bt-wrap button, .bt-wrap label { font-family: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  .bt-wrap button:active { transform: scale(.975); }
+  .bt-top { display: flex; align-items: center; gap: 9px; margin-bottom: 12px; }
+  .bt-bk { width: 36px; height: 36px; border-radius: 11px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); font-size: 22px; line-height: 1; padding-bottom: 3px; flex: none; }
+  .bt-tt { flex: 1; min-width: 0; } .bt-tt small { display: block; font-size: 10.5px; font-weight: 900; color: var(--bv); letter-spacing: .04em; } .bt-tt b { display: block; font-size: 16px; font-weight: 900; letter-spacing: -.02em; }
+  .bt-dots { display: flex; gap: 4px; flex: none; } .bt-dots i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.15); }
+  .bt-dots i.done { background: var(--bv2); } .bt-dots i.on { background: var(--bv); box-shadow: 0 0 0 3px rgba(217,249,80,.22); }
+  .bt-hero { display: grid; grid-template-columns: 1fr 132px; gap: 6px; align-items: center; padding: 16px 14px 10px; border-radius: 20px;
+    background: #11241a; border: 1px solid rgba(217,249,80,.35); }
+  .bt-hx small { font-size: 11px; font-weight: 900; color: var(--bv); } .bt-hx b { display: block; font-size: 23px; line-height: 1.18; font-weight: 900; letter-spacing: -.03em; margin-top: 4px; }
+  .bt-hx p { margin: 8px 0 0; font-size: 12.5px; line-height: 1.5; color: #c9d7c0; font-weight: 700; }
+  .bt-hf .bt-foot { width: 100%; height: auto; display: block; }
+  .bt-steps { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 6px; }
+  .bt-steps li { display: flex; gap: 10px; align-items: center; padding: 9px 11px; border-radius: 13px; background: #101318; border: 1px solid rgba(255,255,255,.08); }
+  .bt-steps i { flex: none; width: 24px; height: 24px; border-radius: 8px; background: rgba(217,249,80,.14); color: var(--bv); font-style: normal; font-weight: 900; font-size: 12.5px; display: grid; place-items: center; }
+  .bt-steps b { display: block; font-size: 13.5px; font-weight: 900; } .bt-steps small { display: block; font-size: 11.5px; color: #8a949e; font-weight: 700; margin-top: 1px; }
+  .bt-go { display: block; width: 100%; margin-top: 14px; padding: 14px; border-radius: 14px; border: 0; font-size: 15px; font-weight: 900; color: #10200a !important;
+    background: linear-gradient(120deg, #e8ff6a, #8bdc2b); box-shadow: 0 6px 20px rgba(163,230,53,.3); }
+  .bt-go:disabled { opacity: .35; box-shadow: none; }
+  .bt-2l { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 9px; }
+  .bt-2l button { text-align: left; padding: 11px 12px; border-radius: 14px; background: #101318; border: 1px solid rgba(217,249,80,.3); }
+  .bt-2l b { display: block; font-size: 13px; font-weight: 900; } .bt-2l small { display: block; font-size: 11px; color: #8a949e; font-weight: 700; margin-top: 2px; }
+  .bt-priv { margin-top: 14px; font-size: 11px; color: #7c8692; line-height: 1.5; text-align: center; }
+  .bt-q { margin: 16px 2px 8px; } .bt-q b { font-size: 14.5px; font-weight: 900; } .bt-q small { font-size: 11.5px; color: #8a949e; font-weight: 700; margin-left: 6px; }
+  .bt-szg { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .bt-szg button { padding: 10px 0; border-radius: 11px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); font-size: 14px; font-weight: 900; font-variant-numeric: tabular-nums; }
+  .bt-szg button.on, .bt-feel button.on, .bt-surfc button.on { background: rgba(217,249,80,.14); border-color: var(--bv); color: #f4ffc2 !important; box-shadow: 0 0 12px rgba(217,249,80,.18); }
+  .bt-feel { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .bt-feel button { padding: 10px 6px; border-radius: 13px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); text-align: center; }
+  .bt-feel svg { display: block; margin: 0 auto 4px; width: 100%; max-width: 96px; height: auto; }
+  .bt-feel b { display: block; font-size: 13.5px; font-weight: 900; } .bt-feel small { display: block; font-size: 10.5px; color: #9aa4ae; font-weight: 700; margin-top: 2px; line-height: 1.35; }
+  .bt-calc { margin-top: 14px; padding: 12px; border-radius: 14px; background: #101318; border: 1px dashed rgba(217,249,80,.45); font-size: 13px; font-weight: 800; }
+  .bt-calc b { font-size: 22px; color: var(--bv); margin-left: 4px; font-variant-numeric: tabular-nums; } .bt-calc small { display: block; font-size: 11.5px; color: #9aa4ae; margin-top: 4px; line-height: 1.5; }
+  .bt-guide { border-radius: 18px; background: #14171c; border: 1px solid rgba(255,255,255,.08); padding: 10px; display: grid; place-items: center; }
+  .bt-guide .bt-foot { width: 100%; max-width: 230px; height: auto; display: block; } .bt-guide .bt-foot.side { max-width: 420px; }
+  .bt-tips { margin: 10px 0 0; padding: 0 0 0 18px; font-size: 12.5px; color: #cfd6de; line-height: 1.6; font-weight: 700; }
+  .bt-cam { display: grid; grid-template-columns: 1.3fr 1fr; gap: 7px; margin-top: 12px; }
+  .bt-camb { position: relative; display: block; text-align: center; padding: 13px 6px; border-radius: 14px; font-size: 14px; font-weight: 900; color: #10200a !important; background: linear-gradient(120deg, #e8ff6a, #8bdc2b); overflow: hidden; }
+  .bt-camb.al { background: #1b1f26; color: #e5e7eb !important; border: 1px solid rgba(255,255,255,.14); }
+  .bt-camb input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+  .bt-link { display: block; width: 100%; margin-top: 10px; padding: 10px; border: 0; background: none; font-size: 12.5px; font-weight: 800; color: #a5b4c3 !important; text-decoration: underline; text-underline-offset: 3px; }
+  .bt-prev { margin-top: 9px; font-size: 12px; font-weight: 800; color: #d9f99d; text-align: center; }
+  .bt-note { margin-top: 10px; font-size: 12px; color: #a7b3bf; line-height: 1.55; }
+  .bt-phw { text-align: center; border-radius: 16px; background: #0c0e11; border: 1px solid rgba(255,255,255,.08); padding: 6px; }
+  .bt-ph { position: relative; display: inline-block; max-width: 100%; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; line-height: 0; }
+  .bt-ph img { display: block; max-width: 100%; max-height: 58vh; width: auto; height: auto; border-radius: 10px; pointer-events: none; }
+  .bt-ph svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+  #btMk { position: absolute; inset: 0; pointer-events: none; }
+  .bt-pt { position: absolute; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; border: 2.5px solid var(--c); box-shadow: 0 0 0 1.5px rgba(0,0,0,.7), inset 0 0 0 1.5px rgba(0,0,0,.5); }
+  .bt-pt::after { content: ''; position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px 0 0 -2px; border-radius: 50%; background: var(--c); }
+  .bt-pt i { position: absolute; left: 50%; top: -19px; transform: translateX(-50%); font-style: normal; font-size: 11px; font-weight: 900; line-height: 15px; padding: 0 5px; border-radius: 6px; background: var(--c); color: #0b0d10; }
+  .bt-pt.dr { width: 34px; height: 34px; margin: -17px 0 0 -17px; }
+  .bt-phb { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 7px; }
+  .bt-phb button { padding: 9px; border-radius: 11px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.05); font-size: 12.5px; font-weight: 800; }
+  .bt-ins { display: flex; gap: 10px; align-items: center; margin-top: 10px; padding: 11px 12px; border-radius: 14px; background: #101318; border: 1px solid rgba(255,255,255,.1); }
+  .bt-ins > span { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-weight: 900; color: #0b0d10; font-size: 14px; }
+  .bt-ins b { font-size: 14.5px; font-weight: 900; } .bt-ins div { font-size: 13px; font-weight: 800; } .bt-ins small { display: block; font-size: 11.5px; color: #9aa4ae; font-weight: 700; margin-top: 2px; line-height: 1.45; }
+  .bt-meas { margin-top: 10px; padding: 12px; border-radius: 15px; background: #101318; border: 1px solid rgba(217,249,80,.4); }
+  .bt-mh { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; } .bt-mh span { font-size: 12px; color: #9aa4ae; font-weight: 800; }
+  .bt-mh b { font-size: 22px; font-weight: 900; font-variant-numeric: tabular-nums; } .bt-mh em { margin-left: auto; font-style: normal; font-size: 13px; font-weight: 900; padding: 4px 10px; border-radius: 9px; background: rgba(217,249,80,.16); color: #f4ffc2; }
+  .bt-gauge { margin-top: 10px; } .bt-gauge .bar { position: relative; display: flex; height: 10px; border-radius: 6px; overflow: visible; }
+  .bt-gauge .bar i { display: block; height: 100%; } .bt-gauge .bar i:nth-child(1) { background: #38bdf8; border-radius: 6px 0 0 6px; } .bt-gauge .bar i:nth-child(2) { background: #a3e635; } .bt-gauge .bar i:nth-child(3) { background: #fb923c; border-radius: 0 6px 6px 0; }
+  .bt-gauge .bar b { position: absolute; top: -4px; width: 4px; height: 18px; margin-left: -2px; border-radius: 2px; background: #fff; box-shadow: 0 0 0 2px #0b0d10; }
+  .bt-gauge .lab { display: flex; justify-content: space-between; font-size: 10.5px; color: #8a949e; font-weight: 800; margin-top: 5px; }
+  .bt-warn { margin-top: 8px; font-size: 12px; font-weight: 800; color: #fda4af; line-height: 1.45; }
+  .bt-ok { display: block; margin-top: 8px; font-size: 11px; color: #8a949e; font-weight: 700; }
+  .bt-or { margin: 14px 2px 6px; font-size: 12px; font-weight: 800; color: #9aa4ae; }
+  .bt-surf { border-radius: 18px; background: #14171c; border: 1px solid rgba(255,255,255,.08); padding: 10px 6px 6px; }
+  .bt-surf-svg { width: 100%; height: auto; display: block; }
+  .bt-crit { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 8px; }
+  .bt-crit > div { padding: 10px; border-radius: 13px; background: #101318; border: 1px solid; }
+  .bt-crit .tf { border-color: rgba(190,242,100,.45); } .bt-crit .ag { border-color: rgba(253,164,175,.45); }
+  .bt-crit b { font-size: 12.5px; font-weight: 900; } .bt-crit .tf b { color: #d9f99d; } .bt-crit .ag b { color: #fecdd3; }
+  .bt-crit ul { margin: 5px 0 0; padding-left: 15px; font-size: 11.5px; line-height: 1.5; color: #cfd6de; font-weight: 700; }
+  .bt-test, .bt-local { margin-top: 8px; padding: 10px 12px; border-radius: 13px; font-size: 12.3px; line-height: 1.5; font-weight: 700; }
+  .bt-test { background: rgba(255,255,255,.04); color: #cfd6de; } .bt-local { background: rgba(217,249,80,.1); border: 1px solid rgba(217,249,80,.4); color: #f4ffc2; }
+  .bt-surfc { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .bt-surfc button { padding: 11px 4px; border-radius: 13px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); }
+  .bt-surfc b { display: block; font-size: 16px; font-weight: 900; } .bt-surfc small { display: block; font-size: 10.5px; color: #9aa4ae; font-weight: 700; margin-top: 2px; }
+  .bt-sec { font-size: 13.5px; font-weight: 900; margin: 20px 2px 8px; color: #eef5e6; } .bt-sec small { font-size: 11px; color: #8a949e; font-weight: 700; margin-left: 5px; }
+  .bt-ex { display: grid; gap: 6px; }
+  .bt-ex > div { display: flex; gap: 10px; padding: 9px 11px; border-radius: 13px; background: #101318; border: 1px solid rgba(255,255,255,.07); }
+  .bt-ex span { flex: none; min-width: 52px; text-align: center; align-self: flex-start; font-size: 11.5px; font-weight: 900; padding: 4px 6px; border-radius: 8px; background: rgba(239,68,68,.16); color: #fecaca; text-decoration: line-through; text-decoration-color: rgba(254,202,202,.6); }
+  .bt-ex b { display: block; font-size: 12.5px; font-weight: 900; } .bt-ex small { display: block; font-size: 11.5px; color: #a7b3bf; line-height: 1.5; font-weight: 700; margin-top: 2px; }
+  .bt-exl { margin: 8px 0 0; padding-left: 16px; font-size: 11.5px; color: #8a949e; line-height: 1.6; font-weight: 700; }
+  .bt-rhead { display: flex; align-items: center; gap: 8px; } .bt-rhead b { flex: 1; font-size: 18px; font-weight: 900; letter-spacing: -.02em; }
+  .bt-rhead button { padding: 7px 12px; border-radius: 10px; border: 1px solid rgba(217,249,80,.45); background: rgba(217,249,80,.08); font-size: 12.5px; font-weight: 900; color: #f4ffc2 !important; }
+  .bt-sum { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-top: 10px; }
+  .bt-sum button { text-align: left; padding: 9px 8px; border-radius: 13px; background: #101318; border: 1px solid rgba(255,255,255,.1); min-width: 0; }
+  .bt-sum small { display: block; font-size: 10px; color: #8a949e; font-weight: 800; } .bt-sum b { display: block; font-size: 17px; font-weight: 900; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .bt-sum em { display: block; font-style: normal; font-size: 9.8px; color: #a3e635; font-weight: 800; margin-top: 2px; line-height: 1.3; overflow-wrap: anywhere; }
+  .bt-ord { margin-top: 10px; padding: 10px; border-radius: 14px; background: #0f1310; border: 1px solid rgba(217,249,80,.22); }
+  .bt-why { font-size: 12px; line-height: 1.5; color: #cfd6de; font-weight: 700; margin-bottom: 8px; } .bt-why b { color: #f4ffc2; }
+  .bt-bud { display: flex; align-items: center; gap: 5px; margin-top: 8px; flex-wrap: wrap; } .bt-bud span { font-size: 11.5px; font-weight: 900; color: #9aa4ae; margin-right: 2px; }
+  .bt-bud button { padding: 6px 9px; border-radius: 10px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); font-size: 11.8px; font-weight: 800; }
+  .bt-bud button.on { border-color: #fde047; background: rgba(253,224,71,.12); color: #fef9c3 !important; }
+  .bt-card { margin-top: 7px; border-radius: 16px; background: #101318; border: 1px solid rgba(255,255,255,.09); overflow: hidden; }
+  .bt-card.open { border-color: rgba(217,249,80,.45); }
+  .bt-ch { display: flex; align-items: center; gap: 10px; width: 100%; padding: 11px 12px 6px; border: 0; background: none; text-align: left; }
+  .bt-rk { flex: none; width: 26px; height: 26px; border-radius: 9px; display: grid; place-items: center; font-size: 13px; font-weight: 900; background: rgba(255,255,255,.07); }
+  .bt-card:first-of-type .bt-rk, .bt-card.open .bt-rk { background: var(--bv); color: #10200a; }
+  .bt-nm { flex: 1; min-width: 0; } .bt-nm small { display: block; font-size: 10.5px; color: #8a949e; font-weight: 900; letter-spacing: .02em; }
+  .bt-nm b { display: block; font-size: 15px; font-weight: 900; letter-spacing: -.02em; line-height: 1.25; }
+  .bt-nm em { display: inline-block; margin-top: 3px; font-style: normal; font-size: 10.5px; font-weight: 900; color: var(--c); }
+  .bt-szb { flex: none; text-align: center; padding: 5px 9px; border-radius: 11px; background: rgba(217,249,80,.1); border: 1px solid rgba(217,249,80,.35); }
+  .bt-szb small { display: block; font-size: 9.5px; color: #d9f99d; font-weight: 900; } .bt-szb b { display: block; font-size: 18px; font-weight: 900; font-variant-numeric: tabular-nums; color: #f4ffc2; }
+  .bt-fit { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+  .bt-fit span { font-size: 11px; font-weight: 900; padding: 3px 8px; border-radius: 8px; } .bt-fit .f2 { background: rgba(34,197,94,.16); color: #bbf7d0; } .bt-fit .f1 { background: rgba(250,204,21,.14); color: #fef08a; }
+  .bt-fit small { font-size: 11.3px; color: #a7b3bf; font-weight: 700; }
+  .bt-tierl { padding: 6px 12px 11px; font-size: 12.3px; color: #cfd6de; font-weight: 700; } .bt-tierl b { color: #fff; font-variant-numeric: tabular-nums; } .bt-tierl em { font-style: normal; color: #fda4af; font-weight: 800; }
+  .bt-more { padding: 2px 12px 12px; border-top: 1px solid rgba(255,255,255,.06); }
+  .bt-vis { display: grid; grid-template-columns: minmax(96px, 42%) minmax(0, 1fr); gap: 10px; align-items: center; padding: 2px 12px 10px; }
+  .bt-img { border-radius: 12px; background: rgba(255,255,255,.045); padding: 4px 2px 0; }
+  .bt-boot { width: 100%; height: auto; display: block; }
+  .bt-vi { min-width: 0; display: grid; gap: 4px; justify-items: start; }
+  .bt-vi .bt-fit { padding: 0; } .bt-szw { font-size: 11px; color: #a7b3bf; font-weight: 700; line-height: 1.4; }
+  .bt-vi .bt-tierl { padding: 0; }
+  .bt-shop { font-size: 11.5px; font-weight: 900; color: #d9f99d; text-decoration: none; padding: 4px 9px; border-radius: 9px; border: 1px solid rgba(217,249,80,.4); background: rgba(217,249,80,.06); }
+  .bt-open { display: block; width: 100%; padding: 9px; border: 0; border-top: 1px solid rgba(255,255,255,.06); background: rgba(255,255,255,.02); font-size: 12px; font-weight: 800; color: #9aa4ae !important; }
+  .bt-imgnote { margin-top: 8px; font-size: 10.8px; color: #6b7480; }
+  .bt-spec { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-top: 10px; }
+  .bt-spec > div { text-align: center; } .bt-spec span { display: block; font-size: 10px; color: #9aa4ae; font-weight: 800; white-space: nowrap; }
+  .bt-spec i { display: flex; gap: 2px; justify-content: center; margin-top: 4px; } .bt-spec i b { width: 11px; height: 6px; border-radius: 3px; background: rgba(255,255,255,.1); }
+  .bt-spec i b.on { background: var(--c); }
+  .bt-dl { display: grid; grid-template-columns: auto 1fr; gap: 5px 10px; margin: 11px 0 0; font-size: 12.3px; line-height: 1.5; }
+  .bt-dl dt { color: #8a949e; font-weight: 900; } .bt-dl dd { margin: 0; color: #dbe3ea; font-weight: 700; } .bt-dl small { color: #7c8692; }
+  .bt-trs { margin-top: 11px; border-radius: 12px; background: rgba(0,0,0,.25); padding: 8px; }
+  .bt-trh { font-size: 11.5px; font-weight: 900; color: #cfd6de; margin-bottom: 4px; } .bt-trh small { color: #7c8692; font-weight: 700; margin-left: 4px; }
+  .bt-tr { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding: 6px 4px; border-top: 1px solid rgba(255,255,255,.05); font-size: 12.3px; }
+  .bt-tr:first-of-type { border-top: 0; }
+  .bt-tr .rk { min-width: 52px; font-size: 11px; font-weight: 900; padding: 2px 6px; border-radius: 7px; text-align: center; background: rgba(255,255,255,.08); }
+  .bt-tr .rk.r1 { background: rgba(250,204,21,.18); color: #fde68a; } .bt-tr .rk.r2 { background: rgba(217,249,80,.16); color: #ecfccb; }
+  .bt-tr .sf { font-size: 10.5px; font-weight: 900; padding: 2px 6px; border-radius: 7px; } .bt-tr .sf.TF { color: #d9f99d; border: 1px solid rgba(190,242,100,.5); } .bt-tr .sf.AG { color: #fecdd3; border: 1px solid rgba(253,164,175,.5); }
+  .bt-tr b { margin-left: auto; font-variant-numeric: tabular-nums; font-weight: 900; }
+  .bt-tr small { flex-basis: 100%; font-size: 10.8px; color: #8a949e; font-weight: 700; padding-left: 2px; } .bt-tr small.w { color: #fdba74; }
+  .bt-tr.on { background: rgba(217,249,80,.08); border-radius: 9px; box-shadow: inset 0 0 0 1px rgba(217,249,80,.4); }
+  .bt-tr.off { opacity: .42; }
+  .bt-vari { margin-top: 8px; font-size: 11.8px; color: #a7b3bf; font-weight: 700; }
+  .bt-av { display: grid; gap: 5px; }
+  .bt-av > div { padding: 9px 11px; border-radius: 12px; background: rgba(239,68,68,.06); border: 1px solid rgba(248,113,113,.25); }
+  .bt-av b { font-size: 12.5px; font-weight: 900; } .bt-av small { display: block; font-size: 11.3px; color: #a7b3bf; font-weight: 700; margin-top: 2px; line-height: 1.45; }
+  .bt-lv { display: grid; gap: 7px; }
+  .bt-lvc { padding: 11px 12px; border-radius: 15px; background: #101318; border: 1px solid rgba(255,255,255,.09); }
+  .bt-lvc.r2 { border-color: rgba(217,249,80,.5); background: linear-gradient(160deg, rgba(217,249,80,.08), #101318 55%); }
+  .bt-lvh { display: flex; align-items: center; gap: 8px; } .bt-lvh i { font-style: normal; width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; font-size: 12px; font-weight: 900; background: rgba(255,255,255,.08); }
+  .bt-lvc.r1 .bt-lvh i { background: rgba(250,204,21,.2); color: #fde68a; } .bt-lvc.r2 .bt-lvh i { background: var(--bv); color: #10200a; }
+  .bt-lvh b { font-size: 14.5px; font-weight: 900; } .bt-lvh em { margin-left: auto; font-style: normal; font-size: 10.5px; font-weight: 900; padding: 3px 8px; border-radius: 8px; background: var(--bv); color: #10200a; }
+  .bt-lvn { display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 7px; font-size: 11.3px; color: #8a949e; font-weight: 700; } .bt-lvn b { color: #e5e7eb; font-weight: 900; }
+  .bt-lvp { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+  .bt-lvp > div { padding: 7px 9px; border-radius: 10px; background: rgba(0,0,0,.25); } .bt-lvp small { display: block; font-size: 10px; color: #8a949e; font-weight: 800; } .bt-lvp b { font-size: 14px; font-weight: 900; font-variant-numeric: tabular-nums; }
+  .bt-one { margin-top: 9px; font-size: 12.3px; line-height: 1.5; font-weight: 800; color: #f4ffc2; }
+  .bt-src { margin-top: 18px; font-size: 10.8px; color: #6b7480; line-height: 1.6; }
+  .tr-boots { width: 100%; margin-top: 10px; display: flex; align-items: center; gap: 10px; padding: 11px 12px; border-radius: 15px; text-align: left; background: linear-gradient(120deg, rgba(217,249,80,.14), rgba(34,197,94,.08)); border: 1px solid rgba(217,249,80,.45); }
+  .tr-boots > span { font-size: 22px; } .tr-boots div { flex: 1; min-width: 0; } .tr-boots b { display: block; font-size: 14px; font-weight: 900; } .tr-boots small { display: block; font-size: 11px; color: #c9d7c0; font-weight: 700; margin-top: 1px; } .tr-boots i { font-style: normal; font-size: 18px; color: #d9f950; }
+  .hm-tile.volt { background: linear-gradient(150deg, #2c4a12, #13301d 75%); border-color: rgba(217,249,80,.55); box-shadow: 0 8px 18px rgba(132,204,22,.22); }
+  .hm-tile.volt small { color: #d9f99d; }
+  @media (max-width: 360px) {
+    .bt-sum { grid-template-columns: repeat(2, 1fr); }
+    .bt-hero { grid-template-columns: 1fr 96px; } .bt-hx b { font-size: 20px; }
+    .bt-szg button { font-size: 13px; padding: 9px 0; }
+    .bt-spec span { font-size: 9px; }
+  }
+
+  /* 트레이닝 포지션 3줄 (뛰는 · 해보고 싶은 · 잘 맞는) */
+  .tr-prow + .tr-prow { margin-top: 12px; padding-top: 11px; border-top: 1px solid rgba(255,255,255,.07); }
+  .tr-prow .tr-chips button i { font-style: normal; font-size: 9.5px; font-weight: 900; margin-left: 4px; padding: 1px 5px; border-radius: 6px; background: #22d3ee; color: #032027; vertical-align: 1px; }
+  .tr-prow.w .tr-chips button.on { background: rgba(244,114,182,.14); border-color: #f472b6; color: #fce7f3 !important; box-shadow: 0 0 10px rgba(244,114,182,.18); }
+  .tr-prow.f .tr-chips button.on { background: rgba(250,204,21,.13); border-color: #facc15; color: #fef9c3 !important; box-shadow: 0 0 10px rgba(250,204,21,.16); }
+  .tr-fhint { margin-top: 10px; font-size: 11.8px; color: #a7b3bf; font-weight: 700; line-height: 1.5; } .tr-fhint b { color: #fef9c3; }
+  .tr-myp b.w { border-color: rgba(244,114,182,.55); color: #fbcfe8; background: rgba(244,114,182,.08); }
+  .tr-myp b.f { border-color: rgba(250,204,21,.5); color: #fef08a; background: rgba(250,204,21,.07); }
+  .tra-pm { display: grid; gap: 5px; }
+  .tra-pmr { display: grid; grid-template-columns: minmax(0, 1fr) 46px 46px 46px; gap: 4px 6px; align-items: center; padding: 8px 10px; border-radius: 11px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06); font-size: 12.5px; }
+  .tra-pmr b { font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .tra-pmr span { font-weight: 900; text-align: right; font-variant-numeric: tabular-nums; color: #cfd6de; }
+  .tra-pmr span.w { color: #f9a8d4; } .tra-pmr span.f { color: #fde047; }
+  .tra-pmr small { grid-column: 1 / -1; font-size: 11px; color: #9aa4ae; font-weight: 700; }
   /* iOS: 16px 미만 입력칸은 누르는 순간 화면이 확대된다 → 터치 기기에선 16px */
   @media (max-width: 820px) and (pointer: coarse) {
     input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]), select, textarea { font-size: 16px !important; }
@@ -5432,6 +5613,54 @@
     background: rgba(255,255,255,.07); letter-spacing: .02em;
   }
 
+
+  /* ============================================================
+     📱 v108 안전영역 — 노치·다이내믹 아일랜드·홈바 · 가로 화면 (모든 기종)
+     · 폰 화면용 padding 단축 속성이 위쪽 안전영역을 덮어써서 오너/감독 페이지 ✕ 가 상태바 밑에 있었다 → 맨 끝에서 다시 보장
+     · 위쪽은 그라데이션·유리(흐림) 대신 단색 — iOS 사파리가 상태바 쪽을 흐리게 처리할 때 덜 어색하게
+     ============================================================ */
+  .priv-page { background: #0f1013 !important; }
+  .priv-head { background: #0f1013; padding-top: calc(14px + env(safe-area-inset-top, 0px)) !important;
+    padding-left: calc(14px + env(safe-area-inset-left, 0px)) !important; padding-right: calc(14px + env(safe-area-inset-right, 0px)) !important; }
+  .priv-subtabs { padding-left: calc(14px + env(safe-area-inset-left, 0px)) !important; padding-right: calc(14px + env(safe-area-inset-right, 0px)) !important; }
+  .priv-subtab.active { background: var(--gold) !important; }
+  .priv-body { padding-left: calc(14px + env(safe-area-inset-left, 0px)) !important; padding-right: calc(14px + env(safe-area-inset-right, 0px)) !important;
+    padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px)) !important; }
+  .lb { padding: calc(14px + env(safe-area-inset-top, 0px)) calc(14px + env(safe-area-inset-right, 0px)) calc(14px + env(safe-area-inset-bottom, 0px)) calc(14px + env(safe-area-inset-left, 0px)) !important; }
+  .lb-x { top: calc(14px + env(safe-area-inset-top, 0px)) !important; right: calc(14px + env(safe-area-inset-right, 0px)) !important; }
+  .auth-gate { padding-top: calc(20px + env(safe-area-inset-top, 0px)); padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); }
+  .goh-ceremony { padding-top: calc(20px + env(safe-area-inset-top, 0px)); padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); }
+  @media (max-width: 820px) {
+    .topnav { position: sticky; top: 0; padding-top: calc(8px + env(safe-area-inset-top, 0px)) !important;
+      background: #0b0b0d !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+    .topnav::before { display: none; }
+    .botnav { background: #0c0c0f !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+      padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); }
+    .modal-overlay > .modal { max-height: calc(100vh - 14px - env(safe-area-inset-top, 0px)) !important; max-height: calc(100dvh - 14px - env(safe-area-inset-top, 0px)) !important; }
+    .share-pop { max-height: calc(100vh - 14px - env(safe-area-inset-top, 0px)) !important; max-height: calc(100dvh - 14px - env(safe-area-inset-top, 0px)) !important; }
+  }
+
+  .lb-prev { left: calc(8px + env(safe-area-inset-left, 0px)) !important; } .lb-next { right: calc(8px + env(safe-area-inset-right, 0px)) !important; }
+  @media (orientation: landscape) { .app { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); } }
+  /* 폰 가로(넓고 낮은 화면): 한 줄 상단바에 버튼이 넘쳐 탭줄이 0이 되던 것 — 부가 버튼은 ☰ 서랍에 다 있으니 접기 */
+  @media (min-width: 821px) and (max-height: 500px) and (orientation: landscape) {
+    .nav-utils .nav-btn:not(.quick) { display: none !important; }
+    .nav-user-info, .backend-status { display: none !important; }
+  }
+  /* EFM 로고 = 홈으로 */
+  .brand { cursor: pointer; -webkit-tap-highlight-color: transparent; border-radius: 10px; }
+  .brand:active { opacity: .7; }
+
+  /* 홈 참석·보류·불참·아직 → 누르면(폰) / 올리면(PC) 이름 */
+  .hm-who { cursor: pointer; border-radius: 7px; padding: 1px 4px; margin: -1px -4px; -webkit-tap-highlight-color: transparent; text-decoration: underline dotted rgba(255,255,255,.35); text-underline-offset: 3px; }
+  .hm-who:active, .hm-who.on { background: rgba(255,255,255,.1); }
+  .hm-whopop { position: fixed; z-index: 1500; display: none; width: max-content; min-width: 170px; max-width: min(300px, calc(100vw - 16px)); padding: 10px 11px; border-radius: 13px;
+    background: #16181d; border: 1px solid rgba(255,255,255,.14); box-shadow: 0 14px 34px rgba(0,0,0,.6); color: #e5e7eb; font-size: 12.5px; }
+  .hm-whopop > b { display: block; font-size: 12.5px; font-weight: 900; margin-bottom: 7px; }
+  .hm-wn { display: flex; flex-wrap: wrap; gap: 5px; max-height: 40vh; overflow-y: auto; }
+  .hm-wn span { padding: 3px 8px; border-radius: 8px; background: rgba(255,255,255,.07); font-weight: 800; font-size: 12px; }
+  .hm-wn em { font-style: normal; color: #8a949e; }
+  .hm-whopop button { display: block; width: 100%; margin-top: 9px; padding: 8px; border-radius: 10px; border: 1px solid rgba(254,229,0,.45); background: rgba(254,229,0,.1); color: #fef08a; font-family: inherit; font-weight: 900; font-size: 12px; cursor: pointer; }
 </style>
 </head>
 <body class="not-authed">
@@ -5485,11 +5714,12 @@
 
 <nav class="topnav">
   <button class="drawer-btn" id="drawerBtn" title="메뉴" aria-label="메뉴 열기" data-newfeat="drawerMenu">☰</button>
-  <div class="brand" title="EAST FC · East Football Manager"><span class="brand-crest" role="img" aria-label="EAST FC"></span><span class="brand-text">EFM</span></div>
+  <div class="brand" title="EAST FC · East Football Manager — 누르면 홈으로" role="button" tabindex="0" aria-label="홈으로" onclick="brandHome()" onkeydown="if(event.key==='Enter')brandHome()"><span class="brand-crest" role="img" aria-label="EAST FC"></span><span class="brand-text">EFM</span></div>
   <div class="nav-title" id="navTitle" aria-live="polite"></div>
   <div class="tab-strip" id="tabStrip">
     <button class="tab-btn" data-tab="home" data-newfeat="home">🏠 홈</button>
     <button class="tab-btn" data-tab="train" data-newfeat="train">🧠 트레이닝</button>
+    <button class="tab-btn" data-tab="boots" data-newfeat="boots">👟 축구화</button>
     <button class="tab-btn active" data-tab="squad">📋 스쿼드</button>
     <button class="tab-btn" data-tab="players">👥 선수</button>
     <button class="tab-btn" data-tab="profile">📸 프로필</button>
@@ -5554,6 +5784,11 @@
     <div id="trainContent"></div>
   </section>
 
+  <!-- ============ 👟 BOOTS (v108) ============ -->
+  <section class="view" id="view-boots">
+    <div id="bootsContent"></div>
+  </section>
+
   <!-- ============ SQUAD VIEW ============ -->
   <section class="view active" id="view-squad">
     <div class="squad-layout">
@@ -5571,9 +5806,9 @@
           <input type="text" id="squadName" placeholder="스쿼드 이름" style="width:130px" />
           <label>포메이션:</label>
           <select id="formationSelect">
+            <option value="4-2-3-1">4-2-3-1 (기본)</option>
             <option value="4-4-2">4-4-2</option>
             <option value="4-3-3">4-3-3</option>
-            <option value="4-2-3-1">4-2-3-1</option>
             <option value="3-5-2">3-5-2</option>
             <option value="5-3-2">5-3-2</option>
             <option value="4-5-1">4-5-1</option>
@@ -6585,7 +6820,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 107;
+const APP_VERSION = 108;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -7422,7 +7657,7 @@ let _mgrDeepOpen = false;   // 「자세히」 펼침 상태 — 포지션을 �
 function renderMgrBoard() {
   const el = document.getElementById('mgrBoardContent'); if (!el) return;
   if (!canOpenManagerPage()) { el.innerHTML = '<div class="podium-empty">감독 전용 화면이에요</div>'; return; }
-  const key = FORMATIONS[_mgrBoardFormation] ? _mgrBoardFormation : '4-3-3';
+  const key = FORMATIONS[_mgrBoardFormation] ? _mgrBoardFormation : '4-2-3-1';
   _mgrBoardFormation = key;
   const tpl = FORMATIONS[key];
   const fd = mgrFormationView(key);
@@ -9801,6 +10036,7 @@ const NEW_FEATURES = {
   quickMatch: 101, // ⚡ 퀵 매치
   home: 104,       // 🏠 첫 화면
   train: 107,      // 🧠 트레이닝 (뇌지컬 · 보완 · 극대화)
+  boots: 108,      // 👟 축구화 (사이즈 · 발볼 · 발등 · TF/AG)
   drawerMenu: 31,  // ☰ 왼쪽 서랍 메뉴
 };
 const ACK_KEY = 'efm_ack_feats';
@@ -10368,6 +10604,7 @@ function hideAuthGate() {
   const sq = getCurrentSquad();
   if (sq) { $('#squadName').value = sq.name; $('#formationSelect').value = sq.formation; }
   setTimeout(() => autoLinkMyPlayer({ silent: true }), 1200);   // 스토어 동기화 뒤 한 번
+  setTimeout(migrateUpcoming4231, 1800);                          // v108 다가오는 경기 4-3-3 → 4-2-3-1 (한 번)
   // 톡방 카드·고정 링크로 들어왔으면 그 목적지로 (?att · ?vote · ?settle)
   setTimeout(applyIntent, 450);
 }
@@ -10956,17 +11193,17 @@ const ROLE_GUIDE = {
   WNG: '측면을 폭넓게 쓰는 돌파형 공격수. 빠른 스피드와 드리블로 수비를 제치고 크로스·컷백으로 기회를 창출한다.',
   IW:  '반대발 측면 공격수. 측면에서 중앙으로 접어 들어와 감아차기 슈팅과 침투로 직접 득점을 노린다.',
 };
-// 가이드 기준 포메이션 4-3-3 (11명 위치) — 위쪽이 상대 골문(공격 방향)
-const BASE_433 = {
+// 가이드 기준 포메이션 4-2-3-1 (팀 기본 · 11명 위치) — 위쪽이 상대 골문(공격 방향)
+const BASE_GUIDE = {
   GK:[50,92], LB:[15,72], LCB:[37,80], RCB:[63,80], RB:[85,72],
-  DM:[50,64], LCM:[33,52], RCM:[67,52], LW:[20,28], ST:[50,15], RW:[80,28],
+  LDM:[38,63], RDM:[62,63], LAM:[20,36], CAM:[50,40], RAM:[80,36], ST:[50,15],
 };
-const MATE_LABEL = { GK:'GK', LB:'LB', LCB:'CB', RCB:'CB', RB:'RB', DM:'DM', LCM:'CM', RCM:'CM', LW:'LW', ST:'ST', RW:'RW' };
-// 각 역할이 4-3-3에서 차지하는 홈 슬롯(이 자리는 하이라이트 선수가 대신 서고, 나머지 10명은 회색으로 표시)
+const MATE_LABEL = { GK:'GK', LB:'LB', LCB:'CB', RCB:'CB', RB:'RB', LDM:'DM', RDM:'DM', LAM:'LAM', CAM:'CAM', RAM:'RAM', ST:'ST' };
+// 각 역할이 4-2-3-1에서 차지하는 홈 슬롯(이 자리는 하이라이트 선수가 대신 서고, 나머지 10명은 회색으로 표시)
 const ROLE_HOME = {
   GK:'GK', SK:'GK', CB:'LCB', BPD:'LCB', SW:'LCB', FB:'RB', WB:'RB', IWB:'RB',
-  CDM:'DM', ANC:'DM', DLP:'DM', REG:'DM', CM:'RCM', BBM:'RCM', MEZ:'RCM', CAM:'RCM',
-  WM:'RW', ST:'ST', POA:'ST', CF:'ST', TGT:'ST', F9:'ST', DLF:'ST', SS:'ST', IF:'LW', WNG:'RW', IW:'RW',
+  CDM:'LDM', ANC:'LDM', DLP:'LDM', REG:'LDM', CM:'RDM', BBM:'RDM', MEZ:'RDM', CAM:'CAM',
+  WM:'RAM', ST:'ST', POA:'ST', CF:'ST', TGT:'ST', F9:'ST', DLF:'ST', SS:'ST', IF:'LAM', WNG:'RAM', IW:'RAM',
 };
 // 역할별 가이드 시나리오 (여러 개). phase = [선수x, 선수y, 공x, 공y, 설명]
 const ROLE_SCENARIOS = {
@@ -11611,7 +11848,7 @@ function ymd(d) {
 function parseYmd(str) { const [y,m,d] = str.split('-').map(Number); return new Date(y, m-1, d); }
 
 function ensureSquadSlots(squad) {
-  const template = FORMATIONS[squad.formation] || FORMATIONS['4-4-2'];
+  const template = FORMATIONS[squad.formation] || FORMATIONS['4-2-3-1'];
   if (!Array.isArray(squad.slots) || squad.slots.length !== template.length) {
     squad.slots = template.map(t => ({ x: t.x, y: t.y, label: t.label, role: LABEL_TO_ROLE[t.label] || 'CM' }));
   } else {
@@ -11625,7 +11862,7 @@ function ensureSquadSlots(squad) {
   return squad.slots;
 }
 function resetSquadSlots(squad) {
-  const template = FORMATIONS[squad.formation] || FORMATIONS['4-4-2'];
+  const template = FORMATIONS[squad.formation] || FORMATIONS['4-2-3-1'];
   squad.slots = template.map(t => ({ x: t.x, y: t.y, label: t.label, role: LABEL_TO_ROLE[t.label] || 'CM' }));
 }
 
@@ -11968,6 +12205,7 @@ function switchTab(name) {
   if (name === 'settle') renderSettle();
   if (name === 'home') renderHome();
   if (name === 'train') renderTrain();
+  if (name === 'boots') renderBoots();
   if (name === 'prospect') renderProspects();
   if (name === 'admin') renderAdmin();
   if (name === 'squad') { renderPlayerList(); renderField(); renderSquadList(); updateSquadPlanDot(); renderSquadMatchBar(); }
@@ -13347,7 +13585,7 @@ function newSquad() {
   if (!canManageSquad()) { toast('스쿼드 편집은 오너·감독만 가능해요 (감독 모드를 켜세요)'); return; }
   const name = prompt('새 스쿼드 이름:', '스쿼드 ' + (store.squads.length + 1));
   if (!name) return;
-  const squad = { id: uid(), name: name.trim(), formation: '4-4-2', slots: [], assignments: {} };
+  const squad = { id: uid(), name: name.trim(), formation: '4-2-3-1', slots: [], assignments: {} };   // 팀 기본 포메이션
   ensureSquadSlots(squad);
   store.squads.push(squad);
   setLocalSquad(squad.id);
@@ -15429,6 +15667,7 @@ function qmCreate(share) {
 const HOME_TILES = [
   { k: 'quick', ico: '⚡', name: '퀵 매치', t: '#f5b81f', gold: true },
   { k: 'train', ico: '🧠', name: '트레이닝', t: '#22d3ee', neo: true, tab: 'train' },
+  { k: 'boots', ico: '👟', name: '축구화', t: '#d9f950', volt: true, tab: 'boots' },
   { k: 'voteall', ico: '🗳️', name: '한 번에 투표', t: '#6f9fc4' },
   { k: 'squad', ico: '📋', name: '스쿼드', t: '#22c55e', tab: 'squad' },
   { k: 'settle', ico: '💰', name: '정산', t: '#fee500', tab: 'settle' },
@@ -15502,7 +15741,7 @@ function renderHome() {
       <div class="hm-opp">vs ${escapeHtml(next.opponent || '상대팀')}</div>
       <div class="hm-when">${escapeHtml(settleDateLabelOf(next.date))} ${escapeHtml(next.time || '')}${next.location ? ' · 📍 ' + escapeHtml(next.location) + ha : ''}</div>
       <div class="hm-bar"><i style="width:${g.attend.length / tot * 100}%;background:#22c55e"></i><i style="width:${g.hold.length / tot * 100}%;background:#f59e0b"></i><i style="width:${g.absent.length / tot * 100}%;background:#ef4444"></i></div>
-      <div class="hm-cnt"><span>✅ 참석 ${g.attend.length}</span><span>⏸️ 보류 ${g.hold.length}</span><span>❌ 불참 ${g.absent.length}</span>${g.none.length ? `<span class="nv">❓ ${g.none.length}명 아직</span>` : ''}</div>
+      <div class="hm-cnt">${hmWhoBtn(next.id, 'attend', `✅ 참석 ${g.attend.length}`)}${hmWhoBtn(next.id, 'hold', `⏸️ 보류 ${g.hold.length}`)}${hmWhoBtn(next.id, 'absent', `❌ 불참 ${g.absent.length}`)}${g.none.length ? hmWhoBtn(next.id, 'none', `❓ ${g.none.length}명 아직`, 'nv') : ''}</div>
       ${mineHtml}
       <div class="hm-act"><button type="button" onclick="homeLineup('${next.id}')">📋 라인업</button><button type="button" onclick="openShareMatch('${next.id}')">📢 공지</button><button type="button" onclick="openVoteAll({focus:'${next.id}'})">🗳️ 전체 투표</button></div>
     </div>`;
@@ -15517,6 +15756,7 @@ function renderHome() {
   const sub = t => {
     switch (t.k) {
       case 'quick': return '경기 올리기';
+      case 'boots': { const f = btFoot(); return btReady(f) ? `내 사이즈 ${btBase(f)} · ${f.surf === 'both' ? 'TF·AG' : f.surf}` : '내 발 맞춤 추천'; }
       case 'train': { const l = trDailyLeft(), sk = trStreak(); return l ? `오늘 ${l}문제 남음` : sk ? `🔥 ${sk}일째 · 더 풀기` : '뇌지컬 · 보완 · 극대화'; }
       case 'voteall': return T.unvoted.length ? `안 한 경기 ${T.unvoted.length}` : `다가오는 ${T.ups.length}경기`;
       case 'squad': return next ? `${settleDateLabelOf(next.date).replace(' ', '')} 라인업` : '포메이션 · 배치';
@@ -15539,7 +15779,7 @@ function renderHome() {
   };
   const dot = t => (t.k === 'train' && trDailyLeft() > 0) || (t.k === 'voteall' && T.unvoted.length) || (t.k === 'settle' && (T.owe.n || T.confirm)) || (t.k === 'calendar' && calOn);
   const tiles = HOME_TILES.filter(t => !t.tab || homeTabVisible(t.tab)).map(t =>
-    `<button type="button" class="hm-tile${t.gold ? ' gold' : ''}${t.neo ? ' neo' : ''}${dot(t) ? ' dot' : ''}" style="--t:${t.t}" onclick="homeGo('${t.k}')"><span class="hm-ti">${t.ico}</span><b>${t.name}</b><small>${escapeHtml(sub(t))}</small></button>`).join('');
+    `<button type="button" class="hm-tile${t.gold ? ' gold' : ''}${t.neo ? ' neo' : ''}${t.volt ? ' volt' : ''}${dot(t) ? ' dot' : ''}" style="--t:${t.t}" onclick="homeGo('${t.k}')"><span class="hm-ti">${t.ico}</span><b>${t.name}</b><small>${escapeHtml(sub(t))}</small></button>`).join('');
   const rest = T.ups.slice(1, 5);
   const rows = rest.map(m => {
     const k = matchStatus(m); const mine = mp ? (getMatchAttendance(m)[mp.id] || 'none') : '';
@@ -15569,6 +15809,47 @@ function homeGo(k) {
   const t = HOME_TILES.find(x => x.k === k);
   if (t && t.tab) switchTab(t.tab);
 }
+/* 홈 · 투표 인원 이름 보기 — PC 는 마우스 올리면, 폰은 누르면(다시 누르거나 바깥 누르면 닫힘) */
+let _hmWhoT = 0;
+function hmWhoBtn(id, k, txt, cls) { return `<span class="hm-who${cls ? ' ' + cls : ''}" role="button" tabindex="0" data-who="${k}" onclick="hmWho(event,'${id}','${k}')" onmouseenter="hmWhoHover(event,'${id}','${k}')" onmouseleave="hmWhoLeave()" onkeydown="if(event.key==='Enter')hmWho(event,'${id}','${k}')">${txt}</span>`; }
+function hmWhoHover(ev, id, k) { if (!(window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches)) return; clearTimeout(_hmWhoT); hmWho(ev, id, k, true); }
+function hmWhoLeave() { clearTimeout(_hmWhoT); _hmWhoT = setTimeout(() => { const p = document.getElementById('hmWhoPop'); if (p && p.dataset.h === '1' && !p.matches(':hover')) hmWhoClose(); }, 260); }
+function hmWho(ev, id, k, hover) {
+  if (ev && ev.stopPropagation) ev.stopPropagation();
+  const m = store.matches.find(x => x.id === id); if (!m) return;
+  const el = ev.currentTarget || ev.target;
+  let pop = document.getElementById('hmWhoPop');
+  if (pop && pop.style.display === 'block' && pop.dataset.k === id + k) {
+    if (hover) return;
+    if (pop.dataset.h === '1') { pop.dataset.h = ''; return; }   // 마우스로 열린 걸 누르면 고정
+    hmWhoClose(); return;
+  }
+  if (!pop) {
+    pop = document.createElement('div'); pop.id = 'hmWhoPop'; pop.className = 'hm-whopop'; document.body.appendChild(pop);
+    pop.addEventListener('mouseenter', () => clearTimeout(_hmWhoT)); pop.addEventListener('mouseleave', hmWhoLeave);
+  }
+  const g = matchAttendGroups(m); const arr = g[k] || [];
+  const title = { attend: '✅ 참석', hold: '⏸️ 보류', absent: '❌ 불참', none: '❓ 아직 투표 안 함' }[k];
+  pop.innerHTML = `<b>${title} ${arr.length}명</b><div class="hm-wn">${arr.map(p => `<span>${escapeHtml(p.name)}${k === 'attend' && availQTag(m, p.id) ? ` <small>(${escapeHtml(availQTag(m, p.id))})</small>` : ''}</span>`).join('') || '<em>없어요</em>'}</div>${k === 'none' && arr.length ? `<button type="button" onclick="hmWhoCopy('${id}')">📋 이름 복사 · 단톡에 투표 부탁</button>` : ''}`;
+  pop.dataset.k = id + k; pop.dataset.h = hover ? '1' : '';
+  document.querySelectorAll('.hm-who.on').forEach(x => x.classList.remove('on')); if (el && el.classList) el.classList.add('on');
+  pop.style.display = 'block'; pop.style.left = '-999px'; pop.style.top = '0px';
+  const r = el.getBoundingClientRect(), pw = pop.offsetWidth, ph = pop.offsetHeight;
+  const x = Math.min(innerWidth - pw - 8, Math.max(8, r.right - pw));
+  let y = r.bottom + 6; if (y + ph > innerHeight - 80) y = Math.max(8, r.top - ph - 6);
+  pop.style.left = x + 'px'; pop.style.top = y + 'px';
+}
+function hmWhoClose() { const p = document.getElementById('hmWhoPop'); if (p) { p.style.display = 'none'; p.dataset.k = ''; p.dataset.h = ''; } document.querySelectorAll('.hm-who.on').forEach(x => x.classList.remove('on')); }
+function hmWhoCopy(id) {
+  const m = store.matches.find(x => x.id === id); if (!m) return;
+  const names = matchAttendGroups(m).none.map(p => p.name);
+  const txt = `${settleDateLabelOf(m.date)} vs ${m.opponent || ''} 투표 아직 안 한 사람: ${names.join(', ')} — 투표 부탁해요! 🙏`;
+  const ok = () => toast('이름 복사했어요 · 단톡에 붙여넣기');
+  try { navigator.clipboard.writeText(txt).then(ok, () => { prompt('복사해서 쓰세요', txt); }); } catch (e) { prompt('복사해서 쓰세요', txt); }
+  hmWhoClose();
+}
+document.addEventListener('pointerdown', e => { const p = document.getElementById('hmWhoPop'); if (p && p.style.display === 'block' && !p.contains(e.target) && !(e.target.closest && e.target.closest('.hm-who'))) hmWhoClose(); }, true);
+document.addEventListener('scroll', e => { const p = document.getElementById('hmWhoPop'); if (p && p.style.display === 'block' && !(e.target && e.target.nodeType === 1 && p.contains(e.target))) hmWhoClose(); }, true);
 function homeVote(id, st) { haptic(8); setMatchAttendance(id, st); renderHome(); }
 function homeFrom(id, k) { const mp = myPlayer(); if (!mp) return; setAvailFrom(id, mp.id, k); renderHome(); }
 function homeLineup(id) {
@@ -15610,7 +15891,7 @@ function bindAppChrome() {
     if (k === 'quick') { openQuickMatch(); return; }
     if (k === 'more') { openDrawer(); return; }
     if (k === 'train' && currentTab === 'train' && _tr.view !== 'home') { trGo('home'); return; }
-    if (currentTab === k) { const v = document.querySelector('.view.active'); const sc = v && (v.querySelector('#settleContent, #instaContent, #recordsContent, #profileContent, #trainContent, #homeContent') || v); if (sc && sc.scrollTo) sc.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    if (currentTab === k) { const v = document.querySelector('.view.active'); const sc = v && (v.querySelector('#settleContent, #instaContent, #recordsContent, #profileContent, #trainContent, #homeContent, #bootsContent') || v); if (sc && sc.scrollTo) sc.scrollTo({ top: 0, behavior: 'smooth' }); return; }
     switchTab(k);
   }));
   document.getElementById('navUser')?.addEventListener('click', () => { if (window.innerWidth <= 820) openDrawer(); });
@@ -16775,7 +17056,9 @@ function trFigTop() {
   const W = 150, H = 120;
   return `<svg class="trs" viewBox="0 0 ${W} ${H}"><rect width="${W}" height="${H}" rx="10" fill="#15532e"/><line x1="12" y1="2" x2="12" y2="${H - 2}" stroke="#fff" stroke-width="2"/><text x="16" y="${H - 6}" font-size="8" font-weight="800" fill="rgba(255,255,255,.7)">터치라인</text>
     <circle cx="82" cy="24" r="9" fill="#b91c1c" stroke="#fecaca" stroke-width="1.4"/><circle cx="80" cy="38" r="4" fill="#fff" stroke="#111"/>
+    <g transform="rotate(-45 96 60)"><ellipse cx="96" cy="60" rx="3.6" ry="7" fill="#fde68a" stroke="#78350f" stroke-width=".8"/></g><g transform="rotate(-45 66 86)"><ellipse cx="66" cy="86" rx="3.6" ry="7" fill="#fde68a" stroke="#78350f" stroke-width=".8"/></g>
     <g transform="rotate(-32 82 72)"><ellipse cx="82" cy="72" rx="17" ry="7" fill="#f5b81f"/><circle cx="82" cy="72" r="5.5" fill="#b8860b"/></g>
+    <text x="103" y="58" font-size="7.5" font-weight="900" fill="#fde68a">오른발 앞</text><text x="72" y="103" font-size="7.5" font-weight="900" fill="#fde68a">왼발 뒤</text>
     <path d="M73 44 Q34 56 30 ${H - 22}" stroke="#4ade80" stroke-width="2.2" fill="none"/><path d="M90 42 L116 ${H - 26}" stroke="#f87171" stroke-width="2" stroke-dasharray="3 3" fill="none"/><text x="116" y="${H - 12}" font-size="13" font-weight="900" fill="#f87171">✕</text></svg>`;
 }
 
@@ -16808,8 +17091,8 @@ TKA('recv', 'ALL', '받기 — 첫 터치', '한 걸음 마중 · 첫 터치는 
   '좋은 첫 터치 하나가 상대 한 명을 지워.',
   ['상대가 뒤에서 달려오고 있어. 첫 터치는?', '', [['상대 반대쪽, 가려는 방향으로', ''], ['발밑에 딱 멈춘다', '멈추는 순간 상대가 도착해'], ['상대 쪽으로', '바로 뺏겨']], 0, '첫 터치를 상대 반대쪽으로 빼면 그것만으로 한 박자 앞서.']);
 TKA('stance', 'ALL,CB,FB,CDM', '수비 기본자세', '반쯤 옆으로 · 낮게 · 팔 하나 거리',
-  { fig: 'stance', call: ['공을 봐 (몸짓 X)', '반쯤 옆으로', '무릎 굽혀 낮게', '앞꿈치에 체중'], bad: '꼿꼿이 서서 발만 쭉 → 한 번 제치면 끝', top: '위에서 보면 — 비스듬히 서서 바깥 길만 열기' },
-  ['반쯤 옆으로 서기 — 한쪽 길만 열어주기', '무릎 굽혀 낮게, 앞꿈치에 체중 — 바로 따라갈 수 있게', '팔 하나 거리 — 너무 붙으면 제쳐지고, 멀면 슈팅'],
+  { fig: 'stance', call: ['공을 봐 (몸짓 X)', '반쯤 옆으로 · 한 발 앞', '무릎 굽혀 낮게', '뒤꿈치 들고 · 중심은 뒷발'], bad: '꼿꼿이 서서 발만 쭉 → 한 번 제치면 끝', top: '위에서 보면 (왼쪽 터치라인) — 안쪽 오른발 앞 · 바깥 왼발 뒤' },
+  ['반쯤 옆으로, 한 발을 앞으로 — 한쪽 길만 열어주기', '무릎 굽혀 낮게 · 뒤꿈치 들고 중심은 뒷발 쪽 — 바로 물러나고 돌아서 뛸 수 있게 (앞발은 가볍게)', '팔 하나 거리 — 너무 붙으면 제쳐지고, 멀면 슈팅'],
   '발은 공이 상대 발에서 멀어질 때만. 그 전엔 몸으로 버티고 따라가기.',
   ['공격수가 몸을 크게 흔들며 페인트를 해. 나는 뭘 봐야 할까?', '', [['공', ''], ['상대 상체', '상체는 속이려고 흔드는 거야'], ['상대 눈', '눈도 속일 수 있어']], 0, '몸은 속여도 공은 못 속여. 공만 보면 페인트에 안 넘어가.']);
 TKA('shape', 'ALL', '기본 위치 지키기', '공 쪽으로 몇 걸음만 · 간격 유지',
@@ -16852,7 +17135,7 @@ TKA('line', 'CB', '라인 콜', '압박 있으면 「올라가!」 · 없으면 
 /* FB */
 TKA('fb1v1', 'FB', '측면 1대1 몸 방향', '안쪽 발 앞으로 · 바깥 길만 열기',
   { fig: 'stance', call: ['공을 봐', '몸은 비스듬히', '안쪽 발 앞으로', '터치라인 쪽으로 몰기'], top: '위에서 보면 — 안쪽 막고 바깥 길만' },
-  ['안쪽 발을 앞으로 — 몸이 자연스럽게 바깥을 향해', '바깥으로 몰면 터치라인이 수비를 도와줘', '크로스 자세가 나오면 다리 뻗어 막기'],
+  ['안쪽 발을 앞으로 — 왼쪽 터치라인이면 오른발 앞·왼발 뒤, 오른쪽이면 반대 → 몸이 자연스럽게 바깥을 향해', '중심은 뒷발 쪽 · 뒤꿈치 들고 — 바깥으로 치고 나가면 바로 같이 뛰기', '바깥으로 몰면 터치라인이 수비를 도와줘 · 크로스 자세가 나오면 다리 뻗어 막기'],
   '안쪽으로 뚫리면 바로 슈팅 — 안쪽이 먼저야.',
   ['측면 1대1에서 먼저 막아야 하는 길은?', '', [['안쪽(골대 쪽)', ''], ['바깥(터치라인 쪽)', '바깥은 터치라인이 막아줘'], ['둘 다 똑같이', '정면으로 서면 둘 다 열려']], 0, '안쪽은 슈팅·패스 각이 다 열리는 길이라 무조건 먼저.']);
 TKA('throw', 'FB', '스로인', '두 발 땅에 · 머리 뒤에서 · 발 앞으로',
@@ -17530,6 +17813,7 @@ function trMe() {
       if (sv && (sv.u || 0) > (_trRec.u || 0)) {
         _trRec = trNorm(sv); trSaveLocal();
         if (currentTab === 'train') renderTrain();
+        if (currentTab === 'boots') renderBoots();
         updateTrainBadge();
       } else if (_trRec.u && (!sv || (sv.u || 0) < _trRec.u)) {
         trPushAll();                       // 이 기기에만 있던 기록을 서버로
@@ -17585,9 +17869,21 @@ window.addEventListener('pagehide', () => { try { trFlush(); } catch (e) {} });
 function trProfileGroups() {
   const mp = myPlayer(); const out = [];
   (mp && mp.positions || []).forEach(code => { const g = TR_ROLE_GROUP[code]; if (g && !out.includes(g)) out.push(g); });
-  return out.slice(0, 3);
+  return out;
 }
-function trMyGroups() { const r = trMe(); const p = r && Array.isArray(r.pos) && r.pos.length ? r.pos.filter(g => TR_GROUPS[g]) : null; return p && p.length ? p : trProfileGroups(); }
+function trArr(v) { return Array.isArray(v) ? v.filter(Boolean) : (v && typeof v === 'object') ? Object.values(v).filter(Boolean) : []; }
+// ⚽ 지금 뛰는 자리(제한 없음 · 첫 번째 = 주 포지션) · ❤️ 해보고 싶은 자리 · ⭐ 나한테 잘 맞는 자리
+function trPlayGroups() { const r = trMe(); const p = r ? trArr(r.pos).filter(g => TR_GROUPS[g]) : []; return p.length ? p : trProfileGroups(); }
+function trWantGroups() { const r = trMe(); return r ? trArr(r.posW).filter(g => TR_GROUPS[g]) : []; }
+function trFitGroups() { const r = trMe(); return r ? trArr(r.posF).filter(g => TR_GROUPS[g]) : []; }
+// 문제 · 처방은 뛰는 자리 + 해보고 싶은 자리
+function trMyGroups() { const p = trPlayGroups(); return p.concat(trWantGroups().filter(g => !p.includes(g))); }
+function trFitHint() {
+  const r = trMe(); if (!r) return '';
+  const a = TR_GROUP_ORDER.map(g => { const x = r.grp && r.grp[g]; return x && +x[0] >= 5 ? { g, p: Math.round(x[1] / x[0] * 100), n: +x[0] } : null; }).filter(Boolean).sort((x, y) => y.p - x.p).slice(0, 2);
+  if (!a.length) return '<div class="tr-fhint">📊 자리별로 5문제 이상 풀면, 기록으로 본 잘 맞는 자리도 여기 떠요</div>';
+  return `<div class="tr-fhint">📊 문제 기록으로 보면 ${a.map(x => `<b>${TR_GROUPS[x.g].name} ${x.p}%</b>`).join(' · ')} 판단이 좋아요</div>`;
+}
 function trSlotsOf(sq) {
   const tpl = FORMATIONS[sq.formation] || FORMATIONS['4-2-3-1'];
   return (Array.isArray(sq.slots) && sq.slots.length === tpl.length) ? sq.slots.map((s, i) => ({ x: typeof s.x === 'number' ? s.x : tpl[i].x, y: typeof s.y === 'number' ? s.y : tpl[i].y, label: s.label || tpl[i].label, role: s.role || LABEL_TO_ROLE[tpl[i].label] || 'CM' })) : tpl.map(t => ({ x: t.x, y: t.y, label: t.label, role: LABEL_TO_ROLE[t.label] || 'CM' }));
@@ -17810,11 +18106,18 @@ function trViewHome() {
   // 내 포지션
   let pos;
   if (_tr.posEdit || !gs.length) {
-    pos = `<div class="tr-posedit"><div class="tr-ph">${gs.length ? '내 포지션 고르기 <small>최대 3개 · 문제·처방이 여기에 맞춰져요</small>' : '먼저 내 포지션을 골라주세요 <small>최대 3개</small>'}</div>
-      <div class="tr-chips">${TR_GROUP_ORDER.map(g => `<button type="button" class="${gs.includes(g) ? 'on' : ''}" onclick="trTogglePos('${g}')">${TR_GROUPS[g].ico} ${TR_GROUPS[g].name}</button>`).join('')}</div>
-      ${gs.length ? `<button type="button" class="tr-mini-btn" onclick="trGo('home',{posEdit:false})">완료</button>` : ''}</div>`;
+    const play = trPlayGroups(), want = trWantGroups(), fit = trFitGroups();
+    const prow = (kind, list, title, sub, cls) => `<div class="tr-prow ${cls}"><div class="tr-ph">${title} <small>${sub}</small></div>
+      <div class="tr-chips">${TR_GROUP_ORDER.map(g => `<button type="button" class="${list.includes(g) ? 'on' : ''}" onclick="trTogglePos('${g}','${kind}')">${TR_GROUPS[g].ico} ${TR_GROUPS[g].name}${kind === 'pos' && list[0] === g ? '<i>주</i>' : ''}</button>`).join('')}</div></div>`;
+    pos = `<div class="tr-posedit">
+      ${prow('pos', play, '⚽ 지금 뛰는 자리', '전부 골라요 · 처음 고른 게 주 포지션', '')}
+      ${prow('posW', want, '❤️ 해보고 싶은 자리', '이 자리 문제 · 처방도 같이 나와요', 'w')}
+      ${prow('posF', fit, '⭐ 나한테 잘 맞는 자리', '내 생각 · 감독 참고용', 'f')}
+      ${trFitHint()}
+      ${play.length ? `<button type="button" class="tr-mini-btn" onclick="trGo('home',{posEdit:false})">완료</button>` : '<div class="tr-note">⚽ 지금 뛰는 자리를 하나 이상 골라주세요</div>'}</div>`;
   } else {
-    pos = `<div class="tr-myp"><span>내 포지션</span>${gs.map((g, i) => `<b class="${i === 0 ? 'p' : ''}">${TR_GROUPS[g].name}</b>`).join('')}<button type="button" onclick="trGo('home',{posEdit:true})" aria-label="포지션 수정">✎</button></div>`;
+    const play = trPlayGroups(), want = trWantGroups().filter(g => !trPlayGroups().includes(g)), fit = trFitGroups();
+    pos = `<div class="tr-myp"><span>내 포지션</span>${play.map((g, i) => `<b class="${i === 0 ? 'p' : ''}">${TR_GROUPS[g].name}</b>`).join('')}${want.map(g => `<b class="w">❤️ ${TR_GROUPS[g].name}</b>`).join('')}${fit.length ? `<b class="f">⭐ ${fit.map(g => TR_GROUPS[g].name).join(' · ')}</b>` : ''}<button type="button" onclick="trGo('home',{posEdit:true})" aria-label="포지션 수정">✎</button></div>`;
   }
   // 다음 경기
   let match = '';
@@ -17864,15 +18167,18 @@ function trViewHome() {
       <button type="button" class="tr-fixc" onclick="trStartFx('fix')"><i>🩹</i><b>보완</b><small>아쉬운 점 고르면<br>맞춤 처방</small><em>${fxA.length ? `처방 ${fxA.length}개 진행 중` : '시작하기 ›'}</em></button>
       <button type="button" class="tr-maxc" onclick="trStartFx('max')"><i>🚀</i><b>극대화</b><small>내 장점을<br>더 날카롭게</small><em>${mxA.length ? `플랜 ${mxA.length}개 진행 중` : '시작하기 ›'}</em></button>
     </div>
+    <button type="button" class="tr-boots" onclick="switchTab('boots')"><span>👟</span><div><b>내 발에 맞는 축구화</b><small>사이즈 · 발볼 · 발등 + 내 포지션 · 극대화로 순서</small></div><i>›</i></button>
     ${owner}
     <div class="tr-priv">🔒 내가 고르고 푼 기록은 자동 저장돼서 팀 분석에 쓰여요 · 다른 회원 화면엔 안 보여요</div>`;
 }
-function trTogglePos(g) {
-  const cur = trMyGroups().slice();
+function trTogglePos(g, kind) {
+  kind = kind || 'pos';
+  const cur = (kind === 'pos' ? trPlayGroups() : kind === 'posW' ? trWantGroups() : trFitGroups()).slice();
   const i = cur.indexOf(g);
-  if (i >= 0) cur.splice(i, 1); else { if (cur.length >= 3) { toast('포지션은 3개까지 고를 수 있어요'); return; } cur.push(g); }
-  trSet('pos', cur.length ? cur : null);
+  if (i >= 0) cur.splice(i, 1); else cur.push(g);
+  trSet(kind, cur.length ? cur : null);
   _tr.posEdit = true;
+  if (kind === 'posF') { renderTrain(); return; }
   const r = trMe(); if (r && r.dl && r.dl.d === trToday() && !(+r.dl.done)) trSet('dl', null);   // 아직 안 풀었으면 오늘 문제도 새 포지션으로
   renderTrain();
 }
@@ -17985,7 +18291,7 @@ function trViewMore() {
   const unseen = pool.filter(q => !r.ans[q.id]).length, wrong = pool.filter(q => { const a = r.ans[q.id]; return a && +a[0] === 0; }).length;
   const chip = (k, v, label, on) => `<button type="button" class="${on ? 'on' : ''}" onclick="trMoreSet('${k}', ${typeof v === 'number' ? v : `'${v}'`})">${label}</button>`;
   return `${trBack('♾️ 더 풀기 <small>골라서 원하는 만큼</small>', 'home')}
-    <div class="tr-fl"><span>포지션</span><div class="tr-chips">${chip('g', 'mine', '내 포지션 전부', m.g === 'mine')}${groups.map(g => chip('g', g, TR_GROUPS[g].name, m.g === g)).join('')}${chip('g', 'all', '다른 자리도', m.g === 'all')}</div></div>
+    <div class="tr-fl"><span>포지션</span><div class="tr-chips">${chip('g', 'mine', '내 포지션 전부', m.g === 'mine')}${TR_GROUP_ORDER.map(g => chip('g', g, (groups.includes(g) ? '★ ' : '') + TR_GROUPS[g].name, m.g === g)).join('')}${chip('g', 'all', '전 포지션 섞어서', m.g === 'all')}</div></div>
     <div class="tr-fl"><span>난이도</span><div class="tr-chips">${chip('lv', 1, '🟢 기초', m.lv.includes(1))}${chip('lv', 2, '🟡 실전', m.lv.includes(2))}<button type="button" class="soon" onclick="toast('🔴 심화(연속 판단 · 경기 시뮬)는 다음 업데이트에 열려요')">🔴 심화 <i>곧</i></button></div></div>
     <div class="tr-fl"><span>상황</span><div class="tr-chips">${chip('cat', 'all', '전체', m.cat === 'all')}${Object.keys(TR_CATS).map(c => chip('cat', c, TR_CATS[c].ico + ' ' + TR_CATS[c].name, m.cat === c)).join('')}</div></div>
     <div class="tr-fl"><span>경기 상황</span><div class="tr-chips">${chip('gs', 'any', '랜덤', m.gs === 'any')}${['lead', 'trail', 'q4', 'short'].map(g => chip('gs', g, TR_GS[g].name, m.gs === g)).join('')}</div></div>
@@ -18199,7 +18505,7 @@ function trViewFx() {
   const f = _tr.f;
   const fix = f.mode === 'fix'; const kind = fix ? 'fx' : 'mx';
   const lists = fix ? TF : TX; const gs = trMyGroups();
-  const opts = gs.filter(g => lists[g]).concat(['ALL']);
+  const opts = gs.filter(g => lists[g]).concat(TR_GROUP_ORDER.filter(g => lists[g] && !gs.includes(g)), ['ALL']);
   if (!opts.includes(f.g)) f.g = opts[0];
   const items = lists[f.g] || [];
   const seg = `<div class="tr-seg"><button type="button" class="${fix ? 'on fx' : ''}" onclick="trFxMode('fix')">🩹 보완</button><button type="button" class="${!fix ? 'on mx' : ''}" onclick="trFxMode('max')">🚀 극대화</button></div>`;
@@ -18210,7 +18516,7 @@ function trViewFx() {
     const hl = hist.map(e => { const x = trItem(kind, e.g, e.a); if (!x) return ''; return `<button type="button" class="tr-hi" onclick="trOpenRx('${kind}','${e.id}')"><span>${x.ico}</span><div><b>${TRX(x.t)}</b><small>${TRX(trGName(e.g))} · ${e.d ? TRX(settleDateLabelOf(e.d)) : ''}</small></div><em class="${e.chk || ''}">${e.chk === 'up' ? '좋아짐 ↑' : e.chk === 'same' ? '그대로' : e.chk === 'down' ? '더 안 됨' : '진행 중'}</em></button>`; }).join('');
     return `${trBack(fix ? '🩹 보완' : '🚀 극대화', 'home')}${seg}
       <div class="tr-fh"><span class="tr-stp ${fix ? '' : 'mx'}">1 / 3</span><b>${TRX(trGName(f.g))}${fix ? '로 뛸 때 <em>제일 아쉬운 건?</em>' : '로 뛸 때 <em>내 장점은?</em>'}</b></div>
-      <div class="tr-chips mt">${opts.map(g => `<button type="button" class="${g === f.g ? 'on' : ''}" onclick="trFxGroup('${g}')">${TRX(trGName(g))}</button>`).join('')}</div>
+      <div class="tr-chips mt sm">${opts.map(g => `<button type="button" class="${g === f.g ? 'on' : ''}" onclick="trFxGroup('${g}')">${gs.includes(g) ? '★ ' : ''}${TRX(trGName(g))}</button>`).join('')}</div>
       <div class="tr-fol">${items.map(x => `<button type="button" class="tr-fo ${fix ? '' : 'mx'}" onclick="trFxPick(0,'${x.id}')"><i>${x.ico}</i><p><b>${TRX(x.t)}</b></p><span>›</span></button>`).join('')}</div>
       ${hl ? `<div class="tr-sec">📋 지난 ${fix ? '처방' : '플랜'}</div>${hl}` : `<div class="tr-note">고르는 순간부터 자동 저장돼요 — 끝까지 안 가도 고른 데까지 기록돼요.</div>`}`;
   }
@@ -18369,8 +18675,8 @@ function trAnaHtml(data) {
     let name = '', groups = r.pos && r.pos.length ? r.pos : [];
     if (k.indexOf('u_') === 0) { const u = authStore.users.find(x => x.id === k.slice(2)); name = u ? (u.displayName || u.username) : '(탈퇴 계정)'; }
     else { const p = getPlayer(k); name = p ? p.name : '(선수 정보 없음)'; if (!groups.length && p) (p.positions || []).forEach(c => { const g = TR_ROLE_GROUP[c]; if (g && !groups.includes(g)) groups.push(g); }); }
-    return { k, r, name, groups: groups.slice(0, 3) };
-  }).filter(o => o.r.n || Object.keys(o.r.fx).length || Object.keys(o.r.mx).length || Object.keys(o.r.kb).length);
+    return { k, r, name, groups: trArr(groups), want: trArr(r.posW), fit: trArr(r.posF) };
+  }).filter(o => o.r.n || Object.keys(o.r.fx).length || Object.keys(o.r.mx).length || Object.keys(o.r.kb).length || trArr(o.r.pos).length || o.want.length || o.fit.length);
   const H = s => escapeHtml(s);
   if (!recs.length) return `<div class="tra-empty"><b>아직 쌓인 기록이 없어요</b><small>선수들이 트레이닝 탭에서 문제를 풀고, 보완·극대화를 고르는 순간부터 자동으로 여기 모여요. 고르다 멈춘 것까지 다 데이터로 들어와요.</small></div>`;
   const cat = {}, gs = {}, grp = {}, wk = {}; let N = 0, C = 0, fxN = 0, mxN = 0, partial = 0;
@@ -18432,7 +18738,7 @@ function trAnaHtml(data) {
   const rows = recs.slice().sort((a, b) => (b.r.n || 0) - (a.r.n || 0)).map(o => {
     const last = kind => { const es = Object.values(o.r[kind] || {}).filter(e => e && e.a).sort((a, b) => (b.t || 0) - (a.t || 0)); const e = es[0]; if (!e) return '—'; const it = trItem(kind, e.g, e.a); return it ? it.t + (e.end ? '' : ' (고르는 중)') : '—'; };
     const sk = o.r.sd && (trDayNum() - trDayNum(o.r.sd)) <= 1 ? o.r.sk : 0;
-    return `<div class="tra-pr"><b>${H(o.name)}<small>${o.groups.map(g => TR_GROUPS[g] ? TR_GROUPS[g].short : g).join('·') || '—'} · ${o.r.n || 0}문제</small></b><span class="acc">${acc([o.r.n, o.r.c]) === null ? '—' : acc([o.r.n, o.r.c]) + '%'}</span><span class="sk">${sk ? '🔥' + sk : '–'}</span><div class="ch"><span class="fx">🩹 ${H(last('fx'))}</span><span class="mx">🚀 ${H(last('mx'))}</span></div></div>`;
+    return `<div class="tra-pr"><b>${H(o.name)}<small>${o.groups.map(g => TR_GROUPS[g] ? TR_GROUPS[g].short : g).join('·') || '—'}${o.want.filter(g => !o.groups.includes(g)).length ? ' · ❤️' + o.want.filter(g => !o.groups.includes(g)).map(g => TR_GROUPS[g] ? TR_GROUPS[g].short : g).join('·') : ''} · ${o.r.n || 0}문제</small></b><span class="acc">${acc([o.r.n, o.r.c]) === null ? '—' : acc([o.r.n, o.r.c]) + '%'}</span><span class="sk">${sk ? '🔥' + sk : '–'}</span><div class="ch"><span class="fx">🩹 ${H(last('fx'))}</span><span class="mx">🚀 ${H(last('mx'))}</span></div></div>`;
   }).join('');
   const rec = Object.values(recent).sort((a, b) => b.n - a.n).slice(0, 3).map(x => { const it = trItem(x.kind, x.g, x.a); return it ? `<b class="${x.kind}">${x.kind === 'fx' ? '🩹' : '🚀'} ${H(it.t)} ${x.n}</b>` : ''; }).join('');
   return `<div class="tra">
@@ -18447,12 +18753,740 @@ function trAnaHtml(data) {
         ${bar('동점', gs.draw)}${bar('이기는 중', gs.lead)}${bar('지는 중', gs.trail, true)}${bar('4쿼터', gs.q4, true)}${bar('사람 부족', gs.short)}
         <div class="tra-t cy">📏 라인별</div>${lineBars.map(([k, a]) => bar(k, a)).join('')}
         <div class="tra-t vi">📈 주별 추세 <small>이번 주 ${active} / ${roster}명 참여</small></div>${spark}</div>
+      <div class="tra-card wide"><div class="tra-t cy">🗺️ 포지션 지도 <small>뛰는 자리 · ❤️ 해보고 싶은 · ⭐ 잘 맞는다고 고른</small></div>
+        <div class="tra-pm">${TR_GROUP_ORDER.map(g => { const pl = recs.filter(o => o.groups.includes(g)), wa = recs.filter(o => o.want.includes(g)), fi = recs.filter(o => o.fit.includes(g)); return `<div class="tra-pmr"><b>${TR_GROUPS[g].ico} ${TR_GROUPS[g].name}</b><span>⚽ ${pl.length}</span><span class="w">❤️ ${wa.length}</span><span class="f">⭐ ${fi.length}</span>${wa.length ? `<small>❤️ ${wa.slice(0, 5).map(o => H(o.name)).join(' · ')}${wa.length > 5 ? ' 외' : ''}</small>` : ''}</div>`; }).join('')}</div></div>
       <div class="tra-card wide"><div class="tra-t cy">👥 선수별 <small>문제 많이 푼 순</small></div>
         <div class="tra-tab"><div class="tra-ph"><b>선수 · 마지막으로 고른 보완 · 극대화</b><span>뇌지컬</span><span>연속</span></div>${rows}</div>
         <div class="tra-ins"><b>처방 뒤 경기 체크</b> 좋아짐 ${chk.up} · 그대로 ${chk.same} · 더 안 됨 ${chk.down}</div>
         ${rec ? `<div class="tra-ins"><b>요즘(2주) 많이 고르는 것</b> ${rec}</div>` : ''}</div>
     </div></div>`;
 }
+
+/* EFM 로고 누르면 홈으로 (이미 홈이면 맨 위로) */
+function brandHome() {
+  haptic(6);
+  try { if (typeof _drawerOpen !== 'undefined' && _drawerOpen) closeDrawer(); } catch (e) {}
+  if (currentTab === 'home') { const el = document.getElementById('homeContent'); if (el && el.scrollTo) el.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+  switchTab('home');
+}
+/* ==================== v108 기본 포메이션 4-2-3-1 전환 ==================== */
+const M4231_MAP = { 0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 8, 6: 5, 7: 6, 8: 7, 9: 10, 10: 9 };   // 4-3-3 칸 → 4-2-3-1 칸 (CAM→CAM · CDM→DM · 윙→2선 측면)
+function migrateUpcoming4231() {
+  try {
+    const u = currentUser(); if (!u || !(u.role === 'owner' || u.role === 'admin')) return;
+    if (!store || store.form4231) return;
+    const today = ymd(new Date()); let n = 0;
+    const pastIds = new Set(); (store.matches || []).forEach(m => { if (m && m.date && m.date < today) matchQuarters(m).forEach(q => pastIds.add(q.squadId)); });
+    (store.matches || []).forEach(m => {
+      if (!m || !m.date || m.date < today) return;
+      matchQuarters(m).forEach(q => {
+        const sq = store.squads.find(x => x.id === q.squadId);
+        if (!sq || sq.formation !== '4-3-3' || pastIds.has(sq.id)) return;
+        const old = sq.assignments || {}, na = {};
+        Object.keys(old).forEach(k => { const v = old[k]; if (v === null || v === undefined || v === '') return; const t = M4231_MAP[+k]; if (t !== undefined) na[t] = v; });
+        sq.formation = '4-2-3-1'; resetSquadSlots(sq); sq.assignments = na; n++;
+      });
+    });
+    store.form4231 = APP_VERSION;
+    saveState();
+    if (n) { toast(`다가오는 경기 쿼터 ${n}개를 팀 기본 4-2-3-1 로 바꿨어요`); try { if (currentTab === 'squad') { renderField(); renderSquadList(); } } catch (e) {} }
+  } catch (e) { console.warn('4-2-3-1 전환 실패', e); }
+}
+
+/* ==================== 👟 축구화 (v108) — 내 발 · 내 플레이에 맞는 라인 ====================
+   길이는 평소 신발 사이즈로 묻고, 사진으로는 「비율」만 잰다(기준 물건 필요 없음).
+   바닥은 TF · AG 만(우리 구장 규정). 가격은 2026-10 각 브랜드 한국 공식몰 정가 조사 · 참고용.
+   기록: 트레이닝 기록(east_fc/train/{키}/foot)에 같이 자동 저장 — 사진은 저장하지 않음. */
+const BT_SURVEY = '2026년 10월';
+const BT_BR_KO = { Nike: '나이키', adidas: '아디다스', Puma: '퓨마', Mizuno: '미즈노' };
+// 특화 5가지
+const BT_ATTR = {
+  spd: { n: '스피드', ico: '⚡', col: '#facc15' },
+  tch: { n: '터치·컨트롤', ico: '🎯', col: '#22d3ee' },
+  kick: { n: '킥·슈팅', ico: '💥', col: '#fb7185' },
+  cmf: { n: '착화감', ico: '☁️', col: '#a78bfa' },
+  stb: { n: '안정감', ico: '🛡️', col: '#4ade80' },
+};
+const BT_ATTR_ORDER = ['spd', 'tch', 'kick', 'cmf', 'stb'];
+// 바닥 표기 → TF 계열 / AG 계열
+const BT_SURF = {
+  TF: { g: 'TF', n: 'TF' },
+  TT: { g: 'TF', n: 'TT', note: '퓨마 TT = 터프(TF)' },
+  Cage: { g: 'TF', n: '케이지', note: '퓨마 케이지 = 작은 인조구장용 고무 밑창(TF 계열)' },
+  AS: { g: 'TF', n: 'AS', note: '미즈노 AS = 인조잔디용(TF 계열)' },
+  AG: { g: 'AG', n: 'AG' },
+  FGAG: { g: 'AG', n: 'FG/AG', warn: '천연·인조 겸용 — 스터드가 AG보다 길어서 짧은 잔디엔 걸릴 수 있어요' },
+};
+// 브랜드 등급 (1 = 최상급)
+const BT_TIERS = {
+  Nike: ['Elite', 'Pro', 'Academy', 'Club'],
+  adidas: ['Elite', 'Pro', 'League', 'Club'],
+  Puma: ['Ultimate', 'Pro', 'Match', 'Play'],
+  Mizuno: ['Japan · Elite', 'Pro', 'Select', 'Club'],
+};
+const BT_TIER_KO = { Elite: '엘리트', Pro: '프로', Academy: '아카데미', Club: '클럽', League: '리그', Ultimate: '얼티밋', Match: '매치', Play: '플레이', 'Japan · Elite': '재팬 · 엘리트', Select: '셀렉트' };
+function btTierRank(br, tier) { const a = BT_TIERS[br] || []; const i = a.indexOf(tier); if (i >= 0) return i + 1; if (br === 'Mizuno' && (tier === 'Japan' || tier === 'Elite')) return 1; return 3; }
+// 등급 단계별 차이 (브랜드 공통 경향 · 참고)
+const BT_LEVELS = [
+  { r: 1, n: '최상급', up: '제일 얇고 가벼운 갑피 · 공 잡는 코팅/특수 소재 · 프로 선수용과 같은 급', sole: '거의 FG · AG 위주', tf: '조사 때 국내 공식몰에선 TF 를 못 찾았어요(AG 만)', one: '30만 원대 · 얇은 갑피가 짧고 거친 인조잔디에서 빨리 상해요 → 우리 구장엔 비추천' },
+  { r: 2, n: '2등급', up: '최상급 다음 소재 · 그립 코팅이 빠지거나 줄어듦 · 터치감은 좋음', sole: 'TF 중 제일 좋은 쿠션·마감', tf: 'TF 최고 등급', one: '15~19만 원 · 주 1회 이상 꾸준히 차면 제일 추천' },
+  { r: 3, n: '3등급', up: '합성 갑피(조금 두껍고 단단) · 대신 튼튼함', sole: 'TF 많음 · 쿠션 무난', tf: 'TF 종류 제일 많음', one: '10~14만 원 · 처음 사거나 1년에 한 켤레 바꾸면 이걸로' },
+  { r: 4, n: '입문', up: '기본 합성 · 딱딱하고 무거운 편', sole: '쿠션 적음', tf: 'TF 있음 · 할인 많음', one: '5~8만 원대(할인가) · 풋살 겸용·입문용, 매주 차면 금방 아쉬움' },
+];
+/* 라인 데이터
+   w / h : 발볼(좁음·보통·넓음) · 발등(낮음·보통·높음) 별로 2 잘 맞음 / 1 팁 필요 / 0 피하기
+   sz    : 'snug' 작게 나옴(넓은 발·높은 발등이면 반 치수 크게) · 'std' 정사이즈 · 'lea' 가죽(늘어남)
+   ti    : [등급, 바닥, 정가(숫자 또는 [최소,최대] 또는 null), 메모]  — TF·AG 계열만, 그 밖의 바닥은 ex 에 */
+const BT_LINES = [
+  { id: 'merc', sh: 'speed', c: ['#f97316', '#1f2937'], br: 'Nike', nm: '머큐리얼 베이퍼 17', en: 'Mercurial Vapor 17', tag: 'spd', sp: { spd: 3, tch: 1, kick: 1, cmf: 1, stb: 1 },
+    up: '얇은 합성 · 발에 착 붙는 좁은 모양', wt: '가벼움', w: [2, 2, 0], h: [2, 1, 0], sz: 'snug',
+    who: '뒷공간 뛰는 ST·윙 · 발이 좁거나 보통인 사람', bad: '발볼 넓거나 발등 높으면 앞·발등이 조여요',
+    ti: [['Elite', 'AG', 329000], ['Pro', 'TF', 169000], ['Pro', 'AG', 199000], ['Academy', 'TF', 109000], ['Club', 'TF', null, '할인가 68,500원 본 적 있음(SK스토아)']],
+    vari: '발목 감싸는 하이탑: 슈퍼플라이 11 아카데미 TF 119,000원' },
+  { id: 'phan', sh: 'grip', c: ['#22d3ee', '#0f172a'], br: 'Nike', nm: '팬텀 6 로우', en: 'Phantom 6 Low', tag: 'tch', sp: { spd: 1, tch: 3, kick: 2, cmf: 2, stb: 2 },
+    up: '공이 붙는 그립 질감 합성 · 끈이 옆으로 비껴 있어 킥 면이 넓음', wt: '보통', w: [1, 2, 2], h: [1, 2, 2], sz: 'std',
+    who: '패스·터치 많은 미드필더 · 앞볼이 조금 넓은 사람', bad: '발이 아주 좁으면 앞이 남을 수 있어요',
+    ti: [['Elite', 'AG', [329000, 339000]], ['Pro', 'TF', [169000, 189000]], ['Pro', 'AG', 199000], ['Academy', 'TF', [109000, 119000]]],
+    vari: '하이탑: 팬텀 6 하이 아카데미 TF 119,000원' },
+  { id: 'tiem', sh: 'leather', c: ['#e7e5e4', '#111827'], br: 'Nike', nm: '티엠포 마에스트로', en: 'Tiempo Maestro', tag: 'cmf', sp: { spd: 1, tch: 2, kick: 2, cmf: 3, stb: 2 },
+    up: '가죽 느낌 갑피(상위 Techleather · 아카데미 Flytouch) · 신을수록 발에 맞음', wt: '보통', w: [1, 2, 2], h: [2, 2, 1], sz: 'lea',
+    who: '오래 편하게 신고 싶은 사람 · 수비수 · 볼란치', bad: '아주 좁은 발은 헐렁할 수 있어요',
+    ti: [['Elite', 'AG', 309000], ['Academy', 'TF', 119000], ['Club', 'TF', null, '주니어 65,000원 · 성인 정가 확인 필요']] },
+  { id: 'f50', sh: 'speed', c: ['#facc15', '#111827'], br: 'adidas', nm: 'F50', en: 'F50', tag: 'spd', sp: { spd: 3, tch: 1, kick: 1, cmf: 1, stb: 1 },
+    up: '얇은 합성 · 가볍고 좁게 감싸는 스피드형', wt: '가벼움', w: [2, 2, 0], h: [2, 1, 0], sz: 'snug',
+    who: '빠른 윙·ST · 발 좁은 사람', bad: '작게 나와요 · 발볼 넓으면 새끼발가락 쪽이 아파요',
+    ti: [['League', 'TF', 109000, '메시 모델 리그 TF 119,000원']] },
+  { id: 'pred', sh: 'tongue', c: ['#ef4444', '#111827'], br: 'adidas', nm: '프레데터', en: 'Predator (접는 텅)', tag: 'kick', sp: { spd: 1, tch: 2, kick: 3, cmf: 2, stb: 3 },
+    up: '고무 돌기 그립 갑피(감아 차기·킥 회전) · 접어 내리는 텅 · 단단한 구조', wt: '보통~묵직', w: [2, 2, 1], h: [2, 2, 1], sz: 'std',
+    who: '킥·롱패스 많은 볼란치·풀백·CB · 단단하게 잡아주는 걸 좋아하는 사람', bad: '구조가 단단해서 넓은 발은 반 치수 크게',
+    ti: [['Pro', 'TF', 169000], ['League', 'TF', null, '키즈 89,000원 · 성인 정가 확인 필요']] },
+  { id: 'copa', sh: 'leather', c: ['#60a5fa', '#f8fafc'], br: 'adidas', nm: '코파 퓨어 4', en: 'Copa Pure IV', tag: 'cmf', sp: { spd: 1, tch: 2, kick: 1, cmf: 3, stb: 2 },
+    up: '부드러운 가죽 느낌 · 앞볼에 여유', wt: '보통', w: [1, 2, 2], h: [2, 2, 1], sz: 'std',
+    who: '편한 착화감 · 앞볼 넓은 사람', bad: '아주 좁은 발은 앞이 남아요',
+    ti: [['Pro', 'TF', 149000], ['League', 'TF', null, '정가 확인 필요']] },
+  { id: 'futr', sh: 'knit', c: ['#a78bfa', '#f472b6'], br: 'Puma', nm: '퓨처 9', en: 'Future 9', tag: 'tch', sp: { spd: 2, tch: 3, kick: 1, cmf: 2, stb: 1 },
+    up: '늘어나는 니트 · 발 모양에 맞게 감김(넓은 중간발도 OK)', wt: '가벼움~보통', w: [1, 2, 2], h: [1, 2, 2], sz: 'std',
+    who: '드리블·방향 전환 많은 CAM·윙 · 발볼·발등 있는 사람', bad: '발이 아주 좁고 낮으면 헐렁할 수 있어요',
+    ti: [['Match', 'TT', 139000, '할인가 83,400~111,200원'], ['Pro', 'Cage', 169000], ['Pro', 'FGAG', 189000]],
+    ex: '얼티밋 MG 319,000원 — MG 라 제외' },
+  { id: 'ultr', sh: 'speed', c: ['#f472b6', '#e5e7eb'], br: 'Puma', nm: '울트라 니트로 7', en: 'Ultra Nitro 7', tag: 'spd', sp: { spd: 3, tch: 1, kick: 1, cmf: 1, stb: 1 },
+    up: '아주 얇은 합성 · 제일 좁고 가벼운 편', wt: '아주 가벼움', w: [2, 1, 0], h: [2, 1, 0], sz: 'snug',
+    who: '순간 스피드형 · 발 좁고 낮은 사람', bad: '넓은 발·높은 발등엔 비추천',
+    ti: [['Match', 'TT', 109000], ['Pro', 'Cage', 159000]],
+    ex: '프로 FG 189,000원 · 얼티밋 MG 299,000원 — FG·MG 라 제외' },
+  { id: 'king', sh: 'leather', c: ['#111827', '#f5f5f4'], br: 'Puma', nm: '킹 20', en: 'King 20', tag: 'cmf', sp: { spd: 1, tch: 2, kick: 2, cmf: 3, stb: 2 },
+    up: '부드러운 클래식 갑피 · 넓은 발에 제일 편한 편', wt: '보통', w: [1, 2, 2], h: [2, 2, 2], sz: 'std',
+    who: '발볼 넓은 사람 · 편하게 오래 신기', bad: '발이 아주 좁으면 헐렁',
+    ti: [['Pro', 'FGAG', 159000], ['Match', 'TT', null, '국내 정가 확인 필요']] },
+  { id: 'more', sh: 'leather', c: ['#f8fafc', '#2563eb'], br: 'Mizuno', nm: '모렐리아 2 프로 AS', en: 'Morelia II Pro AS', tag: 'tch', sp: { spd: 1, tch: 3, kick: 2, cmf: 3, stb: 2 },
+    up: '가죽 · 신을수록 발에 맞게 늘어남 · 터치감 좋음', wt: '보통', w: [1, 2, 2], h: [2, 2, 2], sz: 'lea',
+    who: '가죽 터치 좋아하는 사람 · 넓은 발', bad: '비 오는 날·젖으면 늘어나고 무거워짐',
+    ti: [['Pro', 'AS', 179000, '할인가 143,200원'], ['Japan · Elite', 'AG', null, '모렐리아 네오 5 베타 엘리트 AG — 정가 확인 필요']] },
+  { id: 'mona', sh: 'wide', c: ['#1d4ed8', '#e5e7eb'], br: 'Mizuno', nm: '모나르시다 네오 3 셀렉트 AS', en: 'Monarcida Neo III Select AS', tag: 'cmf', sp: { spd: 1, tch: 2, kick: 1, cmf: 3, stb: 2 },
+    up: '넓은 발 전용 모양(와이드)', wt: '보통', w: [0, 1, 2], h: [1, 2, 2], sz: 'std',
+    who: '발볼이 아주 넓어서 다른 축구화가 다 아픈 사람', bad: '좁은 발엔 헐렁해요',
+    ti: [['Select', 'AS', null, '국내 정가 확인 필요']] },
+];
+// 포지션 그룹별 기본 우선순위 (트레이닝 기록 없을 때)
+const BT_GROUP_PREF = {
+  GK: { cmf: 2, stb: 2, kick: 1 }, CB: { stb: 3, kick: 2 }, FB: { spd: 2, cmf: 2, kick: 1 }, CDM: { kick: 2, stb: 2, cmf: 1 },
+  CAM: { tch: 3, kick: 1 }, WG: { spd: 3, tch: 2 }, ST: { spd: 2, kick: 2, stb: 1 },
+};
+// 극대화(장점) 선택 → 특화
+const BT_MX_ATTR = {
+  gk_reflex: 'stb', gk_longkick: 'kick', gk_sweep: 'spd', gk_voice: 'stb',
+  cb_aerial: 'stb', cb_speed: 'spd', cb_pass: 'kick', cb_leader: 'stb',
+  fb_overlap: 'spd', fb_cross: 'kick', fb_1v1: 'stb', fb_engine: 'cmf',
+  cdm_win: 'stb', cdm_long: 'kick', cdm_calm: 'tch', cdm_engine: 'cmf',
+  cam_key: 'tch', cam_drib: 'tch', cam_shot: 'kick', cam_space: 'tch',
+  wg_pace: 'spd', wg_drib: 'tch', wg_cross: 'kick', wg_cut: 'kick',
+  st_speed: 'spd', st_power: 'stb', st_finish: 'kick', st_link: 'tch',
+  all_mood: 'cmf', all_multi: 'cmf',
+};
+// 발볼 · 발등 기준 (사진 비율 · 참고용)
+const BT_W_CUT = [0.375, 0.405];   // 발볼 너비 ÷ 발 길이 : 이하 좁음 / 보통 / 이상 넓음
+const BT_H_CUT = [0.23, 0.265];    // 발 가운데 발등 높이 ÷ 발 길이 : 낮음 / 보통 / 높음
+const BT_W_NAME = ['좁음', '보통', '넓음'];
+const BT_H_NAME = ['낮음', '보통', '높음'];
+// 제외한 바닥
+const BT_EXCLUDED = [
+  ['FG', '천연잔디(단단한 땅)용', '스터드가 길고 날카로워 인조잔디에 박혀 안 빠져요 → 무릎·발목 비틀림 부상 · 밑창도 빨리 깨짐 · 막는 구장 많음'],
+  ['SG', '젖은 천연잔디용 · 금속 스터드', '금속 스터드가 인조잔디를 찢고 상대도 다칠 수 있어요 → 대부분 구장 금지'],
+  ['MG · HG', '여러 바닥 겸용 · 맨땅용', 'AG 보다 스터드가 길거나 단단해요 → 우리 구장 규정(TF·AG) 밖'],
+  ['IC', '실내 풋살(평평한 고무)', '잔디를 못 잡아 미끄러져요 → 넘어짐·허벅지 부상'],
+];
+
+// ---------- 👟 계산 ----------
+const _bt = { view: 'home', img: null, asp: 1, pts: [], drag: -1, noPhoto: false, pri: null, bud: 0, open: {}, edit: false };
+function btFoot() { const r = trMe(); return (r && r.foot && typeof r.foot === 'object') ? r.foot : {}; }
+function btSave(patch) {
+  const f = Object.assign({}, btFoot(), patch || {});
+  Object.keys(f).forEach(k => { if (f[k] === undefined || f[k] === null) delete f[k]; });
+  f.t = Date.now();
+  trSet('foot', f);   // 트레이닝 기록과 같은 곳 · 한 단계마다 바로 저장
+  return f;
+}
+function btCls(v, cut) { return v < cut[0] ? 0 : v < cut[1] ? 1 : 2; }
+// 최종 발볼 (0 좁음 · 1 보통 · 2 넓음)
+function btW(f) {
+  f = f || btFoot();
+  if (f.wp !== undefined && f.wp !== null) return +f.wp;
+  if (f.wR) return btCls(+f.wR, BT_W_CUT);
+  if (f.wq !== undefined && f.wq !== null) return +f.wq;
+  return null;
+}
+// 최종 발등 (0 낮음 · 1 보통 · 2 높음) — 사진 + 「발등 아픈 적」 질문
+function btH(f) {
+  f = f || btFoot();
+  if (f.hp !== undefined && f.hp !== null) return +f.hp;
+  let h = null;
+  if (f.hR) h = btCls(+f.hR, BT_H_CUT);
+  if (f.hq) {
+    if (h === null) h = f.hq === 'often' ? 2 : 1;
+    else if (f.hq === 'often' && h < 2) h += 1;
+  }
+  return h;
+}
+function btHWhy(f) {
+  f = f || btFoot();
+  if (f.hp !== undefined && f.hp !== null) return '직접 고름';
+  const ph = f.hR ? btCls(+f.hR, BT_H_CUT) : null;
+  if (ph !== null && f.hq === 'often' && ph < 2) return `사진 ${BT_H_NAME[ph]} + 발등 자주 아픔 → 한 단계 올림`;
+  if (ph !== null) return '사진';
+  return f.hq ? '질문만으로 (낮은 발등은 사진으로만 알 수 있어요)' : '';
+}
+function btBase(f) { f = f || btFoot(); if (!f.s) return null; return +f.s + ({ tight: 5, fit: 0, loose: -5 }[f.f] || 0); }
+function btReady(f) { f = f || btFoot(); return !!(f.s && f.f && btW(f) !== null && btH(f) !== null && f.surf); }
+function btFit(L, W, H) { return Math.min(L.w[W], L.h[H]); }
+// 라인별 추천 사이즈
+function btSize(L, base, W, H) {
+  let d = 0, why = '정사이즈';
+  if (L.sz === 'snug') {
+    if (W >= 1 || H >= 1) { d = 5; why = '작게 나오는 라인 · 반 치수(5mm) 크게'; }
+    else why = '정사이즈 · 두 사이즈 사이면 크게';
+  } else if (L.sz === 'lea') {
+    why = '정사이즈 · 가죽이라 신으면 조금 늘어나요';
+  } else if (L.id === 'pred' && W === 2) { d = 5; why = '구조가 단단해서 넓은 발은 반 치수 크게'; }
+  else if (W === 2 && H === 2 && L.w[2] < 2) { d = 5; why = '발볼·발등 둘 다 있어서 반 치수 크게'; }
+  return { mm: Math.max(220, Math.min(310, base + d)), d, why };
+}
+function btPMin(p) { return Array.isArray(p) ? p[0] : p; }
+function btPrice(p) {
+  if (p === null || p === undefined) return '정가 확인 필요';
+  if (Array.isArray(p)) return `${p[0].toLocaleString('ko-KR')}~${p[1].toLocaleString('ko-KR')}원`;
+  return p.toLocaleString('ko-KR') + '원';
+}
+function btTierName(br, t) { return `${t}`; }
+function btSurfOk(s, mode) { const g = (BT_SURF[s] || {}).g; return mode === 'both' ? !!g : g === mode; }
+// 라인 안에서 추천 등급 (바닥 · 예산)
+function btTierPick(L, mode, bud) {
+  const c = L.ti.map(t => ({ t: t[0], s: t[1], p: t[2], m: t[3], r: btTierRank(L.br, t[0]) })).filter(t => btSurfOk(t.s, mode));
+  if (!c.length) return null;
+  const pref = (a, b) => (a.s === 'FGAG') - (b.s === 'FGAG') || (BT_SURF[a.s].g === 'TF' ? 0 : 1) - (BT_SURF[b.s].g === 'TF' ? 0 : 1);
+  if (bud > 0) {
+    const inb = c.filter(t => t.p !== null && btPMin(t.p) <= bud).sort((a, b) => a.r - b.r || pref(a, b));
+    if (inb.length) return Object.assign({ fit: true }, inb[0]);
+    const known = c.filter(t => t.p !== null).sort((a, b) => btPMin(a.p) - btPMin(b.p));
+    return Object.assign({ fit: false }, known[0] || c[0]);
+  }
+  const s = c.slice().sort((a, b) => pref(a, b) || Math.abs(a.r - 2) - Math.abs(b.r - 2) || (a.p === null) - (b.p === null) || a.r - b.r);
+  return Object.assign({ fit: true }, s[0]);
+}
+// 트레이닝 기록 → 우선순위
+function btPref() {
+  const vec = { spd: 0, tch: 0, kick: 0, cmf: 0, stb: 0 };
+  const why = [];
+  let gs = [];
+  try { gs = trMyGroups(); } catch (e) {}
+  gs.forEach((g, i) => { const p = BT_GROUP_PREF[g]; if (!p) return; const wgt = [1, 0.6, 0.4][i] || 0.3; Object.keys(p).forEach(a => { vec[a] += p[a] * wgt; }); });
+  if (gs.length) why.push(gs.map(g => TR_GROUPS[g] ? TR_GROUPS[g].name : g).join('·'));
+  const r = trMe();
+  const mx = r && r.mx ? Object.keys(r.mx).map(id => r.mx[id]).filter(e => e && e.a && BT_MX_ATTR[e.a]).sort((a, b) => (b.t || 0) - (a.t || 0)) : [];
+  const seen = {};
+  mx.filter(e => { if (seen[e.a]) return false; seen[e.a] = 1; return true; }).slice(0, 3).forEach((e, i) => {
+    vec[BT_MX_ATTR[e.a]] += [3, 2, 1.5][i];
+    let it = null; try { it = trItem('mx', e.g, e.a); } catch (er) {}
+    if (it && i < 2) why.push(`극대화 「${it.t}」`);
+  });
+  if (_bt.pri && vec[_bt.pri] !== undefined) vec[_bt.pri] += 6;
+  const top = BT_ATTR_ORDER.slice().sort((a, b) => vec[b] - vec[a]).filter(a => vec[a] > 0).slice(0, 2);
+  return { vec, why, top, has: gs.length > 0 || mx.length > 0 };
+}
+// 결과 목록
+function btRank(f) {
+  f = f || btFoot();
+  const W = btW(f), H = btH(f), base = btBase(f), mode = f.surf || 'TF';
+  const P = btPref();
+  const rows = BT_LINES.map(L => {
+    const fit = btFit(L, W, H);
+    const sp = BT_ATTR_ORDER.reduce((s, a) => s + P.vec[a] * L.sp[a], 0);
+    const tier = btTierPick(L, mode, _bt.bud);
+    const size = btSize(L, base, W, H);
+    let score = fit * 100 + sp * 4;
+    if (!tier) score -= 150;
+    else if (!tier.fit) score -= 25;
+    if (tier && tier.s === 'FGAG') score -= 8;
+    return { L, fit, tier, size, score };
+  });
+  const good = rows.filter(x => x.fit > 0).sort((a, b) => b.score - a.score);
+  const avoid = rows.filter(x => x.fit === 0);
+  return { W, H, base, mode, P, good, avoid };
+}
+// 사진 점 → 비율 (가로세로 비 asp 로 보정한 좌표)
+function btGeom(pts, asp, kind) {
+  const P = pts.map(p => ({ x: p.x, y: p.y * asp }));
+  if (P.length < 2) return null;
+  const dx = P[1].x - P[0].x, dy = P[1].y - P[0].y, L = Math.hypot(dx, dy);
+  if (L < 0.05) return { err: '발끝과 뒤꿈치가 너무 가까워요' };
+  const u = { x: dx / L, y: dy / L }, n = { x: -u.y, y: u.x };
+  if (kind === 'top') {
+    if (P.length < 4) return { L };
+    const w = Math.abs((P[3].x - P[2].x) * n.x + (P[3].y - P[2].y) * n.y);
+    const r = w / L;
+    return { L, r, warn: r < 0.28 || r > 0.52 ? '점 위치가 이상해요 · 발볼 가장 넓은 곳 양 끝을 다시 찍어주세요' : '' };
+  }
+  if (P.length < 3) return { L };
+  const vx = P[2].x - P[0].x, vy = P[2].y - P[0].y;
+  const h = Math.abs(vx * n.x + vy * n.y), t = (vx * u.x + vy * u.y) / L;
+  const r = h / L;
+  let warn = '';
+  if (t < 0.3 || t > 0.7) warn = '③은 가운데 점선 근처(발 길이 절반쯤) 발등을 눌러주세요';
+  else if (r < 0.15 || r > 0.38) warn = '점 위치가 이상해요 · ①②는 바닥 닿는 끝, ③은 발등 꼭대기';
+  return { L, r, t, warn };
+}
+
+// ---------- 👟 그림 ----------
+const BT_PT_COL = ['#67e8f9', '#f9a8d4', '#bef264', '#fde047'];
+function btPtSvg(x, y, n, col, lx, ly) {
+  return `<circle cx="${x}" cy="${y}" r="7.5" fill="${col}" stroke="#0b0d10" stroke-width="2"/><text x="${x}" y="${y + 3.6}" text-anchor="middle" font-size="10" font-weight="900" fill="#0b0d10">${n}</text>`
+    + (lx !== undefined ? `<text x="${lx}" y="${ly}" font-size="10" font-weight="800" fill="${col}" text-anchor="${lx < x ? 'end' : 'start'}">${['발끝', '뒤꿈치', '발볼 안쪽', '발볼 바깥'][n - 1]}</text>` : '');
+}
+// 위에서 본 오른발 (발끝 위)
+function btFootTopSvg(withPts) {
+  const body = 'M60 242 C45 242 37 231 36 214 C35 196 37 178 34 160 C31 142 25 120 24 100 C23 82 25 66 31 54 C36 45 46 42 56 43 C68 44 80 47 90 54 C97 59 100 70 99 84 C98 104 93 124 90 144 C87 166 86 192 85 212 C84 232 76 242 60 242 Z';
+  const toes = [[40, 30, 11, 15], [58, 24, 6.5, 9], [71, 28, 6, 8], [82, 35, 5.5, 7], [91, 45, 5, 6]].map(t => `<ellipse cx="${t[0]}" cy="${t[1]}" rx="${t[2]}" ry="${t[3]}"/>`).join('');
+  let pts = '';
+  if (withPts) {
+    pts = `<line x1="44" y1="13" x2="60" y2="243" stroke="#67e8f9" stroke-width="1.6" stroke-dasharray="4 4"/>
+      <line x1="24" y1="94" x2="99" y2="100" stroke="#bef264" stroke-width="2"/>`
+      + btPtSvg(44, 13, 1, BT_PT_COL[0], 60, 12) + btPtSvg(60, 243, 2, BT_PT_COL[1], 76, 247)
+      + btPtSvg(24, 94, 3, BT_PT_COL[2], 12, 82) + btPtSvg(99, 100, 4, BT_PT_COL[3], 112, 118);
+  }
+  return `<svg class="bt-foot" viewBox="-30 0 180 256" role="img" aria-label="위에서 본 발과 점 찍는 자리"><g fill="#e8d5c4" stroke="#b9967c" stroke-width="1.5">${toes}<path d="${body}"/></g>${pts}</svg>`;
+}
+// 안쪽에서 본 발 (뒤꿈치 왼쪽)
+function btFootSideSvg(withPts) {
+  const body = 'M22 112 L238 112 C250 112 252 104 244 99 C228 92 204 88 182 78 C160 68 140 56 122 44 C110 36 104 24 102 4 L66 4 C66 26 60 46 48 62 C36 76 24 86 20 98 C18 106 19 112 22 112 Z';
+  let pts = '';
+  if (withPts) {
+    pts = `<line x1="134" y1="112" x2="134" y2="22" stroke="#fde047" stroke-width="1.6" stroke-dasharray="4 4"/>
+      <line x1="134" y1="51" x2="134" y2="112" stroke="#bef264" stroke-width="2.4"/>
+      ${btPtSvg(246, 111, 1, BT_PT_COL[0])}${btPtSvg(22, 111, 2, BT_PT_COL[1])}${btPtSvg(134, 51, 3, BT_PT_COL[2])}
+      <text x="140" y="30" font-size="10" font-weight="800" fill="#fde047">발 길이 절반</text>
+      <text x="246" y="128" text-anchor="middle" font-size="10" font-weight="800" fill="${BT_PT_COL[0]}">발끝</text>
+      <text x="22" y="128" text-anchor="middle" font-size="10" font-weight="800" fill="${BT_PT_COL[1]}">뒤꿈치</text>
+      <text x="146" y="62" font-size="10" font-weight="800" fill="${BT_PT_COL[2]}">발등 꼭대기</text>`;
+  }
+  return `<svg class="bt-foot side" viewBox="0 0 270 134" role="img" aria-label="옆에서 본 발과 점 찍는 자리">
+    <line x1="0" y1="112.5" x2="270" y2="112.5" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
+    <path d="${body}" fill="#e8d5c4" stroke="#b9967c" stroke-width="1.5"/>
+    <path d="M46 112 C72 101 118 100 158 112 Z" fill="#14171c"/>
+    <circle cx="86" cy="54" r="6" fill="#d9c0aa"/>${pts}</svg>`;
+}
+// 밑창 (위에서) — 로컬 좌표 60×130
+const BT_SOLE_D = 'M30 130 C16 130 10 120 10 106 C10 92 12 82 9 68 C6 52 6 36 12 22 C18 8 28 2 36 3 C48 5 56 18 56 36 C56 54 50 70 49 86 C48 100 50 118 42 126 C39 129 35 130 30 130 Z';
+function btInSole(x, y) {
+  const e = (cx, cy, rx, ry) => ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 <= 1;
+  return e(32, 38, 20, 34) || e(30, 107, 16, 20) || (y > 60 && y < 96 && x > 15 && x < 46);
+}
+function btSoleSvg(kind, x0, y0) {
+  let st = '';
+  if (kind === 'TF') {
+    for (let y = 9; y <= 124; y += 6.4) for (let x = 13; x <= 52; x += 6.4) { const xx = x + ((Math.round(y) % 2) ? 1.6 : 0); if (btInSole(xx, y)) st += `<circle cx="${xx.toFixed(1)}" cy="${y.toFixed(1)}" r="1.9" fill="#bef264"/>`; }
+  } else {
+    [[24, 18], [41, 16], [17, 37], [32, 33], [47, 33], [19, 57], [44, 54], [31, 50], [21, 100], [39, 100], [24, 118], [37, 118]].forEach(p => { st += `<circle cx="${p[0]}" cy="${p[1]}" r="4.3" fill="#1f2937" stroke="#fda4af" stroke-width="2.2"/>`; });
+  }
+  return `<g transform="translate(${x0},${y0})"><path d="${BT_SOLE_D}" fill="#2a2f38" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>${st}</g>`;
+}
+// 잔디 단면 + 밑창
+function btTurfSvg(kind, x0, y0, w) {
+  let g = `<rect x="${x0}" y="${y0 + 30}" width="${w}" height="10" fill="#3b2f25"/>`;
+  const long = kind === 'AG';
+  for (let x = x0 + 2; x < x0 + w; x += 3.2) {
+    const h = long ? 15 + (x * 7 % 4) : 4 + (x * 7 % 2);
+    g += `<line x1="${x.toFixed(1)}" y1="${y0 + 30}" x2="${(x + (long ? 1.5 : 0.5)).toFixed(1)}" y2="${(y0 + 30 - h).toFixed(1)}" stroke="#4ade80" stroke-width="1.3"/>`;
+  }
+  if (long) for (let x = x0 + 4; x < x0 + w; x += 5.5) g += `<circle cx="${x.toFixed(1)}" cy="${(y0 + 26 - (x * 3 % 5)).toFixed(1)}" r="1.5" fill="#111"/>`;
+  // 밑창
+  const sy = long ? y0 + 2 : y0 + 13;
+  g += `<rect x="${x0 + 8}" y="${sy}" width="${w - 16}" height="8" rx="3" fill="#e5e7eb"/>`;
+  if (long) for (let x = x0 + 16; x < x0 + w - 12; x += 16) g += `<rect x="${x - 3}" y="${sy + 8}" width="6" height="12" rx="2" fill="#fda4af"/>`;
+  else for (let x = x0 + 12; x < x0 + w - 10; x += 5) g += `<rect x="${x - 1.5}" y="${sy + 8}" width="3" height="3.4" rx="1" fill="#bef264"/>`;
+  return g;
+}
+function btSurfSvg() {
+  return `<svg class="bt-surf-svg" viewBox="0 0 320 236" role="img" aria-label="TF 와 AG 밑창 · 잔디 길이 비교">
+    <text x="80" y="14" text-anchor="middle" font-size="13" font-weight="900" fill="#bef264">TF</text>
+    <text x="240" y="14" text-anchor="middle" font-size="13" font-weight="900" fill="#fda4af">AG</text>
+    <line x1="160" y1="4" x2="160" y2="232" stroke="rgba(255,255,255,.12)"/>
+    ${btSoleSvg('TF', 50, 22)}${btSoleSvg('AG', 210, 22)}
+    <text x="80" y="166" text-anchor="middle" font-size="9.5" font-weight="700" fill="#cbd5e1">작은 고무 돌기 수십 개</text>
+    <text x="240" y="166" text-anchor="middle" font-size="9.5" font-weight="700" fill="#cbd5e1">짧고 속 빈 스터드 10여 개</text>
+    ${btTurfSvg('TF', 14, 176, 132)}${btTurfSvg('AG', 174, 176, 132)}
+    <text x="80" y="230" text-anchor="middle" font-size="9.5" font-weight="800" fill="#bbf7d0">짧고 눌린 잔디 · 딱딱한 바닥</text>
+    <text x="240" y="230" text-anchor="middle" font-size="9.5" font-weight="800" fill="#bbf7d0">길고 고무칩 많은 잔디</text>
+  </svg>`;
+}
+// 엄지 앞 여유 그림 (꽉 · 딱 · 남음)
+function btToeSvg(gap) {
+  const sx = 60 + gap;
+  return `<svg viewBox="0 0 96 34" width="96" height="34" aria-hidden="true"><path d="M6 30 L${sx} 30 C${sx + 8} 30 ${sx + 10} 18 ${sx} 12 L22 6 C10 4 6 14 6 30 Z" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6"/>
+    <path d="M10 28 L54 28 C62 28 64 20 56 15 L24 9 C14 8 10 16 10 28 Z" fill="#e8d5c4"/>${gap > 2 ? `<line x1="62" y1="22" x2="${sx + 6}" y2="22" stroke="#bef264" stroke-width="1.6"/>` : `<circle cx="61" cy="21" r="3" fill="#fb7185"/>`}</svg>`;
+}
+// 축구화 그림 (라인 특징만 · 로고 없음) — 발끝 오른쪽
+function btBootSvg(L, surfG) {
+  const up = L.c[0], ac = L.c[1], sh = L.sh;
+  const dark = c => ['#111827', '#0f172a', '#1f2937', '#1d4ed8'].includes(c);
+  const st = dark(up) ? 'rgba(255,255,255,.55)' : 'rgba(0,0,0,.42)';
+  const lc = dark(up) ? '#e5e7eb' : '#1f2937';
+  // 몸통: 뒤꿈치(왼쪽) → 발목 → 끈 → 발끝(오른쪽)
+  const toeY = sh === 'wide' ? 34 : sh === 'speed' ? 42 : 38;
+  const body = `M24 64 C16 58 13 44 14 30 C15 20 19 13 25 11 C33 9 41 13 47 18 C51 21 55 21 59 19 L63 18 C82 25 104 ${toeY - 6} 124 ${toeY} C143 ${toeY + 4} 156 ${toeY + 9} 158 56 C160 61 157 64 151 64 Z`;
+  const collar = 'M27 13.5 C35 11.5 44 15.5 52 20.5 C44 22.5 34 20.5 27 16.5 Z';
+  let deco = `<path d="M24 64 C16 58 13 44 14 30 C15 22 18 16 22 13 L30 22 C27 34 28 50 34 64 Z" fill="${ac}" opacity=".55"/>`;   // 뒤꿈치 카운터
+  if (sh === 'knit') deco += `<path d="M24 12 C26 2 50 0 58 6 L60 19 C52 14 36 12 26 15 Z" fill="${ac}"/>`;              // 발목 니트(삭스 칼라)
+  if (sh === 'speed') deco += `<path d="M36 54 C70 46 112 46 154 57" fill="none" stroke="${ac}" stroke-width="3.4" stroke-linecap="round"/>`;
+  if (sh === 'grip' || sh === 'knit') for (let x = 100; x < 152; x += 5.5) for (let y = toeY + 4; y < 61; y += 4.6) { if (y < toeY + 2 + (x - 100) * 0.12) continue; deco += `<circle cx="${(x + ((Math.round(y) % 2) ? 2.6 : 0)).toFixed(1)}" cy="${y.toFixed(1)}" r="1.15" fill="${ac}" opacity=".75"/>`; }
+  if (sh === 'leather' || sh === 'wide') deco += `<path d="M112 ${toeY + 4} C126 ${toeY + 2} 144 ${toeY + 7} 154 58" fill="none" stroke="${st}" stroke-width="1.1" stroke-dasharray="2.6 2"/><path d="M104 ${toeY + 10} C122 ${toeY + 8} 140 ${toeY + 12} 151 62" fill="none" stroke="${st}" stroke-width="1.1" stroke-dasharray="2.6 2"/>`;
+  if (sh === 'tongue') for (let i = 0; i < 6; i++) deco += `<path d="M${106 + i * 8} ${toeY + 7 + i * 1.4} l3 9" stroke="${ac}" stroke-width="2.4" stroke-linecap="round" opacity=".85"/>`;
+  // 끈 (팬텀형은 바깥쪽으로 비껴서)
+  let lace = '';
+  const lx = i => 66 + i * 9, ly = i => 22 + i * 3.1 + (sh === 'speed' ? 1.5 : 0);
+  if (sh !== 'tongue') { for (let i = 0; i < 5; i++) { const o = sh === 'grip' ? i * 1.3 : 0; lace += `<path d="M${lx(i)} ${(ly(i) + o).toFixed(1)} l5 4.2 M${lx(i) + 5} ${(ly(i) + o).toFixed(1)} l-5 4.2" stroke="${lc}" stroke-width="1.5" stroke-linecap="round"/>`; } }
+  else lace = `<path d="M54 15 L104 ${toeY - 2} L99 ${toeY + 10} L57 27 Z" fill="${ac}"/><path d="M57 27 L99 ${toeY + 10}" stroke="rgba(255,255,255,.3)" stroke-width="1"/>`;
+  // 밑창 + 바닥
+  let sole = `<path d="M18 63 L156 63 C160 63 161 67 157 69 L22 69 C17 69 16 65 18 63 Z" fill="#e5e7eb"/>`;
+  if (surfG === 'AG') [26, 39, 52, 96, 110, 124, 138, 150].forEach(x => { sole += `<rect x="${x - 2.8}" y="68" width="5.6" height="8" rx="2.4" fill="#9ca3af"/>`; });
+  else for (let x = 24; x < 156; x += 5) sole += `<rect x="${(x - 1.5).toFixed(1)}" y="68.5" width="3" height="3.2" rx="1" fill="#9ca3af"/>`;
+  return `<svg class="bt-boot" viewBox="8 -2 156 82" role="img" aria-label="${L.nm} 그림"><ellipse cx="88" cy="77.5" rx="70" ry="2.6" fill="rgba(0,0,0,.35)"/>${sole}<path d="${body}" fill="${up}"/>${deco}<path d="${collar}" fill="#0b0d10" opacity=".85"/>${lace}<path d="${body}" fill="none" stroke="rgba(0,0,0,.4)" stroke-width="1.1"/></svg>`;
+}
+
+// ---------- 👟 화면 ----------
+const BTX = s => escapeHtml(s);
+const BT_PH = {
+  top: { step: 2, title: '발볼 — 위에서 1장', need: 4,
+    lab: [['발끝', '가장 긴 발가락 끝'], ['뒤꿈치', '뒤꿈치 맨 끝'], ['발볼 안쪽', '엄지발가락 뿌리 옆, 제일 튀어나온 곳'], ['발볼 바깥', '새끼발가락 뿌리 옆, 제일 튀어나온 곳']],
+    tips: ['양말 벗고, 의자에 앉아 다리를 살짝 앞으로 — 뒤꿈치까지 보이게', '폰을 발 바로 위에서 바닥과 평행하게', '발 전체가 화면에 들어오게 · 바닥이 밝으면 점 찍기 쉬워요'] },
+  side: { step: 3, title: '발등 — 옆에서 1장', need: 3,
+    lab: [['발끝', '바닥에 닿는 발가락 끝'], ['뒤꿈치', '바닥에 닿는 뒤꿈치 끝'], ['발등 꼭대기', '노란 점선 위, 발등 맨 위']],
+    tips: ['발 안쪽(엄지 쪽)에서 찍어요 · 체중 실어서 바닥에 평평하게', '폰을 바닥에 세워 두고 렌즈를 발등 높이쯤 · 30cm 떨어져서', '같이 온 사람이 찍어주면 제일 쉬워요'] },
+};
+function btGo(v, opt) {
+  haptic(5);
+  _bt.view = v || 'home';
+  if (opt) Object.assign(_bt, opt);
+  renderBoots();
+  const el = document.getElementById('bootsContent'); if (el) el.scrollTop = 0;
+}
+function renderBoots() {
+  const el = document.getElementById('bootsContent'); if (!el) return;
+  if (!isLoggedIn()) { el.innerHTML = ''; return; }
+  trMe();
+  let html = '';
+  try {
+    let v = _bt.view;
+    if (v === 'home') v = btReady() ? 'result' : 'start';
+    html = v === 'size' ? btViewSize() : v === 'top' ? btViewPhoto('top') : v === 'side' ? btViewPhoto('side') : v === 'surf' ? btViewSurf()
+      : v === 'result' ? btViewResult() : v === 'guide' ? btViewGuide() : v === 'tiers' ? btViewTiers() : btViewStart();
+  } catch (e) { console.error('축구화 화면 오류', e); _bt.view = 'home'; html = btViewStart(); }
+  el.innerHTML = `<div class="bt-wrap">${html}</div>`;
+  if ((_bt.view === 'top' || _bt.view === 'side') && _bt.ph && _bt.ph[_bt.view] && _bt.ph[_bt.view].url) btBindPhoto();
+}
+function btHead(step, title, back) {
+  const dots = [1, 2, 3, 4].map(i => `<i class="${i < step ? 'done' : i === step ? 'on' : ''}"></i>`).join('');
+  return `<div class="bt-top"><button type="button" class="bt-bk" onclick="${back}" aria-label="뒤로">‹</button><div class="bt-tt"><small>${step} / 4</small><b>${title}</b></div><div class="bt-dots">${dots}</div></div>`;
+}
+function btBackBar(title, back) { return `<div class="bt-top"><button type="button" class="bt-bk" onclick="${back}" aria-label="뒤로">‹</button><div class="bt-tt"><b>${title}</b></div></div>`; }
+function btNextStep() { const f = btFoot(); return !(f.s && f.f) ? 'size' : btW(f) === null ? 'top' : btH(f) === null ? 'side' : 'surf'; }
+
+/* ===== 시작 ===== */
+function btViewStart() {
+  const f = btFoot(); const part = !!(f.s || f.wR || f.hR || f.wq || f.hq);
+  return `<div class="bt-hero">
+      <div class="bt-hx"><small>👟 EAST FC 축구화 핏</small><b>내 발에 맞는<br>축구화 찾기</b><p>평소 사이즈 + 사진 2장 · 1분<br>꺼낼 물건 없이 비율로 재요</p></div>
+      <div class="bt-hf">${btBootSvg(BT_LINES[1], 'TF')}</div>
+    </div>
+    <ol class="bt-steps">
+      <li><i>1</i><div><b>평소 사이즈</b><small>270 같은 숫자 + 길이가 꽉 · 딱 · 남음</small></div></li>
+      <li><i>2</i><div><b>위에서 1장 → 발볼</b><small>점 4개 찍으면 너비 ÷ 길이</small></div></li>
+      <li><i>3</i><div><b>옆에서 1장 → 발등</b><small>점 3개 + 「발등 아픈 적?」</small></div></li>
+      <li><i>4</i><div><b>바닥 TF · AG</b><small>우리 구장은 TF 추천</small></div></li>
+    </ol>
+    <button type="button" class="bt-go" onclick="btGo('${part ? btNextStep() : 'size'}')">${part ? '이어서 하기 ›' : '시작하기 ›'}</button>
+    <div class="bt-2l">
+      <button type="button" onclick="btGo('guide')"><b>TF · AG 고르는 법</b><small>밑창 · 잔디 그림</small></button>
+      <button type="button" onclick="btGo('tiers')"><b>등급별 가격 비교</b><small>엘리트 · 프로 · 아카데미…</small></button>
+    </div>
+    <div class="bt-priv">🔒 사진은 폰 안에서만 쓰고 저장하지 않아요 · 사이즈와 비율만 내 트레이닝 기록에 자동 저장</div>`;
+}
+
+/* ===== 1. 사이즈 ===== */
+function btSet(k, v) { haptic(5); const p = {}; p[k] = v; btSave(p); renderBoots(); }
+function btViewSize() {
+  const f = btFoot();
+  const sizes = []; for (let s = 230; s <= 300; s += 5) sizes.push(s);
+  const feel = [['tight', '꽉 낌', '엄지가 닿거나 아픔', 0], ['fit', '딱 맞음', '손가락 반 마디쯤', 7], ['loose', '남음', '손가락 한 마디 이상', 16]];
+  const base = btBase(f);
+  return `${btHead(1, '평소 사이즈', "btGo('start')")}
+    <div class="bt-q"><b>평소 신는 신발 사이즈</b><small>mm</small></div>
+    <div class="bt-szg">${sizes.map(s => `<button type="button" class="${+f.s === s ? 'on' : ''}" onclick="btSet('s',${s})">${s}</button>`).join('')}</div>
+    <div class="bt-q"><b>그 신발은?</b></div>
+    <div class="tr-chips">${[['run', '운동화'], ['boot', '축구화']].map(o => `<button type="button" class="${f.k === o[0] ? 'on' : ''}" onclick="btSet('k','${o[0]}')">${o[1]}</button>`).join('')}</div>
+    <div class="bt-q"><b>길이는 어때?</b><small>엄지발가락 앞 여유</small></div>
+    <div class="bt-feel">${feel.map(o => `<button type="button" class="${f.f === o[0] ? 'on' : ''}" onclick="btSet('f','${o[0]}')">${btToeSvg(o[3])}<b>${o[1]}</b><small>${o[2]}</small></button>`).join('')}</div>
+    ${base ? `<div class="bt-calc">축구화 기본 사이즈 <b>${base}</b><small>${f.f === 'tight' ? '꽉 끼니까 5mm 크게' : f.f === 'loose' ? '남으니까 5mm 작게' : '딱 맞으니까 그대로'}${f.k === 'run' ? ' · 운동화 기준이면 보통 같은 사이즈' : ''} · 라인마다 ±5 는 결과에서</small></div>` : ''}
+    <button type="button" class="bt-go" ${f.s && f.f ? '' : 'disabled'} onclick="btGo('top')">다음 — 발볼 ›</button>`;
+}
+
+/* ===== 2·3. 사진 ===== */
+function btPhState(kind) { _bt.ph = _bt.ph || {}; if (!_bt.ph[kind]) _bt.ph[kind] = { url: null, pts: [], asp: 1 }; return _bt.ph[kind]; }
+function btOnFile(kind, inp) {
+  const file = inp && inp.files && inp.files[0]; if (!file) return;
+  const st = btPhState(kind);
+  if (st.url) { try { URL.revokeObjectURL(st.url); } catch (e) {} }
+  st.url = URL.createObjectURL(file); st.pts = []; _bt.noPhoto = false;
+  renderBoots();
+}
+function btRetake(kind) { const st = btPhState(kind); if (st.url) { try { URL.revokeObjectURL(st.url); } catch (e) {} } st.url = null; st.pts = []; renderBoots(); }
+function btUndo(kind) { const st = btPhState(kind); st.pts.pop(); btDrawPts(false); }
+function btPick(kind, v) { haptic(5); btSave(kind === 'top' ? { wp: v } : { hp: v }); renderBoots(); }
+function btNoPhoto(on) { _bt.noPhoto = on; renderBoots(); }
+function btViewPhoto(kind) {
+  const K = BT_PH[kind]; const st = btPhState(kind); const f = btFoot();
+  const back = kind === 'top' ? "btGo('size')" : "btGo('top')";
+  const next = kind === 'top' ? `<button type="button" class="bt-go" ${btW(f) === null ? 'disabled' : ''} onclick="btGo('side')">다음 — 발등 ›</button>`
+    : `<button type="button" class="bt-go" ${btH(f) === null ? 'disabled' : ''} onclick="btGo('surf')">다음 — 바닥 ›</button>`;
+  const prev = kind === 'top' ? (f.wR ? `지난번 사진: ${(+f.wR).toFixed(3)} · ${BT_W_NAME[btCls(+f.wR, BT_W_CUT)]}` : '') : (f.hR ? `지난번 사진: ${(+f.hR).toFixed(3)} · ${BT_H_NAME[btCls(+f.hR, BT_H_CUT)]}` : '');
+  // 발등 보조 질문 (옆 사진과 같이)
+  const hq = kind === 'side' ? `<div class="bt-q"><b>끈 꽉 묶은 신발에서 발등이 아픈 적 있어?</b><small>사진이 애매할 때 보정</small></div>
+    <div class="tr-chips">${[['often', '자주 아파'], ['some', '가끔'], ['never', '없어']].map(o => `<button type="button" class="${f.hq === o[0] ? 'on' : ''}" onclick="btSet('hq','${o[0]}')">${o[1]}</button>`).join('')}</div>` : '';
+  const manual = (cur, names) => `<div class="bt-or">결과가 아닌 것 같으면 직접 고르기</div><div class="tr-chips sm">${names.map((n, i) => `<button type="button" class="${cur === i ? 'on' : ''}" onclick="btPick('${kind}',${i})">${n}</button>`).join('')}</div>`;
+  let body;
+  if (st.url) {
+    body = `<div class="bt-phw"><div class="bt-ph" id="btPh"><img id="btImg" src="${st.url}" alt="내 발 사진" draggable="false"><svg id="btSvg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg><div id="btMk"></div></div></div>
+      <div class="bt-phb"><button type="button" onclick="btUndo('${kind}')">↶ 점 하나 지우기</button><button type="button" onclick="btRetake('${kind}')">📷 다시 찍기</button></div>
+      <div id="btPtInfo"></div>`;
+  } else if (_bt.noPhoto) {
+    body = kind === 'top'
+      ? `<div class="bt-q"><b>평소 신발에서 새끼발가락 쪽이…</b><small>사진 없이 고르기</small></div>
+        <div class="bt-feel">${[[2, '자주 껴', '발볼 넓음'], [1, '가끔', '보통'], [0, '여유 있어', '발볼 좁음']].map(o => `<button type="button" class="${f.wq === o[0] && f.wp === undefined ? 'on' : ''}" onclick="btSave({wq:${o[0]},wp:null,wR:null});renderBoots()"><b>${o[1]}</b><small>${o[2]}</small></button>`).join('')}</div>
+        <button type="button" class="bt-link" onclick="btNoPhoto(false)">📷 그래도 사진으로 재기</button>`
+      : `<div class="bt-note">사진 없이 아래 질문만으로 정해요 (낮은 발등은 사진으로만 알 수 있어요)</div><button type="button" class="bt-link" onclick="btNoPhoto(false)">📷 그래도 사진으로 재기</button>`;
+  } else {
+    body = `<div class="bt-guide">${kind === 'top' ? btFootTopSvg(true) : btFootSideSvg(true)}</div>
+      <ul class="bt-tips">${K.tips.map(t => `<li>${t}</li>`).join('')}</ul>
+      <div class="bt-cam"><label class="bt-camb">📷 카메라로 찍기<input type="file" accept="image/*" capture="environment" onchange="btOnFile('${kind}',this)"></label><label class="bt-camb al">🖼️ 앨범에서<input type="file" accept="image/*" onchange="btOnFile('${kind}',this)"></label></div>
+      ${prev ? `<div class="bt-prev">${prev} — 그대로 쓰려면 아래 「다음」</div>` : ''}
+      <button type="button" class="bt-link" onclick="btNoPhoto(true)">사진 없이 ${kind === 'top' ? '질문으로' : '질문만으로'} 할게요</button>`;
+  }
+  const pick = st.url ? '' : (kind === 'top' && (f.wR || f.wp !== undefined) ? manual(btW(f), BT_W_NAME) : kind === 'side' && (f.hR || f.hp !== undefined) ? manual(btH(f), BT_H_NAME) : '');
+  return `${btHead(K.step, K.title, back)}${body}${pick}${hq}${next}
+    <div class="bt-priv">🔒 사진은 저장 안 해요 · 이 화면에서만 써요</div>`;
+}
+function btBindPhoto() {
+  const kind = _bt.view; const st = btPhState(kind); const K = BT_PH[kind];
+  const box = document.getElementById('btPh'), img = document.getElementById('btImg'); if (!box || !img) return;
+  const pos = e => { const r = img.getBoundingClientRect(); return { x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height, r }; };
+  box.onpointerdown = e => {
+    const p = pos(e); if (!p.r.width || p.x < 0 || p.x > 1 || p.y < 0 || p.y > 1) return;
+    let idx = -1, bd = 26;
+    st.pts.forEach((q, i) => { const d = Math.hypot((q.x - p.x) * p.r.width, (q.y - p.y) * p.r.height); if (d < bd) { bd = d; idx = i; } });
+    if (idx < 0) { if (st.pts.length >= K.need) return; st.pts.push({ x: p.x, y: p.y }); idx = st.pts.length - 1; haptic(6); }
+    _bt.drag = idx;
+    try { box.setPointerCapture(e.pointerId); } catch (er) {}
+    e.preventDefault();
+    btDrawPts(false);
+  };
+  box.onpointermove = e => { if (_bt.drag < 0) return; const p = pos(e); st.pts[_bt.drag] = { x: Math.max(0, Math.min(1, p.x)), y: Math.max(0, Math.min(1, p.y)) }; btDrawPts(false); };
+  box.onpointerup = box.onpointercancel = () => { if (_bt.drag < 0) return; _bt.drag = -1; btDrawPts(true); };
+  if (img.complete && img.naturalWidth) btDrawPts(false); else img.onload = () => btDrawPts(false);
+}
+function btGauge(v, lo, hi, cut, names) {
+  const pc = x => Math.max(0, Math.min(100, (x - lo) / (hi - lo) * 100));
+  return `<div class="bt-gauge"><div class="bar"><i style="width:${pc(cut[0])}%"></i><i style="width:${pc(cut[1]) - pc(cut[0])}%"></i><i style="flex:1"></i><b style="left:${pc(v)}%"></b></div>
+    <div class="lab"><span>${names[0]}</span><span>${names[1]}</span><span>${names[2]}</span></div></div>`;
+}
+function btDrawPts(final) {
+  const kind = _bt.view; if (kind !== 'top' && kind !== 'side') return;
+  const st = btPhState(kind); const K = BT_PH[kind];
+  const img = document.getElementById('btImg'), mk = document.getElementById('btMk'), sv = document.getElementById('btSvg'), info = document.getElementById('btPtInfo');
+  if (!img) return;
+  const r = img.getBoundingClientRect(); if (r.width) st.asp = r.height / r.width;
+  const P = st.pts, A = st.asp;
+  if (mk) mk.innerHTML = P.map((p, i) => `<div class="bt-pt${_bt.drag === i ? ' dr' : ''}" style="left:${(p.x * 100).toFixed(2)}%;top:${(p.y * 100).toFixed(2)}%;--c:${BT_PT_COL[i]}"><i>${i + 1}</i></div>`).join('');
+  const ln = (a, b, c, dash) => `<line x1="${(a.x * 100).toFixed(2)}" y1="${(a.y * 100).toFixed(2)}" x2="${(b.x * 100).toFixed(2)}" y2="${(b.y * 100).toFixed(2)}" stroke="${c}" stroke-width="2.2" vector-effect="non-scaling-stroke"${dash ? ' stroke-dasharray="7 6"' : ''}/>`;
+  let g = '';
+  if (P.length >= 2) {
+    g += ln(P[0], P[1], '#67e8f9', true);
+    if (kind === 'side') {
+      const X0 = { x: P[0].x, y: P[0].y * A }, X1 = { x: P[1].x, y: P[1].y * A };
+      const dx = X1.x - X0.x, dy = X1.y - X0.y, L = Math.hypot(dx, dy) || 1, u = { x: dx / L, y: dy / L };
+      let n = { x: -u.y, y: u.x }; if (n.y > 0) n = { x: -n.x, y: -n.y };
+      const M = { x: (X0.x + X1.x) / 2, y: (X0.y + X1.y) / 2 }, bk = q => ({ x: q.x, y: q.y / A });
+      g += ln(bk(M), bk({ x: M.x + n.x * L * 0.5, y: M.y + n.y * L * 0.5 }), '#fde047', true);
+      if (P.length >= 3) { const X2 = { x: P[2].x, y: P[2].y * A }; const t = (X2.x - X0.x) * u.x + (X2.y - X0.y) * u.y; g += ln(P[2], bk({ x: X0.x + u.x * t, y: X0.y + u.y * t }), '#bef264'); }
+    }
+    if (kind === 'top' && P.length >= 4) g += ln(P[2], P[3], '#bef264');
+  }
+  if (sv) sv.innerHTML = g;
+  let h = '';
+  if (P.length < K.need) {
+    const i = P.length;
+    h = `<div class="bt-ins"><span style="background:${BT_PT_COL[i]}">${i + 1}</span><div><b>${K.lab[i][0]}</b> 을 눌러요<small>${K.lab[i][1]}${i ? ' · 찍은 점은 끌어서 옮길 수 있어요' : ' · 사진을 두 손가락으로 키우지 말고 그대로 눌러요'}</small></div></div>`;
+  } else {
+    const gm = btGeom(P, A, kind);
+    if (!gm || gm.err || !gm.r) h = `<div class="bt-warn">${(gm && gm.err) || '점을 다시 찍어주세요'}</div>`;
+    else {
+      const top = kind === 'top';
+      const c = btCls(gm.r, top ? BT_W_CUT : BT_H_CUT), nm = top ? BT_W_NAME : BT_H_NAME;
+      h = `<div class="bt-meas"><div class="bt-mh"><span>${top ? '발볼 너비 ÷ 발 길이' : '발등 높이 ÷ 발 길이'}</span><b>${gm.r.toFixed(3)}</b><em class="c${c}">${top ? '발볼' : '발등'} ${nm[c]}</em></div>
+        ${top ? btGauge(gm.r, 0.33, 0.45, BT_W_CUT, nm) : btGauge(gm.r, 0.19, 0.31, BT_H_CUT, nm)}
+        ${gm.warn ? `<div class="bt-warn">${gm.warn}</div>` : '<small class="bt-ok">점은 끌어서 고칠 수 있어요 · 사진 각도에 따라 조금 달라져요(참고용)</small>'}</div>`;
+      if (final && !gm.warn) { btSave(top ? { wR: +gm.r.toFixed(3), wp: null, ws: 'photo' } : { hR: +gm.r.toFixed(3), hp: null, hs: 'photo' }); btRefreshNext(); }
+    }
+  }
+  if (info) info.innerHTML = h;
+}
+function btRefreshNext() {
+  const f = btFoot(); const b = document.querySelector('#bootsContent .bt-go'); if (!b) return;
+  b.disabled = _bt.view === 'top' ? btW(f) === null : btH(f) === null;
+}
+
+/* ===== 4. 바닥 ===== */
+function btSurfBlock() {
+  return `<div class="bt-surf">${btSurfSvg()}</div>
+    <div class="bt-crit">
+      <div class="tf"><b>TF 고르는 경우</b><ul><li>잔디가 짧거나 눌려 있고 바닥이 딱딱함</li><li>고무칩이 거의 없음 · 오래된 구장</li><li>작은 돌기가 힘을 넓게 나눠서 발바닥 덜 아프고 덜 미끄러짐</li></ul></div>
+      <div class="ag"><b>AG 고르는 경우</b><ul><li>잔디가 길고(손가락 두 마디↑) 고무칩이 푹신</li><li>새로 깐 구장</li><li>짧은 잔디에선 스터드에 체중이 몰려 발바닥 통증 · 덜 잡힘</li></ul></div>
+    </div>
+    <div class="bt-test">👆 <b>손가락 테스트</b> — 잔디를 손가락으로 눌러서 고무칩에 한 마디 넘게 묻히면 AG, 아니면 TF</div>
+    <div class="bt-local">📍 <b>성남 근처 우리 구장</b>은 잔디가 짧고 상태가 안 좋아요 → <b>TF 추천</b></div>`;
+}
+function btViewSurf() {
+  const f = btFoot();
+  return `${btHead(4, '바닥 — TF · AG', "btGo('side')")}${btSurfBlock()}
+    <div class="bt-q"><b>어떤 바닥으로 볼까?</b></div>
+    <div class="bt-surfc">${[['TF', 'TF', '추천 · 짧은 잔디'], ['AG', 'AG', '긴 인조잔디'], ['both', '둘 다', '같이 비교']].map(o => `<button type="button" class="${f.surf === o[0] ? 'on' : ''} ${o[0]}" onclick="btSet('surf','${o[0]}')"><b>${o[1]}</b><small>${o[2]}</small></button>`).join('')}</div>
+    <button type="button" class="bt-go" ${f.surf ? '' : 'disabled'} onclick="btGo('result')">결과 보기 ›</button>
+    ${btExclBlock()}`;
+}
+function btExclBlock() {
+  const ex = BT_LINES.filter(L => L.ex).map(L => `<li><b>${BTX(L.nm)}</b> ${BTX(L.ex)}</li>`).join('');
+  return `<div class="bt-sec">🚫 목록에서 뺀 바닥 <small>우리 구장은 TF · AG 만</small></div>
+    <div class="bt-ex">${BT_EXCLUDED.map(x => `<div><span>${x[0]}</span><div><b>${x[1]}</b><small>${x[2]}</small></div></div>`).join('')}</div>
+    ${ex ? `<ul class="bt-exl">${ex}</ul>` : ''}`;
+}
+
+/* ===== 결과 ===== */
+function btToggle(id) { _bt.open[id] = !btIsOpen(id); renderBoots(); }
+function btIsOpen(id) { return _bt.open[id] !== undefined ? _bt.open[id] : false; }
+function btSetPri(a) { haptic(5); _bt.pri = a || null; renderBoots(); }
+function btSetBud(b) { haptic(5); _bt.bud = b; btSave({ bud: b || null }); renderBoots(); }
+function btSpec(L) {
+  return `<div class="bt-spec">${BT_ATTR_ORDER.map(a => `<div><span>${BT_ATTR[a].n}</span><i>${[1, 2, 3].map(k => `<b class="${L.sp[a] >= k ? 'on' : ''}" style="--c:${BT_ATTR[a].col}"></b>`).join('')}</i></div>`).join('')}</div>`;
+}
+function btTierRows(L, mode, pick) {
+  return L.ti.map(t => {
+    const s = BT_SURF[t[1]]; const ok = btSurfOk(t[1], mode); const on = pick && pick.t === t[0] && pick.s === t[1];
+    return `<div class="bt-tr${on ? ' on' : ''}${ok ? '' : ' off'}"><span class="rk r${btTierRank(L.br, t[0])}">${BTX(BT_TIER_KO[t[0]] || t[0])}</span><span class="sf ${s.g}">${s.n}</span><b>${btPrice(t[2])}</b>${t[3] ? `<small>${BTX(t[3])}</small>` : ''}${s.warn ? `<small class="w">⚠ ${s.warn}</small>` : ''}</div>`;
+  }).join('');
+}
+function btShopUrl(L, t) {
+  const tk = t ? (BT_TIER_KO[t.t] || t.t).replace('재팬 · ', '') : '';
+  const sf = t ? BT_SURF[t.s].n.replace('케이지', '') : '';
+  let q = `${BT_BR_KO[L.br] || L.br} ${L.nm}`;
+  if (tk && q.indexOf(tk) < 0) q += ' ' + tk;
+  if (sf && q.indexOf(sf) < 0 && sf.indexOf('/') < 0) q += ' ' + sf;
+  return 'https://search.shopping.naver.com/search/all?query=' + encodeURIComponent(q.trim());
+}
+function btCard(x, i, R) {
+  const L = x.L, open = btIsOpen(L.id) || (_bt.open[L.id] === undefined && i === 0);
+  const t = x.tier; const A = BT_ATTR[L.tag];
+  const sg = t ? BT_SURF[t.s].g : (R.mode === 'AG' ? 'AG' : 'TF');
+  const tierTxt = t ? `${BTX(BT_TIER_KO[t.t] || t.t)} ${BT_SURF[t.s].n} · <b>${btPrice(t.p)}</b>${!t.fit && _bt.bud ? ' <em>예산 넘음</em>' : ''}` : `<em>${R.mode === 'AG' ? 'AG' : 'TF'} 모델 없음</em>`;
+  return `<div class="bt-card${open ? ' open' : ''}">
+    <button type="button" class="bt-ch" onclick="_bt.open['${L.id}']=${open ? 'false' : 'true'};renderBoots()">
+      <span class="bt-rk">${i + 1}</span>
+      <div class="bt-nm"><small>${L.br}</small><b>${BTX(L.nm)}</b><em style="--c:${A.col}">${A.ico} ${A.n} 특화</em></div>
+      <div class="bt-szb"><small>추천</small><b>${x.size.mm}</b></div>
+    </button>
+    <div class="bt-vis">
+      <div class="bt-img">${btBootSvg(L, sg)}</div>
+      <div class="bt-vi">
+        <div class="bt-fit"><span class="f${x.fit}">${x.fit === 2 ? '✓ 잘 맞음' : '△ 팁 있음'}</span></div>
+        <small class="bt-szw">${BTX(x.size.why)}</small>
+        <div class="bt-tierl">${tierTxt}</div>
+        <a class="bt-shop" href="${btShopUrl(L, t)}" target="_blank" rel="noopener">📷 실물 사진 · 최저가 ›</a>
+      </div>
+    </div>
+    ${open ? `<div class="bt-more">
+      ${btSpec(L)}
+      <dl class="bt-dl"><dt>갑피</dt><dd>${BTX(L.up)}</dd><dt>무게감</dt><dd>${BTX(L.wt)} <small>(같은 TF 끼리 비교 · 참고)</small></dd><dt>이런 사람</dt><dd>${BTX(L.who)}</dd><dt>주의</dt><dd>${BTX(L.bad)}</dd></dl>
+      <div class="bt-trs"><div class="bt-trh">등급 · 가격 <small>${BT_SURVEY} 국내 공식몰 정가</small></div>${btTierRows(L, R.mode, t)}</div>
+      ${L.vari ? `<div class="bt-vari">➕ ${BTX(L.vari)}</div>` : ''}
+      <div class="bt-imgnote">그림은 라인 특징만 그린 것 · 실물은 「실물 사진」에서 (네이버 쇼핑 검색)</div>
+    </div>` : `<button type="button" class="bt-open" onclick="_bt.open['${L.id}']=true;renderBoots()">특화 · 갑피 · 등급별 가격 ▾</button>`}
+  </div>`;
+}
+function btViewResult() {
+  const f = btFoot(); if (_bt.bud === 0 && f.bud) _bt.bud = +f.bud;
+  const R = btRank(f);
+  const wSrc = f.wp !== undefined ? '직접 고름' : f.wR ? `사진 ${(+f.wR).toFixed(3)}` : '질문';
+  const hSrc = btHWhy(f) || '';
+  const feel = { tight: '꽉 낌', fit: '딱 맞음', loose: '남음' }[f.f] || '';
+  const sum = `<div class="bt-sum">
+      <button type="button" onclick="btGo('size')"><small>기본 사이즈</small><b>${R.base}</b><em>평소 ${f.s}<br>${feel}</em></button>
+      <button type="button" onclick="btGo('top')"><small>발볼</small><b>${BT_W_NAME[R.W]}</b><em>${BTX(wSrc)}</em></button>
+      <button type="button" onclick="btGo('side')"><small>발등</small><b>${BT_H_NAME[R.H]}</b><em>${BTX(f.hR ? '사진 ' + (+f.hR).toFixed(3) : hSrc)}</em></button>
+      <button type="button" onclick="btGo('surf')"><small>바닥</small><b>${f.surf === 'both' ? 'TF·AG' : f.surf}</b><em>${f.surf === 'TF' ? '우리 구장 추천' : f.surf === 'AG' ? '긴 잔디용' : '둘 다 비교'}</em></button>
+    </div>`;
+  const why = R.P.has ? `${BTX(R.P.why.join(' · '))}${R.P.top.length ? ` → <b>${R.P.top.map(a => BT_ATTR[a].n).join(' · ')}</b> 먼저` : ''}` : '트레이닝 탭에서 포지션 · 🚀 극대화를 고르면 순서가 내 플레이에 맞춰져요';
+  const pri = `<div class="bt-ord"><div class="bt-why">📌 순서 기준: ${why}</div>
+      <div class="tr-chips sm"><button type="button" class="${!_bt.pri ? 'on' : ''}" onclick="btSetPri(null)">자동</button>${BT_ATTR_ORDER.map(a => `<button type="button" class="${_bt.pri === a ? 'on' : ''}" onclick="btSetPri('${a}')">${BT_ATTR[a].ico} ${BT_ATTR[a].n}</button>`).join('')}</div>
+      <div class="bt-bud"><span>예산</span>${[[0, '상관없음'], [200000, '20만↓'], [150000, '15만↓'], [120000, '12만↓']].map(o => `<button type="button" class="${_bt.bud === o[0] ? 'on' : ''}" onclick="btSetBud(${o[0]})">${o[1]}</button>`).join('')}</div></div>`;
+  const cards = R.good.map((x, i) => btCard(x, i, R)).join('');
+  const avoid = R.avoid.length ? `<div class="bt-sec">🙅 내 발엔 피할 라인</div><div class="bt-av">${R.avoid.map(x => `<div><b>${x.L.br} ${BTX(x.L.nm)}</b><small>${BTX(x.L.bad)}${x.L.w[R.W] === 0 ? ` · 발볼 ${BT_W_NAME[R.W]}` : ''}${x.L.h[R.H] === 0 ? ` · 발등 ${BT_H_NAME[R.H]}` : ''}</small></div>`).join('')}</div>` : '';
+  return `<div class="bt-rhead"><b>👟 내 축구화</b><button type="button" onclick="btGo('size')">다시 재기</button></div>
+    ${sum}${pri}
+    <div class="bt-sec">✅ 나한테 맞는 라인 <small>${R.good.length}개 · 눌러서 자세히</small></div>
+    ${cards || '<div class="bt-note">조건에 맞는 라인이 없어요 · 예산이나 바닥을 바꿔보세요</div>'}
+    ${avoid}
+    <div class="bt-sec">💰 등급별 가격 · 차이 <small>${BT_SURVEY} 조사</small></div>${btTierBlock(R.mode)}
+    <div class="bt-sec">🟩 TF · AG 고르는 법</div>${btSurfBlock()}
+    ${btExclBlock()}
+    <div class="bt-src">가격: 나이키 · 아디다스 · 퓨마 · 미즈노 한국 공식몰 정가 (${BT_SURVEY} 조사 · 할인·재고는 수시로 바뀜) · 특화·핏: 브랜드 설명과 해외 리뷰 종합 · 발볼·발등 사진 측정은 참고용 — 매장에서 꼭 신어보고 사세요</div>`;
+}
+
+/* ===== 등급 비교 ===== */
+function btTierBlock(mode) {
+  mode = mode || 'both';
+  const fmt = arr => { if (!arr.length) return '—'; const lo = Math.min(...arr), hi = Math.max(...arr); return lo === hi ? lo.toLocaleString('ko-KR') + '원' : `${(lo / 10000).toFixed(lo % 10000 ? 1 : 0)}~${(hi / 10000).toFixed(hi % 10000 ? 1 : 0)}만 원`; };
+  return `<div class="bt-lv">${BT_LEVELS.map(lv => {
+    const tf = [], ag = [];
+    BT_LINES.forEach(L => L.ti.forEach(t => { if (btTierRank(L.br, t[0]) !== lv.r || t[2] === null) return; const ps = Array.isArray(t[2]) ? t[2] : [t[2]]; (BT_SURF[t[1]].g === 'TF' ? tf : ag).push(...ps); }));
+    const names = Object.keys(BT_TIERS).map(b => `<span>${b} <b>${BTX(BT_TIER_KO[BT_TIERS[b][lv.r - 1]] || BT_TIERS[b][lv.r - 1])}</b></span>`).join('');
+    return `<div class="bt-lvc r${lv.r}">
+      <div class="bt-lvh"><i>${lv.r}</i><b>${lv.n}</b>${lv.r === 2 ? '<em>조기축구 추천</em>' : ''}</div>
+      <div class="bt-lvn">${names}</div>
+      <div class="bt-lvp"><div><small>TF 정가</small><b>${fmt(tf)}</b></div><div><small>AG 정가</small><b>${fmt(ag)}</b></div></div>
+      <dl class="bt-dl"><dt>갑피</dt><dd>${lv.up}</dd><dt>밑창</dt><dd>${lv.sole} · ${lv.tf}</dd></dl>
+      <div class="bt-one">💬 ${lv.one}</div>
+    </div>`;
+  }).join('')}</div>
+  <div class="bt-note">이번 조사에서 확인한 정가만 계산했어요 · 「정가 확인 필요」 모델은 빠져 있어요</div>`;
+}
+function btViewTiers() { return `${btBackBar('💰 등급별 가격 · 차이', "btGo('home')")}${btTierBlock('both')}<div class="bt-src">${BT_SURVEY} 국내 공식몰 정가 기준 · 할인은 수시로 바뀌어요</div>`; }
+function btViewGuide() { return `${btBackBar('🟩 TF · AG 고르는 법', "btGo('home')")}${btSurfBlock()}${btExclBlock()}`; }
 
 /* ==================== Org chart ==================== */
 function renderOrg() {
@@ -19779,7 +20813,7 @@ function renderGuide() {
   el.querySelectorAll('[data-role-guide]').forEach(c => c.addEventListener('click', () => openTacticModal(c.dataset.roleGuide)));
 }
 
-/* ---- 역할 움직임 전술판 (4-3-3 · 동료 · 공까지 · 동영상처럼) ---- */
+/* ---- 역할 움직임 전술판 (4-2-3-1 · 동료 · 공까지 · 동영상처럼) ---- */
 const tac = { code: null, s: 0, phases: [], ppts: [], bpts: [], i: 0, playing: false, raf: 0, timer: 0, curP: { x: 50, y: 75 }, curB: { x: 50, y: 75 } };
 function tacScale(x, y) { return { x, y: y * 1.5 }; } // 데이터 y(0~100) → viewBox y(0~150)
 function tacPitchSvg() {
@@ -19823,8 +20857,8 @@ function buildTacticBoard(code, sIdx) {
   const bdata = phases.map(p => [p[2], p[3]]);
   const home = ROLE_HOME[code] || 'ST';
   const col = CAT_COLOR[ROLES[code]?.cat || 'MF'] || '#f43f5e';
-  const mateKeys = Object.keys(BASE_433).filter(k => k !== home);
-  const initPos = {}; mateKeys.forEach(k => { initPos[k] = mateTargetScaled(k, BASE_433[k][0], BASE_433[k][1], bdata[0][0], bdata[0][1]); });
+  const mateKeys = Object.keys(BASE_GUIDE).filter(k => k !== home);
+  const initPos = {}; mateKeys.forEach(k => { initPos[k] = mateTargetScaled(k, BASE_GUIDE[k][0], BASE_GUIDE[k][1], bdata[0][0], bdata[0][1]); });
   let arrows = '';
   for (let i = 1; i < ppts.length; i++) arrows += `<path class="tac-arrow" data-seg="${i}" d="M${ppts[i-1].x} ${ppts[i-1].y} L${ppts[i].x} ${ppts[i].y}" marker-end="url(#tacHead)"/>`;
   const stops = ppts.map((p,i) => `<g class="tac-stop"><circle cx="${p.x}" cy="${p.y}" r="4.4"/><text x="${p.x}" y="${p.y+2.2}" text-anchor="middle" font-size="5">${i+1}</text></g>`).join('');
@@ -19852,7 +20886,7 @@ function tacSetPhase(i, animate) {
   document.querySelectorAll('#tacticDots .tac-dot').forEach((d,di) => d.classList.toggle('on', di === i));
   document.querySelectorAll('#tacticBoard .tac-arrow').forEach(a => a.classList.toggle('active', +a.dataset.seg === i));
   const p = tac.ppts[i], b = tac.bpts[i];
-  const mT = {}; (tac.mateKeys||[]).forEach(k => { mT[k] = mateTargetScaled(k, BASE_433[k][0], BASE_433[k][1], tac.bdata[i][0], tac.bdata[i][1]); });
+  const mT = {}; (tac.mateKeys||[]).forEach(k => { mT[k] = mateTargetScaled(k, BASE_GUIDE[k][0], BASE_GUIDE[k][1], tac.bdata[i][0], tac.bdata[i][1]); });
   if (animate) tacAnimateAll(p, b, mT, 820);
   else {
     tacSetXY('tacPlayer', p); tacSetXY('tacBall', b);
@@ -22800,7 +23834,7 @@ function seedSampleData() {
   ].map(p => ({ id: uid(), name: p.name, number: p.number, foot: p.foot, positions: p.positions, stats: buildStats(p.s) }));
   store.players = samples;
 
-  const squad = { id: uid(), name: '주전 스쿼드', formation: '4-3-3', slots: [], assignments: {} };
+  const squad = { id: uid(), name: '주전 스쿼드', formation: '4-2-3-1', slots: [], assignments: {} };
   ensureSquadSlots(squad);
   const used = new Set();
   squad.slots.forEach((slot, idx) => {
@@ -22837,7 +23871,7 @@ function seedSampleData() {
   [
     { name: '이스트', title: '회장', dept: 'board', notes: '구단주 겸 회장 · 최종 결정권자' },
     { name: '박이사', title: '이사', dept: 'board' },
-    { name: '김감독', title: '감독', dept: 'coaching', notes: '전술: 4-3-3 포제션' },
+    { name: '김감독', title: '감독', dept: 'coaching', notes: '전술: 4-2-3-1 포제션' },
     { name: '정수석', title: '수석코치', dept: 'coaching' },
     { name: '오코치', title: 'GK 코치', dept: 'coaching' },
     { name: '한피지컬', title: '피지컬 코치', dept: 'coaching' },
