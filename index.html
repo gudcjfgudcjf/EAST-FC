@@ -104,23 +104,25 @@
 
   /* ===== 배경 애니메이션: 파도 스윕 + 두근두근 밝기 (골드 빛줄기가 대각선으로 흐르며 심장처럼 박동) ===== */
   #appFx {
-    position: fixed; inset: -12%; z-index: -1; pointer-events: none;
-    /* 넓게 페더링한 부드러운 빛띠 — 딱딱한 줄무늬가 아니라 은은히 번지는 글로우 */
-    background: linear-gradient(105deg,
-      transparent 20%,
-      rgba(111, 159, 196, 0.020) 33%,
-      rgba(111, 159, 196, 0.045) 42%,
-      rgba(255, 209, 102, 0.075) 50%,
-      rgba(111, 159, 196, 0.045) 58%,
-      rgba(111, 159, 196, 0.020) 67%,
-      transparent 80%);
-    background-size: 300% 100%;
-    background-repeat: no-repeat;
-    filter: blur(26px);
-    animation: appFxSweep 9s ease-in-out infinite, appFxBeat 2.1s ease-in-out infinite;
-    will-change: background-position, opacity;
+    position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden;
+    animation: appFxBeat 2.1s ease-in-out infinite;
+    will-change: opacity;
   }
-  @keyframes appFxSweep { 0% { background-position: 145% 0; } 100% { background-position: -45% 0; } }
+  /* 빛띠는 미리 부드럽게 그린 넓은 그림 하나를 옆으로 미끄러뜨리기만 한다 (다시 그리기·흐림 계산 없음) */
+  #appFx .fx-band {
+    position: absolute; top: -20%; bottom: -20%; left: 0; width: 300%;
+    background: linear-gradient(105deg,
+      transparent 18%,
+      rgba(111, 159, 196, 0.016) 30%,
+      rgba(111, 159, 196, 0.040) 40%,
+      rgba(255, 209, 102, 0.066) 50%,
+      rgba(111, 159, 196, 0.040) 60%,
+      rgba(111, 159, 196, 0.016) 70%,
+      transparent 82%);
+    animation: appFxSweep 9s ease-in-out infinite;
+    will-change: transform;
+  }
+  @keyframes appFxSweep { 0% { transform: translate3d(-96.7%, 0, 0); } 100% { transform: translate3d(30%, 0, 0); } }
   @keyframes appFxBeat {
     0%, 100% { opacity: 0.30; }
     14% { opacity: 0.56; }
@@ -128,10 +130,12 @@
     42% { opacity: 0.48; }
     56% { opacity: 0.30; }
   }
-  /* 접근성: 모션 최소화 설정이면 애니메이션 끄고 아주 은은하게 고정 */
   @media (prefers-reduced-motion: reduce) {
-    #appFx { animation: none; opacity: 0.32; background-position: 50% 0; }
+    #appFx, #appFx .fx-band { animation: none; }
+    #appFx { opacity: 0.32; } #appFx .fx-band { transform: translate3d(-33%, 0, 0); }
   }
+  /* 창을 하나 띄웠거나 탭이 안 보일 땐 배경을 멈춘다 */
+  body.fx-pause #appFx, body.fx-pause #appFx .fx-band { animation-play-state: paused; }
 
   /* ---------- Top nav ---------- */
   .topnav {
@@ -3543,6 +3547,48 @@
     .cal-header .cal-title { font-size: 16.5px !important; white-space: nowrap; }
     .cal-actions-row > button { font-size: 11.5px !important; }
   }
+
+  /* ============================================================
+     ⚡ v105 버벅임 제거 — 전체화면 흐림(backdrop-filter) 끄기 · 무한 그림자 애니메이션 제한
+     (배경 빛줄기가 움직이는 동안 뒤를 흐리게 하는 창·바는 매 프레임 흐림을 다시 계산해서 무거웠다)
+     ============================================================ */
+  .modal-overlay { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; background: rgba(0,0,0,.8) !important; }
+  .priv-overlay { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; background: rgba(4,4,6,.96) !important; }
+  .locked-panel, .zoom-chip { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+  .locked-panel { background: rgba(0,0,0,.66) !important; }
+  .zoom-chip { background: rgba(10,10,10,.92) !important; }
+  /* NEW · 변경 표시 반짝임은 4번만 (계속 깜빡이면 그 자리를 매 프레임 다시 그린다) — 끝나면 얇은 테두리로 남음 */
+  .feat-new, .feat-new::before, .tab-btn.has-update, .drawer-item.has-update, .drawer-item.has-update .di-badge,
+  .tab-btn.has-update.feat-new, .drawer-item.has-update.feat-new { animation-iteration-count: 4 !important; }
+  .feat-new { box-shadow: 0 0 0 1.5px rgba(111,159,196,.45); }
+  .tab-btn.has-update, .drawer-item.has-update { box-shadow: 0 0 0 1.5px rgba(251,146,60,.5); }
+  /* 확정 초록불: 그림자 대신 투명도로 깜빡 (가볍다) */
+  .mst.confirmed i { animation: mstPulse 1.8s ease-in-out infinite !important; box-shadow: 0 0 0 2px rgba(34,197,94,.25), 0 0 8px #22c55e; }
+  @keyframes mstPulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+  /* 새로고침 아이콘 */
+  .nav-refresh-btn .rf-icon { display: flex; align-items: center; justify-content: center; line-height: 0; }
+
+  @media (max-width: 820px) {
+    /* 상단바: 반투명·흐림 대신 또렷한 단색 — 아이콘·글자가 흐려 보이던 문제 */
+    .topnav {
+      -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+      background: #121318 !important;
+      border-bottom: 1px solid rgba(157,192,216,.22) !important;
+      box-shadow: 0 6px 16px rgba(0,0,0,.55) !important;
+    }
+    .topnav::before { display: none; }
+    .brand::before { display: none; }
+    .drawer-btn.feat-new::before { top: 4px !important; right: 4px !important; }
+    .drawer-btn { background: rgba(255,255,255,.09) !important; border: 1px solid rgba(255,255,255,.12) !important; color: #eef3f7 !important; }
+    .nav-refresh-btn { width: 38px; height: 38px; border-radius: 11px; background: rgba(255,255,255,.09) !important; border: 1px solid rgba(255,255,255,.12) !important; color: #eef3f7 !important; }
+    .nav-title { color: #ffffff; font-size: 18px; font-weight: 900; }
+    .nav-title .nt-ico { font-size: 18px; }
+    .user-avatar { width: 34px; height: 34px; background: #1d2b36 !important; border: 1.5px solid #9dc0d8 !important; color: #e6f1f8 !important; font-size: 13.5px; }
+    .nav-user { border-left: 0 !important; padding-left: 4px !important; }
+    /* 하단 탭바도 단색 */
+    .botnav { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; background: #111216 !important; }
+    .botnav button { color: #8a95a1; }
+  }
   /* iOS: 16px 미만 입력칸은 누르는 순간 화면이 확대된다 → 터치 기기에선 16px */
   @media (max-width: 820px) and (pointer: coarse) {
     input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]), select, textarea { font-size: 16px !important; }
@@ -5112,7 +5158,7 @@
 
 
 <!-- ============ 배경 애니메이션 (파도 스윕 + 두근두근) ============ -->
-<div id="appFx" aria-hidden="true"></div>
+<div id="appFx" aria-hidden="true"><i class="fx-band"></i></div>
 
 <!-- ============ AUTH GATE ============ -->
 <div class="auth-gate show" id="authGate">
@@ -5173,7 +5219,7 @@
     <button class="tab-btn" data-tab="admin" id="tabAdmin" style="display:none">🛡️ 관리자</button>
   </div>
   <div class="spacer"></div>
-  <button class="nav-refresh-btn" id="btnRefresh" title="새로고침" aria-label="새로고침"><span class="rf-icon">🔄</span><span class="rf-update">💡</span></button>
+  <button class="nav-refresh-btn" id="btnRefresh" title="새로고침" aria-label="새로고침"><span class="rf-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11.5A8 8 0 1 0 17.6 17"/><path d="M20 5v6.5h-6.5"/></svg></span><span class="rf-update">💡</span></button>
   <div class="backend-status offline" id="backendStatus" title="데이터 저장 위치">📴 이 기기</div>
   <div class="nav-user" id="navUser">
     <div class="user-avatar" id="userAvatar">?</div>
@@ -6235,7 +6281,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 104;
+const APP_VERSION = 105;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -15252,6 +15298,18 @@ function bindAppChrome() {
   document.addEventListener('touchend', end, { passive: true });
   document.addEventListener('touchcancel', end, { passive: true });
 }
+
+
+/* ---- 배경 애니메이션 절약: 창(모달·시트)이 열려 있거나 탭이 숨겨지면 멈춤 ---- */
+(function fxSaver() {
+  const upd = () => {
+    const busy = document.hidden || !!document.querySelector('.modal-overlay.show, .priv-overlay.show, #orderPop, .nav-drawer.open');
+    document.body.classList.toggle('fx-pause', busy);
+  };
+  document.addEventListener('visibilitychange', upd);
+  try { new MutationObserver(() => { clearTimeout(fxSaver._t); fxSaver._t = setTimeout(upd, 60); }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'], childList: true }); } catch (e) {}
+  upd();
+})();
 
 /* ==================== Org chart ==================== */
 function renderOrg() {
