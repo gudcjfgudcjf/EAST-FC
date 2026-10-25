@@ -7089,7 +7089,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 127;
+const APP_VERSION = 128;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -23520,8 +23520,6 @@ PSA('donnarumma', 'GK', 'modern', '잔루이지 돈나룸마', 'Gianluigi Donnar
 PSA('emartinez', 'GK', 'modern', '에밀리아노 마르티네스', 'Emiliano Martinez', '애스턴 빌라 · 아르헨티나 · 2022 월드컵', { spd: 1, tch: 1, drb: 1, kick: 2, stb: 3, eng: 1, vis: 1, calm: 2, lead: 3, agg: 3, mnt: 3 }, '승부사 키퍼', '승부차기에서 상대를 흔들고 큰 경기에서 결정적 선방을 하는 멘탈형 키퍼.', ['PK 전에 숨 고르고 내 리듬', '위기 넘기면 팀 전체에 기합', '1대1은 상대가 찰 때까지']);
 PSA('pickford', 'GK', 'modern', '조던 픽포드', 'Jordan Pickford', '에버턴 · 잉글랜드', { spd: 2, tch: 2, drb: 1, kick: 3, stb: 1, eng: 2, vis: 2, calm: 1, lead: 2, agg: 2, mnt: 3 }, '킥과 반사신경 키퍼', '작은 키를 반사신경과 긴 킥으로 메우는 키퍼. 큰 경기 PK 선방도.', ['잡자마자 멀리 정확한 킥', '낮은 자세로 반사 대비', '작아도 각 좁히기 먼저']);
 PSA('kimbj', 'GK', 'classic', '김병지', 'Kim Byung-ji', '울산 · 한국 · K리그 최다 출장', { spd: 2, tch: 2, drb: 1, kick: 2, stb: 2, eng: 2, vis: 2, calm: 2, lead: 2, agg: 3, mnt: 2 }, '뛰쳐나가는 꽁지머리 키퍼', '박스 밖으로 나와 발로 수비하고 공격까지 나간 K리그의 전설. 오래 뛴 자기 관리.', ['뒷공간 볼은 먼저 나가서 끊기', '오래 뛰려면 몸 관리가 실력', '공격 가담은 지고 있을 때 마지막에만']);
-PSA('johw', 'GK', 'modern', '조현우', 'Jo Hyeon-woo', '울산 · 한국 · 2018 월드컵 독일전', { spd: 2, tch: 1, drb: 1, kick: 1, stb: 2, eng: 2, vis: 1, calm: 2, lead: 2, agg: 2, mnt: 3 }, '반사신경 선방 키퍼', '독일전처럼 쏟아지는 슛을 반사적으로 막아내는 키퍼. 집중력이 무기.', ['슛 많이 오는 날은 낮은 자세 유지', '막은 공은 옆으로', '한 번 막으면 다음 슛 바로 준비']);
-PSA('kimsg', 'GK', 'modern', '김승규', 'Kim Seung-gyu', '알샤밥 · 한국', { spd: 1, tch: 2, drb: 1, kick: 2, stb: 2, eng: 1, vis: 2, calm: 3, lead: 2, agg: 1, mnt: 2 }, '안정형 빌드업 키퍼', '큰 실수 없이 발로 연결하고 자리로 막는 국가대표 키퍼.', ['백패스는 침착하게 압박 반대쪽', '위치 먼저, 다이빙은 나중', '수비에게 짧게 지시']);
 
 /* CB */
 PSA('beckenbauer', 'CB', 'classic', '프란츠 베켄바워', 'Franz Beckenbauer', '바이에른 · 서독 · 1960~70년대', { spd: 2, tch: 3, drb: 3, kick: 3, stb: 2, eng: 2, vis: 3, calm: 3, lead: 3, agg: 1, mnt: 3 }, '리베로의 원조', '수비 뒤에서 공을 받아 직접 몰고 올라가 공격을 만든 「황제」.', ['앞이 비면 CB도 몰고 나가기', '첫 패스는 늘 앞으로 갈 수 있는 사람', '우아하게 — 서두르지 않기']);
@@ -23538,8 +23536,6 @@ PSA('pepe', 'CB', 'modern', '페페', 'Pepe', '레알 마드리드 · 포르투 
 PSA('kompany', 'CB', 'modern', '뱅상 콤파니', 'Vincent Kompany', '맨시티 · 벨기에 · 2008~2019', { spd: 2, tch: 2, drb: 1, kick: 2, stb: 3, eng: 2, vis: 2, calm: 2, lead: 3, agg: 2, mnt: 3 }, '주장형 센터백', '큰 경기 결정적 골과 수비 지휘로 팀을 이끈 주장.', ['우리 코너킥은 내 득점 기회', '수비 전체를 말로 묶기', '위기 땐 내가 먼저 몸 던지기']);
 PSA('stones', 'CB,CDM', 'modern', '존 스톤스', 'John Stones', '맨시티 · 잉글랜드', { spd: 2, tch: 3, drb: 2, kick: 2, stb: 2, eng: 2, vis: 3, calm: 3, lead: 1, agg: 1, mnt: 2 }, '중원으로 올라가는 CB', '공격 땐 볼란치 옆으로 올라가 빌드업을 돕는 현대형 센터백.', ['우리 공격 땐 볼란치 옆까지', '받으면 몸 열고 앞으로', '뺏기면 제일 먼저 뒤로']);
 PSA('godin', 'CB', 'modern', '디에고 고딘', 'Diego Godin', '아틀레티코 · 우루과이', { spd: 1, tch: 1, drb: 1, kick: 1, stb: 3, eng: 2, vis: 1, calm: 3, lead: 3, agg: 2, mnt: 3 }, '세트피스 헤더 · 두 줄 수비의 축', '내려선 두 줄 수비의 중심이자 코너킥 헤딩 골의 주인공.', ['두 줄 수비는 간격이 생명', '우리 코너킥 땐 니어로 뛰어들기', '블록은 몸을 던져']);
-PSA('kimyg', 'CB', 'modern', '김영권', 'Kim Young-gwon', '울산 · 한국 · 2018 독일전 골', { spd: 1, tch: 2, drb: 1, kick: 2, stb: 2, eng: 2, vis: 2, calm: 3, lead: 2, agg: 1, mnt: 3 }, '침착한 왼발 센터백', '왼발 빌드업과 침착한 위치 선정. 큰 경기에서 골도 넣은 수비수.', ['왼발 쪽으로 받아 바로 앞으로', '세컨볼 자리 먼저', '당황하지 않는 첫 터치']);
-PSA('choijc', 'CB', 'classic', '최진철', 'Choi Jin-cheul', '전북 · 한국 · 2002 월드컵', { spd: 1, tch: 1, drb: 1, kick: 1, stb: 3, eng: 2, vis: 1, calm: 2, lead: 2, agg: 3, mnt: 3 }, '공중볼 파이터', '2002년 백3의 공중볼 담당. 몸을 아끼지 않는 수비.', ['공중볼은 먼저 자리', '거칠어도 깨끗하게', '코너킥 땐 키 큰 상대 내가']);
 PSA('yousc', 'CB,CDM', 'classic', '유상철', 'Yoo Sang-chul', '울산 · 한국 · 2002 월드컵', { spd: 2, tch: 2, drb: 1, kick: 3, stb: 3, eng: 3, vis: 2, calm: 2, lead: 2, agg: 2, mnt: 3 }, '전천후 멀티', '수비·미드필더·공격 어디든 뛴 만능 선수. 폴란드전 골도 넣었다.', ['여러 자리 다 익혀두기', '중거리 각 보이면 때리기', '팀이 필요한 자리로']);
 
 /* FB */
@@ -23552,8 +23548,6 @@ PSA('carvajal', 'FB', 'modern', '다니 카르바할', 'Dani Carvajal', '레알 
 PSA('walker', 'FB', 'modern', '카일 워커', 'Kyle Walker', '맨시티 · 잉글랜드', { spd: 3, tch: 1, drb: 2, kick: 2, stb: 3, eng: 3, vis: 1, calm: 2, lead: 2, agg: 2, mnt: 2 }, '스피드 수비 풀백', '빠른 윙도 따라잡는 스피드와 몸으로 막는 수비형 풀백.', ['뒷공간은 스피드로 커버', '몸싸움 피하지 않기', '공 반대쪽이면 안으로 좁히기']);
 PSA('kimmich', 'FB,CDM', 'modern', '요주아 키미히', 'Joshua Kimmich', '바이에른 · 독일', { spd: 2, tch: 3, drb: 1, kick: 3, stb: 2, eng: 3, vis: 3, calm: 3, lead: 3, agg: 2, mnt: 3 }, '풀백도 볼란치도 되는 리더', '오른쪽 풀백과 볼란치를 다 하는 패스·크로스·리더십의 선수.', ['얼리 크로스 — 수비 자리 잡기 전', '볼란치로 서면 CB 앞 고정', '동료에게 끊임없이 말하기']);
 PSA('theo', 'FB', 'modern', '테오 에르난데스', 'Theo Hernandez', 'AC 밀란 · 프랑스', { spd: 3, tch: 2, drb: 3, kick: 2, stb: 2, eng: 3, vis: 1, calm: 1, lead: 1, agg: 2, mnt: 2 }, '폭주 기관차 풀백', '우리 진영에서 상대 박스까지 혼자 몰고 가는 스피드 풀백.', ['역습 땐 측면 전력 질주', '몰고 가다 수비 나오면 안쪽 패스', '올라간 뒤 복귀도 전력']);
-PSA('songjk', 'FB', 'classic', '송종국', 'Song Chong-gug', '수원 · 한국 · 2002 월드컵', { spd: 2, tch: 2, drb: 1, kick: 2, stb: 2, eng: 3, vis: 1, calm: 2, lead: 1, agg: 3, mnt: 3 }, '피구를 막은 풀백', '2002년 피구를 끝까지 따라붙은 활동량과 집요한 수비의 윙백.', ['상대 에이스는 끝까지 따라가기', '수비 먼저, 공격은 여유 있을 때', '90분 같은 속도']);
-PSA('kimjs', 'FB', 'modern', '김진수', 'Kim Jin-su', '전북 · 한국', { spd: 2, tch: 2, drb: 1, kick: 3, stb: 2, eng: 3, vis: 2, calm: 2, lead: 1, agg: 2, mnt: 2 }, '왼발 크로스 풀백', '정확한 왼발 크로스와 세트피스 킥을 가진 왼쪽 풀백.', ['크로스는 ST 머리 보고', '세트피스 키커 연습', '올라간 만큼 복귀']);
 
 /* CDM · CM */
 PSA('rijkaard', 'CDM,CB', 'classic', '프랑크 레이카르트', 'Frank Rijkaard', 'AC 밀란 · 아약스 · 네덜란드', { spd: 2, tch: 3, drb: 2, kick: 2, stb: 3, eng: 2, vis: 3, calm: 3, lead: 2, agg: 2, mnt: 3 }, '우아한 볼란치', '수비 앞에서 공을 끊고 우아하게 연결한 세 네덜란드 중 한 명.', ['뺏으면 급하지 않게 연결', '몸싸움과 기술 둘 다', 'CB도 볼란치도 같은 침착함']);
@@ -23577,8 +23571,6 @@ PSA('pedri', 'CDM,CAM', 'modern', '페드리', 'Pedri', '바르셀로나 · 스�
 PSA('gavi', 'CDM,CAM', 'modern', '가비', 'Gavi', '바르셀로나 · 스페인', { spd: 2, tch: 2, drb: 2, kick: 1, stb: 2, eng: 3, vis: 2, calm: 1, lead: 2, agg: 3, mnt: 3 }, '싸우는 미드필더', '어려도 겁 없이 압박하고 부딪히는 투지의 중원.', ['뺏긴 직후 압박은 내가', '몸싸움 피하지 않기', '지쳐도 한 걸음 더']);
 PSA('macallister', 'CDM', 'modern', '알렉시스 맥알리스터', 'Alexis Mac Allister', '리버풀 · 아르헨티나 · 2022 월드컵', { spd: 1, tch: 3, drb: 1, kick: 2, stb: 2, eng: 3, vis: 3, calm: 3, lead: 2, agg: 2, mnt: 3 }, '조용한 만능 미드필더', '화려하지 않게 수비·연결·침투를 다 하는 영리한 중원.', ['받기 전 보고 한 번에', '세컨볼 자리 먼저', '필요한 곳에 먼저 서 있기']);
 PSA('kimni', 'CDM', 'classic', '김남일', 'Kim Nam-il', '전남 · 한국 · 2002 월드컵', { spd: 2, tch: 2, drb: 1, kick: 2, stb: 3, eng: 3, vis: 2, calm: 1, lead: 2, agg: 3, mnt: 3 }, '진공청소기', '2002년 중원에서 공을 쓸어 담은 투지의 볼란치.', ['뺏기면 바로 압박', '세컨볼 먼저', '거칠어도 영리하게']);
-PSA('jungwy', 'CDM', 'modern', '정우영', 'Jung Woo-young', '알사드 · 한국', { spd: 1, tch: 2, drb: 1, kick: 2, stb: 2, eng: 2, vis: 2, calm: 3, lead: 2, agg: 2, mnt: 3 }, '자리 지키는 볼란치', '화려하지 않게 CB 앞을 지키고 간단히 연결하는 안정형 볼란치.', ['CB 앞 가운데 고정', '간단한 패스 정확히', '짝이 올라가면 남기']);
-PSA('hwangib', 'CDM,CAM', 'modern', '황인범', 'Hwang In-beom', '페예노르트 · 한국', { spd: 2, tch: 3, drb: 2, kick: 3, stb: 2, eng: 3, vis: 3, calm: 3, lead: 2, agg: 2, mnt: 2 }, '빌드업 조율사', '압박 속에서 공을 받아 돌리고 중거리까지 — 한국 중원의 연결고리.', ['몸 열고 받아 앞으로', '압박 오면 반대쪽', '중거리 각 보이면 바로']);
 /* ===== v120 선수 추가 (CAM · WG · ST) ===== */
 /* CAM */
 PSA('cruyff', 'CAM,ST', 'classic', '요한 크루이프', 'Johan Cruyff', '아약스 · 바르셀로나 · 네덜란드 · 1970년대', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 1, eng: 2, vis: 3, calm: 2, lead: 3, agg: 1, mnt: 3 }, '토탈 풋볼의 두뇌', '어디든 나타나 경기를 읽고 지시한 선수. 크루이프 턴의 주인공.', ['공 없을 때 자리 바꿔 주기', '크루이프 턴 — 상대 반대로', '동료에게 손과 말로 지시']);
@@ -23606,7 +23598,6 @@ PSA('nakata', 'CAM', 'classic', '나카타 히데토시', 'Hidetoshi Nakata', '�
 PSA('honda', 'CAM,WG', 'classic', '혼다 케이스케', 'Keisuke Honda', 'CSKA · AC 밀란 · 일본', { spd: 1, tch: 2, drb: 1, kick: 3, stb: 2, eng: 2, vis: 2, calm: 3, lead: 3, agg: 1, mnt: 3 }, '왼발 프리킥 리더', '왼발 프리킥과 큰 경기 자신감으로 일본을 이끈 선수.', ['프리킥 연습량', '큰 경기일수록 당당하게', '팀을 말로 끌기']);
 PSA('kagawa', 'CAM', 'classic', '카가와 신지', 'Shinji Kagawa', '도르트문트 · 맨유 · 일본', { spd: 2, tch: 3, drb: 2, kick: 2, stb: 1, eng: 2, vis: 3, calm: 2, lead: 1, agg: 1, mnt: 2 }, '사이에서 받는 10번', '상대 사이 공간에서 받아 원터치로 연결하는 작은 10번.', ['상대 볼란치 뒤에서 받기', '원터치·투터치', '첫 터치는 앞으로']);
 PSA('koojc', 'CAM,CDM', 'modern', '구자철', 'Koo Ja-cheol', '아우크스부르크 · 한국 · 2012 올림픽 동메달', { spd: 2, tch: 2, drb: 1, kick: 3, stb: 2, eng: 3, vis: 2, calm: 2, lead: 3, agg: 2, mnt: 3 }, '박스 침투 미드필더', '2선에서 박스로 들어가 골을 넣고 팀을 이끈 주장.', ['늦게 박스 들어가기', '세컨볼 슛', '팀을 말로 끌기']);
-PSA('leejs', 'CAM,WG', 'modern', '이재성', 'Lee Jae-sung', '마인츠 · 한국', { spd: 2, tch: 3, drb: 2, kick: 2, stb: 2, eng: 3, vis: 3, calm: 2, lead: 1, agg: 3, mnt: 3 }, '영리한 활동량', '공 없을 때 가장 영리하게 움직이고 압박하는 2선 자원.', ['공 없을 때 빈 곳 먼저', '뺏긴 직후 압박', '간단한 패스 정확히']);
 
 /* WG */
 PSA('bestg', 'WG', 'classic', '조지 베스트', 'George Best', '맨유 · 북아일랜드 · 1960년대', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 1, eng: 1, vis: 1, calm: 2, lead: 1, agg: 1, mnt: 1 }, '드리블의 천재', '수비 몇 명을 혼자 제치는 드리블로 유럽을 홀린 윙.', ['1대1은 자신 있게', '제친 뒤 바로 마무리', '화려함도 팀을 위해']);
@@ -23747,7 +23738,6 @@ PSA('mthuram', 'ST', 'modern', '마르쿠스 튀랑', 'Marcus Thuram', '인터�
 PSA('jdavid', 'ST', 'modern', '조너선 데이비드', 'Jonathan David', '릴 · 유벤투스 · 캐나다', { spd: 3, tch: 2, drb: 1, kick: 3, stb: 1, eng: 2, vis: 1, calm: 3, lead: 1, agg: 2, mnt: 2 }, '움직임 피니셔', '수비 등 뒤 움직임과 원터치 마무리의 공격수.', ['수비 등 뒤에서 출발', '원터치', '낮게 구석']);
 PSA('openda', 'ST', 'modern', '루아 오펜다', 'Lois Openda', '라이프치히 · 유벤투스 · 벨기에', { spd: 3, tch: 2, drb: 2, kick: 2, stb: 2, eng: 3, vis: 1, calm: 1, lead: 1, agg: 3, mnt: 2 }, '질주형 9번', '뒷공간 질주와 압박의 스피드 공격수.', ['뒷공간 질주', '압박', '마무리 낮게']);
 PSA('jackson', 'ST', 'modern', '니콜라스 잭슨', 'Nicolas Jackson', '첼시 · 바이에른 · 세네갈', { spd: 3, tch: 2, drb: 2, kick: 2, stb: 2, eng: 3, vis: 1, calm: 1, lead: 1, agg: 3, mnt: 1 }, '뛰는 9번', '압박과 뒷공간 질주로 수비를 괴롭히는 공격수.', ['압박 먼저', '뒷공간', '실수해도 다음']);
-PSA('ohg', 'ST', 'modern', '오현규', 'Oh Hyeon-gyu', '헹크 · 한국', { spd: 2, tch: 2, drb: 1, kick: 3, stb: 3, eng: 3, vis: 1, calm: 2, lead: 1, agg: 2, mnt: 2 }, '파워 9번', '몸싸움과 강슛으로 유럽에서 골을 넣는 한국 공격수.', ['등지고 버티기', '강슛', '압박']);
 // v124 추가 — 사용자 요청(사비 알론소) + 같은 결의 중원 셋
 PSA('xalonso', 'CDM', 'classic', '사비 알론소', 'Xabi Alonso', '리버풀 · 레알 마드리드 · 바이에른 · 스페인 · 2004~2017', { spd: 1, tch: 3, drb: 1, kick: 3, stb: 2, eng: 2, vis: 3, calm: 3, lead: 2, agg: 1, mnt: 3 }, '롱패스 레지스타', '뒤에서 한 번에 반대쪽을 여는 대각선 롱패스와 하프라인 중거리. 서두르지 않는 중원의 조율사 — 지금은 감독.', ['받기 전에 반대쪽 먼저 보고 한 번에 전환', '패스 전에 몸을 열어 두 방향 다 가능하게', '하프라인 근처에서도 골문 한 번 보기']);
 PSA('dsilva', 'CAM,WG', 'classic', '다비드 실바', 'David Silva', '발렌시아 · 맨시티 · 스페인 · 2004~2023', { spd: 2, tch: 3, drb: 2, kick: 2, stb: 1, eng: 2, vis: 3, calm: 3, lead: 1, agg: 1, mnt: 2 }, '하프스페이스의 마술사', '수비와 미드 사이 좁은 공간에서 받아 원터치로 풀어내는 왼발 10번. 화려하지 않지만 뺏기지 않는다.', ['수비 사이 틈에 서서 받기', '받기 전에 어깨 너머 보기', '원터치 리턴 → 다시 움직이기']);
@@ -23764,7 +23754,6 @@ PSA('dumfries', 'FB', 'modern', '덴절 둠프리스', 'Denzel Dumfries', '인�
 PSA('dimarco', 'FB', 'modern', '페데리코 디마르코', 'Federico Dimarco', '인테르 · 이탈리아', { spd: 2, tch: 3, drb: 2, kick: 3, stb: 1, eng: 3, vis: 3, calm: 2, lead: 1, agg: 2, mnt: 2 }, '왼발 크로스 윙백', '왼발 크로스와 중거리로 공격을 만드는 윙백. 안쪽으로 들어가 패스도 한다.', ['크로스는 수비 뒤 공간으로', '안쪽으로 들어가 삼각형 만들기', '세트피스 왼발 키커']);
 PSA('pavard', 'FB,CB', 'modern', '벤자맹 파바르', 'Benjamin Pavard', '바이에른 · 인테르 · 프랑스', { spd: 2, tch: 2, drb: 1, kick: 3, stb: 2, eng: 2, vis: 2, calm: 3, lead: 1, agg: 2, mnt: 3 }, '멀티 수비수', '풀백·센터백 다 되는 침착한 수비수. 2018 월드컵 발리 한 방.', ['자리 가리지 않고 간단하게', '기회 오면 한 번에 때리기', '큰 경기에서 평소대로']);
 PSA('bwhite', 'FB,CB', 'modern', '벤 화이트', 'Ben White', '아스널 · 잉글랜드', { spd: 2, tch: 3, drb: 2, kick: 2, stb: 2, eng: 2, vis: 2, calm: 3, lead: 1, agg: 2, mnt: 2 }, '빌드업 풀백', '센터백 출신으로 침착하게 공을 돌리고 안쪽으로 들어가 중원을 돕는 풀백.', ['압박 와도 서두르지 않기', '안쪽으로 들어가 숫자 만들기', '패스 받기 전에 몸 열어두기']);
-PSA('seolyw', 'FB', 'modern', '설영우', 'Seol Young-woo', '츠르베나 즈베즈다 · 한국', { spd: 2, tch: 2, drb: 2, kick: 2, stb: 2, eng: 3, vis: 1, calm: 2, lead: 1, agg: 3, mnt: 2 }, '왕복 풀백', '양쪽 풀백 다 되는 활동량과 영리한 위치의 한국 풀백.', ['왕복은 끝까지', '양발 크로스 연습', '수비 복귀 먼저']);
 PSA('barella', 'CDM,CAM', 'modern', '니콜로 바렐라', 'Nicolo Barella', '인테르 · 이탈리아', { spd: 2, tch: 3, drb: 2, kick: 2, stb: 2, eng: 3, vis: 3, calm: 2, lead: 2, agg: 3, mnt: 3 }, '박스 투 박스 엔진', '쉬지 않고 뛰며 뺏고 찔러 넣는 이탈리아 중원의 심장.', ['뺏긴 즉시 압박', '뛰면서도 패스 각 보기', '세컨볼 자리 미리 잡기']);
 PSA('bguimaraes', 'CDM,CAM', 'modern', '브루누 기마랑이스', 'Bruno Guimaraes', '뉴캐슬 · 브라질', { spd: 2, tch: 3, drb: 2, kick: 2, stb: 2, eng: 3, vis: 3, calm: 2, lead: 2, agg: 2, mnt: 3 }, '전진하는 조율사', '압박을 벗겨내고 앞으로 공을 나르는 중원. 팀을 끌고 가는 승부욕.', ['받기 전 둘러보고 돌아서기', '앞으로 가는 패스 먼저', '동료 북돋우기']);
 PSA('gravenberch', 'CDM', 'modern', '라이언 흐라벤베르흐', 'Ryan Gravenberch', '리버풀 · 네덜란드', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 2, eng: 3, vis: 2, calm: 3, lead: 1, agg: 2, mnt: 2 }, '긴 보폭 탈압박 6번', '큰 키에 긴 보폭으로 압박을 드리블로 벗어나는 볼란치.', ['압박 오면 몸 돌려 반대로', '드리블 한 번으로 라인 하나 넘기기', '뺏기면 바로 되찾기']);
@@ -23777,7 +23766,6 @@ PSA('dybala', 'CAM,ST', 'modern', '파울로 디발라', 'Paulo Dybala', '유벤
 PSA('cherki', 'CAM,WG', 'modern', '라얀 셰르키', 'Rayan Cherki', '리옹 · 맨시티 · 프랑스', { spd: 2, tch: 3, drb: 3, kick: 2, stb: 1, eng: 2, vis: 3, calm: 2, lead: 1, agg: 1, mnt: 2 }, '양발 창의 10번', '양발 드리블과 예측 못 할 패스로 수비를 흔드는 10번.', ['양발 다 쓰기', '수비가 안 보는 쪽으로 패스', '드리블은 공간 만들 때만']);
 PSA('yildiz', 'CAM,WG', 'modern', '케난 일디즈', 'Kenan Yildiz', '유벤투스 · 튀르키예', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 1, eng: 2, vis: 2, calm: 2, lead: 1, agg: 2, mnt: 2 }, '안으로 접는 10번', '왼쪽에서 왼발 드리블로 안으로 접어 들어오는 젊은 공격형 MF.', ['측면에서 안으로 접기', '첫 터치는 앞으로', '슛 각 보이면 바로']);
 PSA('mastantuono', 'CAM,WG', 'modern', '프랑코 마스탄투오노', 'Franco Mastantuono', '리버플레이트 · 레알 마드리드 · 아르헨티나', { spd: 2, tch: 3, drb: 3, kick: 3, stb: 1, eng: 2, vis: 3, calm: 2, lead: 1, agg: 1, mnt: 2 }, '왼발 프리킥 유망주', '10대에 레알로 — 왼발 프리킥과 드리블.', ['프리킥 루틴', '좁은 공간 드리블', '겁 없이 시도']);
-PSA('baejh', 'CAM,WG', 'modern', '배준호', 'Bae Jun-ho', '스토크 · 한국', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 1, eng: 2, vis: 2, calm: 2, lead: 1, agg: 2, mnt: 2 }, '드리블 영건', '빠른 발과 드리블로 측면·2선에서 수비를 흔드는 한국 영건.', ['1대1은 과감하게', '드리블 뒤 마무리까지', '실수해도 다시 시도']);
 PSA('kvara', 'WG', 'modern', '흐비차 크바라츠헬리아', 'Khvicha Kvaratskhelia', '나폴리 · PSG · 조지아', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 1, eng: 3, vis: 2, calm: 2, lead: 1, agg: 2, mnt: 3 }, '크바라도나', '왼쪽에서 쉬지 않고 1대1을 시도하는 드리블러. 수비 가담도 성실.', ['1대1은 무조건 시도', '안으로 접어 슛', '뺏기면 바로 복귀']);
 PSA('doue', 'WG,CAM', 'modern', '데지레 두에', 'Desire Doue', 'PSG · 프랑스', { spd: 3, tch: 3, drb: 3, kick: 3, stb: 1, eng: 2, vis: 2, calm: 2, lead: 1, agg: 2, mnt: 3 }, '큰 경기 윙', '양발 드리블과 슛 — 챔스 결승 2골의 10대.', ['양발 슛', '드리블 뒤 바로 슛', '큰 경기일수록 과감하게']);
 PSA('gakpo', 'WG,ST', 'modern', '코디 각포', 'Cody Gakpo', '리버풀 · 네덜란드', { spd: 2, tch: 3, drb: 2, kick: 3, stb: 2, eng: 2, vis: 2, calm: 3, lead: 1, agg: 2, mnt: 2 }, '안으로 접는 왼쪽 피니셔', '왼쪽에서 안으로 접어 오른발로 때리는 침착한 윙.', ['안으로 접고 먼 포스트', '첫 터치 안쪽으로', '박스 안은 침착하게']);
@@ -23794,7 +23782,8 @@ PSA('guirassy', 'ST', 'modern', '세루 기라시', 'Serhou Guirassy', '슈투�
 PSA('joaopedro', 'ST,CAM', 'modern', '주앙 페드루', 'Joao Pedro', '브라이턴 · 첼시 · 브라질', { spd: 2, tch: 3, drb: 2, kick: 2, stb: 2, eng: 2, vis: 3, calm: 2, lead: 1, agg: 2, mnt: 2 }, '연계형 세컨드 스트라이커', '내려와 받고 연결하다 박스에서 마무리하는 공격수.', ['내려와 받고 돌아서기', '동료 살리는 패스', '박스 안 마무리']);
 PSA('vardy', 'ST', 'modern', '제이미 바디', 'Jamie Vardy', '레스터 · 잉글랜드 · 2012~2025', { spd: 3, tch: 2, drb: 1, kick: 3, stb: 2, eng: 3, vis: 1, calm: 2, lead: 1, agg: 3, mnt: 3 }, '뒷공간 스프린터', '늦게 피어 뒷공간 질주로 우승까지 한 9번. 오프사이드 라인 타기.', ['오프사이드 라인에서 타이밍', '뒷공간 질주', '앞에서 압박']);
 PSA('immobile', 'ST', 'modern', '치로 임모빌레', 'Ciro Immobile', '라치오 · 이탈리아', { spd: 2, tch: 2, drb: 1, kick: 3, stb: 2, eng: 3, vis: 1, calm: 2, lead: 1, agg: 2, mnt: 2 }, '박스 안 피니셔', '움직임과 마무리로 세리에 득점왕 4회.', ['박스 안 움직임', '원터치 슛', '뒷공간 타이밍']);
-PSA('jogs', 'ST', 'modern', '조규성', 'Cho Gue-sung', '미트윌란 · 한국', { spd: 2, tch: 2, drb: 1, kick: 2, stb: 3, eng: 3, vis: 1, calm: 2, lead: 1, agg: 2, mnt: 3 }, '헤딩 9번', '2022 월드컵 헤딩 2골 — 공중볼과 활동량의 타깃.', ['헤딩 타이밍', '등지고 버티기', '앞에서 압박']);
+// v128: 사용자 「한국 선수는 레전드급만」 — 11명 뺌(황인범·이재성·김영권·정우영·김승규·조현우·김진수·오현규·설영우·배준호·조규성·송종국·최진철) + 차두리 추가
+PSA('chadr', 'FB,WG', 'classic', '차두리', 'Cha Du-ri', '프랑크푸르트 · 셀틱 · 한국 · 2002~2015', { spd: 3, tch: 2, drb: 2, kick: 2, stb: 3, eng: 3, vis: 1, calm: 1, lead: 2, agg: 3, mnt: 3 }, '로봇 — 파워 오버래핑', '스피드와 힘으로 측면을 폭주하는 풀백. 공격수로 시작해 풀백이 됐고, 2015년 아시안컵 돌파로 마무리.', ['측면은 직선으로 폭주', '몸싸움은 먼저 부딪히기', '마지막 경기처럼 뛰기']);
 
 /* ===== 질문 — 「내가 하고 싶은 플레이」 (현재 실력 말고 원하는 스타일) · v123: 가지 치는 질문 · v124: 볼 터치(tch)와 드리블(drb) 분리 · 멘탈(mnt) 추가 · 보기 5~10개 · 보기 하나 = 성향 하나 · v126: 상황 질문은 복수 선택(최대 2 · 무기는 3) =====
    공통 10 → (답으로 정한 갈래: 공격 · 중원 · 수비 · 키퍼) 갈래 6 → (안 잡힌 성향 + 상위 후보들이 갈리는 성향) 결정 3~7 → 시대 1 = 20~24문제, 사람마다 다름
