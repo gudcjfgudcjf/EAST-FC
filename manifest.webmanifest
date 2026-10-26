@@ -1,0 +1,22 @@
+{
+  "id": "./",
+  "name": "EAST FC 풋볼 매니저",
+  "short_name": "EAST FC",
+  "description": "이스트FC 참석 투표 · 라인업 · 정산 · 트레이닝",
+  "lang": "ko",
+  "start_url": "./?src=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0a0b",
+  "theme_color": "#0a0a0b",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "한 번에 투표", "short_name": "투표", "url": "./?vote", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
+    { "name": "플레이스타일 — 닮은 선수", "short_name": "플레이스타일", "url": "./?ps", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] }
+  ]
+}
