@@ -4042,6 +4042,14 @@
   .tr-boots > span { font-size: 22px; } .tr-boots div { flex: 1; min-width: 0; } .tr-boots b { display: block; font-size: 14px; font-weight: 900; } .tr-boots small { display: block; font-size: 11px; color: #c9d7c0; font-weight: 700; margin-top: 1px; } .tr-boots i { font-style: normal; font-size: 18px; color: #d9f950; }
   .hm-tile.volt { background: linear-gradient(150deg, #2c4a12, #13301d 75%); border-color: rgba(217,249,80,.55); box-shadow: 0 8px 18px rgba(132,204,22,.22); }
   .hm-tile.volt small { color: #d9f99d; }
+  /* v137 — 투표 파랑 · 스쿼드 주황 */
+  .hm-tile.sea { background: linear-gradient(150deg, #2563eb, #1e3a8a 85%); border-color: rgba(147,197,253,.6); color: #fff; box-shadow: 0 8px 20px rgba(37,99,235,.35), 0 0 0 1px rgba(147,197,253,.2) inset; }
+  .hm-tile.sea .hm-ti { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.28); }
+  .hm-tile.sea small { color: #dbeafe; }
+  .hm-tile.sea.dot::after { box-shadow: 0 0 0 2px #1e3a8a; }
+  .hm-tile.ember { background: linear-gradient(150deg, #f97316, #b91c1c 90%); border-color: rgba(253,186,116,.6); color: #fff; box-shadow: 0 8px 20px rgba(234,88,12,.35), 0 0 0 1px rgba(253,186,116,.2) inset; }
+  .hm-tile.ember .hm-ti { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.28); }
+  .hm-tile.ember small { color: #ffedd5; }
   @media (max-width: 360px) {
     .bt-sum { grid-template-columns: repeat(2, 1fr); }
     .bt-hero { grid-template-columns: 1fr 96px; } .bt-hx b { font-size: 20px; }
@@ -4349,6 +4357,14 @@
   .tr-bdr b { font-size: 13px; font-weight: 900; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .tr-bdr span { font-size: 13px; font-weight: 800; color: #e5e7eb; } .tr-bdr span em { font-style: normal; color: #f9a8d4; margin-left: 4px; } .tr-bdr small { grid-column: 2; font-size: 11px; color: #8a949e; }
   .tr-bdr.me b { color: #a5f3fc; }
   .tr-psshare { margin-top: 10px; }
+  .dp-open { width: 100%; margin-top: 10px; } .dp-open small { display: block; font-size: 11.5px; font-weight: 600; opacity: .85; margin-top: 2px; }
+  .tr-pshero { margin-top: 10px; padding: 12px 12px 10px; border-radius: 20px; background: linear-gradient(135deg, #2a0f2e, #15102e 55%, #0f1b2e); border: 1.5px solid rgba(244,114,182,.55); box-shadow: 0 0 0 3px rgba(244,114,182,.08), 0 10px 30px rgba(244,114,182,.12); position: relative; overflow: hidden; }
+  .tr-pshero::before { content: '🌟'; position: absolute; right: -6px; top: -14px; font-size: 92px; opacity: .08; pointer-events: none; }
+  .tr-pshh { display: flex; justify-content: space-between; align-items: center; } .tr-pshh span { font-size: 15px; font-weight: 900; color: #f9a8d4; letter-spacing: -.2px; } .tr-pshh em { font-style: normal; font-size: 11px; font-weight: 800; color: #a5f3fc; padding: 3px 8px; border-radius: 999px; background: rgba(165,243,252,.12); } .tr-pshh em.off { color: #9aa4ae; background: rgba(255,255,255,.06); }
+  .tr-pshb { width: 100%; margin-top: 9px; display: flex; align-items: center; gap: 10px; padding: 13px 13px; border-radius: 15px; background: rgba(0,0,0,.38); border: 1px solid rgba(255,255,255,.1); text-align: left; color: #fff; }
+  .tr-pshb div { flex: 1; min-width: 0; } .tr-pshb b { display: block; font-size: 19px; font-weight: 900; letter-spacing: -.3px; } .tr-pshb small { display: block; font-size: 12px; color: #d1d5db; margin-top: 3px; line-height: 1.4; } .tr-pshb i { flex: none; font-style: normal; font-weight: 900; color: #f9a8d4; font-size: 15px; }
+  .tr-pshr { display: flex; gap: 6px; margin-top: 8px; } .tr-pshr button { flex: 1; min-width: 0; padding: 9px 6px; border-radius: 11px; border: 1px solid rgba(244,114,182,.35); background: rgba(244,114,182,.1); color: #fbcfe8; font-weight: 800; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tr-pshero.on .tr-pshb { border-color: rgba(244,114,182,.4); }
   .tr-psnh { display: block; font-size: 11.5px; color: #9aa4ae; font-weight: 600; margin-top: 2px; }
   .tr-psbars { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px 10px; margin: 10px 0 4px; padding: 10px 12px; border-radius: 14px; background: #121318; border: 1px solid #262833; }
   .tr-psb span { display: block; font-size: 10.5px; font-weight: 800; color: #9aa4b2; } .tr-psb i { display: block; height: 6px; border-radius: 4px; background: #23262f; margin-top: 3px; overflow: hidden; } .tr-psb b { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #f472b6, #c084fc); }
@@ -7132,7 +7148,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 133;
+const APP_VERSION = 137;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -15986,8 +16002,8 @@ const HOME_TILES = [
   { k: 'quick', ico: '⚡', name: '퀵 매치', t: '#f5b81f', gold: true },
   { k: 'train', ico: '🧠', name: '트레이닝', t: '#22d3ee', neo: true, tab: 'train' },
   { k: 'boots', ico: '👟', name: '축구화', t: '#d9f950', volt: true, tab: 'boots' },
-  { k: 'voteall', ico: '🗳️', name: '한 번에 투표', t: '#6f9fc4' },
-  { k: 'squad', ico: '📋', name: '스쿼드', t: '#22c55e', tab: 'squad' },
+  { k: 'voteall', ico: '🗳️', name: '한 번에 투표', t: '#93c5fd', sea: true },
+  { k: 'squad', ico: '📋', name: '스쿼드', t: '#fdba74', ember: true, tab: 'squad' },
   { k: 'settle', ico: '💰', name: '정산', t: '#fee500', tab: 'settle' },
   { k: 'calendar', ico: '📅', name: '일정', t: '#38bdf8', tab: 'calendar' },
   { k: 'records', ico: '🏅', name: '기록', t: '#a78bfa', tab: 'records' },
@@ -16097,7 +16113,7 @@ function renderHome() {
   };
   const dot = t => (t.k === 'train' && trDailyLeft() > 0) || (t.k === 'voteall' && T.unvoted.length) || (t.k === 'settle' && (T.owe.n || T.confirm)) || (t.k === 'calendar' && calOn);
   const tiles = HOME_TILES.filter(t => !t.tab || homeTabVisible(t.tab)).map(t =>
-    `<button type="button" class="hm-tile${t.gold ? ' gold' : ''}${t.neo ? ' neo' : ''}${t.volt ? ' volt' : ''}${dot(t) ? ' dot' : ''}" style="--t:${t.t}" onclick="homeGo('${t.k}')"><span class="hm-ti">${t.ico}</span><b>${t.name}</b><small>${escapeHtml(sub(t))}</small></button>`).join('');
+    `<button type="button" class="hm-tile${t.gold ? ' gold' : ''}${t.neo ? ' neo' : ''}${t.volt ? ' volt' : ''}${t.sea ? ' sea' : ''}${t.ember ? ' ember' : ''}${dot(t) ? ' dot' : ''}" style="--t:${t.t}" onclick="homeGo('${t.k}')"><span class="hm-ti">${t.ico}</span><b>${t.name}</b><small>${escapeHtml(sub(t))}</small></button>`).join('');
   const rest = T.ups.slice(1, 5);
   const rows = rest.map(m => {
     const k = matchStatus(m); const mine = mp ? (getMatchAttendance(m)[mp.id] || 'none') : '';
@@ -17270,9 +17286,9 @@ TQA('cb17', 'CB', 'def', 2, 'draw', '0:0. 상대가 투톱이야. 한 명이 내
   'v:d M:CB@56,70 U:CB@36,58#CB2 O:ST@36,50 RO:36,50>36,56 O:ST@60,62 O:CM@50,30 B@50,34 T:70,50:압박 없음 A:56,70>50,78 AT:72,84:사선 뒤 「내가 뒤!」',
   [['나도 나가서 내려온 ST를 둘이 압박', '투톱 아닌 원톱이면 맞아 — 지금은 다른 ST가 내 옆에서 뒷공간을 보고 있어'],
    ['라인 올려서 오프사이드 만들기', '공에 압박이 있으면 맞아 — 압박 없는 CM이 바로 찔러주면 ST가 그냥 뒤로'],
-   ['짝 CB 뒤 사선으로 빠지며 「내가 뒤!」', ''],
-   ['내 옆 ST에게 바짝 붙는다', '붙으면 ST가 몸으로 밀고 돌아서 — 뒷공간 ST는 한 걸음 뒤에서 봐야 해']], 2,
-  '단서는 「투톱 + 짝이 이미 나감 + 압박 없음」. 하나가 나가면 하나는 사선 뒤 — 투톱일수록 더.',
+   ['반 걸음 뒤로 빠져 짝이 비운 자리를 사선으로 막고, 옆 ST는 내 앞에 둔다 — 「내가 뒤!」', ''],
+   ['내 옆 ST에게 바짝 붙는다', '공에 압박이 없을 땐 붙으면 안 돼 — ST가 몸으로 밀고 돌아서거나 등 뒤로 뛰면 한 번에 뚫려. 한 걸음 뒤에서 봐야 해']], 2,
+  '단서는 「투톱 + 짝이 이미 나감 + 공에 압박 없음」. 공에 압박이 없으면 언제든 찔러 넣는 패스가 와 — 그래서 라인을 올릴 수도, 나갈 수도, 붙을 수도 없어. 남은 CB의 일은 「깊이」: 짝이 비운 자리를 사선으로 덮고 옆 ST보다 한 걸음 뒤에 서는 것. 뒤로 가는 게 소극적인 게 아니라 1대2를 안 만드는 유일한 답이야. 볼란치가 CM을 압박하기 시작하면 그때 라인을 다시 올려.',
   '투톱은 경기 전에 「누가 누구」 정하기.');
 TQA('cb18', 'CB', 'sp', 2, 'lead', '4Q 1:0 남은 3분, 우리 코너킥. 감독이 CB도 올라가라고 했는데, 상대가 발 빠른 ST 둘을 하프라인에 남겼어. 짝 CB({CB2})가 「올라가?」 하고 물어봐. 나는?',
   'v:f M:CB@40,62 U:CB@60,62#CB2 U:CDM@50,30#CDM O:ST@40,46 O:ST@62,48 B@98,2 T:50,74:우리 골대 A:40,62>40,66 AT:12,72:둘 다 남기 · 사선 10m 뒤',
@@ -19192,12 +19208,11 @@ function trViewHome() {
       <button type="button" class="tr-maxc" onclick="trStartFx('max')"><i>🚀</i><b>극대화</b><small>내 장점을<br>더 날카롭게</small><em>${mxA.length ? `플랜 ${mxA.length}개 진행 중` : '시작하기 ›'}</em></button>
     </div>`;
   const boots = `<button type="button" class="tr-boots" onclick="switchTab('boots')"><span>👟</span><div><b>내 발에 맞는 축구화</b><small>사이즈 · 발볼 · 발등 + 내 포지션 · 극대화로 순서</small></div><i>›</i></button>`;
-  return `${pos}${match}${checks}
+  return `${pos}${trPsHero()}${trPsBoard(6)}${match}${checks}
     ${trHighlight({ kb, unseen, fxA, mxA })}
     ${daily}
-    ${trPsBoard(6)}
     <div class="tr-pil">더 보기 <small>한 번에 하나씩 — 필요한 것만 펼쳐요</small></div>
-    ${sec('ps', '🌟 플레이스타일 · 🧭 포지션 찾기', '닮은 선수 · 12문제로 자리 찾기', trPsCard() + trPfCard())}
+    ${sec('ps', '🧭 포지션 찾기', '12문제로 지금 능력에 맞는 자리', trPfCard())}
     ${sec('brain', '🧠 뇌지컬 더 · 📐 포메이션', `더 풀기 ${unseen} · 오답 ${wrong + dpWrongSets().length} · 기본기 · 심화`, brain)}
     ${sec('fx', '🩹 보완 · 🚀 극대화', fxA.length + mxA.length ? `진행 중 ${fxA.length + mxA.length}개` : '고르면 나만의 코칭', fxmx)}
     ${sec('boots', '👟 축구화', '내 발 · 내 포지션 기준', boots)}
@@ -19211,11 +19226,9 @@ function trHighlight(c) {
   const cand = [];
   const psDone = r.ps && r.ps.top && r.ps.top.length;
   const board = (typeof psBoardList === 'function') ? psBoardList() : [];
-  if (!psDone) cand.push({ k: 'ps', ico: '🌟', t: '닮은 선수 찾기', s: `능력 11개 찍고 상황 답하면 ${typeof PS !== 'undefined' ? PS.length : 299}명 중 내 롤모델 · 5분 · 자리는 안 가려요`, b: '시작 ›', fn: 'psStart()' });
-  if (board.length) cand.push({ k: 'board', ico: '👥', t: `팀 롤모델 보드 ${board.length}명`, s: `${board.slice(0, 3).map(x => `${x.n} → ${x.t1}`).join(' · ')}${board.length > 3 ? ' …' : ''}`, b: psDone ? '내 결과 ›' : '나도 ›', fn: psDone ? 'psOpen()' : 'psStart()' });
+  // 플레이스타일·보드는 홈 맨 위에 늘 크게 있으니 하이라이트 후보에선 뺌 (v134)
   if (m) { const f = (ctx.qs.find(x => x.sq && TFM[x.sq.formation]) || {}).sq; if (f) cand.push({ k: 'fm', ico: '📐', t: `이번 경기 ${f.formation} 이해도`, s: `${TRX(settleDateLabelOf(m.date))} vs ${TRX(m.opponent || '상대팀')} — 내 자리 역할 문제 5개`, b: '풀기 ›', fn: `trFmSet('f','${f.formation}');trFmSet('tab','quiz');trFmSet('n',5);trFmStart()` }); }
   if (!(r.pf && r.pf.h && Object.keys(r.pf.h).length)) cand.push({ k: 'pf', ico: '🧭', t: '내 자리 찾기 12문제', s: '지금 가진 능력으로 어울리는 자리 — 3분', b: '시작 ›', fn: 'pfStart()' });
-  if (psDone) cand.push({ k: 'psre', ico: '🌟', t: '내 플레이스타일', s: `${TRX((psById(r.ps.top[0]) || {}).name || '')} ${r.pub ? '· 팀에 공개 중' : '· 아직 비공개 — 팀에 자랑해봐요'}`, b: '보기 ›', fn: 'psOpen()' });
   cand.push({ k: 'deep', ico: '🔴', t: '심화 — 헷갈리는 상황 4지선다', s: '보기 4개 · 함정 포함 · 틀리면 왜 틀렸는지', b: '도전 ›', fn: "trGo('deep')" });
   cand.push({ k: 'fx', ico: '🩹', t: '보완 처방', s: c.fxA.length ? `처방 ${c.fxA.length}개 진행 중 — 경기 뒤 체크` : '아쉬운 점 하나 고르면 맞춤 처방', b: '열기 ›', fn: "trStartFx('fix')" });
   cand.push({ k: 'boots', ico: '👟', t: '내 발에 맞는 축구화', s: '카드 한 장으로 실측 · 내 포지션 기준 추천', b: '보기 ›', fn: "switchTab('boots')" });
@@ -21152,15 +21165,15 @@ TDA('gk_d5', 'GK', 'PK → 리바운드 → 분배', { us: 0, them: 1, q: 3, lef
         ['골라인으로 복귀해 세트', '비어 있는 공을 상대가 먼저 차 — 세트할 시간이 없어'],
         ['누운 채로 발을 뻗어 멀리 찬다', '누워서 뻗은 발은 힘이 없어 앞에 떨어져 — 또 상대 발 앞']], a: 0,
     why: '단서는 「나 3m, 상대 5m」. PK는 막은 다음이 진짜 — 제일 가까운 사람이 나면 내가 덮친다.' },
-  { k: '분배', cat: 'tr', q: '잡았어. 0:1 3쿼터. 상대 전부 우리 박스 근처에 몰려 있고, 우리 ST({ST})가 하프라인에서 상대 CB 한 명만 보고 서 있어. 반대쪽 풀백({RB})도 비어 있어. 어디로?',
+  { k: '분배', cat: 'tr', q: '잡았어. 0:1 3쿼터. 상대 전부 우리 박스 근처에 몰려 있고, 우리 ST({ST})가 하프라인에서 상대 CB 한 명을 등 뒤에 두고 이미 뒷공간으로 뛰기 시작했어 — 먼저 닿는 건 ST야. 반대쪽 풀백({RB})은 비었지만 상대 윙이 돌아오는 중이야. 어디로?',
     sc: 'v:d M:GK@50,86 O:@40,70 O:@58,66 O:@30,76 O:@64,78 O:CB@52,16 U:ST@48,22#ST U:RB@90,60#RB A:50,84>46,24 AT:66,30:빠르게 ST 쪽 · 1대1',
-    o: [['반대쪽 빈 풀백에게 굴린다', '상대가 다 우리 진영이면 보통 정답 — 지금 ST가 상대 CB와 1대1이야. 0:1에선 한 번에 가는 게 더 커'],
+    o: [['반대쪽 빈 풀백에게 굴린다', '상대가 다 우리 진영이면 보통 정답 — 지금은 ST가 CB를 이미 등 뒤에 두고 뛰어서 한 번에 1대1이고, 풀백 쪽은 상대 윙이 돌아와 숫자가 금방 맞춰져'],
         ['ST가 있는 쪽으로 빠르게 길게', ''],
         ['천천히 수비 정리하고 시작한다', '4Q 1:0 앞설 때 정답 — 0:1이고 상대가 다 올라온 지금은 역습 기회'],
         ['가까운 CB에게 짧게', 'CB 옆에 상대 둘 — 압박 속에서 시작하는 셈']], a: 1,
-    why: '단서는 「ST vs 상대 CB 한 명」. 0:1에 상대가 다 올라왔으면 숫자가 맞는 곳으로 한 번에.',
+    why: '단서는 「ST가 CB를 등 뒤에 두고 이미 출발 + 풀백 쪽은 상대 윙이 돌아옴」. 0:1에 상대가 다 올라왔으면 먼저 닿는 사람에게 한 번에. ST가 서 있기만 했다면 50:50 공중볼이라 풀백이 답이야.',
     trap: '🪤 함정: 「키퍼 분배는 반대쪽 빈 풀백에게」가 교과서. ST가 1대1이고 지고 있으면 한 번에 가는 공이 더 커.' },
-], { rule: 'PK는 발이 닿는 순간 · 막은 다음이 진짜 · 분배는 숫자가 맞는 곳으로', alt: '3번 컷에서 ST 뒤에 상대 CB 둘이 있었다면 → 반대쪽 빈 풀백에게 굴리는 게 정답' });
+], { rule: 'PK는 발이 닿는 순간 · 막은 다음이 진짜 · 분배는 숫자가 맞는 곳으로', alt: '3번 컷에서 ST가 서 있기만 했거나 뒤에 상대 CB 둘이 있었다면 → 반대쪽 빈 풀백에게 굴리는 게 정답' });
 
 TDA('gk_d6', 'GK', '시간 관리 → 벽 세우기 → 마지막 30초', { us: 1, them: 0, q: 4, left: '남은 2분', gs: 'lead' }, [
   { k: '시간', cat: 'tr', q: '공을 잡았어. 4Q 1:0 남은 2분. 상대 전부 우리 진영에 올라와 있고 우리 ST({ST})는 하프라인에 혼자야. 가까운 CB({CB}) 옆엔 상대 ST가 붙어 있어.',
@@ -21178,7 +21191,7 @@ TDA('gk_d6', 'GK', '시간 관리 → 벽 세우기 → 마지막 30초', { us: 
         ['벽 없이 라인을 올려 오프사이드를 노린다', '직접 프리킥은 오프사이드가 없어 — 그냥 쏘면 끝'],
         ['벽을 골대 가운데에 세우고 양쪽을 반반 본다', '벽은 니어를 막고 키퍼는 먼 쪽 — 반반이면 둘 다 못 봐']], a: 1,
     why: '단서는 「아크 바로 밖」. 가까운 프리킥은 벽이 니어를 다 막고, 내 눈은 먼 쪽. 심판 없어도 9걸음은 우리가 세.' },
-  { k: '마지막 콜', cat: 'tr', q: '프리킥을 막아냈고 공이 측면으로 흘러 우리 풀백({LB})이 잡았어. 남은 30초. 풀백이 나를 봐. 뭐라고 외칠까?',
+  { k: '마지막 콜', cat: 'tr', q: '프리킥을 막아냈고 공이 측면으로 흘러 우리 풀백({LB})이 잡았어. 남은 30초, 상대 하나가 5m 에서 달려와. 풀백이 나를 봐. 뭐라고 외칠까?',
     sc: 'v:d M:GK@50,92 U:LB@14,70#LB B@16,72 O:@24,60 O:@44,70 RO:24,60>18,68 A:16,72>8,20 AT:22,34:「멀리! 코너로!」',
     o: [['「나한테!」 — 백패스 받아 시간 끌기', '발로 받는 백패스는 손 못 써 — 상대가 바로 달려들어서 남은 30초에 제일 위험한 선택'],
         ['「멀리! 코너로!」 — 상대 코너 쪽으로 길게', ''],
@@ -21283,7 +21296,7 @@ TDA('cb_d4', 'CB', '투톱 상대 → 먼 포스트 → 트랩 없는 날', { us
         ['ST만 보고 등을 진다', '공을 안 보면 헤딩 타이밍을 못 잡아 — 반 몸 열어서 둘 다'],
         ['뛰어나가 크로스를 블록한다', '풀백이 이미 나가 있어 — 둘이 나가면 박스 안 2대1']], a: 0,
     why: '단서는 「풀백이 이미 나가」. 크로스 막는 사람이 있으면 CB는 사람 — 등 뒤 ST에게 몸 붙이고 반 몸 열어서 공도 봐.' },
-  { k: '트랩 없는 날', cat: 'def', q: '크로스를 걷어냈는데 상대 CM이 세컨볼을 잡고 고개를 들었어. 상대 ST 둘이 동시에 뒷공간으로 뛰고, 짝 CB({CB2})가 「올라가!」 외쳐. 오늘은 심판 없는 날이야.',
+  { k: '트랩 없는 날', cat: 'def', q: '크로스를 걷어냈는데 상대 CM이 세컨볼을 잡고 고개를 들었어. 상대 ST 둘이 동시에 뒷공간으로 뛰고, 짝 CB({CB2})가 「올라가?」 하며 나를 봐. 오늘은 심판 없는 날이야.',
     sc: 'v:d M:CB@44,64 U:CB@62,64#CB2 O:CM@50,40 B@50,44 O:ST@40,58 RO:40,58>36,76 O:ST@66,58 RO:66,58>70,76 T:72,56:「올라가!」 A:44,64>42,76 AT:12,86:「내려!」 둘이 같이',
     o: [['같이 올라가 오프사이드 트랩', '부심 있으면 정답 — 심판 없는 날 오프사이드는 아무도 안 불어. 올라가면 그냥 2대2 뒷공간'],
         ['「내려!」 하고 둘이 같이 내려 뒷공간을 지운다', ''],
@@ -21345,7 +21358,7 @@ TDA('cb_d6', 'CB', '세트피스 마크 → 타이밍 → 걷어낸 뒤', { us: 
 
 /* ===== FB ===== */
 TDA('fb_d1', 'FB', '윙 1대1 → 터치 길어진 순간 → 먼 쪽 수비', { us: 1, them: 1, q: 3, left: '3쿼터', gs: 'draw' }, [
-  { k: '1대1', cat: 'def', q: '상대 윙이 나에게 드리블해 와. 나는 왼쪽 풀백(터치라인이 내 왼쪽). 윙은 오른발잡이라 안으로 접기 좋아하고, 짝 CB({CB})는 내 안쪽 8m에 있어. 어떻게 설까?',
+  { k: '1대1', cat: 'def', q: '상대 윙이 나에게 드리블해 와. 나는 왼쪽 풀백(터치라인이 내 왼쪽). 윙은 왼발잡이(반대발)라 안으로 접어 왼발로 때리기 좋아하고, 짝 CB({CB})는 내 안쪽 8m에 있어. 어떻게 설까?',
     sc: 'v:d M:LB@16,60 O:W@22,40 B@24,44 D:26,24>23,40 U:CB@40,70#CB T:8,30:터치라인 A:16,58>20,52 AT:42,52:안쪽 막고 바깥으로',
     o: [['정면으로 마주 선다', '양쪽 길이 다 열려'],
         ['안쪽 발(오른발) 앞, 안쪽을 막고 바깥으로 몰기', ''],
@@ -21367,7 +21380,7 @@ TDA('fb_d1', 'FB', '윙 1대1 → 터치 길어진 순간 → 먼 쪽 수비', {
         ['공 쪽으로 따라간다', '내 쪽이 통째로 비어'],
         ['윙과 ST 중간에 선다', '둘 다 못 봐 — 좁혀서 ST를 막고, 윙은 크로스 반대로 올 때 나가면 돼']], a: 1,
     why: '단서는 「ST가 먼 포스트로」. 반대쪽 공이면 먼 쪽 풀백은 세 번째 센터백 — 터치라인 윙은 한 템포 늦어도 돼.' },
-], { rule: '측면 1대1은 안쪽 먼저 · 터치 길어지면 서서 뺏기 · 반대쪽 공이면 안으로 좁히기', alt: '1번 컷에서 윙이 왼발잡이(바깥으로 치는 윙)였다면 → 안쪽은 막되 조금 더 바깥을 의식하고 서기' });
+], { rule: '측면 1대1은 안쪽 먼저 · 터치 길어지면 서서 뺏기 · 반대쪽 공이면 안으로 좁히기', alt: '1번 컷에서 윙이 오른발잡이(바깥으로 치고 크로스하는 윙)였다면 → 안쪽은 막되 조금 더 바깥을 의식하고 서기' });
 
 TDA('fb_d2', 'FB', '오버래핑 → 크로스 선택 → 복귀', { us: 0, them: 1, q: 2, left: '2쿼터 후반', gs: 'trail' }, [
   { k: '출발', cat: 'bu', q: '우리 2선({W})이 측면에서 공을 잡고 안으로 접으려 해. 같은 쪽 볼란치({CDM})가 뒤에 남아 있어. 0:1 2쿼터. 나는 언제 출발?',
@@ -21677,13 +21690,13 @@ TDA('cam_d2', 'CAM', '전방 압박 → 뺏은 직후 → 코너킥 자리', { u
         ['비어 있는 상대 볼란치 앞에 서서 패스길을 막으며 CB 쪽으로 압박', ''],
         ['내려와서 볼란치 둘과 두 줄로 선다', '0:1 남은 5분 — 뒤에서 기다리면 공이 안 와, 앞에서 뺏어야 골이 나']], a: 2,
     why: '단서는 「ST는 CB로, 우리 볼란치는 상대 볼란치 하나로」. 남은 상대 볼란치 하나가 내 담당이고, 그 길을 막아야 ST의 압박이 통해.' },
-  { k: '뺏은 직후', cat: 'bu', q: '상대 CB가 급하게 찬 공을 뺏었어! 박스 앞 22m, 앞에 수비 하나뿐이고 슈팅 각이 보여. 그런데 ST({ST})가 그 수비 뒤로 돌아 들어가 키퍼와 1대1이 되기 직전이고 손을 들어. 남은 4분.',
-    sc: 'v:a M:CAM@46,46 B@46,42 O:CB@52,30 U:ST@58,22#ST R:58,22>54,12 O:GK@50,4 A:46,42>54,14 AT:78,38:ST에게 한 번에',
+  { k: '뺏은 직후', cat: 'bu', q: '상대 CB가 급하게 찬 공을 뺏었어! 박스 앞 22m, 앞에 수비 하나뿐이고 슈팅 각이 보여. 그런데 ST({ST})가 그 수비와 같은 높이에서 등 뒤로 돌아 들어가려는 순간이야 — 지금 주면 온사이드, 키퍼와 1대1. 손을 들어. 남은 4분.',
+    sc: 'v:a M:CAM@46,46 B@46,42 O:CB@52,30 U:ST@58,30#ST R:58,30>54,12 O:GK@50,4 A:46,42>54,14 AT:78,38:ST에게 한 번에 · 지금!',
     o: [['바로 낮게 중거리 슛', '뺏은 직후 각 보이면 때리기가 교과서 — 22m 중거리는 키퍼가 세트돼 있으면 열에 하나, ST의 1대1이 훨씬 확률 높아'],
         ['수비 뒤로 들어가는 ST에게 한 번에 스루패스', ''],
-        ['수비 하나를 제치고 더 가까이 간다', '뺏긴 상대가 바로 돌아와 — 제치는 2초에 ST는 오프사이드 되거나 기회가 사라져'],
+        ['수비 하나를 제치고 더 가까이 간다', '뺏긴 상대가 바로 돌아와 — 제치는 2초면 ST는 이미 수비 뒤로 들어가 오프사이드, 기회가 사라져'],
         ['측면 2선({W})에게 벌려준다', 'ST가 지금 뛰고 있어 — 측면으로 돌리면 수비가 정리되고 다시 크로스 싸움']], a: 1,
-    why: '단서는 「ST가 수비 뒤로 돌아 1대1 직전」. 내 슈팅 각보다 동료의 1대1이 확률이 높으면 패스가 곧 슛이야.', trap: '🪤 함정: 「뺏은 직후 5초, 각 보이면 때려」는 더 좋은 옵션이 없을 때. 동료가 1대1 직전이면 그게 더 큰 기회.' },
+    why: '단서는 「ST가 수비와 같은 높이 — 지금 주면 온사이드」. 내 슈팅 각보다 동료의 1대1이 확률이 높으면 패스가 곧 슛이야. 한 박자 늦으면 오프사이드니까 타이밍이 전부.', trap: '🪤 함정: 「뺏은 직후 5초, 각 보이면 때려」는 더 좋은 옵션이 없을 때. 동료가 1대1 직전이면 그게 더 큰 기회.' },
   { k: '코너 자리', cat: 'sp', q: 'ST의 슛이 키퍼 손에 맞고 나가 코너킥. 0:1 남은 3분. 우리 CB({CB})가 「내가 남을게」 하고 하프라인에 남고, 키 큰 짝 CB({CB2})는 박스로 들어왔어. 볼란치({CDM})는 박스 앞 아크에 서서 세컨볼 자리를 잡았어. 평소 세컨볼 담당인 나는?',
     sc: 'v:a M:CAM@50,42 U:CDM@50,34#CDM U:CB@58,16#CB2 U:ST@42,12#ST U:W@6,4#W B@4,4 O:CB@46,10 O:CB@62,12 O:GK@50,4 A:50,42>70,12 AT:78,24:박스 안 먼 포스트',
     o: [['박스 앞 아크에서 세컨볼', '평소 내 자리 맞아 — 지금은 {CDM}이 먼저 거기 섰고, 남은 3분 지는 상황엔 박스 안에 사람이 하나 더 필요해'],
@@ -21694,7 +21707,7 @@ TDA('cam_d2', 'CAM', '전방 압박 → 뺏은 직후 → 코너킥 자리', { u
 ], { rule: '압박은 역할을 나눠서 · 동료 1대1 직전이면 패스가 슛 · 코너 땐 비어 있는 자리로', alt: '2번 컷에서 ST가 수비 앞에 서 있었다면 → 바로 중거리 슛이 정답' });
 
 TDA('cam_d3', 'CAM', '뺏긴 직후 → 뚫리면 복귀 → 다시 뺏으면', { us: 1, them: 0, q: 3, left: '3쿼터 중반', gs: 'lead' }, [
-  { k: '5초', cat: 'tr', q: '내 패스가 끊겼어. 공 잡은 상대는 내 앞 3m, 아직 등지고 있고 첫 터치가 길었어. 우리 볼란치 둘은 공격 때 둘 다 올라와 있어서 그 뒤는 CB뿐이야. 압박은 어느 쪽으로?',
+  { k: '5초', cat: 'tr', q: '내 패스가 끊겼어. 공 잡은 상대는 내 앞 3m, 아직 등지고 있고 공은 발에 붙었어. 우리 볼란치 둘은 공격 때 둘 다 올라와 있어서 그 뒤는 CB뿐이야. 압박은 어느 쪽으로?',
     sc: 'v:m M:CAM@50,32 O:@50,44 B@52,48 U:CDM@36,36#CDM U:CDM@64,34#CDM2 U:CB@40,72#CB U:CB@60,72#CB2 Z:36,50,28,18 A:50,32>46,44 AT:22,54:안쪽 막고 밖으로',
     o: [['터치라인 쪽을 막고 안쪽으로 몬다', '숫자 많은 가운데로 몰기가 평소 정답 — 지금은 볼란치 둘이 올라와 가운데가 비어서 안으로 몰면 CB 앞으로 바로 가'],
         ['가운데 길을 막고 바깥 터치라인 쪽으로 몬다', ''],
@@ -21725,13 +21738,13 @@ TDA('cam_d4', 'CAM', '10명일 때 내려올까 → 첫 터치 → 슛이냐 패
         ['ST 옆으로 올라가 롱볼 세컨볼 준비', '압박받는 CB에게 롱볼 옵션 주기는 평소 맞아 — 0:0 2쿼터인데 10명이라 세컨볼 숫자가 모자라 소유만 버려'],
         ['측면으로 벌려 풀백과 삼각형', '풀백이 이미 높게 올라가 있어서 CB에서 거기까지는 패스가 길어 끊겨']], a: 1,
     why: '단서는 「10명 + 볼란치 하나가 마크당함」. 10번이 둘째 볼란치로 내려와야 CB에게 짧은 길이 생겨.' },
-  { k: '첫 터치', cat: 'bu', q: '내려와서 받았어. 받기 전에 보니 상대 10번은 아직 3m 뒤에서 나한테 옮겨 오는 중이고 내 앞 10m는 비어 있어. 우리 ST({ST})는 선 사이로 내려오는 중이야. 첫 터치는?',
+  { k: '첫 터치', cat: 'bu', q: '내려와서 받았어. 받기 전에 보니 상대 10번은 아직 6~7m 뒤에서 나한테 옮겨 오는 중이고 내 앞 10m는 비어 있어. 우리 ST({ST})는 선 사이로 내려오는 중이야. 첫 터치는?',
     sc: 'v:m M:CAM@40,56 B@40,58 O:CAM@50,62 RO:50,62>43,58 Z:34,30,16,22 U:ST@50,30#ST R:50,20>50,30 U:CDM@52,64#CDM A:40,56>40,36 AT:66,40:돌아서 앞 공간으로',
     o: [['첫 터치로 돌아서서 빈 앞 공간으로 몰고 간다', ''],
-        ['원터치로 CB에게 다시 돌려준다', '압박이 아직 3m 뒤인데 뒤로 돌리면 상대가 줄을 다시 세워 — 공짜 10m를 버려'],
+        ['원터치로 CB에게 다시 돌려준다', '압박이 아직 6m 넘게 뒤인데 뒤로 돌리면 상대가 줄을 다시 세워 — 공짜 10m를 버려'],
         ['ST 뒤 공간으로 길게 찔러준다', 'ST가 내려오는 중이라 뒤로 차면 아무도 없어'],
         ['측면 2선({W})에게 길게 벌려준다', '공이 뜨면 50:50 — 10명이라 뺏기면 바로 숫자 싸움에서 밀려']], a: 0,
-    why: '단서는 「상대 10번이 아직 3m 뒤 + 앞 10m가 비었다」. 등 뒤 압박이 늦으면 첫 터치가 곧 전진이야.' },
+    why: '단서는 「상대 10번이 아직 6~7m 뒤 + 앞 10m가 비었다」. 등 뒤 압박이 6m 넘게 늦으면 첫 터치가 곧 전진이야 — 3m면 받자마자 갇히니 원터치.' },
   { k: '슛이냐 패스냐', cat: 'bu', q: '몰고 가서 박스 앞 20m. 상대 CB 하나가 나한테 나오고, ST({ST})가 그 CB 뒤로 돌아 들어가는데 상대 짝 CB가 ST를 따라가. 왼쪽 2선({W})이 박스 모서리에서 혼자 비어 손을 들어. 10명이라 뒤엔 볼란치 하나뿐.',
     sc: 'v:a M:CAM@48,46 B@48,42 O:CB@46,32 RO:46,32>47,40 U:ST@56,22#ST O:CB@60,20 U:W@22,26#W O:GK@50,4 A:48,42>24,28 AT:24,44:비어 있는 {W}',
     o: [['나온 CB 옆으로 중거리 슛', 'CB가 2m 앞에 있어 막히면 그대로 역습 — 10명이라 뒤는 볼란치 하나'],
@@ -21934,9 +21947,9 @@ TDA('wg_d6', 'WG', '상대 코너 때 남기 → 역습 → 슛 다음', { us: 1
 ], { rule: '남을 땐 받을 거리에 · 역습은 뛰는 사람 앞으로 · 수비 없으면 리바운드 쇄도', alt: '2번 컷이 1:0 앞서는 중이면 → 코너 쪽으로 가서 공 지키며 시간 쓰는 게 정답' });
 /* ===== ST (v118 심화) ===== */
 TDA('st_d1', 'ST', '출발할까 내려올까 → 1대1 → 리바운드', { us: 0, them: 0, q: 2, left: '2쿼터 중반', gs: 'draw' }, [
-  { k: '출발', cat: 'bu', q: '10번({CAM})이 공을 잡고 고개를 들었어. 나는 마지막 수비와 일직선. 오늘은 심판 없는 날이라 오프사이드는 서로 양심껏이야. 상대 CB 둘은 나만 보고 있고, 반대쪽 2선({W2})이 CB 뒤로 비스듬히 들어오기 시작했어.',
+  { k: '출발', cat: 'bu', q: '10번({CAM})이 공을 잡고 고개를 들었어. 나는 마지막 수비와 일직선. 오늘은 심판 없는 날이라 오프사이드는 서로 양심껏이야. 상대 CB 둘은 나만 보고 있고 상대 키퍼는 박스 밖까지 높게 나와 있어. 반대쪽 2선({W2})이 CB 뒤로 비스듬히 들어오기 시작했어.',
     sc: 'v:a M:ST@50,30 O:CB@42,30 O:CB@60,30 U:CAM@50,56#CAM B@50,52 U:W@84,36#W2 R:84,36>68,14 Z:60,8,26,16 A:50,30>46,42 AT:24,42:내려와 CB 끌어내기',
-    o: [['지금 대각선으로 뒷공간 출발', '고개 드는 순간 출발이 교과서 — CB 둘이 나만 보고 있어 둘 다 따라오고, 심판 없는 날 애매한 오프사이드는 골이 아니라 싸움'],
+    o: [['지금 대각선으로 뒷공간 출발', '고개 드는 순간 출발이 교과서 — 지금은 키퍼가 높게 나와 있어 뒷공간 긴 공은 키퍼 것이고, CB 둘이 나만 보고 있어 둘 다 따라와. 심판 없는 날 애매한 오프사이드는 골이 아니라 싸움'],
         ['CB 앞으로 내려와 발밑으로 받으며 CB 하나를 끌어낸다', ''],
         ['미리 라인보다 앞에 나가 있다가 받는다', '누가 봐도 오프사이드 — 심판 없는 날엔 골로 인정 안 돼'],
         ['그 자리에 서서 발밑으로 달라고 한다', 'CB 둘 앞에서 서 있으면 받아도 돌 수 없어']], a: 1,
@@ -21958,9 +21971,9 @@ TDA('st_d1', 'ST', '출발할까 내려올까 → 1대1 → 리바운드', { us:
 ], { rule: '수비가 나만 보면 미끼가 된다 · 빈 골대는 원터치 · 각 없는 리바운드는 가로지르기', alt: '1번 컷에서 심판이 있고 CB 하나가 {W2}를 보고 있었다면 → 지금 대각선 뒷공간 출발이 정답' });
 
 TDA('st_d2', 'ST', '급한 롱볼 받기 → 열린 쪽 → 니어 수비 앞', { us: 0, them: 1, q: 3, left: '3쿼터 중반', gs: 'trail' }, [
-  { k: '자리', cat: 'bu', q: '우리 CB({CB})가 압박받으면서 급하게 롱볼을 차려 해. 상대 CB가 내 등 뒤에 바짝. 상대 키퍼는 라인에 있고 뒷공간은 비어 있어.',
+  { k: '자리', cat: 'bu', q: '우리 CB({CB})가 압박받으면서 급하게 롱볼을 차려 해 — 제대로 멀리 갈 킥이 아니야. 상대 CB가 내 등 뒤에 바짝 붙었고 나보다 빨라.',
     sc: 'v:m M:ST@50,32 O:CB@50,24 U:CB@42,84#CB B@42,80 O:ST@40,78 U:W@18,40#W U:CAM@50,50#CAM A:50,32>50,28 AT:80,42:몸으로 먼저 자리',
-    o: [['뒷공간으로 출발한다', '뒤가 비어 있으면 출발이 교과서 — 압박받으며 급하게 차는 공은 뒤로 안 넘어오고 짧게 떨어져'],
+    o: [['뒷공간으로 출발한다', '멀리 가는 킥이면 출발이 교과서 — 압박받으며 급하게 차는 공은 짧게 떨어지고, 나보다 빠른 CB가 뒤에 있으면 달리기 싸움은 지는 싸움'],
         ['몸으로 수비를 먼저 막고 공 떨어질 자리를 잡는다', ''],
         ['공 떨어지는 곳을 보고 뛰어간다', '보고 뛰면 등 뒤 수비가 먼저 자리 잡아'],
         ['내려와서 발밑으로 받는다', '급한 롱볼은 머리 위로 넘어가 — 내려오면 공이 나를 지나쳐']], a: 1,
@@ -21997,12 +22010,12 @@ TDA('st_d3', 'ST', '압박 방향 → 백패스 → 롱킥 뒤', { us: 0, them: 
         ['백패스한 오른쪽 CB를 마크한다', '거긴 {LAM}이 있어 — 공은 키퍼']], a: 2,
     why: '단서는 「왼쪽 CB가 비었다」. 키퍼 압박은 비어 있는 쪽을 막아야 길게 찰 수밖에 없게 만들어.' },
   { k: '롱킥 뒤', cat: 'def', q: '키퍼가 결국 길게 찼어. 공은 하프라인 쪽. 10번({CAM})과 볼란치({CDM})가 둘 다 그 자리에서 세컨볼을 기다리고, 상대 CB 둘은 라인을 올리는 중이야. 나는?',
-    sc: 'v:m M:ST@50,24 B@50,12 P:50,4>50,52 U:CAM@46,50#CAM U:CDM@54,58#CDM O:CB@40,28 O:CB@60,28 RO:40,28>40,40 RO:60,28>60,40 A:50,24>50,34 AT:78,32:CB 뒤에 남아 받을 자리',
+    sc: 'v:m M:ST@50,24 B@50,12 P:50,4>50,52 U:CAM@46,50#CAM U:CDM@54,58#CDM O:CB@40,28 O:CB@60,28 RO:40,28>40,40 RO:60,28>60,40 A:50,24>50,40 AT:78,36:CB 라인에 어깨 맞추고 · 다음 패스',
     o: [['하프라인 쪽으로 내려와 세컨볼 자리', '롱킥 나오면 세컨볼이 교과서 — 10번과 볼란치가 이미 둘이야, 내가 가면 셋이 겹쳐'],
-        ['상대 CB 둘 뒤에 남아서 세컨볼을 이기면 바로 받을 자리를 잡는다', ''],
+        ['올라오는 CB 라인에 어깨를 맞춰 같이 올라가되 라인 뒤로 처지지 않게 — 세컨볼 이기면 바로 뒷공간으로 뛸 자리', ''],
         ['떨어지는 곳으로 달려가 헤딩 경합', '볼란치가 이미 경합 — 1쿼터부터 체력 낭비'],
         ['다시 상대 CB 쪽으로 가서 압박 준비', '공은 하프라인 — 압박할 공이 없어']], a: 1,
-    why: '단서는 「10번·볼란치가 이미 세컨볼 자리」. 세컨볼 숫자가 됐으면 ST는 그 다음 패스를 받을 자리, 올라오는 CB 뒤에 남아.', trap: '🪤 함정: 「롱킥 나오면 내려와 세컨볼」은 거기 숫자가 모자랄 때. 둘이 있으면 나는 그 다음 자리.' },
+    why: '단서는 「10번·볼란치가 이미 세컨볼 자리 + CB 라인이 올라오는 중」. 세컨볼 숫자가 됐으면 ST는 그 다음 패스를 받을 자리 — 올라오는 CB 어깨에 맞춰 서야 패스 순간 온사이드로 뒷공간을 뛸 수 있어. 라인보다 골대 쪽에 남으면 세컨볼 이기자마자 오프사이드.', trap: '🪤 함정: 「롱킥 나오면 내려와 세컨볼」은 거기 숫자가 모자랄 때. 둘이 있으면 나는 그 다음 자리.' },
 ], { rule: '압박은 동료가 기다리는 쪽으로 몰기 · 키퍼 압박은 빈 쪽 막기 · 세컨볼 숫자가 되면 다음 자리', alt: '3번 컷에서 10번이 앞에 올라와 있고 볼란치 혼자였다면 → 내려와서 세컨볼 자리가 정답' });
 
 TDA('st_d4', 'ST', '투톱 역할 분담 → 짝에게 → 슛 순간 내 위치', { us: 1, them: 0, q: 2, left: '2쿼터 후반', gs: 'lead' }, [
@@ -24275,6 +24288,20 @@ function trPsBoard(limit) {
     ${list.length > (limit || 8) ? `<div class="tr-note">+ ${list.length - (limit || 8)}명 더 · 결과 화면에서 전체 보기</div>` : ''}
     <div class="tr-2btn">${mine ? `<button type="button" class="tr-btn lm" onclick="psOpen()">내 결과 · ${r.pub ? '공개 중' : '팀에 공개하기'} ›</button>` : `<button type="button" class="tr-btn lm" onclick="psStart()">🌟 나도 찾아보기 ›</button>`}</div></div>`;
 }
+// v134 트레이닝 홈 맨 위 큰 카드 (사용자: 「플레이스타일 다른 거랑 다르게 눈에 띄게 위로」)
+function trPsHero() {
+  const r = (trMe() || {}).ps; const board = psBoardList();
+  if (r && r.top && r.top.length && r.aff) {
+    const t1 = psById(r.top[0]); const others = r.top.slice(1).map(psById).filter(Boolean).map(p => p.name);
+    const pct = (r.res0 !== undefined) ? r.res0 : null;
+    return `<div class="tr-pshero on"><div class="tr-pshh"><span>🌟 내 플레이스타일</span>${r.pub ? '<em>👀 팀에 공개 중</em>' : '<em class="off">비공개</em>'}</div>
+      <button type="button" class="tr-pshb" onclick="psOpen()"><div><b>${TRX(t1 ? t1.name : '')}</b><small>${TRX(t1 ? t1.ty : '')}${others.length ? ' · 그다음 ' + TRX(others.join(' · ')) : ''}</small></div><i>›</i></button>
+      <div class="tr-pshr"><button type="button" onclick="psOpen();setTimeout(psShare,150)">💬 카톡에 자랑</button><button type="button" onclick="${r.pub ? 'psOpen();setTimeout(()=>psPub(false),150)' : 'psOpen();setTimeout(()=>psPub(true),150)'}">${r.pub ? '보드에서 내리기' : '👥 팀에 공개'}</button><button type="button" onclick="psStart()">🔁 다시</button></div></div>`;
+  }
+  return `<div class="tr-pshero"><div class="tr-pshh"><span>🌟 플레이스타일</span><em class="off">${board.length ? board.length + '명이 공개 중' : '5분'}</em></div>
+    <button type="button" class="tr-pshb" onclick="psStart()"><div><b>나는 어떤 선수와 닮았을까?</b><small>능력 11개 찍고 상황 답하면 ${PS.length}명 중 내 롤모델 — 자리는 안 가려요 · 모든 포지션 가능성</small></div><i>시작 ›</i></button>
+    ${board.length ? `<div class="tr-pshr"><button type="button" onclick="psStart()">${TRX(board.slice(0, 2).map(x => x.n + ' → ' + x.t1).join(' · '))}${board.length > 2 ? ' …' : ''} — 나도</button></div>` : ''}</div>`;
+}
 function trPsCard() {
   const r = (trMe() || {}).ps;
   if (r && r.top && r.top.length && r.aff) { const names = r.top.map(id => psById(id)).filter(Boolean).map(p => p.name); return `<button type="button" class="tr-psc on" onclick="psOpen()"><span>🌟</span><div><b>내 플레이스타일 — ${TRX(names[0] || '')}</b><small>${TRX(psAffLine(r.aff) || '전체')} 쪽 · 닮은 선수 ${TRX(names.join(' · '))}</small></div><i>›</i></button>`; }
@@ -24340,7 +24367,7 @@ function trViewPs() {
      수비 장면 틀리면 실점, 공격 장면 맞히면 득점 → 내 판단으로 만든 경기 결과
    · 기록: rec.dp[세트id] = { s 마지막 점수, b 최고, n 횟수, ok '101', d 날번호, t }, rec.sim[경기키] = { t, d, us, them, n, ok }
      각 컷·장면은 정답률 통계(n·c·cat·lv3·gs·grp·wk)에도 들어감 */
-const DP_LIM = 12;
+const DP_LIM = 20;   // v135: 12 → 20 · 상황·그림은 시간 없이 읽고 「보기 열기」 뒤에만 셈
 function dpTimerOn() { try { return localStorage.getItem('efm_dp_timer') !== 'off'; } catch (e) { return true; } }
 function dpSetTimer(on) { haptic(5); try { localStorage.setItem('efm_dp_timer', on ? 'on' : 'off'); } catch (e) {} renderTrain(); }
 const _dpT = { key: null, t0: 0, to: 0, iv: 0 };
@@ -24386,7 +24413,7 @@ function dpViewMenu() {
     <div class="tr-sec">🔴 연속 판단 세트 <small>한 장면이 2~3컷으로 이어져요</small></div>
     <div class="tr-fl"><span>포지션</span><div class="tr-chips sm">${chip('g', 'mine', '내 포지션 전부', o.g === 'mine')}${TR_GROUP_ORDER.map(g => chip('g', g, (mine.includes(g) ? '★ ' : '') + TR_GROUPS[g].name, o.g === g)).join('')}${chip('g', 'all', '전 포지션', o.g === 'all')}</div></div>
     <div class="tr-fl"><span>세트 수</span><div class="tr-chips">${[3, 5].map(n => chip('n', n, n + '세트', o.n === n)).join('')}${chip('n', 0, '♾️ 전부', o.n === 0)}</div></div>
-    <div class="tr-fl"><span>⏱ 시간</span><div class="tr-chips"><button type="button" class="${dpTimerOn() ? 'on' : ''}" onclick="dpSetTimer(true)">컷마다 ${DP_LIM}초</button><button type="button" class="${dpTimerOn() ? '' : 'on'}" onclick="dpSetTimer(false)">끄기 (천천히)</button></div></div>
+    <div class="tr-fl"><span>⏱ 시간</span><div class="tr-chips"><button type="button" class="${dpTimerOn() ? 'on' : ''}" onclick="dpSetTimer(true)">보기 열면 ${DP_LIM}초</button><button type="button" class="${dpTimerOn() ? '' : 'on'}" onclick="dpSetTimer(false)">끄기 (천천히)</button></div></div>
     <div class="tr-sum">세트 <b>${pool.length}개</b> (컷 ${pool.reduce((s, d) => s + d.cuts.length, 0)}개) · 해본 세트 <b>${tried.length}</b>${avg !== null ? ` · 평균 <b>${avg}점</b>` : ''}</div>
     <button type="button" class="tr-btn red big" onclick="dpStartMenu()" ${pool.length ? '' : 'disabled'}>${o.n ? Math.min(o.n, pool.length) + '세트 시작 ›' : '전부 시작 ›'}</button>
     ${recent.length ? `<div class="tr-sec">최근 기록</div>${recent.map(x => { const d = trDById(x.id); return `<button type="button" class="dp-hrow" onclick="dpStartSets(['${x.id}'],'다시 하기')"><b>${TRX(d.t)}</b><small>${TRX(trGName(d.g[0]))} · ${x.n || 1}번째${x.b ? ` · 최고 ${x.b}점` : ''}</small><span class="${(+x.s || 0) >= 80 ? 'hi' : (+x.s || 0) >= 50 ? 'mid' : 'lo'}">${x.s || 0}점</span></button>`; }).join('')}` : ''}`;
@@ -24417,6 +24444,7 @@ function dpCur() {
   const qn = D.plan.filter(x => x.qn === sc.qn).length;
   return { key: 'sim:' + D.idx, q, g: sc.g, cat: q.cat, gs: sc.gs, st: { us: D.us, them: D.them, q: sc.qn, left: `장면 ${D.plan.filter(x => x.qn === sc.qn).indexOf(sc) + 1}/${qn}`, gs: sc.gs }, sc };
 }
+function dpOpenOpts() { const cur = dpCur(); if (!cur) return; haptic(5); _tr.dpOpen = cur.key; renderTrain(); }
 function dpStartTimer(cur) {
   if (!dpTimerOn() || _dpT.key === cur.key) return;
   dpClearTimer();
@@ -24486,8 +24514,9 @@ function dpViewPlay() {
     chips = `<div class="dp-simdots">${D.plan.map((x, i) => { const l = D.log[i]; const ic = l ? (l.ev === 'goal' ? '⚽' : l.ev === 'conceded' ? '😣' : l.ok ? '✓' : '·') : i === D.idx ? '●' : ''; return `<span class="${l ? l.ev : i === D.idx ? 'now' : ''}${i > 0 && D.plan[i - 1].qn !== x.qn ? ' qs' : ''}" title="${x.qn}Q">${ic}</span>`; }).join('')}</div>`;
   }
   const stake = D.mode === 'sim' ? `<div class="dp-stake ${cur.sc.stake}">${cur.sc.stake === 'def' ? '🛡️ 수비 장면 — 틀리면 실점' : '⚔️ 공격 장면 — 맞히면 골'}</div>` : '';
-  const timer = !done && dpTimerOn() ? `<div class="dp-time"><div><i id="dpBar"></i></div><b id="dpSec">${DP_LIM}초</b></div>` : '';
-  const opts = q.o.map((o, i) => {
+  const gated = !done && dpTimerOn() && _tr.dpOpen !== cur.key;   // v135: 읽는 단계 — 보기는 닫혀 있고 타이머도 안 돎
+  const timer = !done && dpTimerOn() && !gated ? `<div class="dp-time"><div><i id="dpBar"></i></div><b id="dpSec">${DP_LIM}초</b></div>` : '';
+  const opts = gated ? `<button type="button" class="tr-btn red big dp-open" onclick="dpOpenOpts()">👀 다 읽었어요 — 보기 열기 <small>열리면 ⏱ ${DP_LIM}초 · 상황과 그림은 천천히 봐요</small></button>` : q.o.map((o, i) => {
     let cls = 'tr-o';
     if (done) cls += i === q.a ? ' ok' : i === pick.pd ? ' no' : ' dim';
     const ex = done && o[1] ? `<small>${TRX(trFill(o[1], g))}</small>` : '';
@@ -24515,7 +24544,7 @@ function dpViewPlay() {
     ${timer}
     <div class="tr-opts">${opts}</div>
     ${res}</div>`;
-  if (!done) setTimeout(() => {
+  if (!done && !gated) setTimeout(() => {
     if (_tr.view !== 'dq') return;
     const c2 = dpCur(); if (!c2 || c2.key !== cur.key) return;
     dpStartTimer(c2);
