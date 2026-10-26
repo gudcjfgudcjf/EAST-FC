@@ -6033,7 +6033,9 @@
     .sqf-tools select { height: 36px; max-width: 128px; border-radius: 10px; padding: 0 6px; font-size: 13px; font-weight: 800; background: var(--bg-3); color: var(--text); border: 1px solid var(--border-2); font-family: inherit; }
     .sqf-more { width: 38px; height: 36px; border-radius: 10px; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.08); color: #fff; font-size: 18px; font-weight: 900; line-height: 1; }
     /* 트레이 */
-    #sqfTray { flex: 0 0 auto; background: #101117; border-top: 1px solid rgba(255,255,255,.08); padding: 4px 0 6px; }
+    #sqfTray { flex: 0 0 auto; background: #101117; border-top: 1px solid rgba(255,255,255,.08); padding: 4px 0 14px; }
+    body.sqf-view .botnav { box-shadow: none !important; }             /* 탭바 위 그림자가 트레이 칩 아래를 덮어 잘려 보이던 것 */
+    .squad-layout.sqf .field-container { padding-bottom: 6px; }
     .sqf-th { display: flex; align-items: center; gap: 6px; padding: 2px 10px 5px; min-height: 32px; font-size: 12px; color: var(--text-2); white-space: nowrap; overflow: hidden; }
     .sqf-th b { color: #fff; font-size: 13px; font-weight: 900; }
     .sqf-th .sqf-vsn { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
@@ -6044,7 +6046,7 @@
     .sqf-th button.danger { color: #fca5a5; border-color: rgba(248,113,113,.4); }
     .sqf-th button.sqf-x { width: 30px; padding: 0; }
     .sqf-qin { flex: 1 1 auto; min-width: 0; height: 32px; border-radius: 9px; border: 1px solid var(--border-2); background: var(--bg-3); color: var(--text); padding: 0 10px; font-size: 14px; font-family: inherit; }
-    .sqf-chips { display: flex; gap: 8px; overflow-x: auto; overflow-y: hidden; padding: 2px 10px 6px; scrollbar-width: none; touch-action: pan-x; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+    .sqf-chips { display: flex; gap: 8px; overflow-x: auto; overflow-y: hidden; padding: 4px 10px 8px; scrollbar-width: none; touch-action: pan-x; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
     .sqf-chips::-webkit-scrollbar { display: none; }
     .sqf-empty { padding: 14px 6px; font-size: 13px; color: var(--text-3); }
     .sqf-chip { flex: 0 0 auto; display: grid; grid-template-columns: 32px 1fr; grid-template-rows: auto auto; column-gap: 7px; align-items: center; min-width: 112px; max-width: 160px; padding: 7px 10px 7px 7px; border-radius: 14px; background: #1b1d24; border: 1.5px solid rgba(255,255,255,.1); color: var(--text); font-family: inherit; text-align: left; touch-action: pan-x; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; transition: transform .12s ease, opacity .12s ease; }
@@ -6166,14 +6168,8 @@
   .tab-badge:not(.off) { color: var(--gold-warm); }
   .match-new-bulb { filter: none !important; }
   #drawerEdge::before, #drawerEdge::after { animation: none !important; }
-  /* 하단바: 포인트는 퀵 매치 하나. 트레이닝은 다른 탭과 같은 결 + 숫자 배지 */
+  /* 하단바 (v144: 트레이닝 탭은 원래 네온 그대로 — 사용자 요청) */
   @media (max-width: 820px) {
-    .botnav .bn-fab.tr { color: #7c8692; text-shadow: none; }
-    .botnav .bn-fab.tr .bi { width: 46px; height: 30px; margin-top: 0; border-radius: 15px; background: transparent; color: inherit; box-shadow: none; }
-    .botnav .bn-fab.tr .bi svg { width: 23px; height: 23px; }
-    .botnav .bn-fab.tr.on { color: #dbe7f1; }
-    .botnav .bn-fab.tr.on .bi { background: rgba(111,159,196,.22); color: #9dc0d8; box-shadow: none; }
-    .botnav .bn-fab.tr .bn-badge { top: -4px; right: 0; }
     .botnav .bn-fab.qm { text-shadow: none; }
     .botnav .bn-fab.qm .bi { box-shadow: 0 0 0 4px rgba(17,18,22,.98), 0 6px 16px rgba(255,180,0,.35), inset 0 1px 0 rgba(255,255,255,.45); }
     .botnav button { font-size: 11px; letter-spacing: 0; }
@@ -6216,6 +6212,33 @@
     .assign-hint { font-size: 12px; }
     .tr-priv { font-size: 12px; color: var(--text-3); }
   }
+
+  /* 🎨 v143 아이콘 색 */
+  .di-ico.tint { width: 32px; height: 32px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; color: var(--c, #9dc0d8); background: color-mix(in srgb, var(--c, #9dc0d8) 16%, transparent); }
+  .di-ico.tint svg.qi { width: 19px; height: 19px; color: inherit; }
+  .drawer-item.active .di-ico.tint { background: color-mix(in srgb, var(--c) 28%, transparent); }
+  .drawer-item.active .di-ico.tint svg.qi { color: inherit; }
+  .hm-tile:not(.gold):not(.neo):not(.volt):not(.sea):not(.ember) .hm-ti { background: color-mix(in srgb, var(--t) 18%, transparent); border-color: color-mix(in srgb, var(--t) 40%, transparent); }
+  /* 홈 히어로 · 할 일 버튼 */
+  .hm-act button .qi-w svg { color: #9dc0d8; }
+  .hm-todo button .qi-w svg { color: #fbbf24; }
+  /* 트레이닝 홈 */
+  .tr-pshh .qi-w svg, .tr-pshr .qi-w svg { color: #f9a8d4; }
+  .tr-boardh .qi-w svg { color: #fbbf24; }
+  .tr-hlh .qi-w svg { color: #fde68a; }
+  .tr-daily .qi-w svg { color: #67e8f9; }
+  .tr-mbtn .tr-btn.blue .qi-w svg { color: #0f172a; }
+  .tr-mbtn .tr-btn.red .qi-w svg { color: #fff; }
+  .tr-sech .qi-w svg { color: #9dc0d8; }
+  .tr-sec2:nth-of-type(1) .tr-sech .qi-w svg { color: #86efac; }
+  .tr-fixc .qi-w svg { color: #fca5a5; } .tr-maxc .qi-w svg { color: #c4b5fd; }
+  .tr-boots .qi-w svg { color: #d9f950; } .tr-owner .qi-w svg { color: #fbbf24; } .tr-fmc .qi-w svg { color: #a78bfa; }
+  .tr-mini3 button .qi-w svg { color: #9dc0d8; } .tr-mini3 button.r .qi-w svg { color: #f87171; } .tr-mini3 button.a .qi-w svg { color: #fbbf24; } .tr-mini3 button.v .qi-w svg { color: #c4b5fd; }
+  .tr-bmc small .qi-w svg { color: #4ade80; }
+  /* 일정 */
+  .cal-header .add-btn .qi-w svg, .cal-actions-row > button .qi-w svg { color: #38bdf8; }
+  .cal-up-btns button .qi-w svg { color: #9dc0d8; }
+  /* 경기 창 탭 · 스쿼드 시트 제목은 글자색 그대로 */
 </style>
 </head>
 <body class="not-authed">
@@ -6323,7 +6346,7 @@
   <button type="button" data-bn="home"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5h-4v-6h-5v6h-4A1.5 1.5 0 0 1 4 19z"/></svg><i class="bn-dot" id="bnDotHome"></i></span><span class="bl">홈</span></button>
   <button type="button" data-bn="calendar"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3.2"/><path d="M8 3v4M16 3v4M3.5 10h17"/><circle cx="12" cy="15.2" r="1.5" fill="currentColor" stroke="none"/></svg><i class="bn-dot" id="bnDotCal"></i></span><span class="bl">일정</span></button>
   <button type="button" class="bn-fab qm" data-bn="quick" aria-label="퀵 매치"><span class="bi"><svg viewBox="0 0 24 24"><path d="M13.2 2.2 5 13.6h6.1l-1.3 8.2L19 10.2h-6.3l.5-8z" fill="currentColor"/></svg></span><span class="bl">퀵 매치</span></button>
-  <button type="button" class="bn-fab tr" data-bn="train" aria-label="트레이닝"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/></svg><i class="bn-badge" id="bnTrainBadge"></i></span><span class="bl">트레이닝</span></button>
+  <button type="button" class="bn-fab tr" data-bn="train" aria-label="트레이닝"><span class="bi">🧠<i class="bn-badge" id="bnTrainBadge"></i></span><span class="bl">트레이닝</span></button>
   <button type="button" data-bn="squad"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2.8"/><path d="M4 12h16"/><circle cx="12" cy="12" r="2.8"/><path d="M9 3v3.2h6V3M9 21v-3.2h6V21"/></svg></span><span class="bl">스쿼드</span></button>
   <button type="button" data-bn="more"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="4" y="4" width="6.6" height="6.6" rx="1.8"/><rect x="13.4" y="4" width="6.6" height="6.6" rx="1.8"/><rect x="4" y="13.4" width="6.6" height="6.6" rx="1.8"/><rect x="13.4" y="13.4" width="6.6" height="6.6" rx="1.8"/></svg></span><span class="bl">전체</span></button>
 </nav>
@@ -7397,7 +7420,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 142;
+const APP_VERSION = 145;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -12587,7 +12610,7 @@ if ('serviceWorker' in navigator && location.protocol !== 'file:' && (!navigator
 }
 function pwaInstallRow() {
   if (pwaStandalone()) return '';
-  return `<div class="drawer-divider"></div><button class="drawer-item" onclick="closeDrawer();setTimeout(pwaInstall,200)"><span class="di-ico">${ico('phone')}</span><span>홈 화면에 앱으로 추가</span></button>`;
+  return `<div class="drawer-divider"></div><button class="drawer-item" onclick="closeDrawer();setTimeout(pwaInstall,200)"><span class="di-ico tint" style="--c:#67e8f9">${ico('phone')}</span><span>홈 화면에 앱으로 추가</span></button>`;
 }
 function pwaInstall() {
   haptic(6);
@@ -12631,7 +12654,7 @@ function buildDrawer() {
     const badge = b.querySelector('.tab-badge:not(.off)') ? '<span class="di-badge">💡</span>' : '';
     const nf = b.dataset.newfeat ? ` data-newfeat="${b.dataset.newfeat}"` : '';
     return `<button class="drawer-item${b.classList.contains('active') ? ' active' : ''}" data-drawer-tab="${b.dataset.tab}"${nf}>
-      <span class="di-ico">${(EMO_ICO[ico] && ICO[EMO_ICO[ico]]) || ico}</span><span>${escapeHtml(label)}</span>${badge}</button>`;
+      <span class="di-ico tint" style="--c:${TAB_COLOR[b.dataset.tab] || '#9dc0d8'}">${(EMO_ICO[ico] && ICO[EMO_ICO[ico]]) || ico}</span><span>${escapeHtml(label)}</span>${badge}</button>`;
   }).join('');
 
   // 2) 도구 — 상단바에 있는 버튼을 그대로 위임 호출
@@ -12641,19 +12664,20 @@ function buildDrawer() {
     const raw = src.textContent.replace(/^\s*(\p{Extended_Pictographic}️?)\s*/u, '').trim();
     const TOOL_ICO = { btnQuickMatch: 'bolt', btnOwnerPage: 'crown', btnManagerPage: 'target', btnManagerToggle: 'lock', btnExport: 'share', btnImport: 'download' };
     const svg = src.querySelector('svg.qi') ? src.querySelector('svg.qi').outerHTML : ico(TOOL_ICO[id] || 'dot');
+    const TOOL_COL = { btnQuickMatch: '#f5b81f', btnOwnerPage: '#fbbf24', btnManagerPage: '#f87171', btnManagerToggle: '#9dc0d8', btnExport: '#38bdf8', btnImport: '#4ade80' };
     return `<button class="drawer-item ${cls || ''}" data-drawer-act="${id}">
-      <span class="di-ico">${svg}</span><span>${escapeHtml(raw)}</span></button>`;
+      <span class="di-ico tint" style="--c:${TOOL_COL[id] || '#9dc0d8'}">${svg}</span><span>${escapeHtml(raw)}</span></button>`;
   };
   const tools = [tool('btnOwnerPage','owner'), tool('btnManagerPage','mgr'), tool('btnManagerToggle'),
                  tool('btnExport'), tool('btnImport'),
-                 `<button class="drawer-item" onclick="closeDrawer();setTimeout(()=>{try{location.reload()}catch(e){location.href=location.href}},150)"><span class="di-ico">${ico('refresh')}</span><span>새로고침</span></button>`].filter(Boolean).join('');
+                 `<button class="drawer-item" onclick="closeDrawer();setTimeout(()=>{try{location.reload()}catch(e){location.href=location.href}},150)"><span class="di-ico tint" style="--c:#9dc0d8">${ico('refresh')}</span><span>새로고침</span></button>`].filter(Boolean).join('');
 
   const qmBtn = tool('btnQuickMatch', 'quick');
   body.innerHTML = (qmBtn ? qmBtn + '<div class="drawer-divider"></div>' : '') + `<div class="drawer-sec">화면</div>${tabHtml}`
     + (tools ? `<div class="drawer-divider"></div><div class="drawer-sec">도구</div>${tools}` : '')
     + pwaInstallRow()
     + `<div class="drawer-divider"></div>`
-    + `<button class="drawer-item danger" data-drawer-act="btnLogout"><span class="di-ico">${ico('logout')}</span><span>로그아웃</span></button>`;
+    + `<button class="drawer-item danger" data-drawer-act="btnLogout"><span class="di-ico tint" style="--c:#f87171">${ico('logout')}</span><span>로그아웃</span></button>`;
 
   body.querySelectorAll('[data-drawer-tab]').forEach(el => el.addEventListener('click', () => {
     haptic(6); closeDrawer(); switchTab(el.dataset.drawerTab);
@@ -13223,6 +13247,7 @@ ICO.download = QI('<path d="M12 4v11"/><path d="m8 11 4 4 4-4"/><path d="M4 19h1
 ICO.phone = QI('<rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/>');
 ICO.shield = QI('<path d="M12 3 5 6v5c0 4.5 3 8 7 9.5 4-1.5 7-5 7-9.5V6z"/><path d="m9.5 12 2 2 3.5-4"/>');
 EMO_ICO['🛡️'] = 'shield'; EMO_ICO['🛡'] = 'shield'; EMO_ICO['💬'] = 'chat'; ICO.chat = QI('<path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H9l-5 4z"/>');
+const TAB_COLOR = { home: '#9dc0d8', train: '#67e8f9', boots: '#d9f950', squad: '#fdba74', players: '#a78bfa', profile: '#f472b6', calendar: '#38bdf8', org: '#94a3b8', board: '#9ca3af', dor: '#facc15', traits: '#c084fc', guide: '#fbbf24', chem: '#2dd4bf', records: '#a78bfa', attend: '#4ade80', hall: '#fbbf24', goh: '#f59e0b', blacklist: '#f87171', uniform: '#c4b8c0', prospect: '#86efac', insta: '#fb7185', settle: '#fee500', admin: '#f87171', quick: '#f5b81f' };
 function ico(k, cls) { const s = ICO[k] || ''; return cls ? s.replace('class="qi"', `class="qi ${cls}"`) : s; }
 const EMO_RE = /^(\p{Extended_Pictographic}️?)\s*/u;
 // 문자열 맨 앞 이모지를 아이콘으로 (없는 이모지는 그대로)
@@ -17016,7 +17041,7 @@ function updateNavChrome() {
   if (t && b) {
     const raw = (b.childNodes[0] && b.childNodes[0].nodeType === 3 ? b.childNodes[0].textContent : b.textContent).replace(/💡/g, '').trim();
     const m = raw.match(/^(\p{Extended_Pictographic}️?)\s*(.*)$/u);
-    t.innerHTML = m ? `<span class="nt-ico">${(EMO_ICO[m[1]] && ICO[EMO_ICO[m[1]]]) || m[1]}</span><span class="nt-txt">${escapeHtml(m[2])}</span>` : `<span class="nt-txt">${escapeHtml(raw)}</span>`;
+    t.innerHTML = m ? `<span class="nt-ico" style="color:${TAB_COLOR[currentTab] || '#9dc0d8'}">${(EMO_ICO[m[1]] && ICO[EMO_ICO[m[1]]]) || m[1]}</span><span class="nt-txt">${escapeHtml(m[2])}</span>` : `<span class="nt-txt">${escapeHtml(raw)}</span>`;
   }
   document.querySelectorAll('#botNav [data-bn]').forEach(x => x.classList.toggle('on', x.dataset.bn === currentTab));
   const dc = document.getElementById('bnDotCal'), cb = document.getElementById('calBadge');
