@@ -4318,6 +4318,21 @@
   .tr-pscmp span { display: block; font-size: 11px; color: #9aa4ae; font-weight: 700; margin-bottom: 2px; }
   .tr-pscmp b { color: #f9a8d4; }
   .tr-pscmp p { margin: 3px 0 0; font-size: 11.8px; color: #a3e635; }
+  .tr-pstags { margin: 8px 0 0; font-size: 11.5px; color: #9aa4ae; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+  .tr-pstags i { font-style: normal; padding: 2px 8px; border-radius: 999px; background: rgba(196,181,253,.14); color: #c4b5fd; font-weight: 700; }
+  .tr-psty small { display: block; font-weight: 600; color: #a3e635; font-size: 11px; margin-top: 3px; }
+  .tr-lvg { margin-top: 8px; border-radius: 14px; background: #121318; border: 1px solid #262833; padding: 6px 8px; }
+  .tr-lvh, .tr-lvr { display: grid; grid-template-columns: 72px 1fr 1fr; gap: 6px; align-items: center; }
+  .tr-lvh { padding: 2px 0 6px; font-size: 11px; color: #9aa4ae; text-align: center; } .tr-lvh b { color: #cbd5e1; } .tr-lvh b.g { color: #f9a8d4; }
+  .tr-lvr { padding: 4px 0; border-top: 1px solid rgba(255,255,255,.05); } .tr-lvr > span { font-size: 12px; font-weight: 800; color: #cbd5e1; }
+  .tr-lvc { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; }
+  .tr-lvc button { height: 30px; border-radius: 8px; border: 1px solid rgba(255,255,255,.1); background: #1a1b22; color: #9aa4ae; font-weight: 900; font-size: 13px; }
+  .tr-lvc.cur button.on { background: rgba(34,211,238,.18); border-color: #22d3ee; color: #a5f3fc; }
+  .tr-lvc.goal button.on { background: rgba(244,114,182,.18); border-color: #f472b6; color: #fbcfe8; }
+  .tr-psb i { position: relative; } .tr-psb u { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: rgba(34,211,238,.55); text-decoration: none; }
+  .tr-psb b { position: relative; background: transparent !important; border: 2px solid #f472b6; box-sizing: border-box; }
+  .tr-psb span em { float: right; font-style: normal; font-size: 10.5px; color: #9aa4ae; }
+  .tr-psleg { grid-column: 1 / -1; font-size: 11px; color: #9aa4ae; display: flex; align-items: center; gap: 4px; } .tr-psleg u { display: inline-block; width: 18px; height: 8px; border-radius: 999px; background: rgba(34,211,238,.55); } .tr-psleg b { display: inline-block; width: 18px; height: 8px; border-radius: 999px; border: 2px solid #f472b6; box-sizing: border-box; }
   .tr-psnh { display: block; font-size: 11.5px; color: #9aa4ae; font-weight: 600; margin-top: 2px; }
   .tr-psbars { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px 10px; margin: 10px 0 4px; padding: 10px 12px; border-radius: 14px; background: #121318; border: 1px solid #262833; }
   .tr-psb span { display: block; font-size: 10.5px; font-weight: 800; color: #9aa4b2; } .tr-psb i { display: block; height: 6px; border-radius: 4px; background: #23262f; margin-top: 3px; overflow: hidden; } .tr-psb b { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #f472b6, #c084fc); }
@@ -7101,7 +7116,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 129;
+const APP_VERSION = 132;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -23526,7 +23541,6 @@ PSA('hwangsh', 'ST', 'classic', '황선홍', 'Hwang Sun-hong', '한국 · 1990~2
 PSA('vdsar', 'GK', 'classic', '에드빈 판데르사르', 'Edwin van der Sar', '아약스 · 맨유 · 네덜란드', { spd: 1, tch: 2, drb: 1, kick: 3, stb: 2, eng: 1, vis: 3, calm: 3, lead: 2, agg: 1, mnt: 3 }, '발로 시작하는 침착 키퍼', '빌드업에 발로 참여한 첫 세대 키퍼. 큰 키와 침착함으로 실수가 없었다.', ['골킥은 압박 없으면 짧게', '당황하지 않는 첫 터치', '라인 뒤 긴 공은 미리 나가 끊기']);
 PSA('seaman', 'GK', 'classic', '데이비드 시먼', 'David Seaman', '아스널 · 잉글랜드 · 1990~2000년대', { spd: 1, tch: 1, drb: 1, kick: 2, stb: 2, eng: 1, vis: 1, calm: 3, lead: 2, agg: 1, mnt: 2 }, '자리로 막는 키퍼', '화려한 다이빙보다 위치 선정으로 어렵게 안 막는 안정형 키퍼.', ['슛 각부터 좁히고 서기', '크로스는 떨어지는 곳 미리', '팀이 흔들려도 뒤에서 차분하게']);
 PSA('barthez', 'GK', 'classic', '파비앙 바르테즈', 'Fabien Barthez', '마르세유 · 맨유 · 프랑스 · 1998 월드컵', { spd: 2, tch: 2, drb: 1, kick: 1, stb: 2, eng: 2, vis: 1, calm: 1, lead: 2, agg: 3, mnt: 2 }, '뛰쳐나오는 키퍼', '박스 밖까지 과감하게 나와 발로 끊고 1대1에 몸을 던지는 모험형.', ['뒷공간 볼은 망설이지 말고 먼저', '나갈 땐 「키퍼!」 크게', '모험이 안 통하면 바로 자리로']);
-PSA('dida', 'GK', 'classic', '지다', 'Dida', 'AC 밀란 · 브라질 · 2000년대', { spd: 1, tch: 2, drb: 1, kick: 1, stb: 3, eng: 1, vis: 1, calm: 3, lead: 1, agg: 1, mnt: 2 }, '승부차기 전문', '큰 키와 긴 팔, 침착한 승부차기 선방으로 챔피언스리그를 바꾼 키퍼.', ['PK는 키커 디딤발 보기', '큰 동작보다 위치', '혼전에선 펀칭']);
 PSA('cech', 'GK', 'classic', '페트르 체흐', 'Petr Cech', '첼시 · 아스널 · 체코', { spd: 1, tch: 1, drb: 1, kick: 2, stb: 3, eng: 1, vis: 2, calm: 3, lead: 3, agg: 1, mnt: 3 }, '꾸준함의 키퍼', '헬멧을 쓰고도 흔들리지 않은 꾸준함. 수비 조직을 말로 지휘했다.', ['매 경기 같은 집중력', '수비 라인 뒤에서 콜', '잡을 수 있는 공은 확실히 잡기']);
 PSA('donnarumma', 'GK', 'modern', '잔루이지 돈나룸마', 'Gianluigi Donnarumma', 'AC 밀란 · PSG · 이탈리아', { spd: 1, tch: 1, drb: 1, kick: 1, stb: 3, eng: 1, vis: 1, calm: 3, lead: 2, agg: 1, mnt: 3 }, '큰 몸의 선방 키퍼', '거대한 체구로 각을 막고 승부차기에 강한 키퍼. 유로 2020 우승.', ['1대1은 몸을 크게 세우기', 'PK는 끝까지 기다리기', '크로스는 손으로 확실히']);
 PSA('emartinez', 'GK', 'modern', '에밀리아노 마르티네스', 'Emiliano Martinez', '애스턴 빌라 · 아르헨티나 · 2022 월드컵', { spd: 1, tch: 1, drb: 1, kick: 2, stb: 3, eng: 1, vis: 1, calm: 2, lead: 3, agg: 3, mnt: 3 }, '승부사 키퍼', '승부차기에서 상대를 흔들고 큰 경기에서 결정적 선방을 하는 멘탈형 키퍼.', ['PK 전에 숨 고르고 내 리듬', '위기 넘기면 팀 전체에 기합', '1대1은 상대가 찰 때까지']);
@@ -23554,7 +23568,6 @@ PSA('yousc', 'CB,CDM', 'classic', '유상철', 'Yoo Sang-chul', '울산 · 한�
 PSA('acole', 'FB', 'classic', '애슐리 콜', 'Ashley Cole', '아스널 · 첼시 · 잉글랜드', { spd: 3, tch: 2, drb: 2, kick: 2, stb: 2, eng: 3, vis: 1, calm: 2, lead: 1, agg: 2, mnt: 2 }, '1대1 수비 최강 풀백', '빠른 윙도 지우는 1대1 수비와 왕복 체력의 왼쪽 풀백.', ['윙의 첫 터치 순간에 거리 맞추기', '바깥으로 몰고 같이 뛰기', '복귀는 늘 전력']);
 PSA('gneville', 'FB', 'classic', '게리 네빌', 'Gary Neville', '맨유 · 잉글랜드 · 1990~2000년대', { spd: 1, tch: 2, drb: 1, kick: 2, stb: 2, eng: 3, vis: 2, calm: 3, lead: 3, agg: 2, mnt: 3 }, '성실한 오른쪽 풀백', '화려함 없이 매 경기 같은 수비와 베컴과의 호흡으로 20년을 뛴 풀백.', ['같은 쪽 2선과 약속 만들기', '실수 없는 쉬운 패스', '복귀·커버 말로 알리기']);
 PSA('zanetti', 'FB,CDM', 'classic', '하비에르 사네티', 'Javier Zanetti', '인터밀란 · 아르헨티나 · 1995~2014', { spd: 2, tch: 3, drb: 2, kick: 2, stb: 2, eng: 3, vis: 2, calm: 3, lead: 3, agg: 1, mnt: 3 }, '철인 캡틴', '풀백·윙백·볼란치 어디든 같은 수준으로 20년 뛴 주장.', ['몸 관리가 곧 실력', '어느 자리든 침착하게', '팀 분위기는 주장이 만들기']);
-PSA('lizarazu', 'FB', 'classic', '비셴테 리자라쥐', 'Bixente Lizarazu', '바이에른 · 프랑스 · 1998 월드컵', { spd: 3, tch: 2, drb: 2, kick: 2, stb: 1, eng: 3, vis: 2, calm: 2, lead: 1, agg: 2, mnt: 2 }, '작고 빠른 왼쪽 풀백', '작은 키를 스피드와 활동량으로 메운 왼쪽 풀백.', ['작으면 먼저 움직이기', '오버래핑은 타이밍', '복귀는 짧은 길로']);
 PSA('jalba', 'FB', 'modern', '조르디 알바', 'Jordi Alba', '바르셀로나 · 스페인', { spd: 3, tch: 2, drb: 2, kick: 2, stb: 1, eng: 3, vis: 2, calm: 2, lead: 1, agg: 1, mnt: 2 }, '뒷공간 침투 풀백', '왼쪽 측면 뒷공간으로 뛰어 들어가 낮은 크로스를 올리는 공격 풀백.', ['2선이 안으로 접으면 뒷공간으로', '엔드라인에서 낮은 컷백', '뺏기면 전력 복귀']);
 PSA('carvajal', 'FB', 'modern', '다니 카르바할', 'Dani Carvajal', '레알 마드리드 · 스페인', { spd: 2, tch: 2, drb: 2, kick: 2, stb: 2, eng: 3, vis: 2, calm: 2, lead: 2, agg: 3, mnt: 3 }, '영리한 공수 풀백', '큰 경기에 강한 오른쪽 풀백. 수비 1대1과 공격 가담의 균형.', ['안쪽 길 먼저 막기', '같은 쪽 볼란치 남을 때만 올라가기', '뺏긴 직후 바로 압박']);
 PSA('walker', 'FB', 'modern', '카일 워커', 'Kyle Walker', '맨시티 · 잉글랜드', { spd: 3, tch: 1, drb: 2, kick: 2, stb: 3, eng: 3, vis: 1, calm: 2, lead: 2, agg: 2, mnt: 2 }, '스피드 수비 풀백', '빠른 윙도 따라잡는 스피드와 몸으로 막는 수비형 풀백.', ['뒷공간은 스피드로 커버', '몸싸움 피하지 않기', '공 반대쪽이면 안으로 좁히기']);
@@ -23566,7 +23579,6 @@ PSA('rijkaard', 'CDM,CB', 'classic', '프랑크 레이카르트', 'Frank Rijkaar
 PSA('davids', 'CDM', 'classic', '에드가 다비즈', 'Edgar Davids', '아약스 · 유벤투스 · 네덜란드', { spd: 2, tch: 2, drb: 2, kick: 2, stb: 3, eng: 3, vis: 2, calm: 1, lead: 2, agg: 3, mnt: 3 }, '핏불', '고글을 쓰고 중원을 물어뜯은 전투형 미드필더.', ['뺏긴 직후 압박은 내가', '몸싸움 피하지 않기', '지쳐도 한 걸음 더']);
 PSA('seedorf', 'CDM,CAM', 'classic', '클라렌스 세도르프', 'Clarence Seedorf', 'AC 밀란 · 네덜란드 · 챔스 4회', { spd: 2, tch: 3, drb: 2, kick: 3, stb: 2, eng: 2, vis: 3, calm: 3, lead: 2, agg: 1, mnt: 3 }, '중거리 조율사', '공을 지키며 템포를 조절하고 중거리 슛으로 마무리한 미드필더.', ['몸으로 공 가리며 돌기', '박스 앞 20m 각 보이면 슈팅', '템포 늦출 때와 올릴 때 구분']);
 PSA('deschamps', 'CDM', 'classic', '디디에 데샹', 'Didier Deschamps', '마르세유 · 유벤투스 · 프랑스 · 1998 주장', { spd: 1, tch: 2, drb: 1, kick: 1, stb: 2, eng: 3, vis: 2, calm: 3, lead: 3, agg: 2, mnt: 3 }, '물 나르는 주장', '화려함 없이 공을 뺏고 짧게 연결하며 팀을 묶은 주장.', ['간단한 패스를 정확히', '자리 지키고 팀 정리', '리더는 말보다 꾸준함']);
-PSA('petit', 'CDM', 'classic', '에마뉘엘 프티', 'Emmanuel Petit', '아스널 · 프랑스 · 1998 월드컵', { spd: 2, tch: 2, drb: 1, kick: 3, stb: 2, eng: 3, vis: 3, calm: 2, lead: 1, agg: 2, mnt: 2 }, '왼발 롱패스 볼란치', '비에이라 옆에서 왼발 롱패스로 공격을 열었던 볼란치.', ['짝 볼란치와 역할 나누기', '긴 대각선 전환 패스', '수비 땐 CB 앞']);
 PSA('gattuso', 'CDM', 'classic', '젠나로 가투소', 'Gennaro Gattuso', 'AC 밀란 · 이탈리아 · 2006 월드컵', { spd: 2, tch: 1, drb: 1, kick: 1, stb: 3, eng: 3, vis: 1, calm: 1, lead: 2, agg: 3, mnt: 3 }, '피를로의 경호원', '기술 대신 투지와 활동량으로 피를로가 뛰게 만든 수비형 미드필더.', ['짝이 만들면 나는 뺏기', '뺏긴 직후 5초 압박', '거칠어도 영리하게']);
 PSA('derossi', 'CDM', 'classic', '다니엘레 데로시', 'Daniele De Rossi', 'AS 로마 · 이탈리아 · 2006 월드컵', { spd: 2, tch: 2, drb: 1, kick: 3, stb: 3, eng: 3, vis: 2, calm: 2, lead: 3, agg: 3, mnt: 3 }, '전투형 롱패서', '몸싸움과 롱패스, 중거리를 다 갖춘 로마의 심장.', ['뺏으면 한 번에 길게', '세컨볼 싸움 먼저', '팀을 소리로 깨우기']);
 PSA('ballack', 'CDM,CAM', 'classic', '미하엘 발락', 'Michael Ballack', '레버쿠젠 · 바이에른 · 첼시 · 독일', { spd: 2, tch: 2, drb: 2, kick: 3, stb: 3, eng: 3, vis: 2, calm: 2, lead: 3, agg: 2, mnt: 3 }, '박스 침투 리더', '중원에서 박스로 늦게 들어가 헤딩·슈팅으로 골을 넣은 리더형.', ['크로스 땐 박스 앞 세컨볼·침투', '헤딩은 도움닫기', '팀 처지면 내가 먼저']);
@@ -23606,23 +23618,18 @@ PSA('bruno', 'CAM', 'modern', '브루누 페르난드스', 'Bruno Fernandes', '�
 PSA('foden', 'CAM,WG', 'modern', '필 포든', 'Phil Foden', '맨시티 · 잉글랜드', { spd: 2, tch: 3, drb: 3, kick: 3, stb: 1, eng: 2, vis: 3, calm: 2, lead: 1, agg: 2, mnt: 2 }, '왼발 하프스페이스 플레이어', '하프스페이스에서 받아 왼발 슛·패스로 끝내는 기술형.', ['하프스페이스에서 받기', '첫 터치 뒤 바로 슛', '좁은 공간 작은 터치']);
 PSA('palmer', 'CAM,WG', 'modern', '콜 파머', 'Cole Palmer', '첼시 · 잉글랜드', { spd: 2, tch: 3, drb: 2, kick: 3, stb: 1, eng: 2, vis: 3, calm: 3, lead: 1, agg: 1, mnt: 3 }, '차가운 마무리의 10번', '느긋해 보여도 박스 앞에서 가장 침착한 슈팅과 PK.', ['박스 앞에선 한 박자 쉬기', '키퍼 반대쪽 낮게', '패스 각 열어두고 슛']);
 PSA('wirtz', 'CAM', 'modern', '플로리안 비르츠', 'Florian Wirtz', '레버쿠젠 · 리버풀 · 독일', { spd: 2, tch: 3, drb: 3, kick: 2, stb: 1, eng: 3, vis: 3, calm: 2, lead: 1, agg: 2, mnt: 2 }, '전진하는 10번', '받으면 늘 앞을 보고 드리블·패스로 전진하는 젊은 10번.', ['받자마자 앞 보기', '수비 사이로 드리블', '마지막 패스는 침투 길로']);
-PSA('nakata', 'CAM', 'classic', '나카타 히데토시', 'Hidetoshi Nakata', '페루자 · 로마 · 일본 · 1998·2002', { spd: 2, tch: 3, drb: 2, kick: 3, stb: 2, eng: 2, vis: 3, calm: 3, lead: 1, agg: 1, mnt: 2 }, '아시아의 선구자', '이탈리아에서 통한 패스와 중거리의 10번. 자기 길을 간 선수.', ['킬패스는 보일 때 바로', '중거리 각 보이면', '남 눈치 말고 내 플레이']);
-PSA('honda', 'CAM,WG', 'classic', '혼다 케이스케', 'Keisuke Honda', 'CSKA · AC 밀란 · 일본', { spd: 1, tch: 2, drb: 1, kick: 3, stb: 2, eng: 2, vis: 2, calm: 3, lead: 3, agg: 1, mnt: 3 }, '왼발 프리킥 리더', '왼발 프리킥과 큰 경기 자신감으로 일본을 이끈 선수.', ['프리킥 연습량', '큰 경기일수록 당당하게', '팀을 말로 끌기']);
-PSA('kagawa', 'CAM', 'classic', '카가와 신지', 'Shinji Kagawa', '도르트문트 · 맨유 · 일본', { spd: 2, tch: 3, drb: 2, kick: 2, stb: 1, eng: 2, vis: 3, calm: 2, lead: 1, agg: 1, mnt: 2 }, '사이에서 받는 10번', '상대 사이 공간에서 받아 원터치로 연결하는 작은 10번.', ['상대 볼란치 뒤에서 받기', '원터치·투터치', '첫 터치는 앞으로']);
 PSA('koojc', 'CAM,CDM', 'modern', '구자철', 'Koo Ja-cheol', '아우크스부르크 · 한국 · 2012 올림픽 동메달', { spd: 2, tch: 2, drb: 1, kick: 3, stb: 2, eng: 3, vis: 2, calm: 2, lead: 3, agg: 2, mnt: 3 }, '박스 침투 미드필더', '2선에서 박스로 들어가 골을 넣고 팀을 이끈 주장.', ['늦게 박스 들어가기', '세컨볼 슛', '팀을 말로 끌기']);
 
 /* WG */
 PSA('bestg', 'WG', 'classic', '조지 베스트', 'George Best', '맨유 · 북아일랜드 · 1960년대', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 1, eng: 1, vis: 1, calm: 2, lead: 1, agg: 1, mnt: 1 }, '드리블의 천재', '수비 몇 명을 혼자 제치는 드리블로 유럽을 홀린 윙.', ['1대1은 자신 있게', '제친 뒤 바로 마무리', '화려함도 팀을 위해']);
 PSA('stoichkov', 'WG,ST', 'classic', '흐리스토 스토이치코프', 'Hristo Stoichkov', '바르셀로나 · 불가리아 · 1994 발롱도르', { spd: 3, tch: 2, drb: 2, kick: 3, stb: 2, eng: 2, vis: 1, calm: 1, lead: 2, agg: 3, mnt: 3 }, '불같은 왼발', '왼발 강슛과 투지로 1994 월드컵 득점왕이 된 공격수.', ['각 보이면 강하게', '투지로 수비 흔들기', '흥분은 공에 쏟기']);
 PSA('overmars', 'WG', 'classic', '마르크 오베르마르스', 'Marc Overmars', '아약스 · 아스널 · 네덜란드', { spd: 3, tch: 2, drb: 2, kick: 2, stb: 1, eng: 3, vis: 1, calm: 1, lead: 1, agg: 1, mnt: 2 }, '측면 스프린터', '순수 스피드로 측면을 뚫고 들어간 윙.', ['뒷공간 출발 타이밍', '터치는 길게 속도', '제치면 바로 크로스']);
-PSA('ljungberg', 'WG', 'classic', '프레드리크 융베리', 'Fredrik Ljungberg', '아스널 · 스웨덴 · 2000년대', { spd: 3, tch: 2, drb: 2, kick: 2, stb: 1, eng: 3, vis: 2, calm: 2, lead: 1, agg: 2, mnt: 2 }, '박스 침투 윙', '측면에서 안쪽 뒷공간으로 뛰어 들어가 골을 넣는 침투형 윙.', ['공 없을 때 대각선 침투', '패스 순간 출발', '수비 복귀도 끝까지']);
 PSA('hazard', 'WG', 'modern', '에덴 아자르', 'Eden Hazard', '첼시 · 벨기에 · 2010년대', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 2, eng: 2, vis: 3, calm: 2, lead: 1, agg: 1, mnt: 2 }, '낮은 무게중심 드리블러', '몸으로 공을 가리며 둘셋을 제치는 드리블과 연계.', ['드리블은 무게중심 낮게', '몸으로 공 가리기', '제친 뒤 패스 각 보기']);
 PSA('mane', 'WG', 'modern', '사디오 마네', 'Sadio Mane', '리버풀 · 세네갈', { spd: 3, tch: 2, drb: 2, kick: 2, stb: 2, eng: 3, vis: 1, calm: 2, lead: 1, agg: 3, mnt: 3 }, '압박하는 스피드 윙', '전방 압박과 뒷공간 질주를 다 하는 활동량 윙.', ['상대 풀백 공 잡으면 바로 압박', '뒷공간 출발 타이밍', '먼 포스트 들어가기']);
 PSA('mahrez', 'WG', 'modern', '리야드 마레즈', 'Riyad Mahrez', '레스터 · 맨시티 · 알제리', { spd: 2, tch: 3, drb: 3, kick: 3, stb: 1, eng: 1, vis: 2, calm: 3, lead: 1, agg: 1, mnt: 2 }, '왼발 감아차기 윙', '오른쪽에서 안으로 접어 왼발로 감아 넣는 기술형 윙.', ['접을 땐 속도 변화', '먼 구석 감아차기', '막히면 풀백에게']);
 PSA('dimaria', 'WG', 'modern', '앙헬 디마리아', 'Angel Di Maria', '레알 마드리드 · PSG · 아르헨티나 · 2022 월드컵', { spd: 3, tch: 3, drb: 3, kick: 3, stb: 1, eng: 3, vis: 3, calm: 2, lead: 1, agg: 2, mnt: 3 }, '달리는 크로스 윙', '끝없이 뛰며 왼발 크로스·슛으로 결승골을 만든 윙.', ['뛰면서 크로스 연습', '먼 포스트 보고 감아 올리기', '수비 복귀 끝까지']);
 PSA('dembele', 'WG', 'modern', '우스만 뎀벨레', 'Ousmane Dembele', '바르셀로나 · PSG · 프랑스', { spd: 3, tch: 3, drb: 3, kick: 3, stb: 1, eng: 2, vis: 2, calm: 1, lead: 1, agg: 1, mnt: 2 }, '양발 드리블러', '양발을 똑같이 써서 안팎 어디로든 가는 예측 불가 윙.', ['약한 발도 똑같이 연습', '수비가 한쪽 막으면 반대로', '제친 뒤 바로 슛·크로스']);
 PSA('nwilliams', 'WG', 'modern', '니코 윌리엄스', 'Nico Williams', '빌바오 · 스페인 · 유로 2024', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 1, eng: 2, vis: 1, calm: 1, lead: 1, agg: 1, mnt: 2 }, '바깥 돌파 윙', '터치라인에서 바깥으로 치고 나가는 정통 스피드 윙.', ['넓게 서서 1대1', '바깥으로 치고 낮은 크로스', '상대 풀백 지치게 반복']);
-PSA('mitoma', 'WG', 'modern', '미토마 가오루', 'Kaoru Mitoma', '브라이턴 · 일본', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 1, eng: 2, vis: 2, calm: 2, lead: 1, agg: 1, mnt: 2 }, '연구하는 드리블러', '드리블을 논문으로 연구한 선수. 상대 중심을 보고 반대로 간다.', ['상대 무게중심 보고 반대로', '터치는 작게 여러 번', '제친 뒤 컷백']);
 PSA('sulkh', 'WG', 'classic', '설기현', 'Seol Ki-hyeon', '안더레흐트 · 레딩 · 한국 · 2002', { spd: 3, tch: 2, drb: 2, kick: 2, stb: 2, eng: 3, vis: 1, calm: 1, lead: 1, agg: 2, mnt: 2 }, '돌파하는 윙', '스피드 돌파와 이탈리아전 동점골로 기억되는 윙.', ['1대1은 속도로 바깥', '박스 안 세컨볼', '끝까지 뛰기']);
 PSA('leecy', 'WG', 'modern', '이청용', 'Lee Chung-yong', '볼턴 · 한국 · 2010 월드컵', { spd: 2, tch: 3, drb: 2, kick: 2, stb: 1, eng: 3, vis: 3, calm: 3, lead: 1, agg: 2, mnt: 2 }, '영리한 윙', '빠르지 않아도 영리한 움직임과 패스로 측면을 푼 「블루 드래곤」.', ['공 없을 때 빈 곳 먼저', '제치기보다 패스 각', '수비 가담 끝까지']);
 PSA('hwanghc', 'WG,ST', 'modern', '황희찬', 'Hwang Hee-chan', '울버햄튼 · 한국', { spd: 3, tch: 2, drb: 2, kick: 2, stb: 3, eng: 3, vis: 1, calm: 1, lead: 1, agg: 3, mnt: 3 }, '황소', '몸싸움을 피하지 않고 뒷공간으로 돌진하는 파워 윙.', ['뒷공간 출발 먼저', '몸으로 부딪히며 버티기', '압박은 끝까지']);
@@ -23662,11 +23669,7 @@ PSA('ahnjh', 'ST,CAM', 'classic', '안정환', 'Ahn Jung-hwan', '페루자 · �
 PSA('terstegen', 'GK', 'modern', '마르크안드레 테어슈테겐', 'Marc-Andre ter Stegen', '바르셀로나 · 독일', { spd: 2, tch: 3, drb: 1, kick: 3, stb: 2, eng: 1, vis: 3, calm: 3, lead: 2, agg: 1, mnt: 2 }, '빌드업 키퍼', '발로 수비수처럼 공을 돌리고 1대1을 침착하게 막는 현대 키퍼.', ['백패스는 압박 반대쪽 첫 터치', '짧은 패스로 시작', '1대1은 서서 버티기']);
 PSA('maignan', 'GK', 'modern', '마이크 마이냥', 'Mike Maignan', 'AC 밀란 · 프랑스', { spd: 2, tch: 2, drb: 1, kick: 3, stb: 2, eng: 2, vis: 2, calm: 2, lead: 3, agg: 3, mnt: 3 }, '적극적인 킥 키퍼', '길고 정확한 킥으로 역습을 시작하고 박스를 적극적으로 지배하는 키퍼.', ['잡으면 바로 멀리 정확히', '높은 공은 「키퍼!」로 나가기', '수비에게 큰 소리로']);
 PSA('oblak', 'GK', 'modern', '얀 오블라크', 'Jan Oblak', '아틀레티코 · 슬로베니아', { spd: 1, tch: 1, drb: 1, kick: 1, stb: 3, eng: 1, vis: 1, calm: 3, lead: 2, agg: 1, mnt: 2 }, '벽 같은 키퍼', '내려선 팀 뒤에서 수많은 슛을 자리와 반응으로 막아내는 키퍼.', ['슛 많은 날은 자리 먼저', '리바운드 안 주기 — 옆으로', '크로스는 손으로 확실히']);
-PSA('usimon', 'GK', 'modern', '우나이 시몬', 'Unai Simon', '빌바오 · 스페인 · 유로 2024', { spd: 1, tch: 2, drb: 1, kick: 2, stb: 2, eng: 1, vis: 2, calm: 3, lead: 2, agg: 1, mnt: 3 }, '침착한 우승 키퍼', '큰 대회에서 실수 없이 팀을 받친 안정형 키퍼.', ['쉬운 공을 확실히', '백패스 침착하게', '실수해도 표정 그대로']);
 PSA('raya', 'GK', 'modern', '다비드 라야', 'David Raya', '아스널 · 스페인', { spd: 2, tch: 3, drb: 1, kick: 3, stb: 2, eng: 1, vis: 3, calm: 3, lead: 2, agg: 2, mnt: 2 }, '스위퍼 · 패스 키퍼', '높은 라인 뒤를 지우고 발로 빌드업하는 아스널의 키퍼.', ['라인 높으면 박스 앞까지', '짧게·길게 상황 따라', '뒷공간 볼은 먼저 나가기']);
-PSA('sommer', 'GK', 'modern', '얀 조머', 'Yann Sommer', '인터밀란 · 스위스', { spd: 2, tch: 2, drb: 1, kick: 2, stb: 1, eng: 1, vis: 2, calm: 3, lead: 2, agg: 1, mnt: 2 }, '작지만 빠른 반응', '큰 키가 아니어도 반사신경과 위치로 막는 키퍼.', ['낮은 자세 유지', '각 좁히기 먼저', '작으면 먼저 움직이기']);
-PSA('dcosta', 'GK', 'modern', '디오구 코스타', 'Diogo Costa', '포르투 · 포르투갈', { spd: 2, tch: 2, drb: 1, kick: 3, stb: 2, eng: 1, vis: 2, calm: 3, lead: 2, agg: 1, mnt: 2 }, '승부차기 · 롱킥 키퍼', '승부차기 3연속 선방과 정확한 롱킥의 키퍼.', ['PK는 끝까지 기다리기', '멀리 정확한 킥', '1대1 각 좁히기']);
-PSA('mamardashvili', 'GK', 'modern', '기오르기 마마르다슈빌리', 'Giorgi Mamardashvili', '발렌시아 · 리버풀 · 조지아', { spd: 1, tch: 1, drb: 1, kick: 2, stb: 3, eng: 1, vis: 1, calm: 2, lead: 2, agg: 2, mnt: 2 }, '큰 몸 선방 키퍼', '큰 키와 반응으로 슛을 막아내는 유로 2024의 발견.', ['몸을 크게', '슛 많은 날 집중력', '혼전은 펀칭']);
 
 /* CB */
 PSA('saliba', 'CB', 'modern', '윌리암 살리바', 'William Saliba', '아스널 · 프랑스', { spd: 3, tch: 3, drb: 2, kick: 2, stb: 3, eng: 2, vis: 2, calm: 3, lead: 2, agg: 1, mnt: 3 }, '다 되는 현대 센터백', '스피드·공중볼·빌드업·침착함을 다 갖춘 수비수.', ['1대1은 거리로, 발은 마지막', '첫 패스는 볼란치 빈 쪽', '공중볼 자리 먼저']);
@@ -23677,10 +23680,7 @@ PSA('araujo', 'CB,FB', 'modern', '로날드 아라우호', 'Ronald Araujo', '바
 PSA('bastoni', 'CB', 'modern', '알레산드로 바스토니', 'Alessandro Bastoni', '인터밀란 · 이탈리아', { spd: 2, tch: 3, drb: 2, kick: 3, stb: 2, eng: 2, vis: 3, calm: 3, lead: 1, agg: 1, mnt: 2 }, '올라가는 왼쪽 센터백', '백3 왼쪽에서 공을 몰고 올라가 왼발로 전개하는 수비수.', ['앞이 비면 몰고 올라가기', '왼발 긴 대각선', '뺏기면 제일 먼저 뒤로']);
 PSA('rdias', 'CB', 'modern', '후벵 디아스', 'Ruben Dias', '맨시티 · 포르투갈', { spd: 1, tch: 2, drb: 1, kick: 2, stb: 3, eng: 2, vis: 2, calm: 3, lead: 3, agg: 2, mnt: 3 }, '수비 조직의 리더', '몸을 던지는 블록과 큰 목소리로 수비 조직을 묶는 센터백.', ['슛은 몸으로 블록', '라인 콜 내가', '세트피스 마크 정해 주기']);
 PSA('gvardiol', 'CB,FB', 'modern', '요슈코 그바르디올', 'Josko Gvardiol', '맨시티 · 크로아티아', { spd: 3, tch: 3, drb: 2, kick: 2, stb: 3, eng: 3, vis: 2, calm: 2, lead: 1, agg: 2, mnt: 2 }, '공격하는 센터백', '왼쪽 풀백으로 올라가 골까지 넣는 피지컬 수비수.', ['앞이 비면 몰고 올라가기', '몸싸움은 먼저 몸', '올라간 만큼 복귀']);
-PSA('bremer', 'CB', 'modern', '글레이송 브레메르', 'Gleison Bremer', '유벤투스 · 브라질', { spd: 3, tch: 2, drb: 1, kick: 1, stb: 3, eng: 2, vis: 1, calm: 2, lead: 2, agg: 3, mnt: 2 }, '1대1 사냥꾼', '빠른 발과 태클 타이밍으로 공격수를 지우는 수비수.', ['태클은 공이 떠난 순간', '빠른 상대는 거리로', '등진 공격수는 붙기']);
-PSA('huijsen', 'CB', 'modern', '딘 하위선', 'Dean Huijsen', '본머스 · 레알 마드리드 · 스페인', { spd: 2, tch: 3, drb: 1, kick: 3, stb: 2, eng: 2, vis: 3, calm: 3, lead: 1, agg: 1, mnt: 2 }, '키 큰 빌드업 센터백', '큰 키에 패스까지 되는 젊은 센터백.', ['첫 패스는 상대 한 줄 넘기기', '공중볼 자리 먼저', '침착한 첫 터치']);
 PSA('tah', 'CB', 'modern', '조나탄 타', 'Jonathan Tah', '레버쿠젠 · 바이에른 · 독일', { spd: 2, tch: 2, drb: 1, kick: 2, stb: 3, eng: 2, vis: 2, calm: 3, lead: 2, agg: 2, mnt: 2 }, '단단한 센터백', '큰 몸과 안정감으로 무패 우승을 받친 수비수.', ['공중볼은 자리부터', '실수 없는 패스', '라인 콜']);
-PSA('vdven', 'CB', 'modern', '미키 판더펜', 'Micky van de Ven', '토트넘 · 네덜란드', { spd: 3, tch: 2, drb: 1, kick: 2, stb: 2, eng: 3, vis: 1, calm: 2, lead: 1, agg: 2, mnt: 2 }, '초고속 센터백', '높은 라인 뒤를 스피드로 지우는 수비수.', ['뒷공간은 내가 먼저', '라인 높게 서기', '몰고 올라가 역습 시작']);
 
 /* FB */
 PSA('balde', 'FB', 'modern', '알레한드로 발데', 'Alejandro Balde', '바르셀로나 · 스페인', { spd: 3, tch: 2, drb: 2, kick: 2, stb: 1, eng: 3, vis: 1, calm: 1, lead: 1, agg: 2, mnt: 2 }, '스피드 왼쪽 풀백', '폭발적인 스피드로 측면을 왕복하는 풀백.', ['뒷공간 질주', '낮은 크로스', '복귀도 스피드']);
@@ -23690,9 +23690,6 @@ PSA('adavies', 'FB', 'modern', '알폰소 데이비스', 'Alphonso Davies', '바
 PSA('nmendes', 'FB', 'modern', '누누 멘데스', 'Nuno Mendes', 'PSG · 포르투갈', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 2, eng: 3, vis: 2, calm: 2, lead: 1, agg: 2, mnt: 2 }, '공수 왕복 왼쪽 풀백', '1대1 수비와 공격 돌파를 다 하는 현대 풀백.', ['1대1은 안쪽 막고 바깥', '2선 접으면 바깥으로', '복귀 전력']);
 PSA('frimpong', 'FB,WG', 'modern', '제레미 프림퐁', 'Jeremie Frimpong', '레버쿠젠 · 리버풀 · 네덜란드', { spd: 3, tch: 2, drb: 3, kick: 2, stb: 1, eng: 3, vis: 1, calm: 1, lead: 1, agg: 2, mnt: 2 }, '윙 같은 윙백', '사실상 윙처럼 뛰며 골까지 넣는 스피드 윙백.', ['넓이는 내가', '박스 안 먼 포스트까지', '뺏기면 전력 복귀']);
 PSA('kounde', 'FB,CB', 'modern', '쥘 쿤데', 'Jules Kounde', '바르셀로나 · 프랑스', { spd: 3, tch: 3, drb: 2, kick: 2, stb: 2, eng: 3, vis: 2, calm: 2, lead: 1, agg: 2, mnt: 2 }, '센터백 출신 풀백', '센터백의 수비력과 스피드로 오른쪽 풀백을 소화하는 수비수.', ['1대1은 거리로', '안쪽으로 좁히기', '올라가면 복귀']);
-PSA('grimaldo', 'FB', 'modern', '알레한드로 그리말도', 'Alejandro Grimaldo', '레버쿠젠 · 스페인', { spd: 2, tch: 3, drb: 2, kick: 3, stb: 1, eng: 3, vis: 3, calm: 2, lead: 1, agg: 1, mnt: 2 }, '골 넣는 윙백', '왼발 크로스·프리킥·중거리로 골을 만드는 공격 윙백.', ['얼리 크로스', '세트피스 키커', '컷백 자리 들어가기']);
-PSA('kerkez', 'FB', 'modern', '밀로시 케르케즈', 'Milos Kerkez', '본머스 · 리버풀 · 헝가리', { spd: 3, tch: 2, drb: 2, kick: 2, stb: 2, eng: 3, vis: 1, calm: 1, lead: 1, agg: 3, mnt: 2 }, '공격적인 왼쪽 풀백', '끝없이 오르내리며 압박하는 활동량 풀백.', ['뺏긴 직후 압박', '오버래핑 타이밍', '복귀 전력']);
-PSA('porro', 'FB', 'modern', '페드로 포로', 'Pedro Porro', '토트넘 · 스페인', { spd: 2, tch: 3, drb: 2, kick: 3, stb: 1, eng: 3, vis: 3, calm: 2, lead: 1, agg: 1, mnt: 2 }, '안으로 들어오는 풀백', '중원 안쪽으로 들어와 패스하고 중거리도 때리는 풀백.', ['2선 넓으면 나는 안쪽', '긴 대각선 전환', '세컨볼 슛']);
 
 /* CDM · CM */
 PSA('camavinga', 'CDM', 'modern', '에두아르도 카마빙가', 'Eduardo Camavinga', '레알 마드리드 · 프랑스', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 2, eng: 3, vis: 2, calm: 2, lead: 1, agg: 3, mnt: 2 }, '탈압박 드리블 볼란치', '긴 다리 드리블로 압박을 빠져나오고 끝없이 뛰는 볼란치.', ['압박 오면 한 명 제치고 전진', '뺏긴 직후 압박', '풀백도 소화']);
@@ -23700,13 +23697,10 @@ PSA('zubimendi', 'CDM', 'modern', '마르틴 주비멘디', 'Martin Zubimendi', 
 PSA('enzo', 'CDM', 'modern', '엔소 페르난데스', 'Enzo Fernandez', '첼시 · 아르헨티나 · 2022 월드컵', { spd: 2, tch: 3, drb: 1, kick: 3, stb: 2, eng: 3, vis: 3, calm: 3, lead: 2, agg: 2, mnt: 3 }, '롱패스 조율사', '뒤에서 긴 패스로 전환하고 활동량으로 중원을 덮는 미드필더.', ['긴 대각선 전환', '받기 전 보기', '세컨볼 먼저']);
 PSA('caicedo', 'CDM', 'modern', '모이세스 카이세도', 'Moises Caicedo', '첼시 · 에콰도르', { spd: 2, tch: 2, drb: 2, kick: 2, stb: 3, eng: 3, vis: 2, calm: 2, lead: 1, agg: 3, mnt: 2 }, '탈취 기계', '태클과 가로채기로 중원을 쓸고 간단히 연결하는 볼란치.', ['뺏긴 직후 압박', '태클은 공이 떠난 순간', '뺏으면 간단하게']);
 PSA('palhinha', 'CDM', 'modern', '주앙 팔리냐', 'Joao Palhinha', '풀럼 · 바이에른 · 포르투갈', { spd: 1, tch: 2, drb: 1, kick: 2, stb: 3, eng: 3, vis: 1, calm: 2, lead: 2, agg: 3, mnt: 3 }, '태클왕', '리그 최다 태클 — 몸으로 끊는 수비형 미드필더.', ['태클 타이밍은 공이 떠날 때', 'CB 앞 자리', '세컨볼 몸으로']);
-PSA('merino', 'CDM,CAM', 'modern', '미켈 메리노', 'Mikel Merino', '아스널 · 스페인 · 유로 2024', { spd: 1, tch: 2, drb: 1, kick: 2, stb: 3, eng: 3, vis: 2, calm: 2, lead: 2, agg: 2, mnt: 3 }, '헤딩 미드필더', '박스 안 헤딩과 세컨볼 싸움에 강한 큰 미드필더.', ['크로스 땐 박스 안으로', '헤딩 도움닫기', '세컨볼 먼저']);
 PSA('kovacic', 'CDM', 'modern', '마테오 코바치치', 'Mateo Kovacic', '맨시티 · 크로아티아', { spd: 2, tch: 3, drb: 3, kick: 2, stb: 2, eng: 3, vis: 2, calm: 3, lead: 1, agg: 2, mnt: 2 }, '몰고 가는 미드필더', '드리블로 중원을 통과해 전진하는 미드필더.', ['앞이 비면 몰고 가기', '몸으로 공 가리기', '압박 오면 반대로']);
 PSA('partey', 'CDM', 'modern', '토마스 파티', 'Thomas Partey', '아스널 · 가나', { spd: 2, tch: 2, drb: 1, kick: 3, stb: 3, eng: 2, vis: 2, calm: 3, lead: 1, agg: 2, mnt: 1 }, '중거리 앵커', '자리를 지키고 가끔 먼 거리에서 강슛을 때리는 볼란치.', ['CB 앞 고정', '세컨볼 떨어지면 슛', '몸싸움']);
-PSA('endo', 'CDM', 'modern', '엔도 와타루', 'Wataru Endo', '리버풀 · 일본', { spd: 1, tch: 2, drb: 1, kick: 1, stb: 3, eng: 3, vis: 2, calm: 3, lead: 3, agg: 3, mnt: 3 }, '듀얼 왕', '작아도 몸싸움·태클 승률이 높은 투지의 볼란치 주장.', ['몸싸움 먼저 몸', '세컨볼 자리', '팀을 말로 묶기']);
 PSA('fruiz', 'CDM,CAM', 'modern', '파비안 루이스', 'Fabian Ruiz', 'PSG · 스페인 · 유로 2024', { spd: 1, tch: 3, drb: 2, kick: 3, stb: 2, eng: 2, vis: 3, calm: 3, lead: 1, agg: 1, mnt: 2 }, '왼발 조율사', '긴 다리 왼발로 템포를 조절하고 중거리를 때리는 미드필더.', ['받기 전 보기', '왼발 긴 전환', '중거리 각']);
 PSA('vitinha', 'CDM,CAM', 'modern', '비티냐', 'Vitinha', 'PSG · 포르투갈', { spd: 2, tch: 3, drb: 2, kick: 2, stb: 1, eng: 3, vis: 3, calm: 3, lead: 2, agg: 2, mnt: 2 }, '작은 메트로놈', '작은 몸으로 압박을 빠져나오고 템포를 쥐는 중원.', ['작은 터치로 탈압박', '주고 움직이기', '뺏긴 직후 압박']);
-PSA('jneves', 'CDM', 'modern', '주앙 네베스', 'Joao Neves', 'PSG · 포르투갈', { spd: 2, tch: 3, drb: 2, kick: 2, stb: 2, eng: 3, vis: 3, calm: 3, lead: 1, agg: 3, mnt: 2 }, '작은 전천후', '작아도 태클·패스·활동량 다 되는 젊은 중원.', ['뺏긴 직후 압박', '받기 전 보기', '세컨볼']);
 PSA('szoboszlai', 'CDM,CAM', 'modern', '도미니크 소보슬라이', 'Dominik Szoboszlai', '리버풀 · 헝가리', { spd: 2, tch: 3, drb: 2, kick: 3, stb: 2, eng: 3, vis: 2, calm: 2, lead: 2, agg: 3, mnt: 3 }, '중거리 · 압박 미드필더', '강한 중거리와 앞에서부터 압박하는 활동량의 미드필더.', ['세컨볼 슛', '압박 앞장', '세트피스 키커']);
 PSA('calhanoglu', 'CDM', 'modern', '하칸 찰하노을루', 'Hakan Calhanoglu', '인터밀란 · 튀르키예', { spd: 1, tch: 3, drb: 1, kick: 3, stb: 1, eng: 2, vis: 3, calm: 3, lead: 2, agg: 1, mnt: 3 }, '딥라잉 플레이메이커', '10번에서 볼란치로 내려가 롱패스와 세트피스로 경기를 만든다.', ['뒤에서 긴 패스', '세트피스 키커', '받기 전 보기']);
 PSA('mainoo', 'CDM,CAM', 'modern', '코비 마이누', 'Kobbie Mainoo', '맨유 · 잉글랜드', { spd: 2, tch: 3, drb: 2, kick: 2, stb: 2, eng: 2, vis: 3, calm: 3, lead: 1, agg: 1, mnt: 2 }, '침착한 10대 중원', '어려도 압박 속에서 침착하게 공을 지키는 미드필더.', ['몸으로 공 가리기', '서두르지 않기', '주고 움직이기']);
@@ -23717,26 +23711,16 @@ PSA('xsimons', 'CAM,WG', 'modern', '사비 시몬스', 'Xavi Simons', '라이프
 PSA('jfelix', 'CAM,ST', 'modern', '주앙 펠릭스', 'Joao Felix', '아틀레티코 · 포르투갈', { spd: 2, tch: 3, drb: 3, kick: 2, stb: 1, eng: 1, vis: 3, calm: 2, lead: 1, agg: 1, mnt: 1 }, '기술의 세컨드 스트라이커', '부드러운 터치와 창의적 연계의 공격수.', ['첫 터치로 수비 지우기', '연계 뒤 박스로', '패스 각 열어두기']);
 PSA('maddison', 'CAM', 'modern', '제임스 매디슨', 'James Maddison', '토트넘 · 잉글랜드', { spd: 1, tch: 3, drb: 1, kick: 3, stb: 1, eng: 2, vis: 3, calm: 2, lead: 2, agg: 1, mnt: 2 }, '세트피스 · 킬패스 10번', '프리킥과 한 번에 가르는 패스의 플레이메이커.', ['세트피스 키커', '상대 볼란치 뒤에서 받기', '침투 길로 패스']);
 PSA('havertz', 'CAM,ST', 'modern', '카이 하베르츠', 'Kai Havertz', '첼시 · 아스널 · 독일', { spd: 2, tch: 3, drb: 1, kick: 2, stb: 3, eng: 3, vis: 2, calm: 2, lead: 1, agg: 2, mnt: 2 }, '키 큰 연계형', '큰 키로 등지고 받고 박스로 늦게 들어가는 공격형 미드필더.', ['등지고 받아 내주기', '늦게 박스 진입', '헤딩 자리']);
-PSA('guler', 'CAM,WG', 'modern', '아르다 귈레르', 'Arda Guler', '레알 마드리드 · 튀르키예', { spd: 2, tch: 3, drb: 2, kick: 3, stb: 1, eng: 2, vis: 3, calm: 3, lead: 1, agg: 1, mnt: 2 }, '왼발 천재', '왼발 감아차기와 킬패스를 가진 젊은 플레이메이커.', ['왼발 각 만들기', '먼 구석 감아차기', '받기 전 보기']);
-PSA('eze', 'CAM,WG', 'modern', '에베레치 에제', 'Eberechi Eze', '크리스탈 팰리스 · 아스널 · 잉글랜드', { spd: 2, tch: 3, drb: 3, kick: 3, stb: 1, eng: 2, vis: 2, calm: 2, lead: 1, agg: 1, mnt: 2 }, '리듬 드리블러', '느릿한 리듬에서 갑자기 빨라지는 드리블과 중거리.', ['속도 변화', '중거리 각', '좁은 곳 드리블']);
-PSA('reijnders', 'CAM,CDM', 'modern', '타이아니 레인더르스', 'Tijjani Reijnders', 'AC 밀란 · 맨시티 · 네덜란드', { spd: 2, tch: 3, drb: 3, kick: 2, stb: 2, eng: 3, vis: 3, calm: 3, lead: 1, agg: 1, mnt: 2 }, '몰고 올라가는 8번', '중원에서 공을 몰고 박스까지 전진하는 미드필더.', ['앞이 비면 몰고 가기', '늦게 박스 진입', '세컨볼']);
-PSA('nicopaz', 'CAM', 'modern', '니코 파스', 'Nico Paz', '코모 · 아르헨티나', { spd: 2, tch: 3, drb: 2, kick: 3, stb: 1, eng: 2, vis: 3, calm: 2, lead: 1, agg: 1, mnt: 2 }, '키 큰 10번', '큰 키와 왼발 기술로 공격을 만드는 젊은 10번.', ['상대 사이에서 받기', '왼발 중거리', '침투 패스']);
 
 /* WG */
 PSA('rodrygo', 'WG', 'modern', '호드리구', 'Rodrygo', '레알 마드리드 · 브라질', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 1, eng: 2, vis: 2, calm: 3, lead: 1, agg: 1, mnt: 3 }, '큰 경기 윙', '챔피언스리그 큰 경기마다 골을 넣는 침착한 윙.', ['큰 경기 침착', '박스 안 세컨볼', '안으로 접어 슛']);
 PSA('raphinha', 'WG', 'modern', '하피냐', 'Raphinha', '바르셀로나 · 브라질', { spd: 3, tch: 3, drb: 3, kick: 3, stb: 2, eng: 3, vis: 2, calm: 2, lead: 2, agg: 3, mnt: 3 }, '압박하는 득점 윙', '앞에서 압박하고 박스로 들어가 골·어시스트를 쌓는 윙.', ['상대 풀백 압박', '먼 포스트 진입', '왼발 감아차기']);
 PSA('leao', 'WG', 'modern', '하파엘 레앙', 'Rafael Leao', 'AC 밀란 · 포르투갈', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 2, eng: 1, vis: 2, calm: 1, lead: 1, agg: 1, mnt: 1 }, '긴 보폭 드리블러', '긴 보폭 스피드 드리블로 측면을 단숨에 뚫는 윙.', ['터치 길게 속도', '1대1 바깥·안쪽 다', '제친 뒤 마무리']);
 PSA('sane', 'WG', 'modern', '르로이 자네', 'Leroy Sane', '바이에른 · 갈라타사라이 · 독일', { spd: 3, tch: 3, drb: 3, kick: 3, stb: 1, eng: 2, vis: 2, calm: 1, lead: 1, agg: 1, mnt: 1 }, '폭발 스피드 윙', '순간 스피드와 왼발 슛의 윙.', ['뒷공간 질주', '안으로 접어 슛', '속도 변화']);
-PSA('kulusevski', 'WG,CAM', 'modern', '데얀 쿨루셉스키', 'Dejan Kulusevski', '토트넘 · 스웨덴', { spd: 2, tch: 3, drb: 3, kick: 2, stb: 3, eng: 3, vis: 3, calm: 2, lead: 1, agg: 2, mnt: 2 }, '몸으로 버티는 윙', '큰 몸으로 공을 지키고 안으로 들어와 패스하는 윙.', ['몸으로 공 가리기', '안으로 접어 패스', '수비 가담']);
 PSA('doku', 'WG', 'modern', '제레미 도쿠', 'Jeremy Doku', '맨시티 · 벨기에', { spd: 3, tch: 3, drb: 3, kick: 1, stb: 1, eng: 2, vis: 1, calm: 1, lead: 1, agg: 1, mnt: 2 }, '1대1 머신', '정지 상태에서 폭발하는 드리블로 1대1을 가장 많이 이기는 윙.', ['1대1은 멈췄다 폭발', '작은 터치', '제친 뒤 컷백']);
-PSA('olise', 'WG,CAM', 'modern', '마이클 올리세', 'Michael Olise', '바이에른 · 프랑스', { spd: 2, tch: 3, drb: 3, kick: 3, stb: 1, eng: 2, vis: 3, calm: 3, lead: 1, agg: 1, mnt: 2 }, '왼발 창의 윙', '오른쪽에서 왼발로 패스와 슛을 만드는 창의적 윙.', ['안으로 접어 패스·슛', '세트피스 키커', '받기 전 보기']);
 PSA('barcola', 'WG', 'modern', '브래들리 바르콜라', 'Bradley Barcola', 'PSG · 프랑스', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 1, eng: 2, vis: 2, calm: 2, lead: 1, agg: 2, mnt: 2 }, '직선 드리블 윙', '빠른 직선 드리블로 뒷공간을 공략하는 윙.', ['뒷공간 질주', '바깥으로 치고 낮은 크로스', '압박']);
 PSA('garnacho', 'WG', 'modern', '알레한드로 가르나초', 'Alejandro Garnacho', '맨유 · 첼시 · 아르헨티나', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 1, eng: 2, vis: 1, calm: 1, lead: 1, agg: 2, mnt: 2 }, '겁 없는 드리블러', '1대1을 두려워하지 않는 젊은 윙.', ['자신 있게 1대1', '제친 뒤 슛', '뺏기면 압박']);
-PSA('cunha', 'WG,ST', 'modern', '마테우스 쿠냐', 'Matheus Cunha', '울버햄튼 · 맨유 · 브라질', { spd: 2, tch: 3, drb: 3, kick: 3, stb: 2, eng: 3, vis: 2, calm: 2, lead: 1, agg: 2, mnt: 2 }, '몰고 때리는 공격수', '중원부터 드리블로 올라와 중거리를 때리는 공격수.', ['몰고 올라가기', '중거리 각', '세컨볼']);
-PSA('mbeumo', 'WG', 'modern', '브라이언 음뵈모', 'Bryan Mbeumo', '브렌트퍼드 · 맨유 · 카메룬', { spd: 3, tch: 2, drb: 2, kick: 3, stb: 2, eng: 3, vis: 2, calm: 2, lead: 1, agg: 2, mnt: 2 }, '왼발 역습 윙', '역습 때 안으로 접어 왼발로 마무리하는 윙.', ['뺏는 순간 질주', '왼발 마무리', '먼 포스트']);
 PSA('ldiaz', 'WG', 'modern', '루이스 디아스', 'Luis Diaz', '리버풀 · 바이에른 · 콜롬비아', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 2, eng: 3, vis: 1, calm: 1, lead: 1, agg: 3, mnt: 3 }, '압박 드리블 윙', '끝없는 압박과 직선 드리블의 왼쪽 윙.', ['상대 풀백 압박', '직선 돌파', '박스 안 진입']);
-PSA('estevao', 'WG', 'modern', '에스테방', 'Estevao', '파우메이라스 · 첼시 · 브라질', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 1, eng: 2, vis: 2, calm: 2, lead: 1, agg: 1, mnt: 2 }, '브라질의 새 드리블러', '10대 기술 드리블러. 왼발 감아차기.', ['작은 터치 드리블', '안으로 접어 왼발', '제친 뒤 패스']);
-PSA('savinho', 'WG', 'modern', '사비뉴', 'Savinho', '맨시티 · 브라질', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 1, eng: 2, vis: 2, calm: 1, lead: 1, agg: 2, mnt: 2 }, '발 빠른 크로스 윙', '바깥으로 치고 올리는 스피드 윙.', ['바깥 돌파', '낮은 크로스', '압박']);
 
 /* ST */
 PSA('lautaro', 'ST', 'modern', '라우타로 마르티네스', 'Lautaro Martinez', '인터밀란 · 아르헨티나 · 2022 월드컵', { spd: 2, tch: 3, drb: 2, kick: 3, stb: 3, eng: 3, vis: 2, calm: 2, lead: 3, agg: 3, mnt: 3 }, '투지의 9번 주장', '몸싸움·압박·마무리를 다 하는 전투형 스트라이커.', ['상대 CB 압박', '등지고 버티기', '박스 안 원터치']);
@@ -23747,9 +23731,6 @@ PSA('gyokeres', 'ST', 'modern', '빅토르 요케레스', 'Viktor Gyokeres', '�
 PSA('richarlison', 'ST', 'modern', '히샬리송', 'Richarlison', '토트넘 · 브라질', { spd: 2, tch: 2, drb: 1, kick: 3, stb: 3, eng: 3, vis: 1, calm: 1, lead: 1, agg: 3, mnt: 2 }, '전투형 공격수', '압박·헤딩·발리 — 몸을 던지는 공격수.', ['압박 먼저', '헤딩 자리', '발리 과감하게']);
 PSA('giroud', 'ST', 'modern', '올리비에 지루', 'Olivier Giroud', 'AC 밀란 · 프랑스 · 2018 월드컵', { spd: 1, tch: 3, drb: 1, kick: 3, stb: 3, eng: 2, vis: 2, calm: 3, lead: 2, agg: 1, mnt: 3 }, '연계형 타깃맨', '등지고 받아 내주고 헤딩·발리로 마무리하는 타깃.', ['등지고 받아 내주기', '헤딩 도움닫기', '연계 뒤 박스로']);
 PSA('mthuram', 'ST', 'modern', '마르쿠스 튀랑', 'Marcus Thuram', '인터밀란 · 프랑스', { spd: 3, tch: 3, drb: 2, kick: 2, stb: 3, eng: 3, vis: 2, calm: 2, lead: 1, agg: 2, mnt: 2 }, '파워 연계 9번', '큰 몸과 스피드로 등지고 받고 뒷공간도 뛰는 공격수.', ['등지고 받기', '뒷공간', '짝 ST와 역할 나누기']);
-PSA('jdavid', 'ST', 'modern', '조너선 데이비드', 'Jonathan David', '릴 · 유벤투스 · 캐나다', { spd: 3, tch: 2, drb: 1, kick: 3, stb: 1, eng: 2, vis: 1, calm: 3, lead: 1, agg: 2, mnt: 2 }, '움직임 피니셔', '수비 등 뒤 움직임과 원터치 마무리의 공격수.', ['수비 등 뒤에서 출발', '원터치', '낮게 구석']);
-PSA('openda', 'ST', 'modern', '루아 오펜다', 'Lois Openda', '라이프치히 · 유벤투스 · 벨기에', { spd: 3, tch: 2, drb: 2, kick: 2, stb: 2, eng: 3, vis: 1, calm: 1, lead: 1, agg: 3, mnt: 2 }, '질주형 9번', '뒷공간 질주와 압박의 스피드 공격수.', ['뒷공간 질주', '압박', '마무리 낮게']);
-PSA('jackson', 'ST', 'modern', '니콜라스 잭슨', 'Nicolas Jackson', '첼시 · 바이에른 · 세네갈', { spd: 3, tch: 2, drb: 2, kick: 2, stb: 2, eng: 3, vis: 1, calm: 1, lead: 1, agg: 3, mnt: 1 }, '뛰는 9번', '압박과 뒷공간 질주로 수비를 괴롭히는 공격수.', ['압박 먼저', '뒷공간', '실수해도 다음']);
 // v124 추가 — 사용자 요청(사비 알론소) + 같은 결의 중원 셋
 PSA('xalonso', 'CDM', 'classic', '사비 알론소', 'Xabi Alonso', '리버풀 · 레알 마드리드 · 바이에른 · 스페인 · 2004~2017', { spd: 1, tch: 3, drb: 1, kick: 3, stb: 2, eng: 2, vis: 3, calm: 3, lead: 2, agg: 1, mnt: 3 }, '롱패스 레지스타', '뒤에서 한 번에 반대쪽을 여는 대각선 롱패스와 하프라인 중거리. 서두르지 않는 중원의 조율사 — 지금은 감독.', ['받기 전에 반대쪽 먼저 보고 한 번에 전환', '패스 전에 몸을 열어 두 방향 다 가능하게', '하프라인 근처에서도 골문 한 번 보기']);
 PSA('dsilva', 'CAM,WG', 'classic', '다비드 실바', 'David Silva', '발렌시아 · 맨시티 · 스페인 · 2004~2023', { spd: 2, tch: 3, drb: 2, kick: 2, stb: 1, eng: 2, vis: 3, calm: 3, lead: 1, agg: 1, mnt: 2 }, '하프스페이스의 마술사', '수비와 미드 사이 좁은 공간에서 받아 원터치로 풀어내는 왼발 10번. 화려하지 않지만 뺏기지 않는다.', ['수비 사이 틈에 서서 받기', '받기 전에 어깨 너머 보기', '원터치 리턴 → 다시 움직이기']);
@@ -23777,7 +23758,6 @@ PSA('jorginho', 'CDM', 'modern', '조르지뉴', 'Jorginho', '첼시 · 아스�
 PSA('dybala', 'CAM,ST', 'modern', '파울로 디발라', 'Paulo Dybala', '유벤투스 · 로마 · 아르헨티나', { spd: 2, tch: 3, drb: 3, kick: 3, stb: 1, eng: 2, vis: 3, calm: 2, lead: 1, agg: 1, mnt: 2 }, '왼발 보석', '감아차기와 드리블로 박스 앞을 지배하는 왼발 10번.', ['박스 앞 왼발 감아차기', '좁은 공간 드리블', '프리킥 루틴 하나']);
 PSA('cherki', 'CAM,WG', 'modern', '라얀 셰르키', 'Rayan Cherki', '리옹 · 맨시티 · 프랑스', { spd: 2, tch: 3, drb: 3, kick: 2, stb: 1, eng: 2, vis: 3, calm: 2, lead: 1, agg: 1, mnt: 2 }, '양발 창의 10번', '양발 드리블과 예측 못 할 패스로 수비를 흔드는 10번.', ['양발 다 쓰기', '수비가 안 보는 쪽으로 패스', '드리블은 공간 만들 때만']);
 PSA('yildiz', 'CAM,WG', 'modern', '케난 일디즈', 'Kenan Yildiz', '유벤투스 · 튀르키예', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 1, eng: 2, vis: 2, calm: 2, lead: 1, agg: 2, mnt: 2 }, '안으로 접는 10번', '왼쪽에서 왼발 드리블로 안으로 접어 들어오는 젊은 공격형 MF.', ['측면에서 안으로 접기', '첫 터치는 앞으로', '슛 각 보이면 바로']);
-PSA('mastantuono', 'CAM,WG', 'modern', '프랑코 마스탄투오노', 'Franco Mastantuono', '리버플레이트 · 레알 마드리드 · 아르헨티나', { spd: 2, tch: 3, drb: 3, kick: 3, stb: 1, eng: 2, vis: 3, calm: 2, lead: 1, agg: 1, mnt: 2 }, '왼발 프리킥 유망주', '10대에 레알로 — 왼발 프리킥과 드리블.', ['프리킥 루틴', '좁은 공간 드리블', '겁 없이 시도']);
 PSA('kvara', 'WG', 'modern', '흐비차 크바라츠헬리아', 'Khvicha Kvaratskhelia', '나폴리 · PSG · 조지아', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 1, eng: 3, vis: 2, calm: 2, lead: 1, agg: 2, mnt: 3 }, '크바라도나', '왼쪽에서 쉬지 않고 1대1을 시도하는 드리블러. 수비 가담도 성실.', ['1대1은 무조건 시도', '안으로 접어 슛', '뺏기면 바로 복귀']);
 PSA('doue', 'WG,CAM', 'modern', '데지레 두에', 'Desire Doue', 'PSG · 프랑스', { spd: 3, tch: 3, drb: 3, kick: 3, stb: 1, eng: 2, vis: 2, calm: 2, lead: 1, agg: 2, mnt: 3 }, '큰 경기 윙', '양발 드리블과 슛 — 챔스 결승 2골의 10대.', ['양발 슛', '드리블 뒤 바로 슛', '큰 경기일수록 과감하게']);
 PSA('gakpo', 'WG,ST', 'modern', '코디 각포', 'Cody Gakpo', '리버풀 · 네덜란드', { spd: 2, tch: 3, drb: 2, kick: 3, stb: 2, eng: 2, vis: 2, calm: 3, lead: 1, agg: 2, mnt: 2 }, '안으로 접는 왼쪽 피니셔', '왼쪽에서 안으로 접어 오른발로 때리는 침착한 윙.', ['안으로 접고 먼 포스트', '첫 터치 안쪽으로', '박스 안은 침착하게']);
@@ -23785,15 +23765,10 @@ PSA('rashford', 'WG,ST', 'modern', '마커스 래시포드', 'Marcus Rashford', 
 PSA('agordon', 'WG', 'modern', '앤서니 고든', 'Anthony Gordon', '뉴캐슬 · 잉글랜드', { spd: 3, tch: 2, drb: 3, kick: 2, stb: 1, eng: 3, vis: 1, calm: 1, lead: 1, agg: 3, mnt: 2 }, '압박하는 스프린터', '스피드와 압박으로 왼쪽을 괴롭히는 윙.', ['압박은 앞에서부터', '뒷공간 질주', '컷백 패스']);
 PSA('grealish', 'WG,CAM', 'modern', '잭 그릴리시', 'Jack Grealish', '애스턴 빌라 · 맨시티 · 에버턴 · 잉글랜드', { spd: 2, tch: 3, drb: 3, kick: 1, stb: 2, eng: 2, vis: 2, calm: 3, lead: 1, agg: 1, mnt: 2 }, '공을 지키는 드리블러', '낮은 무게중심으로 공을 지키고 파울을 얻으며 템포를 늦추는 윙.', ['공 지키며 시간 벌기', '파울 얻기', '안으로 들어가 패스']);
 PSA('kudus', 'WG,CAM', 'modern', '모하메드 쿠두스', 'Mohammed Kudus', '웨스트햄 · 토트넘 · 가나', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 2, eng: 3, vis: 1, calm: 1, lead: 1, agg: 2, mnt: 2 }, '힘 있는 드리블러', '몸과 드리블로 밀고 들어가는 윙·2선.', ['몸으로 버티며 드리블', '중거리 슛', '뺏겨도 다시']);
-PSA('semenyo', 'WG,ST', 'modern', '안토니 세메뇨', 'Antoine Semenyo', '본머스 · 가나', { spd: 3, tch: 2, drb: 3, kick: 3, stb: 3, eng: 3, vis: 1, calm: 1, lead: 1, agg: 3, mnt: 2 }, '파워 윙', '힘과 스피드로 밀고 들어가 강슛까지 하는 윙.', ['몸싸움에서 안 밀리기', '직선 드리블', '강슛']);
-PSA('marmoush', 'WG,ST', 'modern', '오마르 마르무시', 'Omar Marmoush', '프랑크푸르트 · 맨시티 · 이집트', { spd: 3, tch: 2, drb: 2, kick: 3, stb: 2, eng: 3, vis: 2, calm: 2, lead: 1, agg: 3, mnt: 2 }, '압박하는 득점 윙', '앞에서 압박하고 뒷공간으로 뛰고 강슛 — 왼쪽·중앙 다 가능.', ['압박 → 뺏고 바로 슛', '뒷공간 타이밍', '중거리 강슛']);
 PSA('watkins', 'ST', 'modern', '올리 왓킨스', 'Ollie Watkins', '애스턴 빌라 · 잉글랜드', { spd: 3, tch: 2, drb: 2, kick: 3, stb: 2, eng: 3, vis: 2, calm: 2, lead: 1, agg: 3, mnt: 2 }, '뛰는 움직임 9번', '뒷공간 질주와 압박, 움직임으로 골을 만드는 9번.', ['수비 사이 뒷공간 타이밍', '앞에서 압박', '컷백 받는 자리']);
 PSA('vlahovic', 'ST', 'modern', '두샨 블라호비치', 'Dusan Vlahovic', '유벤투스 · 세르비아', { spd: 2, tch: 2, drb: 1, kick: 3, stb: 3, eng: 2, vis: 1, calm: 2, lead: 1, agg: 2, mnt: 2 }, '왼발 파워 9번', '큰 키와 왼발 강슛으로 박스 안을 지배하는 타깃 피니셔.', ['등지고 버티기', '왼발 강슛', '니어 포스트 헤딩']);
 PSA('ekitike', 'ST', 'modern', '위고 에키티케', 'Hugo Ekitike', '프랑크푸르트 · 리버풀 · 프랑스', { spd: 3, tch: 3, drb: 3, kick: 2, stb: 2, eng: 2, vis: 2, calm: 2, lead: 1, agg: 2, mnt: 2 }, '기술 있는 큰 9번', '키 크면서 드리블·연계까지 되는 현대 9번.', ['발밑 받아 돌기', '드리블로 박스 진입', '연계 뒤 다시 들어가기']);
-PSA('guirassy', 'ST', 'modern', '세루 기라시', 'Serhou Guirassy', '슈투트가르트 · 도르트문트 · 기니', { spd: 2, tch: 2, drb: 1, kick: 3, stb: 3, eng: 2, vis: 1, calm: 3, lead: 1, agg: 2, mnt: 3 }, '침착한 박스 피니셔', '몸으로 버티고 박스 안에서 침착하게 마무리하는 9번.', ['박스 안 침착', '등지고 버티기', '헤딩']);
-PSA('joaopedro', 'ST,CAM', 'modern', '주앙 페드루', 'Joao Pedro', '브라이턴 · 첼시 · 브라질', { spd: 2, tch: 3, drb: 2, kick: 2, stb: 2, eng: 2, vis: 3, calm: 2, lead: 1, agg: 2, mnt: 2 }, '연계형 세컨드 스트라이커', '내려와 받고 연결하다 박스에서 마무리하는 공격수.', ['내려와 받고 돌아서기', '동료 살리는 패스', '박스 안 마무리']);
 PSA('vardy', 'ST', 'modern', '제이미 바디', 'Jamie Vardy', '레스터 · 잉글랜드 · 2012~2025', { spd: 3, tch: 2, drb: 1, kick: 3, stb: 2, eng: 3, vis: 1, calm: 2, lead: 1, agg: 3, mnt: 3 }, '뒷공간 스프린터', '늦게 피어 뒷공간 질주로 우승까지 한 9번. 오프사이드 라인 타기.', ['오프사이드 라인에서 타이밍', '뒷공간 질주', '앞에서 압박']);
-PSA('immobile', 'ST', 'modern', '치로 임모빌레', 'Ciro Immobile', '라치오 · 이탈리아', { spd: 2, tch: 2, drb: 1, kick: 3, stb: 2, eng: 3, vis: 1, calm: 2, lead: 1, agg: 2, mnt: 2 }, '박스 안 피니셔', '움직임과 마무리로 세리에 득점왕 4회.', ['박스 안 움직임', '원터치 슛', '뒷공간 타이밍']);
 // v128: 사용자 「한국 선수는 레전드급만」 — 11명 뺌(황인범·이재성·김영권·정우영·김승규·조현우·김진수·오현규·설영우·배준호·조규성·송종국·최진철) + 차두리 추가
 PSA('chadr', 'FB,WG', 'classic', '차두리', 'Cha Du-ri', '프랑크푸르트 · 셀틱 · 한국 · 2002~2015', { spd: 3, tch: 2, drb: 2, kick: 2, stb: 3, eng: 3, vis: 1, calm: 1, lead: 2, agg: 3, mnt: 3 }, '로봇 — 파워 오버래핑', '스피드와 힘으로 측면을 폭주하는 풀백. 공격수로 시작해 풀백이 됐고, 2015년 아시안컵 돌파로 마무리.', ['측면은 직선으로 폭주', '몸싸움은 먼저 부딪히기', '마지막 경기처럼 뛰기']);
 
@@ -23926,16 +23901,107 @@ const PS_QN = {
     mnt: { id: 'n_mnt', q: '실점 직후', o: [['바로 소리치며 리셋', { mnt: 3 }], ['평소대로', { mnt: 2 }], ['조금 흔들린다', { mnt: 1 }], ['무너진다', {}]] },
   },
 };
+// ── v130 파생 질문(PS_FU) — 「어떤 보기를 고르면 그 보기에서 파생되는 질문이 또 나오고」(사용자) · 키 = '질문id:보기번호' · 보기 = [글, 성향 하나, null, 태그[]]
+//    태그는 선수 글(유형·설명·가져올 것)에서 자동으로 뽑은 「세부 스타일」(PS_TAGK) 과 맞춰서 점수 15% — 같은 성향이라도 「프리킥」「컷백」「스위퍼」 같은 세부가 다르면 다른 선수가 나오게
+const PS_FU = {
+  'q1:0': { id: 'f_q1_0', q: '드리블로 제친다 — 어떤 드리블?', o: [['속도로 치고 나간다', { spd: 3 }, null, ['behind', 'drib']], ['페인트·발재간으로', { drb: 3 }, null, ['drib']], ['몸으로 밀고 들어간다', { stb: 3 }, null, ['hold', 'drib']], ['방향 바꿔 공간 만들고 패스', { vis: 3 }, null, ['escape', 'key']]] },
+  'f_q1_0:1': { id: 'f_q1_0_1', q: '페인트로 제친 다음은?', o: [['안으로 접어 슛', { kick: 3 }, null, ['cutin', 'long']], ['바깥으로 나가 크로스', { spd: 3 }, null, ['cross']], ['한 명 더 제친다', { drb: 3 }, null, ['drib']], ['제치자마자 패스', { vis: 3 }, null, ['key']]] },
+  'q1:1': { id: 'f_q1_1', q: '첫 터치로 돌아선 다음은?', o: [['앞으로 몰고 간다', { drb: 3 }, null, ['escape', 'drib']], ['바로 전진 패스', { vis: 3 }, null, ['escape', 'key']], ['슛 각부터 본다', { kick: 3 }, null, ['long']], ['한 번 더 보고 템포', { calm: 3 }, null, ['tempo']]] },
+  'q1:2': { id: 'f_q1_2', q: '빠른 패스는 어떤 패스?', o: [['원터치 벽패스', { tch: 3 }, null, ['build', 'link']], ['수비 뒤 스루패스', { vis: 3 }, null, ['key']], ['반대쪽 전환', { kick: 3 }, null, ['switch']], ['주고 바로 뛰어 다시 받기', { eng: 3 }, null, ['engine', 'link']]] },
+  'q1:3': { id: 'f_q1_3', q: '전환이냐 슛이냐?', o: [['중거리 슛', { kick: 3 }, null, ['long']], ['대각선 전환 패스', { vis: 3 }, null, ['switch']], ['발리·하프발리', { tch: 3 }, null, ['long']], ['골키퍼 위로 로빙', { calm: 3 }, null, ['box']]] },
+  'q1:4': { id: 'f_q1_4', q: '템포 조절은 어떻게?', o: [['뒤로 돌려 다시 시작', { calm: 3 }, null, ['tempo', 'build']], ['공 지키며 동료 올라올 시간 벌기', { stb: 3 }, null, ['hold', 'tempo']], ['짧은 패스 여러 번', { tch: 3 }, null, ['build']], ['소리로 속도 지시', { lead: 3 }, null, ['line', 'tempo']]] },
+  'q1:5': { id: 'f_q1_5', q: '등지고 버틴 다음은?', o: [['돌아서 슛', { kick: 3 }, null, ['hold', 'box']], ['내려오는 동료에게 내준다', { vis: 3 }, null, ['hold', 'link']], ['파울 얻기', { mnt: 3 }, null, ['hold']], ['버티다 돌아서 드리블', { drb: 3 }, null, ['hold', 'drib']]] },
+  'q1:6': { id: 'f_q1_6', q: '주고 뛰는 건 어디로?', o: [['뒷공간', { spd: 3 }, null, ['behind']], ['리턴 받으러', { tch: 3 }, null, ['link', 'build']], ['박스 안', { kick: 3 }, null, ['box']], ['세컨볼 자리', { calm: 3 }, null, ['second']]] },
+  'q2:0': { id: 'f_q2_0', q: '스피드를 어디에 쓰고 싶어?', o: [['뒷공간 질주', { spd: 3 }, null, ['behind']], ['측면 왕복', { eng: 3 }, null, ['engine', 'cross']], ['역습에서 공 몰고 가기', { drb: 3 }, null, ['counter', 'drib']], ['수비 복귀·커버', { calm: 3 }, null, ['cover']]] },
+  'q2:1': { id: 'f_q2_1', q: '볼 터치가 빛나는 순간은?', o: [['압박 속 탈압박', { tch: 3 }, null, ['escape']], ['원터치 연결', { vis: 3 }, null, ['build', 'link']], ['발리·하프발리', { kick: 3 }, null, ['long']], ['공중볼 트래핑', { stb: 3 }, null, ['aerial']]] },
+  'q2:2': { id: 'f_q2_2', q: '드리블 스타일은?', o: [['치고 달리기', { spd: 3 }, null, ['behind', 'drib']], ['발재간·페인트', { drb: 3 }, null, ['drib']], ['몸으로 밀고', { stb: 3 }, null, ['hold', 'drib']], ['좁은 공간에서 돌아서기', { tch: 3 }, null, ['escape']]] },
+  'q2:3': { id: 'f_q2_3', q: '킥은 어떤 킥?', o: [['강슛·중거리', { kick: 3 }, null, ['long']], ['롱패스·전환', { vis: 3 }, null, ['switch']], ['프리킥·코너킥', { calm: 3 }, null, ['set']], ['감아차기', { tch: 3 }, null, ['curl']]] },
+  'q2:4': { id: 'f_q2_4', q: '몸싸움은 어디서?', o: [['공중볼', { stb: 3 }, null, ['aerial', 'head']], ['등지고 버티기', { calm: 3 }, null, ['hold']], ['태클·몸 던지기', { agg: 3 }, null, ['tackle']], ['밀어내고 돌파', { drb: 3 }, null, ['hold', 'drib']]] },
+  'q2:5': { id: 'f_q2_5', q: '체력은 어디에 쓰고 싶어?', o: [['측면 왕복', { eng: 3 }, null, ['engine', 'cross']], ['앞에서부터 압박', { agg: 3 }, null, ['press', 'engine']], ['세컨볼 먼저', { calm: 3 }, null, ['second']], ['후반 뒷공간', { spd: 3 }, null, ['behind']]] },
+  'q2:6': { id: 'f_q2_6', q: '시야는 어떤 패스로?', o: [['킬패스', { vis: 3 }, null, ['key']], ['반대쪽 전환', { kick: 3 }, null, ['switch']], ['원터치 벽패스', { tch: 3 }, null, ['build']], ['수비 읽고 가로채기', { calm: 3 }, null, ['cover']]] },
+  'q2:7': { id: 'f_q2_7', q: '침착함이 빛나는 순간은?', o: [['골키퍼와 1대1', { calm: 3 }, null, ['box']], ['압박 속에서', { tch: 3 }, null, ['escape']], ['1대1 수비', { stb: 3 }, null, ['tackle']], ['승부처', { mnt: 3 }, null, ['mental']]] },
+  'q2:8': { id: 'f_q2_8', q: '콜은 어떤 콜?', o: [['라인 올려·내려', { lead: 3 }, null, ['line']], ['「붙어」「시간」 압박 콜', { agg: 3 }, null, ['press', 'line']], ['세트피스 배치', { calm: 3 }, null, ['set', 'line']], ['분위기·격려', { mnt: 3 }, null, ['mental']]] },
+  'q2:9': { id: 'f_q2_9', q: '멘탈이 세다는 건?', o: [['질 때 더 뛴다', { eng: 3 }, null, ['mental', 'engine']], ['큰 경기에서 골', { kick: 3 }, null, ['mental', 'box']], ['실수 바로 잊기', { calm: 3 }, null, ['mental']], ['거친 상대에 안 밀림', { stb: 3 }, null, ['mental', 'hold']]] },
+  'q3:0': { id: 'f_q3_0', q: '압박은 어떻게?', o: [['상대 CB 까지 쫓아간다', { agg: 3 }, null, ['press']], ['패스길 막으며 몰아간다', { calm: 3 }, null, ['press', 'cover']], ['뺏기면 5초 전력', { eng: 3 }, null, ['press', 'engine']], ['동료와 둘이 샌드위치', { lead: 3 }, null, ['press', 'line']]] },
+  'q3:1': { id: 'f_q3_1', q: '자리 지키기는?', o: [['패스길 막기', { calm: 3 }, null, ['cover']], ['상대 10번 전담', { stb: 3 }, null, ['tackle']], ['세컨볼 자리', { vis: 3 }, null, ['second']], ['라인 맞춰 서기', { lead: 3 }, null, ['line']]] },
+  'q3:2': { id: 'f_q3_2', q: '가로채고 나서는?', o: [['바로 역습 드리블', { drb: 3 }, null, ['counter', 'drib']], ['앞으로 긴 패스', { kick: 3 }, null, ['counter', 'switch']], ['짧게 연결', { tch: 3 }, null, ['build']], ['일단 지키고 템포', { calm: 3 }, null, ['tempo']]] },
+  'q3:3': { id: 'f_q3_3', q: '태클은?', o: [['슬라이딩', { agg: 3 }, null, ['tackle']], ['서서 발 넣기', { calm: 3 }, null, ['tackle']], ['몸으로 밀어내기', { stb: 3 }, null, ['tackle', 'hold']], ['태클보단 각 막기', { vis: 3 }, null, ['cover']]] },
+  'q3:4': { id: 'f_q3_4', q: '복귀해서는?', o: [['내 자리부터', { calm: 3 }, null, ['cover']], ['공 쪽으로 압박', { agg: 3 }, null, ['press']], ['뒷공간 먼저', { spd: 3 }, null, ['cover', 'behind']], ['소리로 정리', { lead: 3 }, null, ['line']]] },
+  'q3:5': { id: 'f_q3_5', q: '뒤에서 보고 정리 — 뭘 말해?', o: [['라인', { lead: 3 }, null, ['line']], ['마크 지정', { vis: 3 }, null, ['line', 'cover']], ['압박 신호', { agg: 3 }, null, ['press', 'line']], ['격려', { mnt: 3 }, null, ['mental']]] },
+  'q9:0': { id: 'f_q9_0', q: '뒷공간 뛰기는?', o: [['오프사이드 라인 타기', { calm: 3 }, null, ['behind']], ['대각선 침투', { spd: 3 }, null, ['behind']], ['수비 등 뒤 돌아 나오기', { vis: 3 }, null, ['behind', 'box']], ['측면 뒷공간', { eng: 3 }, null, ['behind', 'cross']]] },
+  'q9:1': { id: 'f_q9_1', q: '빈 곳에 미리 서기는?', o: [['박스 앞 세컨볼', { calm: 3 }, null, ['second']], ['수비 사이 틈', { tch: 3 }, null, ['link', 'escape']], ['먼 포스트', { stb: 3 }, null, ['box', 'head']], ['하프스페이스', { vis: 3 }, null, ['cutin']]] },
+  'q9:2': { id: 'f_q9_2', q: '패스 받을 각은?', o: [['삼각형 만들기', { vis: 3 }, null, ['build']], ['내려와서 받기', { tch: 3 }, null, ['link']], ['넓게 벌려 폭', { spd: 3 }, null, ['cross']], ['키퍼·CB 앞 빌드업', { calm: 3 }, null, ['build']]] },
+  'q9:3': { id: 'f_q9_3', q: '넓게 벌려 선 다음은?', o: [['1대1 돌파', { drb: 3 }, null, ['drib']], ['크로스', { kick: 3 }, null, ['cross']], ['안으로 접기', { tch: 3 }, null, ['cutin']], ['풀백 올라올 길 열기', { vis: 3 }, null, ['build']]] },
+  'q9:4': { id: 'f_q9_4', q: '소리치는 건?', o: [['동료 자리 잡아주기', { lead: 3 }, null, ['line']], ['「공 줘」', { mnt: 3 }, null, ['mental']], ['압박 신호', { agg: 3 }, null, ['press']], ['격려', { calm: 3 }, null, ['mental']]] },
+  'q9:5': { id: 'f_q9_5', q: '공 쪽으로 가는 건?', o: [['받으러 내려오기', { tch: 3 }, null, ['link']], ['세컨볼 줍기', { calm: 3 }, null, ['second']], ['압박 가담', { agg: 3 }, null, ['press']], ['숫자 우위 만들기', { eng: 3 }, null, ['engine', 'build']]] },
+  'q9:6': { id: 'f_q9_6', q: '뺏을 자리란?', o: [['상대 CB 패스길', { vis: 3 }, null, ['press', 'cover']], ['상대 볼란치 뒤', { agg: 3 }, null, ['press']], ['측면 터치라인으로 몰기', { calm: 3 }, null, ['press']], ['공격수가 발밑에 받을 때', { stb: 3 }, null, ['tackle']]] },
+  'q16:0': { id: 'f_q16_0', q: '잊는 비결은?', o: [['루틴 — 숨 한 번', { calm: 3 }, null, ['mental']], ['다음 플레이에 더 과감', { mnt: 3 }, null, ['mental']], ['동료가 말해준다', { lead: 3 }, null, ['mental']], ['더 세게 부딪힌다', { agg: 3 }, null, ['mental', 'press']]] },
+  'q16:1': { id: 'f_q16_1', q: '더 뛰는 건 어디로?', o: [['압박', { agg: 3 }, null, ['press']], ['복귀', { spd: 3 }, null, ['cover']], ['공 받으러', { tch: 3 }, null, ['link']], ['세컨볼', { calm: 3 }, null, ['second']]] },
+  'q16:2': { id: 'f_q16_2', q: '동료에게 뭐라고?', o: [['「미안, 다음」', { mnt: 3 }, null, ['mental']], ['「내가 막을게」', { lead: 3 }, null, ['line']], ['「붙어!」', { agg: 3 }, null, ['press']], ['말없이 손짓', { calm: 3 }, null, []]] },
+  'q18:0': { id: 'f_q18_0', q: '내가 나선다는 건?', o: [['공 달라고 해서 드리블', { drb: 3 }, null, ['mental', 'drib']], ['슛 각 보이면 바로', { kick: 3 }, null, ['mental', 'long']], ['승부차기 1번 키커', { calm: 3 }, null, ['set', 'mental']], ['동료 세우고 패턴', { lead: 3 }, null, ['line']]] },
+  'q18:2': { id: 'f_q18_2', q: '북돋우는 방법은?', o: [['소리', { lead: 3 }, null, ['line', 'mental']], ['먼저 뛰어서', { eng: 3 }, null, ['engine', 'mental']], ['침착하게 패스로 안정', { calm: 3 }, null, ['tempo']], ['거친 몸싸움으로 기세', { stb: 3 }, null, ['hold', 'mental']]] },
+  'q18:5': { id: 'f_q18_5', q: '한 방은?', o: [['중거리', { kick: 3 }, null, ['long']], ['킬패스', { vis: 3 }, null, ['key']], ['세트피스', { calm: 3 }, null, ['set']], ['헤딩', { stb: 3 }, null, ['head']]] },
+  // 공격 갈래
+  'q6:0': { id: 'f_q6_0', q: '마무리는 어떤 슛?', o: [['원터치', { tch: 3 }, null, ['box']], ['강슛', { kick: 3 }, null, ['long', 'box']], ['감아차기', { calm: 3 }, null, ['curl']], ['헤딩', { stb: 3 }, null, ['head']]] },
+  'q6:1': { id: 'f_q6_1', q: '마지막 패스는?', o: [['스루패스', { vis: 3 }, null, ['key']], ['컷백', { tch: 3 }, null, ['cross', 'key']], ['크로스', { kick: 3 }, null, ['cross']], ['원터치 리턴', { calm: 3 }, null, ['link']]] },
+  'q6:2': { id: 'f_q6_2', q: '드리블로 들어가서는?', o: [['슛', { kick: 3 }, null, ['drib', 'box']], ['패스', { vis: 3 }, null, ['drib', 'key']], ['한 명 더', { drb: 3 }, null, ['drib']], ['파울 얻기', { mnt: 3 }, null, ['drib']]] },
+  'q6:3': { id: 'f_q6_3', q: '뒷공간 침투 뒤 마무리는?', o: [['키퍼 보고 침착하게', { calm: 3 }, null, ['behind', 'box']], ['강슛', { kick: 3 }, null, ['behind']], ['칩샷·로빙', { tch: 3 }, null, ['behind']], ['동료에게 내주기', { vis: 3 }, null, ['behind', 'link']]] },
+  'a1:0': { id: 'f_a1_0', q: '니어에서는?', o: [['헤딩', { stb: 3 }, null, ['head']], ['발로 흘리기', { tch: 3 }, null, ['box']], ['수비 끌고 비우기', { vis: 3 }, null, ['box']], ['먼저 달려들기', { spd: 3 }, null, ['box']]] },
+  'a1:5': { id: 'f_a1_5', q: '어떤 크로스?', o: [['빠른 땅볼 컷백', { kick: 3 }, null, ['cross']], ['감아 올리는 크로스', { tch: 3 }, null, ['cross', 'curl']], ['얼리 크로스', { vis: 3 }, null, ['cross']], ['엔드라인까지 치고', { spd: 3 }, null, ['cross', 'drib']]] },
+  'q11:0': { id: 'f_q11_0', q: '속도로 이기는 건?', o: [['바깥으로', { spd: 3 }, null, ['drib', 'cross']], ['안으로', { tch: 3 }, null, ['cutin']], ['툭 치고 달리기', { drb: 3 }, null, ['drib']], ['뒷공간으로 미리', { vis: 3 }, null, ['behind']]] },
+  'q11:1': { id: 'f_q11_1', q: '드리블 기술은?', o: [['스텝오버', { drb: 3 }, null, ['drib']], ['방향 전환', { tch: 3 }, null, ['drib', 'escape']], ['겁 없이 시도', { mnt: 3 }, null, ['drib']], ['느리게 하다 순간 가속', { spd: 3 }, null, ['drib']]] },
+  'a2:2': { id: 'f_a2_2', q: '등지고 버티기 다음은?', o: [['돌아서 슛', { kick: 3 }, null, ['hold', 'box']], ['내준다', { vis: 3 }, null, ['hold', 'link']], ['파울', { mnt: 3 }, null, ['hold']], ['돌아서 드리블', { drb: 3 }, null, ['hold', 'drib']]] },
+  'a2:3': { id: 'f_a2_3', q: '연계는?', o: [['원터치 리턴', { tch: 3 }, null, ['link']], ['돌아서 스루', { vis: 3 }, null, ['link', 'key']], ['내려와서 전환', { kick: 3 }, null, ['link', 'switch']], ['수비 끌고 공간 만들기', { calm: 3 }, null, ['link']]] },
+  'q13:0': { id: 'f_q13_0', q: '압박 어떻게?', o: [['앞에서부터', { agg: 3 }, null, ['press']], ['함정 — 측면으로 몰기', { calm: 3 }, null, ['press', 'cover']], ['둘이 샌드위치', { lead: 3 }, null, ['press']], ['뺏은 뒤 바로 슛', { kick: 3 }, null, ['press', 'counter']]] },
+  'q13:2': { id: 'f_q13_2', q: '정리할 때 뭐라고?', o: [['「침착하게」', { calm: 3 }, null, ['line']], ['「더 뛰자」', { eng: 3 }, null, ['line', 'engine']], ['「공 줘」', { mnt: 3 }, null, ['mental']], ['자리 바꾸자고', { vis: 3 }, null, ['line']]] },
+  // 중원 갈래
+  'q15:0': { id: 'f_q15_0', q: '원터치 패스는?', o: [['벽패스', { tch: 3 }, null, ['build', 'link']], ['방향 바꾸는 원터치', { vis: 3 }, null, ['build']], ['흘려주기', { calm: 3 }, null, ['link']], ['원터치 스루', { kick: 3 }, null, ['key']]] },
+  'q15:1': { id: 'f_q15_1', q: '긴 패스는?', o: [['대각선 전환', { kick: 3 }, null, ['switch']], ['뒷공간 긴 공', { vis: 3 }, null, ['switch', 'behind']], ['타깃맨 머리로', { stb: 3 }, null, ['switch', 'head']], ['땅볼 롱패스', { tch: 3 }, null, ['switch']]] },
+  'q15:2': { id: 'f_q15_2', q: '틈을 찌를 땐?', o: [['수비 사이 스루', { vis: 3 }, null, ['key']], ['하프스페이스로', { tch: 3 }, null, ['key', 'cutin']], ['뒷공간 칩', { kick: 3 }, null, ['key', 'behind']], ['리턴 받고 다시', { eng: 3 }, null, ['key', 'link']]] },
+  'm1:0': { id: 'f_m1_0', q: '남아서는?', o: [['패스길 막기', { calm: 3 }, null, ['cover']], ['빌드업 출구 되기', { vis: 3 }, null, ['build']], ['역습 대비 뒷공간 보기', { spd: 3 }, null, ['cover', 'counter']], ['상대 10번 마크', { stb: 3 }, null, ['tackle']]] },
+  'm2:0': { id: 'f_m2_0', q: '돌아서 드리블은?', o: [['몰고 라인 넘기기', { drb: 3 }, null, ['drib']], ['수비 끌고 패스', { vis: 3 }, null, ['drib', 'key']], ['치고 달리기', { spd: 3 }, null, ['drib', 'counter']], ['슛 각까지', { kick: 3 }, null, ['drib', 'long']]] },
+  'm2:1': { id: 'f_m2_1', q: '첫 터치 뒤에는?', o: [['전진 패스', { vis: 3 }, null, ['escape', 'key']], ['드리블', { drb: 3 }, null, ['escape', 'drib']], ['슛', { kick: 3 }, null, ['escape', 'long']], ['한 번 더 보고', { calm: 3 }, null, ['escape', 'tempo']]] },
+  'q10:0': { id: 'f_q10_0', q: '드리블로 빠져나오는 방법?', o: [['방향 전환', { drb: 3 }, null, ['escape', 'drib']], ['몸으로 막고', { stb: 3 }, null, ['escape', 'hold']], ['속도로', { spd: 3 }, null, ['escape']], ['상대 발 보고 타이밍', { calm: 3 }, null, ['escape']]] },
+  'q10:2': { id: 'f_q10_2', q: '전환은?', o: [['대각선', { kick: 3 }, null, ['switch']], ['뒷공간', { vis: 3 }, null, ['switch', 'behind']], ['타깃맨 머리', { stb: 3 }, null, ['switch', 'head']], ['땅볼 롱패스', { tch: 3 }, null, ['switch']]] },
+  // 수비 갈래
+  'd1:0': { id: 'f_d1_0', q: '붙어서는?', o: [['몸으로 밀기', { stb: 3 }, null, ['tackle', 'hold']], ['발 넣기', { agg: 3 }, null, ['tackle']], ['돌면 각 막기', { calm: 3 }, null, ['cover']], ['파울 각오', { mnt: 3 }, null, ['tackle']]] },
+  'd1:1': { id: 'f_d1_1', q: '가로챈 뒤엔?', o: [['드리블 전진', { drb: 3 }, null, ['counter', 'drib']], ['긴 패스', { kick: 3 }, null, ['counter', 'switch']], ['짧게', { tch: 3 }, null, ['build']], ['지키기', { calm: 3 }, null, ['tempo']]] },
+  'd2:2': { id: 'f_d2_2', q: '몰고 올라가서는?', o: [['하프라인 넘어 패스', { vis: 3 }, null, ['drib', 'build']], ['슛까지', { kick: 3 }, null, ['drib', 'long']], ['상대 끌어내고 뒤로', { calm: 3 }, null, ['drib', 'build']], ['계속 몰기', { drb: 3 }, null, ['drib']]] },
+  'd2:3': { id: 'f_d2_3', q: '롱패스는?', o: [['대각선 풀백', { kick: 3 }, null, ['switch']], ['뒷공간 공격수', { vis: 3 }, null, ['switch', 'behind']], ['타깃맨 머리', { stb: 3 }, null, ['switch', 'head']], ['땅볼 긴 패스', { tch: 3 }, null, ['switch']]] },
+  'd3:0': { id: 'f_d3_0', q: '겹쳐 뛴 다음은?', o: [['크로스', { kick: 3 }, null, ['cross']], ['컷백', { tch: 3 }, null, ['cross', 'key']], ['끝까지 치고 들어가 슛', { spd: 3 }, null, ['drib', 'box']], ['리턴 패스', { vis: 3 }, null, ['build']]] },
+  'd3:2': { id: 'f_d3_2', q: '빌드업 시작은?', o: [['짧게 볼란치', { tch: 3 }, null, ['build']], ['대각선 긴 패스', { kick: 3 }, null, ['switch']], ['몰고 올라가 끌어내기', { drb: 3 }, null, ['drib', 'build']], ['키퍼와 돌리며 템포', { calm: 3 }, null, ['build', 'tempo']]] },
+  'r5:0': { id: 'f_r5_0', q: '공중볼 이긴 다음은?', o: [['멀리 걷어낸다', { stb: 3 }, null, ['aerial']], ['동료에게 떨궈준다', { tch: 3 }, null, ['aerial', 'link']], ['헤딩 슛', { kick: 3 }, null, ['head']], ['세컨볼까지', { calm: 3 }, null, ['second']]] },
+  // 키퍼 갈래
+  'g1:0': { id: 'f_g1_0', q: '나가서 각 좁힐 때', o: [['큰 몸으로 서기', { stb: 3 }, null, ['save']], ['발 보고 타이밍', { vis: 3 }, null, ['save']], ['다리 넓게 벌리고', { calm: 3 }, null, ['save']], ['슬라이딩', { agg: 3 }, null, ['save', 'sweep']]] },
+  'g2:0': { id: 'f_g2_0', q: '짧게 빌드업은?', o: [['CB 사이 벌려 돌리기', { tch: 3 }, null, ['dist', 'build']], ['볼란치에게 찔러주기', { vis: 3 }, null, ['dist', 'key']], ['풀백에게 넓게', { kick: 3 }, null, ['dist']], ['압박 오면 길게', { calm: 3 }, null, ['dist']]] },
+  'g2:1': { id: 'f_g2_1', q: '멀리 킥은?', o: [['타깃맨 머리', { kick: 3 }, null, ['dist', 'head']], ['측면 윙에게', { vis: 3 }, null, ['dist', 'switch']], ['역습 — 뒷공간으로', { spd: 3 }, null, ['dist', 'counter']], ['안전하게 멀리', { calm: 3 }, null, ['dist']]] },
+  'g3:0': { id: 'f_g3_0', q: '나가서 잡고 나서는?', o: [['빠른 던지기 역습', { vis: 3 }, null, ['dist', 'counter']], ['시간 끌기', { calm: 3 }, null, ['tempo']], ['멀리 킥', { kick: 3 }, null, ['dist']], ['소리로 정리', { lead: 3 }, null, ['line']]] },
+  'g4:0': { id: 'f_g4_0', q: '스위퍼처럼 나가서는?', o: [['헤딩으로 걷어내기', { stb: 3 }, null, ['sweep', 'aerial']], ['발로 패스', { tch: 3 }, null, ['sweep', 'build']], ['태클·슬라이딩', { agg: 3 }, null, ['sweep']], ['길게 걷어내기', { kick: 3 }, null, ['sweep', 'dist']]] },
+};
+// 선수 세부 스타일 태그 — 선수 글(유형·설명·가져올 것)에서 자동으로 (2개 미만이면 성향 3인 것으로 보충)
+const PS_TAGK = {
+  behind: ['뒷공간', '뒷 공간', '침투', '오프사이드', '질주', '스프린트'], box: ['박스 안', '박스안', '박스에서', '골문 앞', '마무리', '피니셔', '득점', '골을 넣'], long: ['중거리', '강슛', '장거리', '발리'], head: ['헤딩', '헤더', '공중볼', '점프'], set: ['프리킥', '세트피스', '코너킥', '승부차기'],
+  curl: ['감아', '왼발'], both: ['양발'], link: ['연계', '연결', '내려와', '내려가', '받아 돌', '세컨드'], hold: ['등지', '버티', '타깃', '몸으로', '피지컬', '힘으로', '파워'], second: ['세컨볼', '세컨드볼', '흘러나온', '떨어지는'], press: ['압박', '뺏', '탈취', '진공', '끊'], counter: ['역습', '카운터'], cutin: ['안으로 접', '접어', '안으로 들어', '컷인', '하프스페이스'], cross: ['크로스', '올리'],
+  drib: ['드리블', '1대1', '제치', '돌파', '페인트', '마술'], escape: ['탈압박', '압박 속', '압박을', '벗어', '돌아서', '뺏기지 않'], key: ['킬패스', '찔러', '스루', '마지막 패스', '어시스트', '노룩', '수비 뒤로', '사이로'], switch: ['전환', '대각선', '롱패스', '롱볼', '반대쪽', '롱킥'], tempo: ['템포', '리듬', '조율', '메트로놈', '조절', '조용'], build: ['빌드업', '패스로', '짧은 패스', '원터치', '돌리'],
+  cover: ['커버', '읽고', '읽는', '위치', '자리', '예측', '미리'], tackle: ['태클', '끊', '막는', '1대1 수비', '사냥'], aerial: ['공중볼', '헤딩', '제공권', '높은 공'], line: ['라인', '지휘', '정리', '콜', '소리', '사령관', '주장', '리더'], sweep: ['스위퍼', '나와서', '뛰쳐', '박스 밖', '나가'], save: ['선방', '반사', '막는', '벽', '손'], dist: ['던지기', '발로', '킥', '빌드업'],
+  engine: ['왕복', '활동량', '쉬지', '심장', '엔진', '뛰는', '뛰고', '박스 투 박스', '달리'], mental: ['승부', '투지', '불타', '강심장', '독', '전사', '파이터', '멘탈', '캡틴', '주장'],
+};
+const PS_TAGN = { behind: '뒷공간', box: '박스 안', long: '중거리', head: '헤딩', set: '세트피스', curl: '감아차기·왼발', both: '양발', link: '연계', hold: '등지기', second: '세컨볼', press: '압박', counter: '역습', cutin: '안으로 접기', cross: '크로스', drib: '드리블', escape: '탈압박', key: '킬패스', switch: '전환', tempo: '템포', build: '빌드업', cover: '커버·읽기', tackle: '태클', aerial: '공중볼', line: '라인·콜', sweep: '스위퍼', save: '선방', dist: '킥·던지기', engine: '활동량', mental: '멘탈' };
+const PS_TAGTR = { spd: 'behind', drb: 'drib', kick: 'long', stb: 'hold', vis: 'key', calm: 'cover', lead: 'line', agg: 'press', eng: 'engine', mnt: 'mental', tch: 'escape' };
+// ── v132 능력 중심 재편(사용자와 상의해 결정): 자리 질문(r1·r2·r4·q2) 안 씀 → 골키퍼 1문제 + 능력 11개 「지금|목표」 한 화면 → 상황·파생 → 좁히기 → 자리 선호(약하게) → 시대
+const PS_LV = { id: 'lv', grid: true, q: '능력 11개 — 지금 실력과 목표를 찍어요', note: '3 = 팀에서 손꼽힘 · 2 = 보통 이상 · 1 = 약한 편 · 0 = 거의 안 씀 · 목표를 안 찍으면 지금과 같다고 봐요' };
+const PS_QP = { id: 'r9', q: '굳이 자리를 하나 고르면? (결과는 자리 안 가리고 다 나와요 — 살짝만 반영)', o: [['골키퍼', {}, { GK: 6 }], ['센터백', {}, { CB: 6 }], ['풀백', {}, { FB: 6 }], ['볼란치', {}, { CDM: 6 }], ['공격형 MF', {}, { CAM: 6 }], ['윙', {}, { WG: 6 }], ['스트라이커', {}, { ST: 6 }], ['상관없어 — 어디든', {}, {}]] };
 const PS_QE = { id: 'q7', q: '더 끌리는 축구는?', o: [['클래식 — 옛날 스타들', { era: 'classic' }], ['요즘 — 현대 축구', { era: 'modern' }], ['상관없어', {}]] };
-const PS_ALLQ = PS_QC.concat(...Object.values(PS_QB), Object.values(PS_QT), ...Object.values(PS_QN).map(b => Object.values(b)), [PS_QE]);
+const PS_ALLQ = PS_QC.concat(...Object.values(PS_QB), Object.values(PS_QT), ...Object.values(PS_QN).map(b => Object.values(b)), Object.values(PS_FU), [PS_LV, PS_QP, PS_QE]);
 function psQById(id) { return PS_ALLQ.find(q => q.id === id) || null; }
-/* ----- 🌟 플레이스타일 엔진 (v123: 자리 안 고름 · 답에 따라 질문이 갈라짐 · 선수 전체 중에서 매칭 · v129: 공통·갈래 뒤 「비슷한 유형 24명」 안에서 갈리는 성향만 물어 좁혀 감) ----- */
+/* ----- 🌟 플레이스타일 엔진 (v132: 능력 중심 — 골키퍼 1 → 능력 11개 「지금|목표」 한 화면 → 상황·파생 → 능력으로 정한 맥락의 상황 → 유형 좁히기 → 자리 선호(10%) → 시대 · 결과는 자리 안 가림) ----- */
 const PS_TR = ['spd', 'tch', 'drb', 'kick', 'stb', 'eng', 'vis', 'calm', 'lead', 'agg', 'mnt'];   // v124: 볼 터치(tch)와 드리블(drb) 분리(사용자 「볼 터치는 좋은데 드리블이 잘 안 돼」) · 멘탈·승부욕(mnt) 추가
 const PS_POS = ['GK', 'CB', 'FB', 'CDM', 'CAM', 'WG', 'ST'];
 const PS_CAMW = [0.4, 0.8];   // CAM 끌림을 공격·중원 갈래에 나누는 비율 (무작위 답 시뮬: 공격 44 · 중원 22 · 수비 23 · 키퍼 10%)
-const PS_BR = { att: '공격', mid: '중원', def: '수비', gk: '골키퍼' };
-const PS_BASE = 17;    // 공통 10 + 갈래 6 + 시대 1 (+ 좁히기 ≤6 + 안 잡힌 성향 = 최대 24문제, 사람마다 다름)
-const PS_DEC_MAX = 7, PS_QMAX = 30;
+const PS_BR = { att: '공격', mid: '중원', def: '수비', gk: '골키퍼' };   // v132 부터는 「어디 뛰고 싶나」가 아니라 능력으로 정한 상황 질문 맥락
+const PS_CORE_IDS = ['q1', 'q3', 'q9', 'q16', 'q18'];   // v132: 자리 묻는 r1·r2·r4 와 무기 q2 는 능력 화면이 대신
+const PS_BASE = 15;    // 키퍼 1 + 능력 1 + 공통 5 + 맥락 6 + 자리 선호 1 + 시대 1 (+ 파생 ≤12 + 좁히기 ≤6 = 18~33문제)
+const PS_DEC_MAX = 7, PS_QMAX = 36, PS_FU_MAX = 12;   // v132: 파생 ≤12 · 전체 ≤36
 // v129 유형 좁히기 — 사용자: 「공통 질문 뒤에 비슷한 유형 선수들 안에서 더 세분화되게 다음 스텝으로 — 야말처럼 나오면 스피드·드리블·측면 유형에서 질문 고르면 또 가지가 나오고 이런 식으로 좁혀 가기」
 const PS_NAR_N = 40, PS_NAR_STOP = 4, PS_NAR_MAX = 8;   // 처음 후보 40명 → 4명 이하가 되거나 8문제 물으면 멈춤 (나무 뿌리처럼 — 사용자)
 const PS_TRS = { spd: '스피드', tch: '터치', drb: '드리블', kick: '킥', stb: '피지컬', eng: '활동량', vis: '시야', calm: '침착', lead: '리더', agg: '압박', mnt: '멘탈' };
@@ -23945,39 +24011,65 @@ function psLv(vec) { const mx = Math.max(0, ...PS_TR.map(k => +vec[k] || 0)); co
 function psPfCur() { try { const pl = pfLast(); if (!pl || !pl.tr) return null; const m = Object.assign({}, pl.tr); if (m.drb === undefined) m.drb = m.tch || 0; if (m.mnt === undefined) m.mnt = Math.round(((+m.calm || 0) + (+m.lead || 0)) / 2); return psLv(m); } catch (e) { return null; } }
 // 카드 아래 「닮으려면」: 더 추구할 것(선수 3 · 내 답은 낮음) · 내가 취약한 곳(포지션 찾기 성향이 낮은데 선수는 높음 — 포지션 찾기가 없으면 「아님」으로 답한 성향) · 이 선수도 약한 곳(1)
 function psCmpHtml(p, lv, cur) {
-  const pursue = PS_TR.filter(k => (+p.tr[k] || 0) >= 3 && lv[k] <= 1).slice(0, 3);
-  const weak = (cur ? PS_TR.filter(k => (+p.tr[k] || 0) >= 2 && cur[k] <= 1) : PS_TR.filter(k => (+p.tr[k] || 0) >= 2 && lv[k] === 0)).filter(k => !pursue.includes(k)).slice(0, 3);
+  const me = cur || lv; const goal = lv;
+  const shared = PS_TR.filter(k => (+p.tr[k] || 0) >= 2 && (+me[k] || 0) >= 2).sort((a, b) => ((+p.tr[b] || 0) + (+me[b] || 0)) - ((+p.tr[a] || 0) + (+me[a] || 0))).slice(0, 3);
+  const add = PS_TR.filter(k => (+p.tr[k] || 0) >= 3 && (+me[k] || 0) <= 1 && (+goal[k] || 0) >= 2).slice(0, 2);
+  const skip = PS_TR.filter(k => (+p.tr[k] || 0) >= 3 && (+me[k] || 0) <= 1 && (+goal[k] || 0) < 2).slice(0, 3);
   const pw = PS_TR.filter(k => (+p.tr[k] || 0) <= 1).slice(0, 4);
   return `<div class="tr-pscmp">
-    <div><span>닮으려면 더 추구할 것</span>${pursue.length ? pursue.map(k => `<b>${PF_TR[k]}</b>`).join(' · ') + pursue.slice(0, 2).map(k => `<p>${PS_TIP[k]}</p>`).join('') : '<b>이미 그 방향이에요</b> — 지금 성향을 더 날카롭게'}</div>
-    <div><span>${cur ? '내가 취약한 곳 (포지션 찾기 기준)' : '내가 취약한 곳 (「아님」으로 답한 것)'}</span>${weak.length ? weak.map(k => `<b>${PF_TR[k]}</b>`).join(' · ') + ` — 이 선수는 여기가 ${weak.map(k => p.tr[k]).join('·')}점` : '뚜렷한 구멍은 없어요'}</div>
-    ${pw.length ? `<div><span>이 선수도 약한 곳</span>${pw.map(k => PF_TR[k]).join(' · ')} — 여기까지 따라 할 필요는 없어요</div>` : ''}
+    <div><span>같이 가진 재능 — 이걸 더 개화시키면 돼요</span>${shared.length ? shared.map(k => `<b>${PF_TR[k]}</b><small>${+me[k] || 0}·${p.tr[k]}</small>`).join(' · ') + shared.slice(0, 2).map(k => `<p>${PS_TIP[k]}</p>`).join('') : '아직 겹치는 강점이 없어요 — 목표 쪽 재능부터'}</div>
+    ${add.length ? `<div><span>목표로 찍었는데 아직 낮은 것 — 여기만 보태요</span>${add.map(k => `<b>${PF_TR[k]}</b><small>${+me[k] || 0}→${p.tr[k]}</small>`).join(' · ')}${add.slice(0, 1).map(k => `<p>${PS_TIP[k]}</p>`).join('')}</div>` : ''}
+    ${skip.length ? `<div><span>이 선수는 강한데 내 목표가 아닌 것 — 억지로 안 따라가도 돼요</span>${skip.map(k => PF_TR[k]).join(' · ')}</div>` : ''}
+    ${pw.length ? `<div><span>이 선수도 약한 곳</span>${pw.map(k => PF_TR[k]).join(' · ')}</div>` : ''}
   </div>`;
 }
 const PS_POSW = { GK: '키퍼', CB: '센터백', FB: '풀백', CDM: '볼란치', CAM: '2선', WG: '윙', ST: '스트라이커' };
-function psTotal(o) { return o && o.done ? o.qs.length : Math.min(PS_QMAX, Math.max(20, ((o && o.qs) ? o.qs.length : 1) + 3)); }
+function psTotal(o) { return o && o.done ? o.qs.length : Math.min(PS_QMAX, Math.max(22, ((o && o.qs) ? o.qs.length : 1) + 4)); }
 function psAsked(o, k) { return (('t_' + k) in o.ans) || (('n_' + k) in o.ans); }
 const PS_JIT = 0.012;   // 점수에 ±0.6%(표시 1% 아래) 흔들림 — 거의 같은 선수들이 할 때마다 순서를 바꿔 다양하게
 function psById(id) { return PS.find(p => p.id === id) || null; }
-function psOpt() { if (!_tr.ps) _tr.ps = { qs: [PS_QC[0]], ans: {}, res: null, filt: 'all', salt: Date.now() % 1000003 }; return _tr.ps; }
-function psStart() { _tr.ps = { qs: [PS_QC[0]], ans: {}, res: null, filt: 'all', salt: Date.now() % 1000003 }; trGo('ps'); }
+function psQ0() { return PS_QC.find(q => q.id === 'r3') || PS_QC[0]; }
+function psOpt() { if (!_tr.ps) _tr.ps = { qs: [psQ0()], ans: {}, res: null, filt: 'all', salt: Date.now() % 1000003 }; return _tr.ps; }
+function psStart() { _tr.ps = { qs: [psQ0()], ans: {}, res: null, filt: 'all', salt: Date.now() % 1000003 }; trGo('ps'); }
 function psOpen() {
   const r = (trMe() || {}).ps;
-  if (r && r.top && r.top.length && r.aff) { _tr.ps = { qs: [], ans: {}, done: true, v: r.v || {}, aff: r.aff || {}, era: r.era || '', br: r.br || '', nar: r.nar || null, res: psNarOrder(psMatch(r.v || {}, r.aff || {}, r.era || '', r.salt || 0), r.nar), filt: 'all', saved: true, salt: r.salt || 0, nq: r.n || 0 }; trGo('ps'); }
+  if (r && r.top && r.top.length && r.aff) { _tr.ps = { qs: [], ans: {}, done: true, v: r.v || {}, aff: r.aff || {}, era: r.era || '', br: r.br || '', nar: r.nar || null, tags: r.tags || null, cur: r.cur || null, goal: r.goal || null, u: r.u || r.v || {}, res: null, filt: 'all', saved: true, salt: r.salt || 0, nq: r.n || 0 }; _tr.ps.gk = r.gk; _tr.ps.res = psNarOrder(psGkSplit(psMatch(r.u || r.v || {}, r.aff || {}, r.era || '', r.salt || 0, r.tags || null), r.gk), r.nar); trGo('ps'); }
   else psStart();   // v122 이전 기록(자리 골라서 한 것)은 새 방식으로 다시
 }
 // 답 → 성향 벡터 v + 자리 끌림 aff + 시대
 function psVec(qs, ans) {
-  const v = {}, aff = {}; PS_TR.forEach(k => v[k] = 0); PS_POS.forEach(k => aff[k] = 0); let era = '';
-  qs.forEach(q => { const a = ans[q.id]; if (a === undefined) return; (Array.isArray(a) ? a : [a]).forEach(i => { if (!q.o[i]) return; const w = q.o[i][1] || {}, pw = q.o[i][2] || {}; Object.keys(w).forEach(k => { if (k === 'era') era = w[k]; else v[k] += w[k]; }); Object.keys(pw).forEach(k => { aff[k] = (aff[k] || 0) + pw[k]; }); }); });   // v126: 복수 선택이면 고른 보기 전부 더함
-  return { v, aff, era };
+  const v = {}, aff = {}, tags = {}; PS_TR.forEach(k => v[k] = 0); PS_POS.forEach(k => aff[k] = 0); let era = ''; let cur = null, goal = null;
+  qs.forEach(q => { const a = ans[q.id]; if (a === undefined) return; if (q.grid) { cur = a.cur || null; goal = a.goal || null; return; } (Array.isArray(a) ? a : [a]).forEach(i => { if (!q.o[i]) return; const w = q.o[i][1] || {}, pw = q.o[i][2] || {}; Object.keys(w).forEach(k => { if (k === 'era') era = w[k]; else v[k] += w[k]; }); Object.keys(pw).forEach(k => { aff[k] = (aff[k] || 0) + pw[k]; }); (q.o[i][3] || []).forEach(t => tags[t] = (tags[t] || 0) + 1); }); });   // v126: 복수 선택이면 고른 보기 전부 더함 · v130: 파생 질문 태그
+  return { v, aff, era, tags, cur, goal, u: psU(v, goal, cur) };
 }
+// 매칭 벡터 u = 지금 능력 + 목표 + 상황 답 스타일 ×½ (사용자: 「너가 가진 능력은 이런 선수와 닮았고 이 포지션도 잘 맞을 거다 — 가능성을 열어 두는 느낌」 → 가진 능력이 바탕, 목표가 방향) — 둘 다 없으면(옛 기록) 스타일만
+function psU(v, goal, cur) { const mx = Math.max(0, ...PS_TR.map(k => +v[k] || 0)); const u = {}; PS_TR.forEach(k => { const st = mx ? (+v[k] || 0) / mx * 3 : 0; u[k] = (goal || cur) ? (cur ? +cur[k] || 0 : 0) + (goal ? +goal[k] || 0 : 0) + st * 0.5 : (+v[k] || 0); }); return u; }
+// 상황 질문 맥락 — 목표 능력으로: 공격 = 스피드·드리블·킥 · 중원 = 시야·터치·침착 · 수비 = 몸싸움·압박·리더 (키퍼는 r3 로)
+function psCtx(goal, isGk) { if (isGk) return 'gk'; const g = goal || {}; const a = { att: (g.spd || 0) + (g.drb || 0) + (g.kick || 0) + (g.mnt || 0) * 0.5, mid: (g.vis || 0) + (g.tch || 0) + (g.calm || 0) + (g.eng || 0) * 0.5, def: (g.stb || 0) + (g.agg || 0) + (g.lead || 0) + (g.calm || 0) * 0.5 }; return ['mid', 'att', 'def'].reduce((b, k) => a[k] > a[b] ? k : b, 'mid'); }
 // 갈래 — 공통 8문제의 자리 끌림으로 정함 (공격 = ST+WG+CAM½ · 중원 = CDM+CAM½ · 수비 = CB+FB · 키퍼는 다른 셋보다 확실히 클 때만)
 function psBranch(aff) {
   const a = { att: (aff.ST || 0) + (aff.WG || 0) + (aff.CAM || 0) * PS_CAMW[0], mid: (aff.CDM || 0) + (aff.CAM || 0) * PS_CAMW[1], def: (aff.CB || 0) + (aff.FB || 0) };
   const best = ['att', 'mid', 'def'].reduce((b, k) => a[k] > a[b] ? k : b, 'att');
   return (aff.GK || 0) > a[best] ? 'gk' : best;
 }
+// ── v130 파생 질문 — 답한 보기(복수면 고른 순서로 앞 2개)에 파생 질문이 있으면 바로 이어서 물음 · 파생의 파생도 같은 식 ──
+function psFuNext(o) {
+  if (typeof PS_FU === 'undefined') return null;
+  const n = o.qs.filter(q => q.fu).length; if (n >= PS_FU_MAX || o.qs.length >= PS_QMAX - 1) return null;
+  for (const q of o.qs) { const a = o.ans[q.id]; if (a === undefined) continue; const idx = (Array.isArray(a) ? a : [a]).slice(0, 2);
+    for (const i of idx) { const f = PS_FU[q.id + ':' + i]; if (f && !o.qs.some(x => x.id === f.id)) return Object.assign({}, f, { fu: true, from: q.id, root: q.root || (PS_QC.some(c => c.id === q.id) ? 'core' : 'br') }); } }
+  return null;
+}
+// 선수 세부 태그(글에서 자동) — 처음 한 번만 계산
+function psTagsOf(p) {
+  if (p._tags) return p._tags;
+  const text = (p.ty || '') + ' ' + (p.style || '') + ' ' + (p.take || []).join(' ');
+  let t = Object.keys(PS_TAGK).filter(k => PS_TAGK[k].some(w => text.includes(w)));
+  if (t.length < 2) PS_TR.forEach(k => { if ((+p.tr[k] || 0) >= 3 && PS_TAGTR[k] && !t.includes(PS_TAGTR[k])) t.push(PS_TAGTR[k]); });
+  p._tags = t; return t;
+}
+// 내가 고른 세부 태그 중 그 선수가 가진 비율 (고른 게 없으면 0.5 중립) — 많이 고른 태그는 2배까지
+function psTagSim(ut, p) { const ks = Object.keys(ut || {}).filter(k => ut[k] > 0); if (!ks.length) return 0.5; const pt = psTagsOf(p); let s = 0, n = 0; ks.forEach(k => { const w = Math.min(2, ut[k]); n += w; if (pt.includes(k)) s += w; }); return n ? s / n : 0.5; }
 // ── 유형 좁히기 ──
 function psNarPlayers(o) { return (o.nar ? o.nar.cand : []).map(psById).filter(Boolean); }
 // 후보들 안에서 제일 갈리는 성향 = 값(1·2·3) 분포 엔트로피가 큰 것 · 아직 안 잡힌(0점) 성향은 살짝 우대 · 키퍼한텐 드리블 안 물음
@@ -23994,7 +24086,7 @@ function psNarQ(k, br) { const bank = (typeof PS_QN !== 'undefined' && PS_QN[br]
 function psNarApply(o, k, L, qid) {
   const cand = psNarPlayers(o); const pref = Math.max(1, L);
   let keep = cand.filter(p => Math.abs((+p.tr[k] || 1) - pref) <= 1); if (keep.length < 3) keep = cand;
-  const { v, aff, era } = psVec(o.qs, o.ans); const rank = psMatch(v, aff, era); const pos = {}; rank.forEach((x, i) => pos[x.p.id] = i);
+  const { u, aff, era, tags } = psVec(o.qs, o.ans); const rank = psMatch(u, aff, era, undefined, tags); const pos = {}; rank.forEach((x, i) => pos[x.p.id] = i);
   keep.sort((a, b) => (pos[a.id] || 0) - (pos[b.id] || 0));
   const n = Math.max(Math.min(keep.length, 4), Math.ceil(keep.length * 0.6)); keep = keep.slice(0, n);
   o.nar.steps.push({ id: qid, k, L, before: o.nar.cand.slice(), after: keep.length });
@@ -24011,18 +24103,20 @@ function psTypeLabel(ids, short) {
 }
 function psNarEx(o, n) { return psNarPlayers(o).slice(0, n || 3).map(p => p.name).join(' · '); }
 function psNext(o) {
-  const c = PS_QC.find(q => !(q.id in o.ans)); if (c) return c;
-  const { v, aff, era } = psVec(o.qs, o.ans);
-  if (!o.br) { const rq = o.qs.filter(q => /^r\d$/.test(q.id)); o.br = psBranch(psVec(rq, o.ans).aff); }   // 허점 검토(v129): 갈래는 자리 질문(r1·r2·r4·r3)으로만 — 상황 보기의 작은 자리 가중치가 수비수를 공격 갈래로 보내지 않게
+  if (!('r3' in o.ans)) return psQ0();                                   // ① 골키퍼?
+  if (!('lv' in o.ans)) return PS_LV;                                    // ② 능력 11개 지금|목표 (한 화면)
+  const fu = psFuNext(o); if (fu) return fu;                             // 고른 보기의 파생
+  const c = PS_QC.find(q => PS_CORE_IDS.includes(q.id) && !(q.id in o.ans)); if (c) return c;   // ③ 공통 상황 5
+  const { v, aff, era, tags, goal } = psVec(o.qs, o.ans); o.tags = tags;
+  if (!o.br) o.br = psCtx(goal, o.ans.r3 === 0);                         // ④ 능력으로 정한 맥락의 상황 6
   const b = (PS_QB[o.br] || []).find(q => !(q.id in o.ans)); if (b) return b;
   // 공통·갈래 답으로 비슷한 유형 24명 → 그 안에서 갈리는 성향을 물어 좁힘
-  if (!o.nar) { const all = psMatch(v, aff, era); let c0 = all.filter(x => psPos(aff, x.p) >= 0.6).slice(0, PS_NAR_N); if (c0.length < 12) c0 = all.slice(0, PS_NAR_N); o.nar = { cand: c0.map(x => x.p.id), steps: [] }; }   // 처음 후보 = 답이 가리킨 자리 쪽 선수 중 닮은 순 40명
+  const u = psU(v, goal, o.ans.lv ? o.ans.lv.cur : null);
+  if (!o.nar) { const all = o.ans.r3 === 0 ? psMatch(u, aff, era, undefined, tags).filter(x => x.p.g.includes('GK')) : psMatch(u, aff, era, undefined, tags).filter(x => !x.p.g.includes('GK')); o.nar = { cand: all.slice(0, PS_NAR_N).map(x => x.p.id), steps: [] }; }   // ⑤ 처음 후보 = 자리 안 가리고 닮은 순 40명 (키퍼만 손/발로 가름)
   psNarSync(o);
-  if (o.nar.cand.length > PS_NAR_STOP && o.nar.steps.length < PS_NAR_MAX && o.qs.length < PS_QMAX - 1) { const k = psNarPick(o, v); if (k) return psNarQ(k, o.br); }
-  // 아직 한 번도 안 잡힌 성향은 한도 안에서 직접 물음 (v124)
-  if (!o.dec) { const skip = o.br === 'gk' ? ['drb'] : []; o.dec = PS_TR.filter(k => !(v[k] > 0) && !psAsked(o, k) && !skip.includes(k)).slice(0, PS_DEC_MAX); }
-  for (const k of o.dec) { const t = PS_QT[k]; if (t && !(t.id in o.ans) && o.qs.length < PS_QMAX - 1) return t; }
-  if (!(PS_QE.id in o.ans)) return PS_QE;
+  if (o.nar.cand.length > PS_NAR_STOP && o.nar.steps.length < PS_NAR_MAX && o.qs.length < PS_QMAX - 2) { const k = psNarPick(o, u); if (k) return psNarQ(k, o.br); }
+  if (!(PS_QP.id in o.ans)) return PS_QP;                                // ⑥ 자리 선호 — 살짝만
+  if (!(PS_QE.id in o.ans)) return PS_QE;                                // ⑦ 시대
   return null;
 }
 // 매칭 = 성향 「모양」 닮음(피어슨 — 어디가 높고 어디가 낮은지) 50% + 「원하는 성향 보유」 20% + 「답이 가리킨 자리」 30%
@@ -24033,16 +24127,28 @@ function psPos(aff, p) { const mx = Math.max(0, ...PS_POS.map(k => aff[k] || 0))
 // v129 올라운더 검토(사용자: 「내 능력치가 고루 평탄하면 올라운더니까 올라운더형 선수가 나와야」): 답 벡터가 평탄하면 「모양 닮음」은 잡음이라
 // 모양 가중치를 벡터의 대비(변동계수)에 비례시키고 나머지를 「보유율」로 — 완전 평탄이면 모양 0 · 보유율 0.7 → 굴리트·벨링엄·키미히 같은 올라운더가 90%대로 나옴
 function psCv(u) { const xs = PS_TR.map(k => +u[k] || 0); const m = xs.reduce((a, b) => a + b, 0) / xs.length; if (!m) return 0; const sd = Math.sqrt(xs.reduce((a, x) => a + (x - m) * (x - m), 0) / xs.length); return sd / m; }
-function psSim(u, aff, p) { const wS = 0.5 * Math.max(0, Math.min(1, psCv(u) / 0.3)); return wS * (psPear(u, p.tr) + 1) / 2 + (0.7 - wS) * psLvl(u, p.tr) + 0.3 * psPos(aff, p); }
-function psPct(c) { return Math.max(0, Math.min(100, Math.round((c - 0.07) / 0.86 * 100))); }   // v124 11성향·20~23문제 기준 — 무작위 답 시뮬(ps_check4.js 4,000회): 1순위 점수 p5 0.79 · 중앙 0.86 · p95 0.92 → 83 · 92 · 99%
+function psSim(u, aff, p, ut) { const wS = 0.5 * Math.max(0, Math.min(1, psCv(u) / 0.3)); return wS * (psPear(u, p.tr) + 1) / 2 + (0.7 - wS) * psLvl(u, p.tr) + 0.1 * psPos(aff, p) + 0.2 * psTagSim(ut, p); }   // v132: 모양 ≤50 + 보유율(0.7−모양) + 자리 선호 10 + 세부 태그 20 — 결과는 자리 안 가림
+function psPct(c) { return Math.max(0, Math.min(100, Math.round(c / 0.83 * 100))); }   // v132 능력 중심 기준 — 페르소나·무작위 시뮬 1순위 점수 p5 0.69 · 중앙 0.76 · p95 0.82 → 84 · 92 · 99%
 function psHash(s, salt) { let h = (salt || 0) >>> 0; for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 2654435761) >>> 0; return h; }
-function psMatch(v, aff, era, salt) {
+function psMatch(v, aff, era, salt, ut) {
   salt = salt === undefined ? ((_tr.ps && _tr.ps.salt) || 0) : salt;
-  const mine = (() => { try { const pl = pfLast(); if (!pl || !pl.tr) return null; const m = Object.assign({}, pl.tr); if (m.drb === undefined) m.drb = m.tch || 0; if (m.mnt === undefined) m.mnt = Math.round(((+m.calm || 0) + (+m.lead || 0)) / 2); return m; } catch (e) { return null; } })();   // v124 이전 포지션 찾기 기록엔 drb 없음 → 터치값으로 대신
-  return PS.map(p => { const s0 = psSim(v, aff, p) + (psHash(p.id, salt) / 4294967296 - 0.5) * PS_JIT; return { p, c: s0, e: era && p.era === era ? 1 : 0, pct: psPct(s0), me: mine ? psPct(psSim(mine, aff, p)) : null }; }).sort((a, b) => b.pct - a.pct || b.e - a.e || b.c - a.c || psHash(a.p.id, salt) - psHash(b.p.id, salt));
+  ut = ut === undefined ? ((_tr.ps && _tr.ps.tags) || null) : ut;
+  const mine = (_tr.ps && _tr.ps.cur) ? _tr.ps.cur : (() => { try { const pl = pfLast(); if (!pl || !pl.tr) return null; const m = Object.assign({}, pl.tr); if (m.drb === undefined) m.drb = m.tch || 0; if (m.mnt === undefined) m.mnt = Math.round(((+m.calm || 0) + (+m.lead || 0)) / 2); return m; } catch (e) { return null; } })();   // v132: 「지금」 수준이 있으면 그걸로, 없으면 포지션 찾기 기록
+  return PS.map(p => { const s0 = psSim(v, aff, p, ut) + (psHash(p.id, salt) / 4294967296 - 0.5) * PS_JIT; return { p, c: s0, e: era && p.era === era ? 1 : 0, pct: psPct(s0), me: mine ? psPct(psSim(mine, aff, p, null)) : null }; }).sort((a, b) => b.pct - a.pct || b.e - a.e || b.c - a.c || psHash(a.p.id, salt) - psHash(b.p.id, salt));
 }
 // 좁힌 후보(답과 다 맞는 선수)를 앞으로, 나머지는 뒤에
-function psNarOrder(res, nar) { if (!nar || !nar.cand || !nar.cand.length || !res.length) return res; const set = new Set(nar.cand); const top = res[0].pct; res.forEach(x => x.nar = set.has(x.p.id) && x.pct >= top - 10); return res.filter(x => x.nar).concat(res.filter(x => !x.nar)); }   // 허점 검토(v129): 전체 1순위보다 10점 넘게 낮은 후보는 앞으로 안 끌어올림
+function psGkSplit(res, isGk) { return isGk === undefined || isGk === null ? res : res.filter(x => x.p.g.includes('GK') === !!isGk); }   // 키퍼면 키퍼만, 필드면 키퍼 빼고 — 손으로 막는 자리는 능력 축이 달라서
+function psNarOrder(res, nar) { if (!nar || !nar.cand || !nar.cand.length || !res.length) return res; const set = new Set(nar.cand); const top = res[0].pct; res.forEach(x => x.nar = set.has(x.p.id) && x.pct >= top - 5); return res.filter(x => x.nar).concat(res.filter(x => !x.nar)); }   // 허점 검토(v129): 전체 1순위보다 5점 넘게 낮은 후보는 앞으로 안 끌어올림
+// ── v132 능력 화면 「지금|목표」 ──
+function psLvState(o) { if (!o.lv) { const pre = psPfCur(); o.lv = { cur: pre ? Object.assign({}, pre) : {}, goal: {} }; } return o.lv; }
+function psLvSet(which, k, val) { haptic(4); const o = psOpt(); const st = psLvState(o); st[which][k] = val; if (which === 'cur' && st.goal[k] === undefined) st.goal[k] = val; renderTrain(); }   // 지금을 찍으면 목표는 일단 같게
+function psLvTraits(o) { return PS_TR.filter(k => !(o.ans.r3 === 0 && k === 'drb')); }   // 키퍼는 드리블 줄 없음
+function psLvDone() {
+  const o = psOpt(); const st = psLvState(o); const ks = psLvTraits(o);
+  const miss = ks.filter(k => st.cur[k] === undefined); if (miss.length) { toast(`「지금」을 다 찍어요 — ${miss.length}개 남음`); return; }
+  const cur = {}, goal = {}; ks.forEach(k => { cur[k] = st.cur[k]; goal[k] = st.goal[k] === undefined ? st.cur[k] : st.goal[k]; }); if (o.ans.r3 === 0) { cur.drb = 1; goal.drb = 1; }
+  haptic(6); psCommit({ cur, goal });
+}
 function psPick(qid, i) {
   haptic(6); const o = psOpt(); if (o.done) return;
   const q = o.qs[o.qs.length - 1]; if (!q || q.id !== qid) return;
@@ -24053,29 +24159,32 @@ function psPick(qid, i) {
   }
   psCommit(i);
 }
-function psGo() { const o = psOpt(); const q = o.qs[o.qs.length - 1]; const sel = (o.sel && q && o.sel.q === q.id) ? o.sel.v : []; if (!sel.length) { toast('하나는 골라요'); return; } haptic(6); psCommit(sel.slice().sort((a, b) => a - b)); }
+function psGo() { const o = psOpt(); const q = o.qs[o.qs.length - 1]; const sel = (o.sel && q && o.sel.q === q.id) ? o.sel.v : []; if (!sel.length) { toast('하나는 골라요'); return; } haptic(6); psCommit(sel.slice()); }   // 고른 순서 그대로 — 파생 질문은 먼저 고른 2개에서
 function psCommit(a) {
   const o = psOpt(); const q = o.qs[o.qs.length - 1]; o.ans[q.id] = a; o.sel = null;
   const nx = psNext(o);
   if (nx) { o.qs.push(nx); trGo('ps'); return; }
-  const { v, aff, era } = psVec(o.qs, o.ans); o.v = v; o.aff = aff; o.era = era; o.res = psNarOrder(psMatch(v, aff, era), o.nar); o.done = true; o.filt = 'all';
-  trSet('ps', { t: Date.now(), d: trToday(), era, v, aff, br: o.br || '', n: o.qs.length, salt: o.salt || 0, top: o.res.slice(0, 3).map(x => x.p.id), nar: o.nar ? { cand: o.nar.cand, steps: o.nar.steps.map(st => ({ k: st.k, L: st.L, after: st.after })) } : null });
+  const { v, aff, era, tags, cur, goal, u } = psVec(o.qs, o.ans); o.v = v; o.aff = aff; o.era = era; o.tags = tags; o.cur = cur; o.goal = goal; o.u = u; o.gk = o.ans.r3 === 0; o.res = psNarOrder(psGkSplit(psMatch(u, aff, era, undefined, tags), o.gk), o.nar); o.done = true; o.filt = 'all';
+  trSet('ps', { t: Date.now(), d: trToday(), era, v, aff, tags, cur, goal, u, gk: o.gk, br: o.br || '', n: o.qs.length, salt: o.salt || 0, top: o.res.slice(0, 3).map(x => x.p.id), nar: o.nar ? { cand: o.nar.cand, steps: o.nar.steps.map(st => ({ k: st.k, L: st.L, after: st.after })) } : null });
   trGo('ps');
 }
 function psBack() {
   const o = psOpt(); if (o.done || o.qs.length <= 1) { trGo('home'); return; }
   o.qs.pop(); const cur = o.qs[o.qs.length - 1]; delete o.ans[cur.id]; o.sel = null;
-  if (PS_QC.some(q => q.id === cur.id)) { o.br = ''; o.dec = null; o.nar = null; }            // 공통 답을 바꾸면 갈래부터 다시
+  if (cur.grid || cur.id === 'r3') { o.br = ''; o.dec = null; o.nar = null; }
+  else if (PS_QC.some(q => q.id === cur.id) || (cur.fu && cur.root === 'core')) { o.br = ''; o.dec = null; o.nar = null; }            // 공통(과 그 파생) 답을 바꾸면 맥락부터 다시
+  else if (cur.fu) { o.dec = null; o.nar = null; }
   else if (o.br && (PS_QB[o.br] || []).some(q => q.id === cur.id)) { o.dec = null; o.nar = null; }   // 갈래 답을 바꾸면 좁히기부터 다시
   else if (cur.nar && o.nar) { const st = o.nar.steps.pop(); if (st) o.nar.cand = st.before; o.dec = null; }   // 좁히기 답을 바꾸면 그 단계 전으로
   trGo('ps');
 }
 function psFilt(f) { haptic(5); psOpt().filt = f; renderTrain(); }
+function psCurPos(cur, isGk) { if (!cur) return []; if (isGk) return ['GK']; const res = PS.filter(p => !p.g.includes('GK')).map(p => ({ p, c: 0.5 * (psPear(cur, p.tr) + 1) / 2 + 0.5 * psLvl(cur, p.tr) })).sort((a, b) => b.c - a.c).slice(0, 12); const cnt = {}; res.forEach(x => x.p.g.forEach(g => cnt[g] = (cnt[g] || 0) + 1)); return PS_POS.filter(g => cnt[g]).sort((a, b) => cnt[b] - cnt[a]).slice(0, 3); }
 function psAffLine(aff) { const mx = Math.max(0, ...PS_POS.map(k => aff[k] || 0)); if (!mx) return ''; return PS_POS.filter(k => (aff[k] || 0) >= mx * 0.6).sort((a, b) => (aff[b] || 0) - (aff[a] || 0)).slice(0, 3).map(trGName).join(' · '); }
 function trPsCard() {
   const r = (trMe() || {}).ps;
   if (r && r.top && r.top.length && r.aff) { const names = r.top.map(id => psById(id)).filter(Boolean).map(p => p.name); return `<button type="button" class="tr-psc on" onclick="psOpen()"><span>🌟</span><div><b>내 플레이스타일 — ${TRX(names[0] || '')}</b><small>${TRX(psAffLine(r.aff) || '전체')} 쪽 · 닮은 선수 ${TRX(names.join(' · '))}</small></div><i>›</i></button>`; }
-  return `<button type="button" class="tr-psc" onclick="psStart()"><span>🌟</span><div><b>닮은 선수 찾기 — 플레이스타일</b><small>20~30문제 · 5분 · 답에 따라 다음 질문이 갈라져요 · 선수 ${PS.length}명(클래식 ${PS.filter(p => p.era === 'classic').length} · 현대 ${PS.filter(p => p.era === 'modern').length}) 중 내 스타일과 제일 닮은 선수</small></div><i>›</i></button>`;
+  return `<button type="button" class="tr-psc" onclick="psStart()"><span>🌟</span><div><b>닮은 선수 찾기 — 플레이스타일</b><small>18~33문제 · 5분 · 능력 11개를 지금·목표로 찍고 → 상황·파생 → 유형 좁히기 · 자리는 안 가려요 · 선수 ${PS.length}명(클래식 ${PS.filter(p => p.era === 'classic').length} · 현대 ${PS.filter(p => p.era === 'modern').length}) 중 내 스타일과 제일 닮은 선수</small></div><i>›</i></button>`;
 }
 function trViewPs() {
   const o = psOpt(); const gs = trMyGroups();
@@ -24085,18 +24194,19 @@ function trViewPs() {
     const top = list.slice(0, 3), rest = list.slice(3, 11);
     const chips = `<div class="tr-chips sm"><button type="button" class="${f === 'all' ? 'on' : ''}" onclick="psFilt('all')">전체</button>${gs.length ? `<button type="button" class="${f === 'me' ? 'on' : ''}" onclick="psFilt('me')">★ 내 포지션</button>` : ''}${PS_POS.map(g => `<button type="button" class="${f === g ? 'on' : ''}" onclick="psFilt('${g}')">${TR_GROUPS[g].name}</button>`).join('')}</div>`;
     const card = (x, i) => `<div class="tr-psr r${i + 1}"><div class="tr-psh"><i>${i + 1}</i><div><b>${TRX(x.p.name)} <small>${TRX(x.p.en)}</small></b><small>${TRX(x.p.g.map(trGName).join('·'))} · ${TRX(x.p.note)} · ${x.p.era === 'classic' ? '클래식' : '현대'}</small></div><em>${x.pct}%<small>스타일 일치</small></em></div>
-      <div class="tr-psty">${TRX(x.p.ty)}</div><p>${TRX(x.p.style)}</p>
+      <div class="tr-psty">${TRX(x.p.ty)}${(() => { const ut = o.tags || {}; const m = psTagsOf(x.p).filter(k => ut[k] > 0); return m.length ? ` <small>겹치는 세부: ${m.map(k => PS_TAGN[k] || k).join(' · ')}</small>` : ''; })()}</div><p>${TRX(x.p.style)}</p>
       <div class="tr-pstk"><span>이 선수한테서 가져올 것</span><ul>${x.p.take.map(t => `<li>${TRX(t)}</li>`).join('')}</ul></div>
       ${psCmpHtml(x.p, lv, cur)}
-      ${x.me !== null ? `<div class="tr-psme">🧭 포지션 찾기 성향 기준으로 <b>지금 나와 ${x.me}%</b> 닮았어요${x.me < x.pct - 15 ? ' — 하고 싶은 스타일과 지금 성향이 달라요. 극대화에서 그 차이를 줄여봐요' : x.me >= x.pct ? ' — 이미 그 방향이에요' : ''}</div>` : ''}</div>`;
-    const lv = psLv(o.v || {}), cur = psPfCur();
-    const bars = PS_TR.map(k => `<div class="tr-psb"><span>${PF_TR[k]}</span><i><b style="width:${Math.max(5, Math.min(100, (o.v && o.v[k] || 0) / 8 * 100))}%"></b></i></div>`).join('');
+      ${x.me !== null ? `<div class="tr-psme">🧭 ${o.cur ? '내가 찍은 지금 능력' : '포지션 찾기 성향'} 기준으로 <b>지금 나와 ${x.me}%</b> 닮았어요${x.me < x.pct - 15 ? ' — 하고 싶은 스타일과 지금 성향이 달라요. 극대화에서 그 차이를 줄여봐요' : x.me >= x.pct ? ' — 이미 그 방향이에요' : ''}</div>` : ''}</div>`;
+    const lv = o.goal ? Object.assign({}, o.goal) : psLv(o.v || {}), cur = o.cur || psPfCur();   // lv = 목표(없으면 스타일), cur = 지금(없으면 포지션 찾기)
+    const bars = PS_TR.map(k => { const g = o.goal ? (+o.goal[k] || 0) / 3 * 100 : Math.max(5, Math.min(100, (o.v && o.v[k] || 0) / 8 * 100)); const c = cur ? (+cur[k] || 0) / 3 * 100 : null; return `<div class="tr-psb"><span>${PF_TR[k]}${o.goal ? `<em>${cur ? (+cur[k] || 0) : '-'}→${+o.goal[k] || 0}</em>` : ''}</span><i>${c !== null ? `<u style="width:${Math.max(4, c)}%"></u>` : ''}<b style="width:${Math.max(4, g)}%"></b></i></div>`; }).join('') + (o.goal ? `<div class="tr-psleg"><u></u> 지금 &nbsp; <b></b> 목표</div>` : '');
     const affl = psAffLine(o.aff || {});
     return `${trBack('🌟 플레이스타일', 'home')}
-      <div class="tr-fh"><span class="tr-stp ps">결과</span><b>내 답이 가리킨 자리 — <em>${TRX(affl || '어디든')}</em></b></div>
-      <div class="tr-sum">${o.saved ? '지난 결과예요 · ' : ''}${(o.qs.length || o.nq) ? (o.qs.length || o.nq) + '문제 · ' : ''}${o.br ? PS_BR[o.br] + ' 갈래로 들어갔어요 · ' : ''}자리를 고르지 않아도 답이 자리까지 말해 줘요 — 아래 칩으로 다른 자리 선수도 볼 수 있어요${o.v && psCv(o.v) < 0.3 ? ' · <b>내 답이 고른 편(올라운더형)</b>이라 한 가지가 뾰족한 선수보다 두루 잘하는 선수를 우선했어요' : ''}</div>
+      <div class="tr-fh"><span class="tr-stp ps">결과</span><b>내 유형 — <em>${TRX(o.nar && o.nar.cand ? psTypeLabel(o.nar.cand, true) : (affl || '전체'))}</em></b></div>
+      <div class="tr-sum">${o.saved ? '지난 결과예요 · ' : ''}${(o.qs.length || o.nq) ? (o.qs.length || o.nq) + '문제 · ' : ''}자리를 안 가리고 모든 포지션에서 골랐어요 — 아래 칩으로 자리별로도 볼 수 있어요${o.cur ? ` · <b>지금 능력으로 어울리는 자리</b>는 ${TRX(psCurPos(o.cur, o.gk).map(trGName).join(' · ') || '아직 몰라요')} (목표가 아니라 지금 실력 기준)` : ''}${o.br && o.br !== 'gk' ? ` · 상황 질문은 목표 능력으로 보니 <b>${PS_BR[o.br]} 쪽</b>으로 냈어요` : ''}${o.u && psCv(o.u) < 0.3 ? ' · <b>목표가 고른 편(올라운더형)</b>이라 두루 잘하는 선수를 우선했어요' : ''}</div>
       ${o.nar && o.nar.cand && o.nar.cand.length ? `<div class="tr-psnar done"><b>유형 좁히기</b> ${TRX(psTypeLabel(o.nar.cand))} · ${PS_NAR_N}명${(o.nar.steps || []).map(st => ` → <i>${PS_TRS[st.k] || st.k}</i> ${st.after}`).join('')}명 — 답과 다 맞는 ${o.nar.cand.length}명이 앞에 와요</div>` : ''}
       ${chips}
+      ${o.tags && Object.keys(o.tags).some(k => o.tags[k] > 0) ? `<div class="tr-pstags">내가 고른 세부 스타일 ${Object.keys(o.tags).filter(k => o.tags[k] > 0).sort((a, b) => o.tags[b] - o.tags[a]).slice(0, 8).map(k => `<i>${PS_TAGN[k] || k}${o.tags[k] > 1 ? ' ×' + o.tags[k] : ''}</i>`).join('')}</div>` : ''}
       <div class="tr-psbars">${bars}</div>
       ${top.length ? top.map(card).join('') : '<div class="tr-note">이 자리엔 아직 선수가 없어요</div>'}
       ${rest.length ? `<div class="tr-sec">그다음 닮은 선수</div><div class="tr-psl">${rest.map(x => `<div><b>${TRX(x.p.name)}</b><small>${TRX(x.p.g.map(trGName).join('·'))} · ${TRX(x.p.ty)}</small><em>${x.pct}%</em></div>`).join('')}</div>` : ''}
@@ -24104,12 +24214,24 @@ function trViewPs() {
       <div class="tr-note">선수 ${PS.length}명 · 공개된 플레이 특징만 성향 11가지로 적어 둔 거라 「정답」이 아니라 롤모델 추천이에요 · 사진은 없고 이름만 · 답이 바뀌면 다음 질문도 바뀌어서 할 때마다 다른 선수가 나올 수 있어요</div>`;
   }
   const q = o.qs[o.qs.length - 1]; const n = o.qs.length;
-  const stage = n <= PS_QC.length ? '공통' : n <= PS_QC.length + 6 ? (PS_BR[o.br] || '') + ' 갈래' : q.id === PS_QE.id ? '시대' : q.nar ? '좁히기' : '확인';
+  const stage = q.grid ? '능력' : q.id === 'r3' ? '키퍼' : q.fu ? '파생' : PS_CORE_IDS.includes(q.id) ? '공통' : q.nar ? '좁히기' : q.id === PS_QP.id ? '자리' : q.id === PS_QE.id ? '시대' : (PS_BR[o.br] || '') + ' 상황';
   const tot = psTotal(o); const prog = `<div class="tr-prog"><i style="width:${Math.round((n - 1) / tot * 100)}%"></i></div>`;
-  return `${trBack('🌟 플레이스타일 <small>' + n + ' / ' + (q.id === PS_QE.id ? n : '20~' + PS_QMAX) + '</small>', 'psBack()', `<button type="button" class="tr-x" onclick="trGo('home')">닫기</button>`)}
-    ${prog}
-    <div class="tr-sum">${n === 1 ? '자리는 안 골라요 — 답이 자리까지 알려 줘요 · ' : ''}${n === PS_QC.length + 1 ? `공통 답을 보니 <b>${PS_BR[o.br] || ''} 쪽</b>이에요 — 그쪽 질문으로 들어가요 · ` : ''}${n === PS_QC.length + 7 ? `여기까지 답으로 <b>비슷한 유형 ${PS_NAR_N}명</b>을 골랐어요 — 이 안에서 서로 갈리는 성향만 물어 좁혀 가요 · ` : ''}${q.nar ? '' : (n > PS_QC.length + 7 && q.id !== PS_QE.id ? '좁히기는 끝 — 아직 한 번도 안 잡힌 성향만 확인해요 · ' : '')}지금 실력 말고 <b>하고 싶은 플레이</b>로 골라요</div>
+  const head = `${trBack('🌟 플레이스타일 <small>' + n + ' / ' + (q.id === PS_QE.id ? n : '18~' + PS_QMAX) + '</small>', 'psBack()', `<button type="button" class="tr-x" onclick="trGo('home')">닫기</button>`)}
+    ${prog}`;
+  if (q.grid) {
+    const st = psLvState(o); const ks = psLvTraits(o); const pre = !!psPfCur();
+    const cell = (which, k) => `<div class="tr-lvc ${which}">${[3, 2, 1, 0].map(v => `<button type="button" class="${st[which][k] === v ? 'on' : ''}" onclick="psLvSet('${which}','${k}',${v})">${v}</button>`).join('')}</div>`;
+    const left = ks.filter(k => st.cur[k] === undefined).length;
+    return `${head}
+    <div class="tr-fh"><span class="tr-stp ps">능력</span><b>${TRX(q.q)}</b></div>
+    <div class="tr-psmh">${TRX(q.note)}${pre ? ' · 「지금」은 포지션 찾기 성향으로 미리 채웠어요 — 다르면 고쳐요' : ''}</div>
+    <div class="tr-lvg"><div class="tr-lvh"><span></span><b>지금</b><b class="g">목표</b></div>${ks.map(k => `<div class="tr-lvr"><span>${PF_TR[k]}</span>${cell('cur', k)}${cell('goal', k)}</div>`).join('')}</div>
+    <button type="button" class="tr-btn lm big tr-psgo${left ? ' off' : ''}" onclick="psLvDone()">다음 › <small>${left ? `「지금」 ${left}개 남음` : '목표는 비우면 지금과 같아요'}</small></button>`;
+  }
+  return `${head}
+    <div class="tr-sum">${n === 1 ? '자리는 안 골라요 — 능력과 스타일로 모든 자리에서 찾아요 · ' : ''}${!q.fu && !q.nar && (PS_QB[o.br] || []).some(x => x.id === q.id) && !(PS_QB[o.br] || []).slice(1).some(x => x.id in o.ans) && !((PS_QB[o.br] || [])[0].id in o.ans) ? `목표 능력으로 보니 <b>${PS_BR[o.br] || ''} 쪽</b> 상황이 맞아요 — 그 상황으로 물어요 · ` : ''}${q.nar && o.nar && !o.nar.steps.length ? `여기까지 답으로 <b>비슷한 유형 ${PS_NAR_N}명</b>을 골랐어요(자리 안 가림) — 이 안에서 갈리는 성향만 물어 좁혀 가요 · ` : ''}${q.id === PS_QP.id ? '' : '상황 질문은 지금 실력 말고 <b>하고 싶은 플레이</b>로 골라요'}</div>
     ${q.nar && o.nar ? `<div class="tr-psnar"><b>비슷한 유형 ${o.nar.cand.length}명</b> — ${TRX(psTypeLabel(o.nar.cand))}<small>예: ${TRX(psNarEx(o, 4))}${o.nar.cand.length > 4 ? ' …' : ''}</small>${o.nar.steps.length ? `<em>${PS_NAR_N}${o.nar.steps.map(st => ' → ' + st.after).join('')}명</em>` : ''}</div>` : ''}
+    ${q.fu ? `<div class="tr-psmh">방금 고른 보기에서 파생된 질문이에요 — 세부 스타일이 점수에 들어가요</div>` : ''}
     <div class="tr-fh"><span class="tr-stp ps">${stage}</span><b>${TRX(q.q)}</b>${q.nar ? `<small class="tr-psnh">이 유형 안에서 제일 갈리는 것</small>` : ''}</div>
     ${q.multi ? `<div class="tr-psmh">여러 개 골라도 돼요 — <b>최대 ${q.multi}개</b> · 고른 만큼 다 반영</div>` : ''}
     <div class="tr-fol">${q.o.map((op, i) => { const on = !!(q.multi && o.sel && o.sel.q === q.id && o.sel.v.includes(i)); return `<button type="button" class="tr-fo ps${on ? ' on' : ''}" onclick="psPick('${q.id}',${i})"><p><b>${TRX(op[0])}</b></p><span>${q.multi ? (on ? '✓' : '+') : '›'}</span></button>`; }).join('')}</div>
