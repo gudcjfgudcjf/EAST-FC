@@ -4333,6 +4333,22 @@
   .tr-psb b { position: relative; background: transparent !important; border: 2px solid #f472b6; box-sizing: border-box; }
   .tr-psb span em { float: right; font-style: normal; font-size: 10.5px; color: #9aa4ae; }
   .tr-psleg { grid-column: 1 / -1; font-size: 11px; color: #9aa4ae; display: flex; align-items: center; gap: 4px; } .tr-psleg u { display: inline-block; width: 18px; height: 8px; border-radius: 999px; background: rgba(34,211,238,.55); } .tr-psleg b { display: inline-block; width: 18px; height: 8px; border-radius: 999px; border: 2px solid #f472b6; box-sizing: border-box; }
+  .tr-lvh, .tr-lvr { grid-template-columns: 58px 1fr 1fr; gap: 4px; }
+  .tr-lvc { grid-template-columns: repeat(6, 1fr); gap: 2px; } .tr-lvc button { height: 28px; font-size: 12px; border-radius: 7px; padding: 0; }
+  .tr-hl { margin-top: 10px; padding: 12px 12px 10px; border-radius: 18px; background: linear-gradient(135deg, rgba(244,114,182,.16), rgba(129,140,248,.12)); border: 1px solid rgba(244,114,182,.35); }
+  .tr-hlh { display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; color: #f9a8d4; font-weight: 800; } .tr-hlh button { background: none; border: 0; color: #c4b5fd; font-weight: 800; font-size: 12px; padding: 4px 6px; }
+  .tr-hlc { width: 100%; margin-top: 8px; display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 14px; background: rgba(0,0,0,.35); border: 1px solid rgba(255,255,255,.08); text-align: left; color: #fff; }
+  .tr-hlc i { font-style: normal; font-size: 30px; flex: none; } .tr-hlc div { flex: 1; min-width: 0; } .tr-hlc b { display: block; font-size: 15.5px; font-weight: 900; } .tr-hlc small { display: block; font-size: 12px; color: #c7cdd6; margin-top: 2px; line-height: 1.4; } .tr-hlc em { flex: none; font-style: normal; font-weight: 900; color: #f9a8d4; font-size: 13px; }
+  .tr-hld { display: flex; gap: 4px; justify-content: center; margin-top: 8px; } .tr-hld i { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.18); } .tr-hld i.on { background: #f472b6; width: 16px; border-radius: 3px; }
+  .tr-sec2 { margin-top: 8px; border-radius: 14px; background: #101318; border: 1px solid #23262f; overflow: hidden; } .tr-sec2.open { border-color: rgba(196,181,253,.35); }
+  .tr-sech { width: 100%; display: flex; align-items: center; gap: 8px; padding: 12px 13px; background: none; border: 0; text-align: left; color: #e5e7eb; } .tr-sech b { font-size: 14px; font-weight: 900; } .tr-sech small { flex: 1; font-size: 11.5px; color: #8a949e; } .tr-sech i { font-style: normal; color: #c4b5fd; font-weight: 900; }
+  .tr-secb { padding: 0 10px 10px; }
+  .tr-board { margin-top: 10px; padding: 11px 12px; border-radius: 16px; background: #101318; border: 1px solid rgba(244,114,182,.28); }
+  .tr-bdh { display: flex; justify-content: space-between; align-items: baseline; } .tr-bdh b { font-size: 14px; font-weight: 900; color: #f9a8d4; } .tr-bdh small { font-size: 11.5px; color: #8a949e; }
+  .tr-bdr { display: grid; grid-template-columns: 72px 1fr; gap: 2px 8px; padding: 7px 0; border-top: 1px solid rgba(255,255,255,.06); align-items: baseline; } .tr-bdr:first-of-type { border-top: 0; margin-top: 4px; }
+  .tr-bdr b { font-size: 13px; font-weight: 900; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .tr-bdr span { font-size: 13px; font-weight: 800; color: #e5e7eb; } .tr-bdr span em { font-style: normal; color: #f9a8d4; margin-left: 4px; } .tr-bdr small { grid-column: 2; font-size: 11px; color: #8a949e; }
+  .tr-bdr.me b { color: #a5f3fc; }
+  .tr-psshare { margin-top: 10px; }
   .tr-psnh { display: block; font-size: 11.5px; color: #9aa4ae; font-weight: 600; margin-top: 2px; }
   .tr-psbars { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px 10px; margin: 10px 0 4px; padding: 10px 12px; border-radius: 14px; background: #121318; border: 1px solid #262833; }
   .tr-psb span { display: block; font-size: 10.5px; font-weight: 800; color: #9aa4b2; } .tr-psb i { display: block; height: 6px; border-radius: 4px; background: #23262f; margin-top: 3px; overflow: hidden; } .tr-psb b { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #f472b6, #c084fc); }
@@ -7116,7 +7132,7 @@ let USE_FIREBASE = false;
 let fbAuthRef = null, fbStoreRef = null, fbPresenceRef = null, fbVersionRef = null;
 // 앱 버전 — 배포(파일 교체)할 때마다 +1. 최신 버전을 로드한 사람이 Firebase에 기록하고,
 // 구버전을 쓰는 다른 사람들은 새로고침 버튼에 업데이트 전구가 켜집니다.
-const APP_VERSION = 132;
+const APP_VERSION = 133;
 let _updateAvailable = false;
 let _presenceData = {}, _presenceTimer = null, _presenceUid = null, _presenceListening = false, _presenceVisBound = false;
 let _booted = false;
@@ -15498,7 +15514,7 @@ function intentToState(it) {
 }
 function stateToIntent(st) {
   if (!st) return null;
-  if (st === 'vote' || st === 'settle') return { t: st };
+  if (st === 'vote' || st === 'settle' || st === 'ps') return { t: st };
   const a = st.split('.');
   if (a[0] === 'att' && a[1]) return { t: 'att', m: a[1], s: ['attend', 'hold', 'absent'].includes(a[2]) ? a[2] : 'attend' };
   return null;
@@ -15520,6 +15536,7 @@ function kakaoBootInit() {
     it = { t: 'att', m: qp.get('att'), s: ['attend', 'hold', 'absent'].includes(s) ? s : 'attend' };
   } else if (qp.has('vote')) it = { t: 'vote' };
   else if (qp.has('settle')) it = { t: 'settle' };
+  else if (qp.has('ps')) it = { t: 'ps' };   // v133: 플레이스타일 공유 카드
   if (it) { _intent = it; try { sessionStorage.setItem('efm_intent', JSON.stringify(it)); } catch (e) {} }
   else if (!_kakaoCode) { try { const s = sessionStorage.getItem('efm_intent'); if (s) _intent = JSON.parse(s); } catch (e) {} }
   if ([...qp.keys()].length) { try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) {} }
@@ -15657,6 +15674,7 @@ function renderAuthIntent() {
     const meta = ATTEND_META[it.s] || ATTEND_META.attend;
     t = m ? `로그인하면 바로 <b>${meta.icon} ${meta.label}</b> 등록돼요 · ${escapeHtml(settleDateLabelOf(m.date))} vs ${escapeHtml(m.opponent || '')}` : `로그인하면 바로 ${meta.icon} ${meta.label} 등록돼요`;
   } else if (it && it.t === 'vote') t = '로그인하면 바로 <b>🗳️ 투표 모아보기</b>로 가요';
+  else if (it && it.t === 'ps') t = '로그인하면 바로 <b>🌟 닮은 선수 찾기</b>로 가요';
   else if (it && it.t === 'settle') t = '로그인하면 바로 <b>💰 내 정산</b>으로 가요';
   el.innerHTML = t; el.style.display = t ? '' : 'none';
 }
@@ -15666,6 +15684,7 @@ function applyIntent() {
   try { sessionStorage.removeItem('efm_intent'); } catch (e) {}
   if (!it || !currentUser()) return;
   if (it.t === 'vote') { switchTab('calendar'); openVoteAll(); return; }
+  if (it.t === 'ps') { switchTab('train'); try { psStart(); } catch (e) {} return; }
   if (it.t === 'settle') { switchTab('settle'); return; }
   if (it.t !== 'att') return;
   switchTab('calendar');
@@ -19155,10 +19174,9 @@ function trViewHome() {
   const acc = trAcc([r.n, r.c]);
   const fxA = trActive('fx'), mxA = trActive('mx');
   const owner = isOwner() ? `<button type="button" class="tr-owner" onclick="openTrainAnalysis()"><span>📊</span><div><b>EAST FC 팀 분석</b><small>오너 전용 · 다른 회원 화면엔 안 보여요</small></div><i>›</i></button>` : '';
-  return `${pos}${trPfCard()}${trPsCard()}${match}${checks}
-    <div class="tr-pil">🧠 뇌지컬</div>
-    ${daily}
-    <div class="tr-bm">
+  const open = _tr.sec || {};
+  const sec = (k, title, sub, inner) => `<div class="tr-sec2${open[k] ? ' open' : ''}"><button type="button" class="tr-sech" onclick="trSecToggle('${k}')"><b>${title}</b><small>${sub}</small><i>${open[k] ? '▾' : '▸'}</i></button>${open[k] ? `<div class="tr-secb">${inner}</div>` : ''}</div>`;
+  const brain = `<div class="tr-bm">
       <button type="button" class="tr-bmc kb" onclick="trOpenKb('${kb.id}')">${trThumb(kb, 40)}<div><small>⚽ 오늘의 기본기</small><b>${TRX(kb.t)}</b></div></button>
       <button type="button" class="tr-bmc mt" onclick="trGo('kb',{kbTab:'mt',kbId:null})"><div><small>🧘 마인드 한 줄</small><b>${TRX(trMindLine())}</b></div></button>
     </div>
@@ -19168,15 +19186,44 @@ function trViewHome() {
       <button type="button" class="a" onclick="trGo('wrong')">📕 오답 <b>${wrong + dpWrongSets().length}</b></button>
       <button type="button" class="v" onclick="trGo('stats')">📈 기록${acc !== null ? ` <b>${acc}%</b>` : ''}</button>
     </div>
-    <button type="button" class="tr-fmc" onclick="trGo('fm')"><span>📐</span><div><b>포메이션 센터</b><small>4-2-3-1 · 4-3-3 · 4-4-2 · 4-5-1 · 3-5-2 · 3-4-3 · 5-3-2 — 설명 보고 기초·중급·심화 문제</small></div><i>${(() => { const p = TFM_ORDER.reduce((a, f) => { const x = trFmProg(f); a.d += x.done; a.o += x.ok; return a; }, { d: 0, o: 0 }); return p.d ? `${p.o}/${p.d}` : '›'; })()}</i></button>
-    <div class="tr-pil">🩹 보완 · 🚀 극대화 <small>고르면 나만의 코칭</small></div>
-    <div class="tr-bm2">
+    <button type="button" class="tr-fmc" onclick="trGo('fm')"><span>📐</span><div><b>포메이션 센터</b><small>4-2-3-1 · 4-3-3 · 4-4-2 · 4-5-1 · 3-5-2 · 3-4-3 · 5-3-2 — 설명 보고 기초·중급·심화 문제</small></div><i>›</i></button>`;
+  const fxmx = `<div class="tr-bm2">
       <button type="button" class="tr-fixc" onclick="trStartFx('fix')"><i>🩹</i><b>보완</b><small>아쉬운 점 고르면<br>맞춤 처방</small><em>${fxA.length ? `처방 ${fxA.length}개 진행 중` : '시작하기 ›'}</em></button>
       <button type="button" class="tr-maxc" onclick="trStartFx('max')"><i>🚀</i><b>극대화</b><small>내 장점을<br>더 날카롭게</small><em>${mxA.length ? `플랜 ${mxA.length}개 진행 중` : '시작하기 ›'}</em></button>
-    </div>
-    <button type="button" class="tr-boots" onclick="switchTab('boots')"><span>👟</span><div><b>내 발에 맞는 축구화</b><small>사이즈 · 발볼 · 발등 + 내 포지션 · 극대화로 순서</small></div><i>›</i></button>
+    </div>`;
+  const boots = `<button type="button" class="tr-boots" onclick="switchTab('boots')"><span>👟</span><div><b>내 발에 맞는 축구화</b><small>사이즈 · 발볼 · 발등 + 내 포지션 · 극대화로 순서</small></div><i>›</i></button>`;
+  return `${pos}${match}${checks}
+    ${trHighlight({ kb, unseen, fxA, mxA })}
+    ${daily}
+    ${trPsBoard(6)}
+    <div class="tr-pil">더 보기 <small>한 번에 하나씩 — 필요한 것만 펼쳐요</small></div>
+    ${sec('ps', '🌟 플레이스타일 · 🧭 포지션 찾기', '닮은 선수 · 12문제로 자리 찾기', trPsCard() + trPfCard())}
+    ${sec('brain', '🧠 뇌지컬 더 · 📐 포메이션', `더 풀기 ${unseen} · 오답 ${wrong + dpWrongSets().length} · 기본기 · 심화`, brain)}
+    ${sec('fx', '🩹 보완 · 🚀 극대화', fxA.length + mxA.length ? `진행 중 ${fxA.length + mxA.length}개` : '고르면 나만의 코칭', fxmx)}
+    ${sec('boots', '👟 축구화', '내 발 · 내 포지션 기준', boots)}
     ${owner}
-    <div class="tr-priv">🔒 내가 고르고 푼 기록은 자동 저장돼서 팀 분석에 쓰여요 · 다른 회원 화면엔 안 보여요</div>`;
+    <div class="tr-priv">🔒 내가 고르고 푼 기록은 자동 저장돼서 팀 분석에 쓰여요 · 다른 회원 화면엔 안 보여요 · 「팀에 공개」를 켠 롤모델 한 줄만 보드에 보여요</div>`;
+}
+function trSecToggle(k) { haptic(4); _tr.sec = _tr.sec || {}; _tr.sec[k] = !_tr.sec[k]; renderTrain(); }
+// 하이라이트 — 오늘 딱 하나만 크게. 후보를 우선순위로 모아 날짜로 돌리고, 「다른 것 ›」로 넘김
+function trHighlight(c) {
+  const r = trMe() || {}; const ctx = trCtx(); const m = ctx.m;
+  const cand = [];
+  const psDone = r.ps && r.ps.top && r.ps.top.length;
+  const board = (typeof psBoardList === 'function') ? psBoardList() : [];
+  if (!psDone) cand.push({ k: 'ps', ico: '🌟', t: '닮은 선수 찾기', s: `능력 11개 찍고 상황 답하면 ${typeof PS !== 'undefined' ? PS.length : 299}명 중 내 롤모델 · 5분 · 자리는 안 가려요`, b: '시작 ›', fn: 'psStart()' });
+  if (board.length) cand.push({ k: 'board', ico: '👥', t: `팀 롤모델 보드 ${board.length}명`, s: `${board.slice(0, 3).map(x => `${x.n} → ${x.t1}`).join(' · ')}${board.length > 3 ? ' …' : ''}`, b: psDone ? '내 결과 ›' : '나도 ›', fn: psDone ? 'psOpen()' : 'psStart()' });
+  if (m) { const f = (ctx.qs.find(x => x.sq && TFM[x.sq.formation]) || {}).sq; if (f) cand.push({ k: 'fm', ico: '📐', t: `이번 경기 ${f.formation} 이해도`, s: `${TRX(settleDateLabelOf(m.date))} vs ${TRX(m.opponent || '상대팀')} — 내 자리 역할 문제 5개`, b: '풀기 ›', fn: `trFmSet('f','${f.formation}');trFmSet('tab','quiz');trFmSet('n',5);trFmStart()` }); }
+  if (!(r.pf && r.pf.h && Object.keys(r.pf.h).length)) cand.push({ k: 'pf', ico: '🧭', t: '내 자리 찾기 12문제', s: '지금 가진 능력으로 어울리는 자리 — 3분', b: '시작 ›', fn: 'pfStart()' });
+  if (psDone) cand.push({ k: 'psre', ico: '🌟', t: '내 플레이스타일', s: `${TRX((psById(r.ps.top[0]) || {}).name || '')} ${r.pub ? '· 팀에 공개 중' : '· 아직 비공개 — 팀에 자랑해봐요'}`, b: '보기 ›', fn: 'psOpen()' });
+  cand.push({ k: 'deep', ico: '🔴', t: '심화 — 헷갈리는 상황 4지선다', s: '보기 4개 · 함정 포함 · 틀리면 왜 틀렸는지', b: '도전 ›', fn: "trGo('deep')" });
+  cand.push({ k: 'fx', ico: '🩹', t: '보완 처방', s: c.fxA.length ? `처방 ${c.fxA.length}개 진행 중 — 경기 뒤 체크` : '아쉬운 점 하나 고르면 맞춤 처방', b: '열기 ›', fn: "trStartFx('fix')" });
+  cand.push({ k: 'boots', ico: '👟', t: '내 발에 맞는 축구화', s: '카드 한 장으로 실측 · 내 포지션 기준 추천', b: '보기 ›', fn: "switchTab('boots')" });
+  if (!cand.length) return '';
+  const day = Math.floor(Date.now() / 86400000); const i = ((day + (_tr.hlOff || 0)) % cand.length + cand.length) % cand.length; const h = cand[i];
+  return `<div class="tr-hl"><div class="tr-hlh"><span>✨ 오늘의 하이라이트</span><button type="button" onclick="_tr.hlOff=(_tr.hlOff||0)+1;renderTrain()">다른 것 ›</button></div>
+    <button type="button" class="tr-hlc" onclick="${h.fn}"><i>${h.ico}</i><div><b>${h.t}</b><small>${h.s}</small></div><em>${h.b}</em></button>
+    <div class="tr-hld">${cand.map((x, j) => `<i class="${j === i ? 'on' : ''}"></i>`).join('')}</div></div>`;
 }
 function trTogglePos(g, kind) {
   kind = kind || 'pos';
@@ -23989,7 +24036,7 @@ const PS_TAGK = {
 const PS_TAGN = { behind: '뒷공간', box: '박스 안', long: '중거리', head: '헤딩', set: '세트피스', curl: '감아차기·왼발', both: '양발', link: '연계', hold: '등지기', second: '세컨볼', press: '압박', counter: '역습', cutin: '안으로 접기', cross: '크로스', drib: '드리블', escape: '탈압박', key: '킬패스', switch: '전환', tempo: '템포', build: '빌드업', cover: '커버·읽기', tackle: '태클', aerial: '공중볼', line: '라인·콜', sweep: '스위퍼', save: '선방', dist: '킥·던지기', engine: '활동량', mental: '멘탈' };
 const PS_TAGTR = { spd: 'behind', drb: 'drib', kick: 'long', stb: 'hold', vis: 'key', calm: 'cover', lead: 'line', agg: 'press', eng: 'engine', mnt: 'mental', tch: 'escape' };
 // ── v132 능력 중심 재편(사용자와 상의해 결정): 자리 질문(r1·r2·r4·q2) 안 씀 → 골키퍼 1문제 + 능력 11개 「지금|목표」 한 화면 → 상황·파생 → 좁히기 → 자리 선호(약하게) → 시대
-const PS_LV = { id: 'lv', grid: true, q: '능력 11개 — 지금 실력과 목표를 찍어요', note: '3 = 팀에서 손꼽힘 · 2 = 보통 이상 · 1 = 약한 편 · 0 = 거의 안 씀 · 목표를 안 찍으면 지금과 같다고 봐요' };
+const PS_LV = { id: 'lv', grid: true, q: '능력 11개 — 지금 실력과 목표를 찍어요', note: '5 = 팀 최고 · 4 = 강점 · 3 = 보통 · 2 = 약한 편 · 1 = 많이 약함 · 0 = 안 씀 · 목표를 안 찍으면 지금과 같다고 봐요' };   // v133: 0~5 (사용자: 「3210 점보다 5점까지」)
 const PS_QP = { id: 'r9', q: '굳이 자리를 하나 고르면? (결과는 자리 안 가리고 다 나와요 — 살짝만 반영)', o: [['골키퍼', {}, { GK: 6 }], ['센터백', {}, { CB: 6 }], ['풀백', {}, { FB: 6 }], ['볼란치', {}, { CDM: 6 }], ['공격형 MF', {}, { CAM: 6 }], ['윙', {}, { WG: 6 }], ['스트라이커', {}, { ST: 6 }], ['상관없어 — 어디든', {}, {}]] };
 const PS_QE = { id: 'q7', q: '더 끌리는 축구는?', o: [['클래식 — 옛날 스타들', { era: 'classic' }], ['요즘 — 현대 축구', { era: 'modern' }], ['상관없어', {}]] };
 const PS_ALLQ = PS_QC.concat(...Object.values(PS_QB), Object.values(PS_QT), ...Object.values(PS_QN).map(b => Object.values(b)), Object.values(PS_FU), [PS_LV, PS_QP, PS_QE]);
@@ -23999,7 +24046,10 @@ const PS_TR = ['spd', 'tch', 'drb', 'kick', 'stb', 'eng', 'vis', 'calm', 'lead',
 const PS_POS = ['GK', 'CB', 'FB', 'CDM', 'CAM', 'WG', 'ST'];
 const PS_CAMW = [0.4, 0.8];   // CAM 끌림을 공격·중원 갈래에 나누는 비율 (무작위 답 시뮬: 공격 44 · 중원 22 · 수비 23 · 키퍼 10%)
 const PS_BR = { att: '공격', mid: '중원', def: '수비', gk: '골키퍼' };   // v132 부터는 「어디 뛰고 싶나」가 아니라 능력으로 정한 상황 질문 맥락
-const PS_CORE_IDS = ['q1', 'q3', 'q9', 'q16', 'q18'];   // v132: 자리 묻는 r1·r2·r4 와 무기 q2 는 능력 화면이 대신
+const PS_CORE_IDS = ['q1', 'q3', 'q9', 'q16', 'q18'];
+const PS_LVMAX = 5;   // v133: 능력 화면 0~5 (선수 데이터는 1~3 → 비교할 땐 ×0.6)
+function psL3(x) { return (+x || 0) * 3 / PS_LVMAX; }
+function psL5(x) { return Math.round((+x || 0) * PS_LVMAX / 3); }   // v132: 자리 묻는 r1·r2·r4 와 무기 q2 는 능력 화면이 대신
 const PS_BASE = 15;    // 키퍼 1 + 능력 1 + 공통 5 + 맥락 6 + 자리 선호 1 + 시대 1 (+ 파생 ≤12 + 좁히기 ≤6 = 18~33문제)
 const PS_DEC_MAX = 7, PS_QMAX = 36, PS_FU_MAX = 12;   // v132: 파생 ≤12 · 전체 ≤36
 // v129 유형 좁히기 — 사용자: 「공통 질문 뒤에 비슷한 유형 선수들 안에서 더 세분화되게 다음 스텝으로 — 야말처럼 나오면 스피드·드리블·측면 유형에서 질문 고르면 또 가지가 나오고 이런 식으로 좁혀 가기」
@@ -24011,14 +24061,15 @@ function psLv(vec) { const mx = Math.max(0, ...PS_TR.map(k => +vec[k] || 0)); co
 function psPfCur() { try { const pl = pfLast(); if (!pl || !pl.tr) return null; const m = Object.assign({}, pl.tr); if (m.drb === undefined) m.drb = m.tch || 0; if (m.mnt === undefined) m.mnt = Math.round(((+m.calm || 0) + (+m.lead || 0)) / 2); return psLv(m); } catch (e) { return null; } }
 // 카드 아래 「닮으려면」: 더 추구할 것(선수 3 · 내 답은 낮음) · 내가 취약한 곳(포지션 찾기 성향이 낮은데 선수는 높음 — 포지션 찾기가 없으면 「아님」으로 답한 성향) · 이 선수도 약한 곳(1)
 function psCmpHtml(p, lv, cur) {
-  const me = cur || lv; const goal = lv;
-  const shared = PS_TR.filter(k => (+p.tr[k] || 0) >= 2 && (+me[k] || 0) >= 2).sort((a, b) => ((+p.tr[b] || 0) + (+me[b] || 0)) - ((+p.tr[a] || 0) + (+me[a] || 0))).slice(0, 3);
-  const add = PS_TR.filter(k => (+p.tr[k] || 0) >= 3 && (+me[k] || 0) <= 1 && (+goal[k] || 0) >= 2).slice(0, 2);
-  const skip = PS_TR.filter(k => (+p.tr[k] || 0) >= 3 && (+me[k] || 0) <= 1 && (+goal[k] || 0) < 2).slice(0, 3);
+  // cur·lv(목표)는 0~5, 선수 tr 는 1~3 → 선수 값은 5점으로 바꿔 보여줌(3→5 · 2→3 · 1→2)
+  const me = cur || lv; const goal = lv; const p5 = k => psL5(p.tr[k]);
+  const shared = PS_TR.filter(k => (+p.tr[k] || 0) >= 2 && (+me[k] || 0) >= 3).sort((a, b) => ((+p.tr[b] || 0) + (+me[b] || 0)) - ((+p.tr[a] || 0) + (+me[a] || 0))).slice(0, 3);
+  const add = PS_TR.filter(k => (+p.tr[k] || 0) >= 3 && (+me[k] || 0) <= 2 && (+goal[k] || 0) >= 3).slice(0, 2);
+  const skip = PS_TR.filter(k => (+p.tr[k] || 0) >= 3 && (+me[k] || 0) <= 2 && (+goal[k] || 0) < 3).slice(0, 3);
   const pw = PS_TR.filter(k => (+p.tr[k] || 0) <= 1).slice(0, 4);
   return `<div class="tr-pscmp">
-    <div><span>같이 가진 재능 — 이걸 더 개화시키면 돼요</span>${shared.length ? shared.map(k => `<b>${PF_TR[k]}</b><small>${+me[k] || 0}·${p.tr[k]}</small>`).join(' · ') + shared.slice(0, 2).map(k => `<p>${PS_TIP[k]}</p>`).join('') : '아직 겹치는 강점이 없어요 — 목표 쪽 재능부터'}</div>
-    ${add.length ? `<div><span>목표로 찍었는데 아직 낮은 것 — 여기만 보태요</span>${add.map(k => `<b>${PF_TR[k]}</b><small>${+me[k] || 0}→${p.tr[k]}</small>`).join(' · ')}${add.slice(0, 1).map(k => `<p>${PS_TIP[k]}</p>`).join('')}</div>` : ''}
+    <div><span>같이 가진 재능 — 이걸 더 개화시키면 돼요</span>${shared.length ? shared.map(k => `<b>${PF_TR[k]}</b><small>나 ${+me[k] || 0} · 선수 ${p5(k)}</small>`).join(' · ') + shared.slice(0, 2).map(k => `<p>${PS_TIP[k]}</p>`).join('') : '아직 겹치는 강점이 없어요 — 목표 쪽 재능부터'}</div>
+    ${add.length ? `<div><span>목표로 찍었는데 아직 낮은 것 — 여기만 보태요</span>${add.map(k => `<b>${PF_TR[k]}</b><small>${+me[k] || 0}→${p5(k)}</small>`).join(' · ')}${add.slice(0, 1).map(k => `<p>${PS_TIP[k]}</p>`).join('')}</div>` : ''}
     ${skip.length ? `<div><span>이 선수는 강한데 내 목표가 아닌 것 — 억지로 안 따라가도 돼요</span>${skip.map(k => PF_TR[k]).join(' · ')}</div>` : ''}
     ${pw.length ? `<div><span>이 선수도 약한 곳</span>${pw.map(k => PF_TR[k]).join(' · ')}</div>` : ''}
   </div>`;
@@ -24033,7 +24084,8 @@ function psOpt() { if (!_tr.ps) _tr.ps = { qs: [psQ0()], ans: {}, res: null, fil
 function psStart() { _tr.ps = { qs: [psQ0()], ans: {}, res: null, filt: 'all', salt: Date.now() % 1000003 }; trGo('ps'); }
 function psOpen() {
   const r = (trMe() || {}).ps;
-  if (r && r.top && r.top.length && r.aff) { _tr.ps = { qs: [], ans: {}, done: true, v: r.v || {}, aff: r.aff || {}, era: r.era || '', br: r.br || '', nar: r.nar || null, tags: r.tags || null, cur: r.cur || null, goal: r.goal || null, u: r.u || r.v || {}, res: null, filt: 'all', saved: true, salt: r.salt || 0, nq: r.n || 0 }; _tr.ps.gk = r.gk; _tr.ps.res = psNarOrder(psGkSplit(psMatch(r.u || r.v || {}, r.aff || {}, r.era || '', r.salt || 0, r.tags || null), r.gk), r.nar); trGo('ps'); }
+  if (r && r.top && r.top.length && r.aff) { if (r.cur && !r.sc) { ['cur', 'goal'].forEach(w => { if (r[w]) PS_TR.forEach(k => r[w][k] = psL5(r[w][k])); }); r.sc = PS_LVMAX; }
+    _tr.ps = { qs: [], ans: {}, done: true, v: r.v || {}, aff: r.aff || {}, era: r.era || '', br: r.br || '', nar: r.nar || null, tags: r.tags || null, cur: r.cur || null, goal: r.goal || null, u: r.u || r.v || {}, res: null, filt: 'all', saved: true, salt: r.salt || 0, nq: r.n || 0 }; _tr.ps.gk = r.gk; _tr.ps.res = psNarOrder(psGkSplit(psMatch(r.u || r.v || {}, r.aff || {}, r.era || '', r.salt || 0, r.tags || null), r.gk), r.nar); trGo('ps'); }
   else psStart();   // v122 이전 기록(자리 골라서 한 것)은 새 방식으로 다시
 }
 // 답 → 성향 벡터 v + 자리 끌림 aff + 시대
@@ -24043,7 +24095,7 @@ function psVec(qs, ans) {
   return { v, aff, era, tags, cur, goal, u: psU(v, goal, cur) };
 }
 // 매칭 벡터 u = 지금 능력 + 목표 + 상황 답 스타일 ×½ (사용자: 「너가 가진 능력은 이런 선수와 닮았고 이 포지션도 잘 맞을 거다 — 가능성을 열어 두는 느낌」 → 가진 능력이 바탕, 목표가 방향) — 둘 다 없으면(옛 기록) 스타일만
-function psU(v, goal, cur) { const mx = Math.max(0, ...PS_TR.map(k => +v[k] || 0)); const u = {}; PS_TR.forEach(k => { const st = mx ? (+v[k] || 0) / mx * 3 : 0; u[k] = (goal || cur) ? (cur ? +cur[k] || 0 : 0) + (goal ? +goal[k] || 0 : 0) + st * 0.5 : (+v[k] || 0); }); return u; }
+function psU(v, goal, cur) { const mx = Math.max(0, ...PS_TR.map(k => +v[k] || 0)); const u = {}; PS_TR.forEach(k => { const st = mx ? (+v[k] || 0) / mx * 3 : 0; u[k] = (goal || cur) ? (cur ? psL3(cur[k]) : 0) + (goal ? psL3(goal[k]) : 0) + st * 0.5 : (+v[k] || 0); }); return u; }
 // 상황 질문 맥락 — 목표 능력으로: 공격 = 스피드·드리블·킥 · 중원 = 시야·터치·침착 · 수비 = 몸싸움·압박·리더 (키퍼는 r3 로)
 function psCtx(goal, isGk) { if (isGk) return 'gk'; const g = goal || {}; const a = { att: (g.spd || 0) + (g.drb || 0) + (g.kick || 0) + (g.mnt || 0) * 0.5, mid: (g.vis || 0) + (g.tch || 0) + (g.calm || 0) + (g.eng || 0) * 0.5, def: (g.stb || 0) + (g.agg || 0) + (g.lead || 0) + (g.calm || 0) * 0.5 }; return ['mid', 'att', 'def'].reduce((b, k) => a[k] > a[b] ? k : b, 'mid'); }
 // 갈래 — 공통 8문제의 자리 끌림으로 정함 (공격 = ST+WG+CAM½ · 중원 = CDM+CAM½ · 수비 = CB+FB · 키퍼는 다른 셋보다 확실히 클 때만)
@@ -24140,13 +24192,13 @@ function psMatch(v, aff, era, salt, ut) {
 function psGkSplit(res, isGk) { return isGk === undefined || isGk === null ? res : res.filter(x => x.p.g.includes('GK') === !!isGk); }   // 키퍼면 키퍼만, 필드면 키퍼 빼고 — 손으로 막는 자리는 능력 축이 달라서
 function psNarOrder(res, nar) { if (!nar || !nar.cand || !nar.cand.length || !res.length) return res; const set = new Set(nar.cand); const top = res[0].pct; res.forEach(x => x.nar = set.has(x.p.id) && x.pct >= top - 5); return res.filter(x => x.nar).concat(res.filter(x => !x.nar)); }   // 허점 검토(v129): 전체 1순위보다 5점 넘게 낮은 후보는 앞으로 안 끌어올림
 // ── v132 능력 화면 「지금|목표」 ──
-function psLvState(o) { if (!o.lv) { const pre = psPfCur(); o.lv = { cur: pre ? Object.assign({}, pre) : {}, goal: {} }; } return o.lv; }
+function psLvState(o) { if (!o.lv) { const pre = psPfCur(); const cur = {}; if (pre) PS_TR.forEach(k => cur[k] = Math.min(PS_LVMAX, Math.max(0, Math.round(pre[k] * PS_LVMAX / 3)))); o.lv = { cur, goal: {} }; } return o.lv; }
 function psLvSet(which, k, val) { haptic(4); const o = psOpt(); const st = psLvState(o); st[which][k] = val; if (which === 'cur' && st.goal[k] === undefined) st.goal[k] = val; renderTrain(); }   // 지금을 찍으면 목표는 일단 같게
 function psLvTraits(o) { return PS_TR.filter(k => !(o.ans.r3 === 0 && k === 'drb')); }   // 키퍼는 드리블 줄 없음
 function psLvDone() {
   const o = psOpt(); const st = psLvState(o); const ks = psLvTraits(o);
   const miss = ks.filter(k => st.cur[k] === undefined); if (miss.length) { toast(`「지금」을 다 찍어요 — ${miss.length}개 남음`); return; }
-  const cur = {}, goal = {}; ks.forEach(k => { cur[k] = st.cur[k]; goal[k] = st.goal[k] === undefined ? st.cur[k] : st.goal[k]; }); if (o.ans.r3 === 0) { cur.drb = 1; goal.drb = 1; }
+  const cur = {}, goal = {}; ks.forEach(k => { cur[k] = st.cur[k]; goal[k] = st.goal[k] === undefined ? st.cur[k] : st.goal[k]; }); if (o.ans.r3 === 0) { cur.drb = 1; goal.drb = 1; }   // 0~5
   haptic(6); psCommit({ cur, goal });
 }
 function psPick(qid, i) {
@@ -24165,7 +24217,7 @@ function psCommit(a) {
   const nx = psNext(o);
   if (nx) { o.qs.push(nx); trGo('ps'); return; }
   const { v, aff, era, tags, cur, goal, u } = psVec(o.qs, o.ans); o.v = v; o.aff = aff; o.era = era; o.tags = tags; o.cur = cur; o.goal = goal; o.u = u; o.gk = o.ans.r3 === 0; o.res = psNarOrder(psGkSplit(psMatch(u, aff, era, undefined, tags), o.gk), o.nar); o.done = true; o.filt = 'all';
-  trSet('ps', { t: Date.now(), d: trToday(), era, v, aff, tags, cur, goal, u, gk: o.gk, br: o.br || '', n: o.qs.length, salt: o.salt || 0, top: o.res.slice(0, 3).map(x => x.p.id), nar: o.nar ? { cand: o.nar.cand, steps: o.nar.steps.map(st => ({ k: st.k, L: st.L, after: st.after })) } : null });
+  trSet('ps', { t: Date.now(), d: trToday(), era, v, aff, tags, cur, goal, u, sc: PS_LVMAX, gk: o.gk, br: o.br || '', pub: !!((trMe() || {}).ps || {}).pub, n: o.qs.length, salt: o.salt || 0, top: o.res.slice(0, 3).map(x => x.p.id), nar: o.nar ? { cand: o.nar.cand, steps: o.nar.steps.map(st => ({ k: st.k, L: st.L, after: st.after })) } : null });
   trGo('ps');
 }
 function psBack() {
@@ -24181,6 +24233,48 @@ function psBack() {
 function psFilt(f) { haptic(5); psOpt().filt = f; renderTrain(); }
 function psCurPos(cur, isGk) { if (!cur) return []; if (isGk) return ['GK']; const res = PS.filter(p => !p.g.includes('GK')).map(p => ({ p, c: 0.5 * (psPear(cur, p.tr) + 1) / 2 + 0.5 * psLvl(cur, p.tr) })).sort((a, b) => b.c - a.c).slice(0, 12); const cnt = {}; res.forEach(x => x.p.g.forEach(g => cnt[g] = (cnt[g] || 0) + 1)); return PS_POS.filter(g => cnt[g]).sort((a, b) => cnt[b] - cnt[a]).slice(0, 3); }
 function psAffLine(aff) { const mx = Math.max(0, ...PS_POS.map(k => aff[k] || 0)); if (!mx) return ''; return PS_POS.filter(k => (aff[k] || 0) >= mx * 0.6).sort((a, b) => (aff[b] || 0) - (aff[a] || 0)).slice(0, 3).map(trGName).join(' · '); }
+// ── v133 카톡에 자랑 · 팀 롤모델 보드 (사용자: 「쟤가 가투소래 ㅋㅋ」 한 마디가 열 명을 들어오게) ──
+function psMyName() { const u = currentUser(); const p = (typeof myPlayer === 'function') ? myPlayer() : null; return (p && p.name) || (u && (u.displayName || u.username)) || '나'; }
+function psSummary(o) { const top = (o.res || []).slice(0, 3); const t1 = top[0]; return { n: psMyName(), t1: t1 ? t1.p.name : '', pct: t1 ? t1.pct : 0, top: top.map(x => x.p.name), ty: o.nar && o.nar.cand ? psTypeLabel(o.nar.cand, true) : '', pos: psCurPos(o.cur, o.gk).map(trGName).join('·'), era: o.era || '' }; }
+async function psShareImage(sm) {
+  const W = 1000, H = 500; const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const g = cv.getContext('2d');
+  const F = "'Pretendard Variable','Noto Sans KR',sans-serif";
+  g.fillStyle = '#0a0a0a'; g.fillRect(0, 0, W, H); const bg = g.createLinearGradient(0, 0, W, H); bg.addColorStop(0, 'rgba(244,114,182,.18)'); bg.addColorStop(.7, 'rgba(0,0,0,0)'); g.fillStyle = bg; g.fillRect(0, 0, W, H);
+  try { await scenCrest(); if (_scenCrestImg) { g.save(); g.globalAlpha = .07; const bh = 520, bw = _scenCrestImg.width / _scenCrestImg.height * bh; g.drawImage(_scenCrestImg, W - bw * .72, -10, bw, bh); g.restore(); const ch = 74, cw = _scenCrestImg.width / _scenCrestImg.height * ch; g.drawImage(_scenCrestImg, 44, 36, cw, ch); } } catch (e) {}
+  g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+  g.fillStyle = '#f9a8d4'; g.font = `800 34px ${F}`; g.fillText('EAST FC', 134, 74); g.fillStyle = '#8b9099'; g.font = `600 22px ${F}`; g.fillText('🌟 플레이스타일 — 닮은 선수', 134, 104);
+  g.fillStyle = '#fff'; g.font = `900 64px ${F}`; g.fillText(sm.n, 44, 200);
+  g.fillStyle = '#f9a8d4'; g.font = `900 58px ${F}`; let t = `${sm.t1}  ${sm.pct}%`; let sz = 58; g.font = `900 ${sz}px ${F}`; while (g.measureText(t).width > W - 88 && sz > 30) { sz -= 2; g.font = `900 ${sz}px ${F}`; } g.fillText(t, 44, 282);
+  g.fillStyle = '#c4b5fd'; g.font = `700 30px ${F}`; g.fillText(`${sm.ty ? sm.ty + ' 유형' : ''}${sm.pos ? ' · 지금 능력으로 어울리는 자리 ' + sm.pos : ''}`, 44, 340);
+  g.fillStyle = '#9aa1aa'; g.font = `600 26px ${F}`; g.fillText(`그다음 닮은 선수 · ${sm.top.slice(1).join(' · ')}`, 44, 392);
+  g.fillStyle = '#6b7280'; g.font = `600 22px ${F}`; g.fillText('EFM 트레이닝 › 닮은 선수 찾기 — 나도 해보기', 44, 452);
+  return new Promise(res => cv.toBlob(res, 'image/png'));
+}
+function psShare() {
+  const o = psOpt(); if (!o.done || !o.res || !o.res.length) { toast('먼저 결과를 받아요'); return; }
+  const sm = psSummary(o); haptic(6);
+  const text = `🌟 ${sm.n} 플레이스타일\n닮은 선수: ${sm.t1} ${sm.pct}%${sm.ty ? ' · ' + sm.ty + ' 유형' : ''}${sm.pos ? '\n지금 능력으로 어울리는 자리: ' + sm.pos : ''}\n그다음: ${sm.top.slice(1).join(' · ')}\n\n나도 해보기 👉 ${APP_URL}?ps`;
+  openSharePop({ label: `🌟 카톡에 자랑 <small>${TRX(sm.t1)} ${sm.pct}%</small>`, text, image: () => psShareImage(sm), fname: `EASTFC_플레이스타일_${sm.n}.png`,
+    kakao: { hint: '단톡방에 카드로', image: () => psShareImage(sm), card: () => ({ title: `🌟 ${sm.n} — ${sm.t1} ${sm.pct}%`, desc: `${sm.ty ? sm.ty + ' 유형 · ' : ''}${sm.pos ? '지금 능력 자리 ' + sm.pos + ' · ' : ''}그다음 ${sm.top.slice(1).join(' · ')}`, buttons: [{ title: '🌟 나도 해보기', url: APP_URL + '?ps' }] }) } });
+}
+function psBoardKey() { return trKey(); }
+function psPub(on) {
+  const o = psOpt(); const k = psBoardKey(); if (!k) { toast('로그인해야 공개할 수 있어요'); return; }
+  haptic(5); store.psBoard = store.psBoard || {};
+  if (on) { if (!o.done || !o.res) { toast('먼저 결과를 받아요'); return; } const sm = psSummary(o); store.psBoard[k] = { n: sm.n, t1: sm.t1, pct: sm.pct, top: sm.top.slice(0, 3), ty: sm.ty, pos: sm.pos, era: sm.era, at: Date.now() }; toast('팀 롤모델 보드에 올렸어요 — 트레이닝 홈에서 다 같이 봐요'); }
+  else { delete store.psBoard[k]; toast('보드에서 내렸어요'); }
+  trSet('ps/pub', on ? true : null); saveState(); renderTrain();
+}
+function psBoardList() { const b = store.psBoard || {}; return Object.keys(b).map(k => Object.assign({ k }, b[k])).filter(x => x && x.t1).sort((a, b) => (b.at || 0) - (a.at || 0)); }
+function trPsBoard(limit) {
+  const list = psBoardList(); const me = psBoardKey(); const r = (trMe() || {}).ps;
+  const mine = r && r.top && r.top.length;
+  const rows = list.slice(0, limit || 8).map(x => `<div class="tr-bdr${x.k === me ? ' me' : ''}"><b>${TRX(x.n)}</b><span>${TRX(x.t1)} <em>${x.pct}%</em></span><small>${TRX([x.ty, x.pos].filter(Boolean).join(' · '))}</small></div>`).join('');
+  return `<div class="tr-board"><div class="tr-bdh"><b>🌟 팀 롤모델 보드</b><small>${list.length ? list.length + '명 공개' : '아직 아무도 공개 안 했어요'}</small></div>
+    ${rows || '<div class="tr-note">내 결과를 첫 줄로 올려봐요 — 「쟤가 가투소래 ㅋㅋ」 한 마디가 열 명을 데려와요</div>'}
+    ${list.length > (limit || 8) ? `<div class="tr-note">+ ${list.length - (limit || 8)}명 더 · 결과 화면에서 전체 보기</div>` : ''}
+    <div class="tr-2btn">${mine ? `<button type="button" class="tr-btn lm" onclick="psOpen()">내 결과 · ${r.pub ? '공개 중' : '팀에 공개하기'} ›</button>` : `<button type="button" class="tr-btn lm" onclick="psStart()">🌟 나도 찾아보기 ›</button>`}</div></div>`;
+}
 function trPsCard() {
   const r = (trMe() || {}).ps;
   if (r && r.top && r.top.length && r.aff) { const names = r.top.map(id => psById(id)).filter(Boolean).map(p => p.name); return `<button type="button" class="tr-psc on" onclick="psOpen()"><span>🌟</span><div><b>내 플레이스타일 — ${TRX(names[0] || '')}</b><small>${TRX(psAffLine(r.aff) || '전체')} 쪽 · 닮은 선수 ${TRX(names.join(' · '))}</small></div><i>›</i></button>`; }
@@ -24199,7 +24293,7 @@ function trViewPs() {
       ${psCmpHtml(x.p, lv, cur)}
       ${x.me !== null ? `<div class="tr-psme">🧭 ${o.cur ? '내가 찍은 지금 능력' : '포지션 찾기 성향'} 기준으로 <b>지금 나와 ${x.me}%</b> 닮았어요${x.me < x.pct - 15 ? ' — 하고 싶은 스타일과 지금 성향이 달라요. 극대화에서 그 차이를 줄여봐요' : x.me >= x.pct ? ' — 이미 그 방향이에요' : ''}</div>` : ''}</div>`;
     const lv = o.goal ? Object.assign({}, o.goal) : psLv(o.v || {}), cur = o.cur || psPfCur();   // lv = 목표(없으면 스타일), cur = 지금(없으면 포지션 찾기)
-    const bars = PS_TR.map(k => { const g = o.goal ? (+o.goal[k] || 0) / 3 * 100 : Math.max(5, Math.min(100, (o.v && o.v[k] || 0) / 8 * 100)); const c = cur ? (+cur[k] || 0) / 3 * 100 : null; return `<div class="tr-psb"><span>${PF_TR[k]}${o.goal ? `<em>${cur ? (+cur[k] || 0) : '-'}→${+o.goal[k] || 0}</em>` : ''}</span><i>${c !== null ? `<u style="width:${Math.max(4, c)}%"></u>` : ''}<b style="width:${Math.max(4, g)}%"></b></i></div>`; }).join('') + (o.goal ? `<div class="tr-psleg"><u></u> 지금 &nbsp; <b></b> 목표</div>` : '');
+    const sc = o.goal ? PS_LVMAX : 3; const bars = PS_TR.map(k => { const g = o.goal ? (+o.goal[k] || 0) / sc * 100 : Math.max(5, Math.min(100, (o.v && o.v[k] || 0) / 8 * 100)); const c = cur ? (+cur[k] || 0) / sc * 100 : null; return `<div class="tr-psb"><span>${PF_TR[k]}${o.goal ? `<em>${cur ? (+cur[k] || 0) : '-'}→${+o.goal[k] || 0}</em>` : ''}</span><i>${c !== null ? `<u style="width:${Math.max(4, c)}%"></u>` : ''}<b style="width:${Math.max(4, g)}%"></b></i></div>`; }).join('') + (o.goal ? `<div class="tr-psleg"><u></u> 지금 &nbsp; <b></b> 목표</div>` : '');
     const affl = psAffLine(o.aff || {});
     return `${trBack('🌟 플레이스타일', 'home')}
       <div class="tr-fh"><span class="tr-stp ps">결과</span><b>내 유형 — <em>${TRX(o.nar && o.nar.cand ? psTypeLabel(o.nar.cand, true) : (affl || '전체'))}</em></b></div>
@@ -24210,6 +24304,8 @@ function trViewPs() {
       <div class="tr-psbars">${bars}</div>
       ${top.length ? top.map(card).join('') : '<div class="tr-note">이 자리엔 아직 선수가 없어요</div>'}
       ${rest.length ? `<div class="tr-sec">그다음 닮은 선수</div><div class="tr-psl">${rest.map(x => `<div><b>${TRX(x.p.name)}</b><small>${TRX(x.p.g.map(trGName).join('·'))} · ${TRX(x.p.ty)}</small><em>${x.pct}%</em></div>`).join('')}</div>` : ''}
+      ${(() => { const pub = !!(((trMe() || {}).ps || {}).pub); return `<div class="tr-2btn tr-psshare"><button type="button" class="tr-btn blue" onclick="psShare()">💬 카톡에 자랑</button><button type="button" class="tr-btn ${pub ? 'ghost' : 'lm'}" onclick="psPub(${pub ? 'false' : 'true'})">${pub ? '👀 팀에 공개 중 · 내리기' : '👥 팀에 공개하기'}</button></div><div class="tr-note">공개하면 트레이닝 홈 「팀 롤모델 보드」에 이름·닮은 선수·유형 한 줄만 올라가요 — 문제 푼 기록은 그대로 비공개</div>`; })()}
+      ${psBoardList().length ? trPsBoard(30) : ''}
       <div class="tr-2btn"><button type="button" class="tr-btn lm" onclick="trStartFx('max')">🚀 이 스타일로 극대화 ›</button><button type="button" class="tr-btn ghost" onclick="psStart()">🔁 다시 고르기</button></div>
       <div class="tr-note">선수 ${PS.length}명 · 공개된 플레이 특징만 성향 11가지로 적어 둔 거라 「정답」이 아니라 롤모델 추천이에요 · 사진은 없고 이름만 · 답이 바뀌면 다음 질문도 바뀌어서 할 때마다 다른 선수가 나올 수 있어요</div>`;
   }
@@ -24220,7 +24316,7 @@ function trViewPs() {
     ${prog}`;
   if (q.grid) {
     const st = psLvState(o); const ks = psLvTraits(o); const pre = !!psPfCur();
-    const cell = (which, k) => `<div class="tr-lvc ${which}">${[3, 2, 1, 0].map(v => `<button type="button" class="${st[which][k] === v ? 'on' : ''}" onclick="psLvSet('${which}','${k}',${v})">${v}</button>`).join('')}</div>`;
+    const cell = (which, k) => `<div class="tr-lvc ${which}">${[5, 4, 3, 2, 1, 0].map(v => `<button type="button" class="${st[which][k] === v ? 'on' : ''}" onclick="psLvSet('${which}','${k}',${v})">${v}</button>`).join('')}</div>`;
     const left = ks.filter(k => st.cur[k] === undefined).length;
     return `${head}
     <div class="tr-fh"><span class="tr-stp ps">능력</span><b>${TRX(q.q)}</b></div>
