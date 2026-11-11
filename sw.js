@@ -68,3 +68,24 @@ self.addEventListener('fetch', e => {
 self.addEventListener('message', e => {
   if (e.data && e.data.type === 'EFM_PING' && e.source) e.source.postMessage({ type: 'EFM_PONG', cache: CACHE });
 });
+
+/* v177 🔔 푸시 알림 — 우리 서버(efm-api)가 보낸 걸 폰 알림으로 띄우고, 누르면 그 화면으로 */
+self.addEventListener('push', e => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch (err) { d = { title: 'EAST FC', body: e.data ? e.data.text() : '' }; }
+  e.waitUntil(self.registration.showNotification(d.title || 'EAST FC', {
+    body: d.body || '', icon: 'icon-192.png', badge: 'icon-192.png', tag: d.tag || undefined, renotify: !!d.tag,
+    data: { url: d.url || './' },
+  }));
+});
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  const url = (e.notification.data && e.notification.data.url) || './';
+  e.waitUntil((async () => {
+    const cs = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    for (const c of cs) {
+      if (c.url.startsWith(self.registration.scope)) { try { await c.focus(); if ('navigate' in c) await c.navigate(url); } catch (err) {} return; }
+    }
+    await self.clients.openWindow(url);
+  })());
+});
